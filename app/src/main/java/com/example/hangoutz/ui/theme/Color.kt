@@ -4,7 +4,7 @@ import androidx.compose.ui.graphics.Color
 
 val Beige = Color(0xFFe2d7d3)
 val Orange = Color(0xFFddae74)
-val PurpleDark = Color(0xFFddae74)
+val PurpleDark = Color(0xFF765A71)
 
 val GreenMinty = Color(0xFFacc199)
 val GreenDark = Color(0xFF618181)
