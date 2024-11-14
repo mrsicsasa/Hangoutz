@@ -2,7 +2,7 @@ package com.example.hangoutz.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Beige = Color(0xFFe2d7d3)
+val Ivory = Color(0xFFe2d7d3)
 val Orange = Color(0xFFddae74)
 val PurpleDark = Color(0xFF765A71)
 
