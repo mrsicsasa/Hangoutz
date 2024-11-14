@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 suspend fun getData(){
-    var response = RetrofitInstance.api.getData()
+    var response = RetrofitInstance.api.getUserByName("Android")
     if (response.isSuccessful && response.body() != null) {
         println("odgovor" +response.body())
     } else {
