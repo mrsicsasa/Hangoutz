@@ -1,6 +1,6 @@
 package com.example.hangoutz.ui.navigation
 
-enum class Screen{
+enum class Screen {
     LOGIN,
     REGISTER,
     MAIN,
@@ -11,7 +11,6 @@ enum class Screen{
     SETTINGS,
     EVENT_DETAILS,
     EVENT_OWNER
-
 }
 
 sealed class NavigationItem(val route: String) {
@@ -24,7 +23,7 @@ sealed class NavigationItem(val route: String) {
     object Friends : NavigationItem(Screen.FRIENDS.name)
     object Settings : NavigationItem(Screen.SETTINGS.name)
     object EventDetails : NavigationItem(Screen.EVENT_DETAILS.name)
-    object EventOwner : NavigationItem(Screen.EVENT_OWNER.name)
+    object EventDetailsOwner : NavigationItem(Screen.EVENT_OWNER.name)
 }
 
 class AppNavigation {

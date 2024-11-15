@@ -7,29 +7,26 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.hangoutz.ui.loginscreen.CreateEventScreen
 import com.example.hangoutz.ui.loginscreen.EventDetailsScreen
-import com.example.hangoutz.ui.loginscreen.EventOwnerScreen
+import com.example.hangoutz.ui.loginscreen.EventOwnerDetailsScreen
 import com.example.hangoutz.ui.loginscreen.FriendsScreen
+import com.example.hangoutz.ui.loginscreen.InvitedScreen
 import com.example.hangoutz.ui.loginscreen.LoginScreen
 import com.example.hangoutz.ui.loginscreen.MainScreen
-import com.example.hangoutz.ui.loginscreen.RegisterScreen
-import com.example.hangoutz.ui.loginscreen.InvitedScreen
 import com.example.hangoutz.ui.loginscreen.MyEventsScreen
+import com.example.hangoutz.ui.loginscreen.RegisterScreen
 import com.example.hangoutz.ui.loginscreen.SettingsScreen
-
 
 @Composable
 fun AppNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController,
     startDestination: String = NavigationItem.Login.route
-    ) {
-
+) {
     NavHost(
         modifier = modifier,
         navController = navController,
         startDestination = startDestination
     ) {
-
         composable(NavigationItem.Login.route) {
             LoginScreen(navController)
         }
@@ -37,13 +34,13 @@ fun AppNavHost(
             RegisterScreen(navController)
         }
         composable(NavigationItem.MainScreen.route) {
-           MainScreen(navController)
+            MainScreen(navController)
         }
         composable(NavigationItem.Invited.route) {
             InvitedScreen(navController)
         }
         composable(NavigationItem.MyEvents.route) {
-           MyEventsScreen(navController)
+            MyEventsScreen(navController)
         }
         composable(NavigationItem.CreateEvent.route) {
             CreateEventScreen(navController)
@@ -55,10 +52,10 @@ fun AppNavHost(
             SettingsScreen(navController)
         }
         composable(NavigationItem.EventDetails.route) {
-           EventDetailsScreen(navController)
+            EventDetailsScreen(navController)
         }
-        composable(NavigationItem.EventOwner.route) {
-            EventOwnerScreen(navController)
+        composable(NavigationItem.EventDetailsOwner.route) {
+            EventOwnerDetailsScreen(navController)
         }
     }
 }

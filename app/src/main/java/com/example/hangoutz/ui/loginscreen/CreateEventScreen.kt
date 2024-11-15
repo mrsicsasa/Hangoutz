@@ -10,18 +10,14 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 
 @Composable
-fun CreateEventScreen (navController: NavController) {
-
-    Text(
-        text="Create Event"
-    )
-    Row(modifier = Modifier.padding(top = 30.dp, end = 30.dp)){
-
-    Button(
-
-        onClick = { navController.popBackStack() }) {
-        Text("Back")
-    }}
+fun CreateEventScreen(navController: NavController) {
+    Text(text = "Create Event")
+    Row(modifier = Modifier.padding(top = 30.dp, end = 30.dp)) {
+        Button(
+            onClick = { navController.popBackStack() }) {
+            Text("Back")
+        }
+    }
 }
 
 
