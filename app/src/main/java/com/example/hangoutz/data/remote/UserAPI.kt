@@ -10,15 +10,15 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface UserAPI {
-    @GET(BuildConfig.REQUEST_URL+"users")
+    @GET(BuildConfig.REQUEST_URL_USER)
     suspend fun getUserByName(@Query("name") name: String): Response<List<User>>
 
-    @GET(BuildConfig.REQUEST_URL+"users")
+    @GET(BuildConfig.REQUEST_URL_USER)
     suspend fun getUserByEmailAndPassword(
         @Query("email") email: String,
         @Query("password_hash") password: String
     ): Response<List<User>>
 
-    @POST(BuildConfig.REQUEST_URL+"users")
+    @POST(BuildConfig.REQUEST_URL_USER)
     suspend fun insertUser(@Body user: UserRequest) : Response<Unit>
 }
