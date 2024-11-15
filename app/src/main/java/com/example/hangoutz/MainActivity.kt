@@ -2,6 +2,7 @@ package com.example.hangoutz
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -42,12 +43,12 @@ suspend fun getData() {
         if (response.isSuccessful) {
             val body = response.body()
             if (body != null) {
-                println("Response: $body")
+                Log.d("ApiTest","response ${body}")
             } else {
-                println("Response body is  null")
+                Log.d("ApiTest","body is null")
             }
         } else {
-            println("Error: ${response.code()} - ${response.message()}")
+            Log.d("ApiTest","Error: ${response.code()} - ${response.message()}")
         }
     } catch (e: Exception) {
         e.printStackTrace()
