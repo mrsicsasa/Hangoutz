@@ -14,11 +14,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.hangoutz.data.remote.RetrofitInstance
+import com.example.hangoutz.ui.ExampleViewModel
 import com.example.hangoutz.ui.theme.HangoutzTheme
 import com.example.hangoutz.ui.theme.inter
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -59,9 +62,10 @@ suspend fun getData() {
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
+    val vm: ExampleViewModel = viewModel()
     val coroutineScope = rememberCoroutineScope()
     coroutineScope.launch {
-        getData()
+        Log.d("DiTest","test "+vm.getUserByName("Mikica").isSuccessful)
     }
     Text(
         text = "Hello $name!",
