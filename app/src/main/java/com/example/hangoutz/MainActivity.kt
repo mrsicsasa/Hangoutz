@@ -9,8 +9,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.example.hangoutz.ui.theme.HangoutzTheme
 import com.example.hangoutz.ui.theme.inter
 
@@ -21,9 +24,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             HangoutzTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
+                    AppNavHost(
+                        modifier = Modifier.padding(innerPadding),
+                        navController = rememberNavController()
                     )
                 }
             }
@@ -38,6 +41,13 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
         modifier = modifier,
         fontFamily = inter
     )
+}
+
+@Composable
+fun switcher(modifier: Modifier = Modifier) {
+    val navController = rememberNavController()
+    val currentBackStack by navController.currentBackStackEntryAsState()
+    val currentDestination = currentBackStack?.destination
 }
 
 @Preview(showBackground = true)
