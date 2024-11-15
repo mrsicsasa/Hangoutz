@@ -1,6 +1,6 @@
 package com.example.hangoutz.ui.loginscreen
 
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -11,29 +11,29 @@ import androidx.navigation.NavController
 import com.example.hangoutz.ui.navigation.NavigationItem
 
 @Composable
-fun LoginScreen (navController: NavController) {
+fun FriendsScreen (navController: NavController) {
     Text(
-        text="Login page"
+        text="Friends List"
     )
 
-    Row (
-        modifier = Modifier.padding(top = 90.dp, end = 30.dp)
+    Column (modifier = Modifier.padding(top = 30.dp, end = 30.dp)){
 
-    ){
-        Button(onClick = {
-
-            navController.navigate(NavigationItem.Register.route)
-        }) {
-            Text(text = "Go to Register")
-        }
+    Button(onClick = {
+        navController.navigate(NavigationItem.Settings.route)
+    }) {
+        Text(text = "Go to Settings")
+    }
 
         Button(onClick = {
-
             navController.navigate(NavigationItem.MainScreen.route)
         }) {
             Text(text = "Go to Main")
         }
-    }
+    Button(
+
+        onClick = { navController.popBackStack() }) {
+        Text("Back")
+    }}
 }
 
 
