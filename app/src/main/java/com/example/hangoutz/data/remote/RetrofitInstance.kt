@@ -1,17 +1,17 @@
-package com.example.hangoutz.data
-import okhttp3.Interceptor
+package com.example.hangoutz.data.remote
+
+import com.example.hangoutz.BuildConfig
 import okhttp3.OkHttpClient
-import okhttp3.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitInstance {
-    private const val BASE_URL = "https://zsjxwfjutstrybvltjov.supabase.co/"
+
     val retrofitInterceptor = RetrofitInterceptor()
-    val httpClient =  OkHttpClient.Builder().addInterceptor(retrofitInterceptor).build()
+    val httpClient = OkHttpClient.Builder().addInterceptor(retrofitInterceptor).build()
     val api: UserAPI by lazy {
         Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(BuildConfig.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(httpClient)
             .build()

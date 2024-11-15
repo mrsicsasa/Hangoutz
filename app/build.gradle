@@ -19,9 +19,15 @@ android {
     }
 
     buildTypes {
+        debug{
+            buildConfigField("String", "BASE_URL", "\"https://zsjxwfjutstrybvltjov.supabase.co/\"")
+            buildConfigField("String", "REQUEST_URL", "\"rest/v1/\"")
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField("String", "BASE_URL", "\"https://zsjxwfjutstrybvltjov.supabase.co/\"")
+            buildConfigField("String", "REQUEST_URL", "\"rest/v1/\"")
         }
     }
     compileOptions {
@@ -32,6 +38,7 @@ android {
         jvmTarget = '11'
     }
     buildFeatures {
+        buildConfig = true
         compose true
     }
 }

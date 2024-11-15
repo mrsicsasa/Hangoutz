@@ -13,7 +13,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.hangoutz.data.RetrofitInstance
+import com.example.hangoutz.data.models.UserRequest
+import com.example.hangoutz.data.remote.RetrofitInstance
 import com.example.hangoutz.ui.theme.HangoutzTheme
 import com.example.hangoutz.ui.theme.inter
 import kotlinx.coroutines.launch
@@ -35,14 +36,26 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-suspend fun getData(){
-    var response = RetrofitInstance.api.getUserByName("eq.Mikica")
-    if (response.isSuccessful && response.body() != null) {
-        println("odgovor" +response.body())
-    } else {
-       print("doslo je do greske")
+
+suspend fun getData() {
+    try {
+        val response = RetrofitInstance.api.getUserByName("eq.Mikica")
+        if (response.isSuccessful) {
+            val body = response.body()
+            if (body != null) {
+                println("Response: $body")
+            } else {
+                println("Response body is  null")
+            }
+        } else {
+            println("Error: ${response.code()} - ${response.message()}")
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
     }
 }
+
+
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
