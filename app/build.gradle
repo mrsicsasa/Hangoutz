@@ -16,12 +16,28 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        def keystoreFile = project.rootProject.file("apikeys.properties")
+        def properties = new Properties()
+        properties.load(keystoreFile.newInputStream())
+        def apiKey = properties.getProperty("API_KEY") ?: ""
+        buildConfigField("String", "API_KEY", apiKey)
     }
 
     buildTypes {
+        debug {
+            buildConfigField("String", "BASE_URL", "\"https://zsjxwfjutstrybvltjov.supabase.co/\"")
+            buildConfigField("String", "REQUEST_URL_EVENTS", "\"rest/v1/events?select=*\"")
+            buildConfigField("String", "REQUEST_URL_EVENT", "\"rest/v1/events\"")
+            buildConfigField("String", "REQUEST_URL_USER", "\"rest/v1/users\"")
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField("String", "BASE_URL", "\"https://zsjxwfjutstrybvltjov.supabase.co/\"")
+            buildConfigField("String", "REQUEST_URL_EVENTS", "\"rest/v1/events?select=*\"")
+            buildConfigField("String", "REQUEST_URL_EVENT", "\"rest/v1/events\"")
+            buildConfigField("String", "REQUEST_URL_USER", "\"rest/v1/users\"")
+
         }
     }
     compileOptions {
@@ -32,6 +48,7 @@ android {
         jvmTarget = '11'
     }
     buildFeatures {
+        buildConfig = true
         compose true
     }
 }
@@ -46,6 +63,10 @@ dependencies {
     implementation libs.androidx.ui.graphics
     implementation libs.androidx.ui.tooling.preview
     implementation libs.androidx.material3
+    implementation libs.retrofit
+    implementation libs.converter.gson
+    implementation libs.kotlinx.coroutines.android
+    implementation libs.kotlinx.coroutines.core
     testImplementation libs.junit
     androidTestImplementation libs.androidx.junit
     androidTestImplementation libs.androidx.espresso.core
@@ -53,4 +74,5 @@ dependencies {
     androidTestImplementation libs.androidx.ui.test.junit4
     debugImplementation libs.androidx.ui.tooling
     debugImplementation libs.androidx.ui.test.manifest
+
 }
