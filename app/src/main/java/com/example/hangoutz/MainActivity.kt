@@ -15,7 +15,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.hangoutz.ui.ExampleViewModel
+import com.example.hangoutz.ui.UserViewModel
 import com.example.hangoutz.ui.theme.HangoutzTheme
 import com.example.hangoutz.ui.theme.inter
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,10 +43,10 @@ class MainActivity : ComponentActivity() {
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
-    val vm: ExampleViewModel = viewModel()
+    val userViewModel: UserViewModel = viewModel()
     val coroutineScope = rememberCoroutineScope()
     coroutineScope.launch {
-        Log.d("DiTest", "test ${vm.getUserByName("Mikica").isSuccessful}")
+        Log.d("DiTest", "test ${userViewModel.getUserByName("Mikica").isSuccessful}")
     }
     Text(
         text = "Hello $name!",

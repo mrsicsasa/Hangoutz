@@ -6,8 +6,9 @@ import com.example.hangoutz.domain.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import retrofit2.Response
 import javax.inject.Inject
+
 @HiltViewModel
-class ExampleViewModel @Inject constructor(
+class UserViewModel @Inject constructor(
     private val repository: UserRepository
 ): ViewModel() {
     suspend fun getUserByName(name: String): Response<List<User>>{
