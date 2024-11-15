@@ -46,7 +46,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
     val vm: ExampleViewModel = viewModel()
     val coroutineScope = rememberCoroutineScope()
     coroutineScope.launch {
-        Log.d("DiTest", "test " + vm.getUserByName("Mikica").isSuccessful)
+        Log.d("DiTest", "test ${vm.getUserByName("Mikica").isSuccessful}")
     }
     Text(
         text = "Hello $name!",

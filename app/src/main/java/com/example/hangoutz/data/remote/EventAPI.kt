@@ -8,10 +8,10 @@ import retrofit2.http.Query
 import java.util.UUID
 
 interface EventAPI {
-    @GET(BuildConfig.REQUEST_URL_EVENTS)
+    @GET("${BuildConfig.REQUEST_URL}events?select=*")
     suspend fun getEvents(): Response<List<Event>>
 
-    @GET(BuildConfig.REQUEST_URL_EVENT)
+    @GET("${BuildConfig.REQUEST_URL}events")
     suspend fun getEventById(
         @Query("id") id: UUID
     ): Response<List<Event>>
