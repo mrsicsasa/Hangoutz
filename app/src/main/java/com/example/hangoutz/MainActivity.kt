@@ -24,10 +24,14 @@ class MainActivity : ComponentActivity() {
         setContent {
             HangoutzTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    AppNavHost(
-                        modifier = Modifier.padding(innerPadding),
-                        navController = rememberNavController()
-                    )
+                    HangoutzTheme {
+                        // Initialize NavController
+                        val navController = rememberNavController()
+
+                        AppNavHost(
+                            navController = navController,
+                            modifier = Modifier.padding(innerPadding)
+                        )
                 }
             }
         }
@@ -43,12 +47,6 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
     )
 }
 
-@Composable
-fun switcher(modifier: Modifier = Modifier) {
-    val navController = rememberNavController()
-    val currentBackStack by navController.currentBackStackEntryAsState()
-    val currentDestination = currentBackStack?.destination
-}
 
 @Preview(showBackground = true)
 @Composable
@@ -56,4 +54,4 @@ fun GreetingPreview() {
     HangoutzTheme {
         Greeting("Android")
     }
-}
+}}
