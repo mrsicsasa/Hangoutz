@@ -15,7 +15,7 @@ fun EventDetailsScreen(navController: NavController) {
     Row(modifier = Modifier.padding(top = 30.dp, end = 30.dp)) {
         Button(
             onClick = { navController.popBackStack() }) {
-            Text("Back")
+            Text(text = "Back")
         }
     }
 }

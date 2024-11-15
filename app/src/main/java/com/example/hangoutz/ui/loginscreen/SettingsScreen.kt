@@ -27,7 +27,7 @@ fun SettingsScreen(navController: NavController) {
         }
         Button(
             onClick = { navController.popBackStack() }) {
-            Text("Back")
+            Text(text = "Back")
         }
     }
 }
