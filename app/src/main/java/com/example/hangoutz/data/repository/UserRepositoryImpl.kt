@@ -7,14 +7,14 @@ import com.example.hangoutz.domain.repository.UserRepository
 import retrofit2.Response
 import javax.inject.Inject
 
-class UserRepositoryImpl @Inject constructor(private val userAPI: UserAPI): UserRepository {
-    val api: UserAPI = userAPI
+class UserRepositoryImpl @Inject constructor(userAPI: UserAPI): UserRepository {
+    private val api: UserAPI = userAPI
     override suspend fun getUserByName(name: String): Response<List<User>> {
-        return api.getUserByName(name = "eq."+name)
+        return api.getUserByName(name = "eq.${name}")
     }
 
     override suspend fun getUserByEmailAndPassword(email: String, password: String): Response<List<User>> {
-        return api.getUserByEmailAndPassword(email = "eq."+email, password= "eq."+password)
+        return api.getUserByEmailAndPassword(email = "eq.${email}", password= "eq.${password}")
     }
 
     override suspend fun insertUser(userRequest: UserRequest): Response<Unit> {
