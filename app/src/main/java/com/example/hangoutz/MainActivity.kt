@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.hangoutz.ui.UserViewModel
+import com.example.hangoutz.ui.screens.loginscreen.LoginScreen
 import com.example.hangoutz.ui.theme.HangoutzTheme
 import com.example.hangoutz.ui.theme.inter
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,6 +35,8 @@ class MainActivity : ComponentActivity() {
                         name = "Android",
                         modifier = Modifier.padding(innerPadding)
                     )
+
+                    LoginScreen()
                 }
             }
         }
