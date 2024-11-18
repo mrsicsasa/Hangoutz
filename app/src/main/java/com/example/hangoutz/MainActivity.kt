@@ -14,14 +14,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.hangoutz.ui.UserViewModel
+import com.example.hangoutz.data.remote.RetrofitInstance
+import com.example.hangoutz.ui.screens.splash.SplashScreen
 import com.example.hangoutz.ui.theme.HangoutzTheme
 import com.example.hangoutz.ui.theme.inter
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -29,24 +27,37 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             HangoutzTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                SplashScreen()
             }
         }
     }
 }
 
+suspend fun getData() {
+    try {
+        val response = RetrofitInstance.api.getUserByName("eq.Mikica")
+        if (response.isSuccessful) {
+            val body = response.body()
+            if (body != null) {
+                Log.d("ApiTest","response ${body}")
+            } else {
+                Log.d("ApiTest","body is null")
+            }
+        } else {
+            Log.d("ApiTest","Error: ${response.code()} - ${response.message()}")
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+}
+
+
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
-    val userViewModel: UserViewModel = viewModel()
     val coroutineScope = rememberCoroutineScope()
     coroutineScope.launch {
-        Log.d("DiTest", "test ${userViewModel.getUserByName("Mikica").isSuccessful}")
+        getData()
     }
     Text(
         text = "Hello $name!",
