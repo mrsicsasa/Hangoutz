@@ -1,6 +1,8 @@
 package com.example.hangoutz.ui.screens.splash
 
+import android.content.Context
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
@@ -13,16 +15,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.hangoutz.R
 import com.example.hangoutz.ui.components.Logo
+import com.example.hangoutz.ui.navigation.NavigationItem
+import kotlinx.coroutines.delay
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun SplashScreen() {
-    val viewmodel: SplashScreenViewModel = viewModel()
+fun SplashScreen(navController: NavController) {
+    val viewmodel: SplashScreenViewModel = hiltViewModel()
     val alpha = remember { Animatable(0.4f) }
+    val context = LocalContext.current
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -45,6 +53,10 @@ fun SplashScreen() {
     LaunchedEffect(key1 = true) {
         alpha.animateTo(1f, animationSpec = tween(2000))
         viewmodel.deleteEventsFromPast()
-
+        if(viewmodel.isUserLoggedIn(context)) {
+            navController.navigate(route = NavigationItem.MainScreen.route)
+        } else {
+            navController.navigate(route = NavigationItem.Login.route)
+        }
     }
 }

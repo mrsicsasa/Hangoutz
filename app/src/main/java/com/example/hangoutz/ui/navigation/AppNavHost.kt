@@ -1,5 +1,7 @@
 package com.example.hangoutz.ui.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -17,6 +19,7 @@ import com.example.hangoutz.ui.screens.registerscreen.RegisterScreen
 import com.example.hangoutz.ui.screens.settingsscreen.SettingsScreen
 import com.example.hangoutz.ui.screens.splash.SplashScreen
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AppNavHost(
     modifier: Modifier = Modifier,
@@ -29,7 +32,7 @@ fun AppNavHost(
         startDestination = startDestination
     ) {
         composable(NavigationItem.Splash.route){
-            SplashScreen()
+            SplashScreen(navController)
         }
         composable(NavigationItem.Login.route) {
             LoginScreen(navController)

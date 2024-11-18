@@ -1,10 +1,12 @@
 package com.example.hangoutz.ui.screens.splash
 
+import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.hangoutz.data.local.SharedPreferencesManager
 import com.example.hangoutz.data.models.Event
 import com.example.hangoutz.data.models.Invite
 import com.example.hangoutz.domain.repository.EventRepository
@@ -35,7 +37,13 @@ class SplashScreenViewModel @Inject constructor(
         }
 
     }
-
+    fun isUserLoggedIn(context: Context): Boolean {
+        SharedPreferencesManager.clearUserId(context)
+        if (SharedPreferencesManager.getUserId(context = context) != null) {
+            return true
+        }
+        return false
+    }
     suspend private fun getEvents(): List<Event>? {
         val response = eventRepository.getEvents()
         if (response.isSuccessful && response.body() != null) {

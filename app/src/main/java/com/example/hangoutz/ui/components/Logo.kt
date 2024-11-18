@@ -22,8 +22,8 @@ import kotlinx.coroutines.delay
 @Composable
 fun Logo(
     painter: Painter,
-    initialValue: Float,
-    targetValue: Float,
+    initialValue: Float = 1f,
+    targetValue: Float = 1f,
     modifier: Modifier
 ) {
     val scale = remember { Animatable(initialValue) }
@@ -40,7 +40,7 @@ fun Logo(
                 .scale(scale.value)
         )
         LaunchedEffect(key1 = true) {
-            delay(1000)
+            delay(800)
             scale.animateTo(
                 targetValue = targetValue,
                 animationSpec = tween(
