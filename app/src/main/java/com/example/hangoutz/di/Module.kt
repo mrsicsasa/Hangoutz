@@ -4,7 +4,9 @@ import com.example.hangoutz.BuildConfig
 import com.example.hangoutz.data.remote.EventAPI
 import com.example.hangoutz.data.remote.RetrofitInterceptor
 import com.example.hangoutz.data.remote.UserAPI
+import com.example.hangoutz.data.repository.EventRepositoryImpl
 import com.example.hangoutz.data.repository.UserRepositoryImpl
+import com.example.hangoutz.domain.repository.EventRepository
 import com.example.hangoutz.domain.repository.UserRepository
 import dagger.Module
 import dagger.Provides
@@ -43,6 +45,10 @@ object Module {
     @Provides
     fun providesUserRepository(userAPI: UserAPI): UserRepository {
         return UserRepositoryImpl(userAPI)
+    }
+    @Provides
+    fun provideEventRepository(eventAPI: EventAPI): EventRepository{
+        return EventRepositoryImpl(eventAPI)
     }
 
 }
