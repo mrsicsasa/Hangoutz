@@ -25,15 +25,12 @@ class SplashScreenViewModel @Inject constructor(
     fun deleteEventsFromPast() {
         viewModelScope.launch {
             val events = getEvents()
-            val oldEvents = events?.filter { it.date.toDate() < LocalDateTime.now() }
-            if (oldEvents != null) {
-                oldEvents.forEach {
-                    val invitesForEvent = getInvites(it.id)
-                    invitesForEvent?.forEach{
+            events?.filter { it.date.toDate() < LocalDateTime.now() }?.forEach {
+                val invitesForEvent = getInvites(it.id)
+                invitesForEvent?.forEach {
                     inviteRepository.deleteInvite(it.id)
-                    }
-                    Log.d("brisanje", eventRepository.deleteEvent(it.id).code().toString())
                 }
+                Log.d("brisanje", eventRepository.deleteEvent(it.id).code().toString())
             }
         }
 

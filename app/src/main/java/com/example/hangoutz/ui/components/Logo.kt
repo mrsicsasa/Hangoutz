@@ -1,6 +1,7 @@
 package com.example.hangoutz.ui.components
 
 import android.view.animation.OvershootInterpolator
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -10,7 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.painter.Painter
@@ -21,9 +21,12 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun Logo(
-    painter: Painter
+    painter: Painter,
+    initialValue: Float,
+    targetValue: Float,
+    modifier: Modifier
 ) {
-    val scale = remember { androidx.compose.animation.core.Animatable(1f) }
+    val scale = remember { Animatable(initialValue) }
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -32,14 +35,18 @@ fun Logo(
         Image(
             painter = painter,
             contentDescription = stringResource(R.string.application_logo),
-            modifier = Modifier
+            modifier = modifier
                 .height(50.dp)
-                .align(Alignment.Center)
                 .scale(scale.value)
         )
         LaunchedEffect(key1 = true) {
             delay(1000)
-            scale.animateTo(targetValue = 0.0f, animationSpec = tween(durationMillis = 500, easing = { OvershootInterpolator(0f).getInterpolation(it) }))
+            scale.animateTo(
+                targetValue = targetValue,
+                animationSpec = tween(
+                    durationMillis = 500,
+                    easing = { OvershootInterpolator(0f).getInterpolation(it) })
+            )
         }
     }
 }
