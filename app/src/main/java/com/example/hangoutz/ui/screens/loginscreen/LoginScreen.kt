@@ -3,6 +3,7 @@ package com.example.hangoutz.ui.screens.loginscreen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScopeInstance.align
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -61,7 +62,7 @@ fun LoginScreen() {
             modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(1f)
-                .align(Alignment.Center)
+                .align(Alignment.TopCenter)
         ){
 
 
@@ -83,7 +84,8 @@ fun Develop() {
         label = { Text("Name") },
         onValueChange = { text = it },
         singleLine = true,
-        shape = RoundedCornerShape(20.dp)
+        shape = RoundedCornerShape(20.dp),
+        modifier = Modifier.align(Alignment.Center)
     )
 }
 
