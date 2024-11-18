@@ -1,4 +1,4 @@
-package com.example.hangoutz.ui.screens.navigation
+package com.example.hangoutz.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -15,18 +15,22 @@ import com.example.hangoutz.ui.screens.mainscreen.MainScreen
 import com.example.hangoutz.ui.screens.myeventsscreen.MyEventsScreen
 import com.example.hangoutz.ui.screens.registerscreen.RegisterScreen
 import com.example.hangoutz.ui.screens.settingsscreen.SettingsScreen
+import com.example.hangoutz.ui.screens.splash.SplashScreen
 
 @Composable
 fun AppNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    startDestination: String = NavigationItem.Login.route
+    startDestination: String = NavigationItem.Splash.route
 ) {
     NavHost(
         modifier = modifier,
         navController = navController,
         startDestination = startDestination
     ) {
+        composable(NavigationItem.Splash.route){
+            SplashScreen()
+        }
         composable(NavigationItem.Login.route) {
             LoginScreen(navController)
         }
