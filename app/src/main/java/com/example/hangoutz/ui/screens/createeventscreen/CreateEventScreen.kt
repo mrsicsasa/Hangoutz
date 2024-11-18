@@ -1,4 +1,4 @@
-package com.example.hangoutz.ui.loginscreen
+package com.example.hangoutz.ui.screens.createeventscreen
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -19,6 +19,3 @@ fun CreateEventScreen(navController: NavController) {
         }
     }
 }
-
-
-

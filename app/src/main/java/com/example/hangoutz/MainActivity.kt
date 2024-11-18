@@ -12,7 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
-import com.example.hangoutz.ui.navigation.AppNavHost
+import com.example.hangoutz.ui.screens.navigation.AppNavHost
 import com.example.hangoutz.ui.theme.HangoutzTheme
 import com.example.hangoutz.ui.theme.inter
 
@@ -31,26 +31,26 @@ class MainActivity : ComponentActivity() {
                             navController = navController,
                             modifier = Modifier.padding(innerPadding)
                         )
+                    }
                 }
             }
         }
     }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier,
-        fontFamily = inter
-    )
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    HangoutzTheme {
-        Greeting("Android")
+    @Composable
+    fun Greeting(name: String, modifier: Modifier = Modifier) {
+        Text(
+            text = "Hello $name!",
+            modifier = modifier,
+            fontFamily = inter
+        )
     }
-}}
+
+    @Preview(showBackground = true)
+    @Composable
+    fun GreetingPreview() {
+        HangoutzTheme {
+            Greeting("Android")
+        }
+    }
+}

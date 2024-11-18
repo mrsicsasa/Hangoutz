@@ -1,20 +1,20 @@
-package com.example.hangoutz.ui.navigation
+package com.example.hangoutz.ui.screens.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.hangoutz.ui.loginscreen.CreateEventScreen
-import com.example.hangoutz.ui.loginscreen.EventDetailsScreen
-import com.example.hangoutz.ui.loginscreen.EventOwnerDetailsScreen
-import com.example.hangoutz.ui.loginscreen.FriendsScreen
-import com.example.hangoutz.ui.loginscreen.InvitedScreen
-import com.example.hangoutz.ui.loginscreen.LoginScreen
-import com.example.hangoutz.ui.loginscreen.MainScreen
-import com.example.hangoutz.ui.loginscreen.MyEventsScreen
-import com.example.hangoutz.ui.loginscreen.RegisterScreen
-import com.example.hangoutz.ui.loginscreen.SettingsScreen
+import com.example.hangoutz.ui.screens.createeventscreen.CreateEventScreen
+import com.example.hangoutz.ui.screens.eventdetailsscreen.EventDetailsScreen
+import com.example.hangoutz.ui.screens.eventdetailsownerscreen.EventOwnerDetailsScreen
+import com.example.hangoutz.ui.screens.friendsscreen.FriendsScreen
+import com.example.hangoutz.ui.screens.invitedscreen.InvitedScreen
+import com.example.hangoutz.ui.screens.loginscreen.LoginScreen
+import com.example.hangoutz.ui.screens.mainscreen.MainScreen
+import com.example.hangoutz.ui.screens.myeventsscreen.MyEventsScreen
+import com.example.hangoutz.ui.screens.registerscreen.RegisterScreen
+import com.example.hangoutz.ui.screens.settingsscreen.SettingsScreen
 
 @Composable
 fun AppNavHost(

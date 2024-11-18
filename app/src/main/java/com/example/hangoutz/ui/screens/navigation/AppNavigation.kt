@@ -1,4 +1,4 @@
-package com.example.hangoutz.ui.navigation
+package com.example.hangoutz.ui.screens.navigation
 
 enum class Screen {
     LOGIN,
