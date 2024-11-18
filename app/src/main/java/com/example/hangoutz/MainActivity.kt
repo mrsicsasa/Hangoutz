@@ -12,7 +12,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.hangoutz.ui.screens.splash.SplashScreen
 import com.example.hangoutz.ui.theme.HangoutzTheme
 import com.example.hangoutz.ui.theme.inter
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 

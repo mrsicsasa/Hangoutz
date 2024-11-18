@@ -1,9 +1,7 @@
 package com.example.hangoutz.data.repository
 
 import com.example.hangoutz.data.models.Event
-import com.example.hangoutz.data.models.User
 import com.example.hangoutz.data.remote.EventAPI
-import com.example.hangoutz.data.remote.UserAPI
 import com.example.hangoutz.domain.repository.EventRepository
 import retrofit2.Response
 import java.util.UUID
