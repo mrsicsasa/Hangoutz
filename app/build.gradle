@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -26,17 +28,13 @@ android {
     buildTypes {
         debug {
             buildConfigField("String", "BASE_URL", "\"https://zsjxwfjutstrybvltjov.supabase.co/\"")
-            buildConfigField("String", "REQUEST_URL_EVENTS", "\"rest/v1/events?select=*\"")
-            buildConfigField("String", "REQUEST_URL_EVENT", "\"rest/v1/events\"")
-            buildConfigField("String", "REQUEST_URL_USER", "\"rest/v1/users\"")
+            buildConfigField("String", "REQUEST_URL", "\"rest/v1/\"")
         }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField("String", "BASE_URL", "\"https://zsjxwfjutstrybvltjov.supabase.co/\"")
-            buildConfigField("String", "REQUEST_URL_EVENTS", "\"rest/v1/events?select=*\"")
-            buildConfigField("String", "REQUEST_URL_EVENT", "\"rest/v1/events\"")
-            buildConfigField("String", "REQUEST_URL_USER", "\"rest/v1/users\"")
+            buildConfigField("String", "REQUEST_URL", "\"rest/v1/\"")
 
         }
     }
@@ -67,6 +65,10 @@ dependencies {
     implementation libs.converter.gson
     implementation libs.kotlinx.coroutines.android
     implementation libs.kotlinx.coroutines.core
+    implementation(libs.hilt.android)
+    implementation(libs.androidx.hilt.navigation.compose)
+    kapt(libs.hilt.android.compiler)
+    kapt(libs.hilt.compiler)
     testImplementation libs.junit
     androidTestImplementation libs.androidx.junit
     androidTestImplementation libs.androidx.espresso.core
