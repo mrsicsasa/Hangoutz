@@ -8,12 +8,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.hangoutz.ui.screens.createeventscreen.CreateEventScreen
-import com.example.hangoutz.ui.screens.eventdetailsscreen.EventDetailsScreen
 import com.example.hangoutz.ui.screens.eventdetailsownerscreen.EventOwnerDetailsScreen
+import com.example.hangoutz.ui.screens.eventdetailsscreen.EventDetailsScreen
 import com.example.hangoutz.ui.screens.friendsscreen.FriendsScreen
 import com.example.hangoutz.ui.screens.invitedscreen.InvitedScreen
 import com.example.hangoutz.ui.screens.loginscreen.LoginScreen
-import com.example.hangoutz.ui.screens.mainscreen.MainScreen
+import com.example.hangoutz.ui.screens.main.MainScreen
 import com.example.hangoutz.ui.screens.myeventsscreen.MyEventsScreen
 import com.example.hangoutz.ui.screens.registerscreen.RegisterScreen
 import com.example.hangoutz.ui.screens.settingsscreen.SettingsScreen
