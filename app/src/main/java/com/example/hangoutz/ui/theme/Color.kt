@@ -11,3 +11,7 @@ val GreenDark = Color(0xFF618181)
 val Blue = Color(0xFF848aab)
 
 val OrangeDark = Color(0xFFaf9767)
+
+
+val Chestnut = Color(0xFF4D4444)
+val Error = Color(0xFFFA626C)
