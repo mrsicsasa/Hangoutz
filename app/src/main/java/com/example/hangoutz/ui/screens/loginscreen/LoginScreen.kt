@@ -1,8 +1,12 @@
 package com.example.hangoutz.ui.screens.loginscreen
 
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
@@ -12,20 +16,38 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.hangoutz.R
 import com.example.hangoutz.ui.components.ActionButton
-import com.example.hangoutz.ui.components.ErrorMessage
 import com.example.hangoutz.ui.components.InputField
+import com.example.hangoutz.ui.navigation.NavigationItem
+import com.example.hangoutz.ui.theme.Ivory
+import androidx.compose.runtime.collectAsState
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.hangoutz.ui.components.ErrorMessage
+import com.example.hangoutz.ui.screens.splash.SplashScreenViewModel
 
+
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun LoginScreen() {
+fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltViewModel()) {
+   // val viewmodel: LoginViewModel = hiltViewModel()
+//    var email = viewmodel.email
+//    var password = viewmodel.password
+//    var errorMessage = viewmodel.errorMessage
+
+    val data = viewmodel.uiState.collectAsState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -62,15 +84,45 @@ fun LoginScreen() {
                 .padding(start = 30.dp, end = 30.dp)
         ) {
 
-            InputField("Email")
-            InputField("Password")
+            InputField("Email", data.value.email, {viewmodel.onTextChanged(it)})
 
-            ErrorMessage("Invalid email or password")
+            InputField("Password", data.value.password, {viewmodel.onPassChanged(it)}, isPassword = true)
 
-            ActionButton(R.drawable.enter, "Login") {
+            ErrorMessage(data.value.errorMessage)
 
-            }
-
+            ActionButton(
+                R.drawable.enter,
+                "Login",
+                onClick = { viewmodel.userAuth({navController.navigate(NavigationItem.MainScreen.route)})})
         }
+
+        Column(
+            modifier = Modifier
+                .padding(bottom = 40.dp)
+                .fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+
+        ) {
+            Text(
+                text = "OR",
+                color = Ivory,
+                modifier = Modifier
+                    .padding(top = 10.dp),
+                textAlign = TextAlign.Center
+            )
+            Text(
+                text = "Create Account",
+                color = Ivory,
+                modifier = Modifier
+                    .padding(top = 5.dp)
+                    .clickable {
+                        navController.navigate(NavigationItem.Register.route)
+                    },
+                textAlign = TextAlign.Center
+            )
+        }
+
+
     }
 }

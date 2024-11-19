@@ -38,7 +38,7 @@ class SplashScreenViewModel @Inject constructor(
 
     }
     fun isUserLoggedIn(context: Context): Boolean {
-        SharedPreferencesManager.clearUserId(context)
+
         if (SharedPreferencesManager.getUserId(context = context) != null) {
             return true
         }

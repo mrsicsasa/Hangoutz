@@ -13,6 +13,7 @@ import com.example.hangoutz.ui.screens.eventdetailsownerscreen.EventOwnerDetails
 import com.example.hangoutz.ui.screens.friendsscreen.FriendsScreen
 import com.example.hangoutz.ui.screens.invitedscreen.InvitedScreen
 import com.example.hangoutz.ui.screens.loginscreen.LoginScreen
+import com.example.hangoutz.ui.screens.loginscreen.LoginViewModel
 import com.example.hangoutz.ui.screens.mainscreen.MainScreen
 import com.example.hangoutz.ui.screens.myeventsscreen.MyEventsScreen
 import com.example.hangoutz.ui.screens.registerscreen.RegisterScreen

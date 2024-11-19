@@ -21,6 +21,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
+import com.example.hangoutz.ui.navigation.NavigationItem
 import com.example.hangoutz.ui.theme.Chestnut
 import com.example.hangoutz.ui.theme.Ivory
 
@@ -47,12 +50,12 @@ fun ActionButton(
 fun ActionButton(
     painterResource: Int,
     buttonText: String,
-    onClick: () -> (Unit)
+    onClick: () -> Unit
 ) {
     Box(
         modifier = Modifier
             .fillMaxHeight()
-            .padding(bottom = 90.dp)
+            .padding(bottom = 30.dp)
     ) {
         Button(
             onClick = onClick,
@@ -60,9 +63,11 @@ fun ActionButton(
             shape = RoundedCornerShape(20.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 20.dp, end = 20.dp, bottom = 75.dp)
+                .padding(start = 20.dp, end = 20.dp)
                 .height(50.dp)
-                .align(Alignment.BottomCenter)
+                .align(Alignment.BottomCenter),
+
+
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center
@@ -79,29 +84,6 @@ fun ActionButton(
                 )
             }
         }
-        Column(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(bottom = 3.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
 
-        ) {
-            Text(
-                text = "OR",
-                color = Ivory,
-                modifier = Modifier
-                    .padding(top = 10.dp),
-            )
-            Text(
-                text = "Create Account",
-                color = Ivory,
-                modifier = Modifier
-                    .padding(top = 5.dp)
-                    .clickable {
-
-                    }
-            )
-        }
     }
 }

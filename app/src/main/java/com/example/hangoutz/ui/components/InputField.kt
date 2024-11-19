@@ -21,12 +21,17 @@ import com.example.hangoutz.ui.theme.Error
 import com.example.hangoutz.ui.theme.Ivory
 
 @Composable
-fun InputField(label: String, isPassword: Boolean = false) {
-    var text by remember { mutableStateOf("") }
+fun InputField(
+    label: String,
+    value: String,
+    onValueChange : (String) -> Unit,
+    isPassword: Boolean = false)
+{
+
     OutlinedTextField(
-        value = text,
+        value = value,
         label = { Text(text = label, style = MaterialTheme.typography.bodySmall) },
-        onValueChange = { text = it },
+        onValueChange = {onValueChange(it)},
         shape = RoundedCornerShape(20.dp),
         visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
         colors = OutlinedTextFieldDefaults.colors(
