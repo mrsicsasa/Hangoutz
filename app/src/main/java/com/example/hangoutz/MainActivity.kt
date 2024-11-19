@@ -1,39 +1,38 @@
 package com.example.hangoutz
 
-import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.hangoutz.ui.UserViewModel
-import com.example.hangoutz.ui.screens.loginscreen.LoginScreen
+import androidx.navigation.compose.rememberNavController
+import com.example.hangoutz.ui.navigation.AppNavHost
+import com.example.hangoutz.ui.screens.splash.SplashScreen
 import com.example.hangoutz.ui.theme.HangoutzTheme
-import com.example.hangoutz.ui.theme.inter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             HangoutzTheme {
-
-
-                    LoginScreen()
-
+                //  SplashScreen()
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    // Initialize NavController
+                    val navController = rememberNavController()
+                    AppNavHost(
+                        navController = navController,
+                        modifier = Modifier.padding(innerPadding)
+                    )
+                }
             }
         }
     }

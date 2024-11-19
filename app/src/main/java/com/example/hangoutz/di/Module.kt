@@ -2,9 +2,14 @@ package com.example.hangoutz.di
 
 import com.example.hangoutz.BuildConfig
 import com.example.hangoutz.data.remote.EventAPI
+import com.example.hangoutz.data.remote.InviteAPI
 import com.example.hangoutz.data.remote.RetrofitInterceptor
 import com.example.hangoutz.data.remote.UserAPI
+import com.example.hangoutz.data.repository.EventRepositoryImpl
+import com.example.hangoutz.data.repository.InviteRepositoryImpl
 import com.example.hangoutz.data.repository.UserRepositoryImpl
+import com.example.hangoutz.domain.repository.EventRepository
+import com.example.hangoutz.domain.repository.InviteRepository
 import com.example.hangoutz.domain.repository.UserRepository
 import dagger.Module
 import dagger.Provides
@@ -41,8 +46,21 @@ object Module {
     }
 
     @Provides
+    fun providesInviteApi(retrofit: Retrofit): InviteAPI{
+        return retrofit.create(InviteAPI::class.java)
+    }
+
+    @Provides
     fun providesUserRepository(userAPI: UserAPI): UserRepository {
         return UserRepositoryImpl(userAPI)
     }
+    @Provides
+    fun provideEventRepository(eventAPI: EventAPI): EventRepository{
+        return EventRepositoryImpl(eventAPI)
+    }
 
+    @Provides
+    fun provideInviteRepository(invitesAPI: InviteAPI): InviteRepository {
+        return InviteRepositoryImpl(invitesAPI)
+    }
 }
