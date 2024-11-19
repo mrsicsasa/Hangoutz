@@ -2,7 +2,7 @@ package com.example.hangoutz.di
 
 import com.example.hangoutz.BuildConfig
 import com.example.hangoutz.data.remote.EventAPI
-import com.example.hangoutz.data.remote.InvitesAPI
+import com.example.hangoutz.data.remote.InviteAPI
 import com.example.hangoutz.data.remote.RetrofitInterceptor
 import com.example.hangoutz.data.remote.UserAPI
 import com.example.hangoutz.data.repository.EventRepositoryImpl
@@ -46,8 +46,8 @@ object Module {
     }
 
     @Provides
-    fun providesInviteApi(retrofit: Retrofit): InvitesAPI{
-        return retrofit.create(InvitesAPI::class.java)
+    fun providesInviteApi(retrofit: Retrofit): InviteAPI{
+        return retrofit.create(InviteAPI::class.java)
     }
 
     @Provides
@@ -60,7 +60,7 @@ object Module {
     }
 
     @Provides
-    fun provideInviteRepository(invitesAPI: InvitesAPI): InviteRepository {
+    fun provideInviteRepository(invitesAPI: InviteAPI): InviteRepository {
         return InviteRepositoryImpl(invitesAPI)
     }
 }

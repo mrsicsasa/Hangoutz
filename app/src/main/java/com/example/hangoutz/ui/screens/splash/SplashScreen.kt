@@ -1,8 +1,6 @@
 package com.example.hangoutz.ui.screens.splash
 
-import android.content.Context
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
@@ -18,12 +16,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.hangoutz.R
 import com.example.hangoutz.ui.components.Logo
 import com.example.hangoutz.ui.navigation.NavigationItem
-import kotlinx.coroutines.delay
+import com.example.hangoutz.utils.Constants
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -51,7 +48,7 @@ fun SplashScreen(navController: NavController) {
 
     }
     LaunchedEffect(key1 = true) {
-        alpha.animateTo(1f, animationSpec = tween(2000))
+        alpha.animateTo(1f, animationSpec = tween(Constants.BACKGROUND_ANIMATION_DURATION))
         viewmodel.deleteEventsFromPast()
         if(viewmodel.isUserLoggedIn(context)) {
             navController.navigate(route = NavigationItem.MainScreen.route)

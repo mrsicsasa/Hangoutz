@@ -1,14 +1,13 @@
 package com.example.hangoutz.data.remote
 
 import com.example.hangoutz.BuildConfig
-import com.example.hangoutz.data.models.Event
 import com.example.hangoutz.data.models.Invite
 import retrofit2.Response
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface InvitesAPI {
+interface InviteAPI {
     @GET("${BuildConfig.REQUEST_URL}invites?select=*")
     suspend fun getInvites(): Response<List<Invite>>
 

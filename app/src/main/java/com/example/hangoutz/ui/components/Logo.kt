@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.hangoutz.R
+import com.example.hangoutz.utils.Constants
 import kotlinx.coroutines.delay
 
 @Composable
@@ -40,11 +41,11 @@ fun Logo(
                 .scale(scale.value)
         )
         LaunchedEffect(key1 = true) {
-            delay(800)
+            delay(Constants.LOGO_ANIMATION_DELAY)
             scale.animateTo(
                 targetValue = targetValue,
                 animationSpec = tween(
-                    durationMillis = 500,
+                    durationMillis = Constants.LOGO_ANIMATION_DURATION,
                     easing = { OvershootInterpolator(0f).getInterpolation(it) })
             )
         }
