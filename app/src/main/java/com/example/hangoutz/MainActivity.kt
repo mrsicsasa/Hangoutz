@@ -1,5 +1,6 @@
 package com.example.hangoutz
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -23,7 +24,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             HangoutzTheme {
-              //  SplashScreen()
+                //  SplashScreen()
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     // Initialize NavController
                     val navController = rememberNavController()
@@ -35,3 +36,4 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+}
