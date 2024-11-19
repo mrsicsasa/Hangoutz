@@ -1,5 +1,6 @@
 package com.example.hangoutz.ui.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -47,63 +48,60 @@ fun ActionButton(
     painterResource: Int,
     buttonText: String,
     onClick: () -> (Unit)
-
 ) {
     Box(
         modifier = Modifier
             .fillMaxHeight()
             .padding(bottom = 90.dp)
-
     ) {
-
         Button(
             onClick = onClick,
             colors = ButtonDefaults.buttonColors(containerColor = Ivory, contentColor = Chestnut),
             shape = RoundedCornerShape(20.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 20.dp, end = 20.dp, bottom = 60.dp)
+                .padding(start = 20.dp, end = 20.dp, bottom = 75.dp)
                 .height(50.dp)
                 .align(Alignment.BottomCenter)
-
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center
-                //contentAlignment = Alignment.
             ) {
-
                 Text(
                     text = buttonText,
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.padding(end = 10.dp)
                 )
-
                 Icon(
                     painter = painterResource(painterResource),
                     contentDescription = "Login icon",
                     modifier = Modifier.size(20.dp)
-
                 )
             }
-
         }
+        Column(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 3.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
 
-Column(modifier = Modifier.align(Alignment.BottomCenter)
-    .padding(bottom = 3.dp)) {
-    Text(
-        text = "OR",
-        color = Ivory,
-        modifier = Modifier
-            .padding(start = 50.dp)
+        ) {
+            Text(
+                text = "OR",
+                color = Ivory,
+                modifier = Modifier
+                    .padding(top = 10.dp),
+            )
+            Text(
+                text = "Create Account",
+                color = Ivory,
+                modifier = Modifier
+                    .padding(top = 5.dp)
+                    .clickable {
 
-
-    )
-    Text(
-
-        text = "Create Account",
-        color = Ivory,
-
-    )
-}
-}
+                    }
+            )
+        }
     }
+}

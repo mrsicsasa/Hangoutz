@@ -38,26 +38,3 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-@SuppressLint("CoroutineCreationDuringComposition")
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    val userViewModel: UserViewModel = viewModel()
-    val coroutineScope = rememberCoroutineScope()
-    coroutineScope.launch {
-        Log.d("DiTest", "test ${userViewModel.getUserByName("Mikica").isSuccessful}")
-    }
-    Text(
-        text = "Hello $name!",
-        modifier = modifier,
-        fontFamily = inter
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    HangoutzTheme {
-        Greeting("Android")
-    }
-}
