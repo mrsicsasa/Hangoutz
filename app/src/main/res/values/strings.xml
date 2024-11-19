@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Hangoutz</string>
+    <string name="application_logo">application_logo</string>
 </resources>
