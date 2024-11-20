@@ -25,7 +25,9 @@ fun InputField(
     label: String,
     value: String,
     onValueChange : (String) -> Unit,
-    isPassword: Boolean = false)
+    isPassword: Boolean = false,
+    isError: Boolean = false
+)
 {
     OutlinedTextField(
         value = value,
@@ -39,8 +41,8 @@ fun InputField(
             cursorColor = Ivory,
             focusedLabelColor = Ivory,
             unfocusedLabelColor = Ivory,
-            focusedBorderColor = Ivory,
-            unfocusedBorderColor = Ivory,
+            focusedBorderColor = if (isError) Error else Ivory,
+            unfocusedBorderColor = if (isError) Error else Ivory,
             errorLabelColor = Ivory,
             errorBorderColor = Error,
             errorTextColor = Ivory

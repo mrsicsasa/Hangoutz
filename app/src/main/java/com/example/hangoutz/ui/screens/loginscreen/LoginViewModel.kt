@@ -19,7 +19,8 @@ import javax.inject.Inject
 data class LoginData(
     var email: String = "",
     var password: String = "",
-    val errorMessage: String = ""
+    val errorMessage: String = "",
+    val isError: Boolean = false
 )
 
 @HiltViewModel
@@ -29,12 +30,14 @@ class LoginViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(LoginData())
     val uiState: StateFlow<LoginData> = _uiState
+
     @RequiresApi(Build.VERSION_CODES.O)
     fun userAuth(context : Context , onLoginSuccess: () -> Unit) {
-
+        _uiState.value = _uiState.value.copy(isError = false)
         if (_uiState.value.email == "" || uiState.value.password == "") {
             _uiState.value =
                 _uiState.value.copy(errorMessage = "All fields must be filled!")
+                 _uiState.value = _uiState.value.copy(isError = true)
         } else {
             viewModelScope.launch {
                 try {
@@ -54,6 +57,7 @@ class LoginViewModel @Inject constructor(
 
                     } else {
                         _uiState.value = _uiState.value.copy(errorMessage = "Incorrect email or password")
+                        _uiState.value = _uiState.value.copy(isError = true)
                     }
                 } catch (e: Exception) {
                     _uiState.value = _uiState.value.copy(errorMessage = "An error has occurred")

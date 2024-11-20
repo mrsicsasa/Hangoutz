@@ -40,6 +40,7 @@ import com.example.hangoutz.utils.Constants
 fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltViewModel()) {
     val data = viewmodel.uiState.collectAsState()
     val context = LocalContext.current
+    val isError : Boolean = false;
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -75,12 +76,14 @@ fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltVi
                 .fillMaxWidth()
                 .padding(start = 30.dp, end = 30.dp)
         ) {
-            InputField("Email", data.value.email, { viewmodel.onTextChanged(it) })
+
+       //     if(ErrorMessage.)
+            InputField("Email", data.value.email, { viewmodel.onTextChanged(it) }, isError = data.value.isError)
             InputField(
                 "Password",
                 data.value.password,
                 { viewmodel.onPassChanged(it) },
-                isPassword = true
+                isPassword = true, isError = data.value.isError
             )
             ErrorMessage(data.value.errorMessage)
             ActionButton(
