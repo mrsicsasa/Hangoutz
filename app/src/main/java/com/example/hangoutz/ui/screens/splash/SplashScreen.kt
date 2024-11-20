@@ -35,7 +35,6 @@ fun SplashScreen(navController: NavController) {
                 painterResource(id = R.drawable.main_background),
                 contentScale = ContentScale.FillBounds,
                 alpha = alpha.value
-
             ),
         contentAlignment = Alignment.Center
     ) {
@@ -56,7 +55,6 @@ fun SplashScreen(navController: NavController) {
                     inclusive = true
                 }
             }
-
         } else {
             navController.navigate(route = NavigationItem.Login.route)
         }

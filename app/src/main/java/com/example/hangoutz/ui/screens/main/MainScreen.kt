@@ -71,9 +71,9 @@ fun MainScreen(navController: NavController) {
             modifier = Modifier
                 .fillMaxSize()
                 .paint(
-                painterResource(id = R.drawable.main_background),
-                contentScale = ContentScale.FillBounds
-            )
+                    painterResource(id = R.drawable.main_background),
+                    contentScale = ContentScale.FillBounds
+                )
                 .padding(innerPadding)
         ) {
             composable(route = BottomNavigationDestination.EVENTS.name) {

@@ -29,8 +29,7 @@ fun TabView(
     NavigationBar(
         modifier = Modifier.height(67.dp),
         containerColor = bottomNavigationColor,
-
-        ) {
+    ) {
         val currentBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = currentBackStackEntry?.destination?.route
         tabBarItems.forEach { tabBarItem ->
@@ -38,7 +37,7 @@ fun TabView(
                 modifier = Modifier.padding(top = 18.dp),
                 selected = tabBarItem.route.name == currentRoute,
                 onClick = {
-                    if(tabBarItem.route.name != currentRoute) {
+                    if (tabBarItem.route.name != currentRoute) {
                         navController.navigate(route = tabBarItem.route.name)
                     }
                 },
