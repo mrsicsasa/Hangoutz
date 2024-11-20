@@ -3,7 +3,6 @@ package com.example.hangoutz.ui.screens.loginscreen
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -12,7 +11,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -31,13 +30,16 @@ import com.example.hangoutz.R
 import com.example.hangoutz.ui.components.ActionButton
 import com.example.hangoutz.ui.components.ErrorMessage
 import com.example.hangoutz.ui.components.InputField
+import com.example.hangoutz.ui.components.Logo
 import com.example.hangoutz.ui.navigation.NavigationItem
 import com.example.hangoutz.ui.theme.Ivory
+import com.example.hangoutz.utils.Constants
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltViewModel()) {
     val data = viewmodel.uiState.collectAsState()
+    val context = LocalContext.current
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -55,14 +57,14 @@ fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltVi
                 modifier = Modifier
                     .fillMaxWidth()
                     .aspectRatio(1f),
-                contentAlignment = Alignment.TopCenter
+                contentAlignment = Alignment.Center
             ) {
-                Image(
-                    painter = painterResource(R.drawable.logo),
-                    contentDescription = "app logo",
-                    modifier = Modifier
-                        .height(50.dp)
-                        .align(Alignment.Center)
+                Logo(
+                    painterResource(id = R.drawable.logo),
+                    initialValue = 0f,
+                    targetValue = 1f,
+                    modifier = Modifier.align(Alignment.Center),
+                    animationDelay = Constants.LOGO_ANIMATION_DELAY
                 )
             }
         }
@@ -84,7 +86,7 @@ fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltVi
             ActionButton(
                 R.drawable.enter,
                 "Login",
-                onClick = { viewmodel.userAuth({ navController.navigate(NavigationItem.MainScreen.route) }) })
+                onClick = { viewmodel.userAuth(context, { navController.navigate(NavigationItem.MainScreen.route) }) })
         }
 
         Column(

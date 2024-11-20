@@ -1,10 +1,12 @@
 package com.example.hangoutz.ui.screens.loginscreen
 
+import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.hangoutz.data.local.SharedPreferencesManager
 import com.example.hangoutz.domain.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,6 +14,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.security.MessageDigest
 import javax.inject.Inject
+
 
 data class LoginData(
     var email: String = "",
@@ -23,11 +26,12 @@ data class LoginData(
 class LoginViewModel @Inject constructor(
     private val userRepository: UserRepository,
 ) : ViewModel() {
+
     private val _uiState = MutableStateFlow(LoginData())
     val uiState: StateFlow<LoginData> = _uiState
-
     @RequiresApi(Build.VERSION_CODES.O)
-    fun userAuth(onLoginSuccess: () -> Unit) {
+    fun userAuth(context : Context , onLoginSuccess: () -> Unit) {
+
         if (_uiState.value.email == "" || uiState.value.password == "") {
             _uiState.value =
                 _uiState.value.copy(errorMessage = "All fields must be filled!")
@@ -41,7 +45,13 @@ class LoginViewModel @Inject constructor(
                         )
                     if (response.isSuccessful && !response.body().isNullOrEmpty()
                     ) {
+
+                        val user = response.body()?.first()
+                        user?.let {
+                            SharedPreferencesManager.saveUserId(context, it.id.toString())
+                        }
                         onLoginSuccess()
+
                     } else {
                         _uiState.value = _uiState.value.copy(errorMessage = "Incorrect email or password")
                     }
@@ -64,5 +74,4 @@ class LoginViewModel @Inject constructor(
     fun onPassChanged(newText: String) {
         _uiState.value = _uiState.value.copy(password = newText)
     }
-
 }

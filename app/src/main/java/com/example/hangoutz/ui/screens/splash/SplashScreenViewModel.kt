@@ -36,13 +36,14 @@ class SplashScreenViewModel @Inject constructor(
             }
         }
     }
-    fun isUserLoggedIn(context: Context): Boolean {
 
+    fun isUserLoggedIn(context: Context): Boolean {
         if (SharedPreferencesManager.getUserId(context = context) != null) {
             return true
         }
         return false
     }
+
     suspend private fun getEvents(): List<Event>? {
         val response = eventRepository.getEvents()
         if (response.isSuccessful && response.body() != null) {
@@ -58,5 +59,4 @@ class SplashScreenViewModel @Inject constructor(
         }
         return null
     }
-
 }
