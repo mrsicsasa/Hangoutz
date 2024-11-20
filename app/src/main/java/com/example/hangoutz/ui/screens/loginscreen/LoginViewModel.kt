@@ -48,11 +48,11 @@ class LoginViewModel @Inject constructor(
                         )
                     if (response.isSuccessful && !response.body().isNullOrEmpty()
                     ) {
-
                         val user = response.body()?.first()
                         user?.let {
                             SharedPreferencesManager.saveUserId(context, it.id.toString())
                         }
+                        _uiState.value = _uiState.value.copy(isError = false)
                         onLoginSuccess()
 
                     } else {
