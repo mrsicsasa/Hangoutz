@@ -11,9 +11,6 @@ val Blue = Color(0xFF848aab)
 val OrangeDark = Color(0xFFaf9767)
 val Chestnut = Color(0xFF4D4444)
 val Error = Color(0xFFFA626C)
-
-
-val OrangeDark = Color(0xFFaf9767)
 val topBarBackgroundColor = Color(red = 120, green = 137, blue = 149)
 val bottomNavigationColor = Color(red = 43, green = 42, blue = 58)
 
