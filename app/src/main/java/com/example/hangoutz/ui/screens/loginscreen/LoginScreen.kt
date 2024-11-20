@@ -22,7 +22,15 @@ fun LoginScreen(navController: NavController) {
             Text(text = "Go to Register")
         }
         Button(onClick = {
-            navController.navigate(NavigationItem.MainScreen.route)
+            navController.navigate(NavigationItem.MainScreen.route) {
+                launchSingleTop = true
+                popUpTo(NavigationItem.Login.route) {
+                    inclusive = true
+                }
+                popUpTo(NavigationItem.Splash.route) {
+                    inclusive = true
+                }
+            }
         }) {
             Text(text = "Go to Main")
         }
