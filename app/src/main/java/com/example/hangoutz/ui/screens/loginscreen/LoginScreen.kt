@@ -2,6 +2,7 @@ package com.example.hangoutz.ui.screens.loginscreen
 
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -97,7 +98,16 @@ fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltVi
                 onClick = {
                     viewmodel.userAuth(
                         context,
-                        { navController.navigate(NavigationItem.MainScreen.route) })
+                        { navController.navigate(NavigationItem.MainScreen.route){
+                            Log.d("Navigacija",navController.currentBackStack.toString())
+                            popUpTo(NavigationItem.Login.route) {
+                                inclusive = true
+                            }
+                            popUpTo(NavigationItem.Register.route){
+                                inclusive = true
+                            }
+                        } })
+                   // navController.popBackStack()
                 })
         }
 
