@@ -15,7 +15,6 @@ import kotlinx.coroutines.launch
 import java.security.MessageDigest
 import javax.inject.Inject
 
-
 data class LoginData(
     var email: String = "",
     var password: String = "",
@@ -36,8 +35,7 @@ class LoginViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(isError = false)
         if (_uiState.value.email == "" || uiState.value.password == "") {
             _uiState.value =
-                _uiState.value.copy(errorMessage = "All fields must be filled!")
-                 _uiState.value = _uiState.value.copy(isError = true)
+                _uiState.value.copy(errorMessage = "All fields must be filled!", isError = true)
         } else {
             viewModelScope.launch {
                 try {
@@ -54,10 +52,8 @@ class LoginViewModel @Inject constructor(
                         }
                         _uiState.value = _uiState.value.copy(isError = false)
                         onLoginSuccess()
-
                     } else {
-                        _uiState.value = _uiState.value.copy(errorMessage = "Incorrect email or password")
-                        _uiState.value = _uiState.value.copy(isError = true)
+                        _uiState.value = _uiState.value.copy(errorMessage = "Incorrect email or password", isError =  true)
                     }
                 } catch (e: Exception) {
                     _uiState.value = _uiState.value.copy(errorMessage = "An error has occurred")
@@ -74,7 +70,6 @@ class LoginViewModel @Inject constructor(
     fun onTextChanged(newText: String) {
         _uiState.value = _uiState.value.copy(email = newText)
     }
-
     fun onPassChanged(newText: String) {
         _uiState.value = _uiState.value.copy(password = newText)
     }

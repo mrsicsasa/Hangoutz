@@ -1,9 +1,7 @@
 package com.example.hangoutz.ui.components
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,9 +19,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.NavDestination
-import com.example.hangoutz.ui.navigation.NavigationItem
 import com.example.hangoutz.ui.theme.Chestnut
 import com.example.hangoutz.ui.theme.Ivory
 
@@ -44,7 +39,6 @@ fun ActionButton(
         Text(text = buttonText, style = MaterialTheme.typography.bodyMedium.copy(color = Chestnut))
     }
 }
-
 @Override
 @Composable
 fun ActionButton(
@@ -66,9 +60,7 @@ fun ActionButton(
                 .padding(start = 20.dp, end = 20.dp)
                 .height(50.dp)
                 .align(Alignment.BottomCenter),
-
-
-        ) {
+            ) {
             Row(
                 modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center
             ) {
@@ -84,6 +76,5 @@ fun ActionButton(
                 )
             }
         }
-
     }
 }
