@@ -10,13 +10,10 @@ import androidx.navigation.compose.composable
 import com.example.hangoutz.ui.screens.createeventscreen.CreateEventScreen
 import com.example.hangoutz.ui.screens.eventdetailsownerscreen.EventOwnerDetailsScreen
 import com.example.hangoutz.ui.screens.eventdetailsscreen.EventDetailsScreen
-import com.example.hangoutz.ui.screens.friendsscreen.FriendsScreen
 import com.example.hangoutz.ui.screens.invitedscreen.InvitedScreen
 import com.example.hangoutz.ui.screens.loginscreen.LoginScreen
 import com.example.hangoutz.ui.screens.main.MainScreen
-import com.example.hangoutz.ui.screens.myeventsscreen.MyEventsScreen
 import com.example.hangoutz.ui.screens.registerscreen.RegisterScreen
-import com.example.hangoutz.ui.screens.settingsscreen.SettingsScreen
 import com.example.hangoutz.ui.screens.splash.SplashScreen
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -46,17 +43,8 @@ fun AppNavHost(
         composable(NavigationItem.Invited.route) {
             InvitedScreen(navController)
         }
-        composable(NavigationItem.MyEvents.route) {
-            MyEventsScreen(navController)
-        }
         composable(NavigationItem.CreateEvent.route) {
             CreateEventScreen(navController)
-        }
-        composable(NavigationItem.Friends.route) {
-            FriendsScreen(navController)
-        }
-        composable(NavigationItem.Settings.route) {
-            SettingsScreen(navController)
         }
         composable(NavigationItem.EventDetails.route) {
             EventDetailsScreen(navController)
