@@ -35,7 +35,6 @@ class SplashScreenViewModel @Inject constructor(
                 Log.d("brisanje", eventRepository.deleteEvent(it.id).code().toString())
             }
         }
-
     }
     fun isUserLoggedIn(context: Context): Boolean {
 

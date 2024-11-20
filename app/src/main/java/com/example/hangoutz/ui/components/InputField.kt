@@ -27,7 +27,6 @@ fun InputField(
     onValueChange : (String) -> Unit,
     isPassword: Boolean = false)
 {
-
     OutlinedTextField(
         value = value,
         label = { Text(text = label, style = MaterialTheme.typography.bodySmall) },
