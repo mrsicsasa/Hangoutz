@@ -23,6 +23,7 @@ fun LoginScreen(navController: NavController) {
         }
         Button(onClick = {
             navController.navigate(NavigationItem.MainScreen.route) {
+                launchSingleTop = true
                 popUpTo(NavigationItem.Login.route) {
                     inclusive = true
                 }
