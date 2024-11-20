@@ -39,6 +39,7 @@ fun ActionButton(
         Text(text = buttonText, style = MaterialTheme.typography.bodyMedium.copy(color = Chestnut))
     }
 }
+
 @Override
 @Composable
 fun ActionButton(
@@ -60,7 +61,7 @@ fun ActionButton(
                 .padding(start = 20.dp, end = 20.dp)
                 .height(50.dp)
                 .align(Alignment.BottomCenter),
-            ) {
+        ) {
             Row(
                 modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center
             ) {
