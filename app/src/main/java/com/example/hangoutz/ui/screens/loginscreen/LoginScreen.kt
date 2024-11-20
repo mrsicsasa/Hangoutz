@@ -100,6 +100,7 @@ fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltVi
                         { navController.navigate(NavigationItem.MainScreen.route) })
                 })
         }
+
         Column(
             modifier = Modifier
                 .padding(bottom = 40.dp)

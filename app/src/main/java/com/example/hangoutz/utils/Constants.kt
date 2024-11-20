@@ -14,4 +14,8 @@ object Constants {
     //credentials
     val EMAIL = "email"
     val PASSWORD = "password"
+
+    //Top bar
+    val TOP_BAR_TITLE = "Hangoutz"
+
 }

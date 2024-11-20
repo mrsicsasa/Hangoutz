@@ -35,7 +35,6 @@ fun SplashScreen(navController: NavController) {
                 painterResource(id = R.drawable.main_background),
                 contentScale = ContentScale.FillBounds,
                 alpha = alpha.value
-
             ),
         contentAlignment = Alignment.Center
     ) {
@@ -51,7 +50,11 @@ fun SplashScreen(navController: NavController) {
         alpha.animateTo(1f, animationSpec = tween(Constants.BACKGROUND_ANIMATION_DURATION))
         viewmodel.deleteEventsFromPast()
         if(viewmodel.isUserLoggedIn(context)) {
-            navController.navigate(route = NavigationItem.MainScreen.route)
+            navController.navigate(route = NavigationItem.MainScreen.route) {
+                popUpTo(NavigationItem.Splash.route) {
+                    inclusive = true
+                }
+            }
         } else {
             navController.navigate(route = NavigationItem.Login.route)
         }
