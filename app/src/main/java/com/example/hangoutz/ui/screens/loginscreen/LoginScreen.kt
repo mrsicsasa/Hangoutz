@@ -34,13 +34,15 @@ import com.example.hangoutz.ui.components.Logo
 import com.example.hangoutz.ui.navigation.NavigationItem
 import com.example.hangoutz.ui.theme.Ivory
 import com.example.hangoutz.utils.Constants
+import com.example.hangoutz.utils.Constants.EMAIL
+import com.example.hangoutz.utils.Constants.PASSWORD
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltViewModel()) {
     val data = viewmodel.uiState.collectAsState()
     val context = LocalContext.current
-    val isError : Boolean = false;
+    val isError: Boolean = false;
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -76,11 +78,14 @@ fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltVi
                 .fillMaxWidth()
                 .padding(start = 30.dp, end = 30.dp)
         ) {
-
-       //     if(ErrorMessage.)
-            InputField("Email", data.value.email, { viewmodel.onTextChanged(it) }, isError = data.value.isError)
             InputField(
-                "Password",
+                EMAIL,
+                data.value.email,
+                { viewmodel.onTextChanged(it) },
+                isError = data.value.isError
+            )
+            InputField(
+                PASSWORD,
                 data.value.password,
                 { viewmodel.onPassChanged(it) },
                 isPassword = true, isError = data.value.isError
@@ -89,16 +94,18 @@ fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltVi
             ActionButton(
                 R.drawable.enter,
                 "Login",
-                onClick = { viewmodel.userAuth(context, { navController.navigate(NavigationItem.MainScreen.route) }) })
+                onClick = {
+                    viewmodel.userAuth(
+                        context,
+                        { navController.navigate(NavigationItem.MainScreen.route) })
+                })
         }
-
         Column(
             modifier = Modifier
                 .padding(bottom = 40.dp)
                 .fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
-
         ) {
             Text(
                 text = "OR",

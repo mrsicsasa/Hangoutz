@@ -31,9 +31,9 @@ class LoginViewModel @Inject constructor(
     val uiState: StateFlow<LoginData> = _uiState
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun userAuth(context : Context , onLoginSuccess: () -> Unit) {
+    fun userAuth(context: Context, onLoginSuccess: () -> Unit) {
         _uiState.value = _uiState.value.copy(isError = false)
-        if (_uiState.value.email == "" || uiState.value.password == "") {
+        if (_uiState.value.email.isEmpty()|| uiState.value.password.isEmpty()) {
             _uiState.value =
                 _uiState.value.copy(errorMessage = "All fields must be filled!", isError = true)
         } else {
@@ -53,7 +53,10 @@ class LoginViewModel @Inject constructor(
                         _uiState.value = _uiState.value.copy(isError = false)
                         onLoginSuccess()
                     } else {
-                        _uiState.value = _uiState.value.copy(errorMessage = "Incorrect email or password", isError =  true)
+                        _uiState.value = _uiState.value.copy(
+                            errorMessage = "Incorrect email or password",
+                            isError = true
+                        )
                     }
                 } catch (e: Exception) {
                     _uiState.value = _uiState.value.copy(errorMessage = "An error has occurred")
