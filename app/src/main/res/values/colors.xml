@@ -8,4 +8,6 @@
     <color name="green_dark">#618181</color>
     <color name="blue">#848aab</color>
     <color name="orange_dark">#af9767</color>
+    <color name="Error">#FA626C</color>
+    <color name="Chestunt">#4D4444</color>
 </resources>

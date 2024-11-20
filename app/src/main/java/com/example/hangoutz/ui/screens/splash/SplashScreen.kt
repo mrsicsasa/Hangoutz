@@ -42,9 +42,9 @@ fun SplashScreen(navController: NavController) {
             painterResource(id = R.drawable.logo),
             initialValue = 1f,
             targetValue = 0f,
-            modifier = Modifier.align(Alignment.Center)
+            modifier = Modifier.align(Alignment.Center),
+            animationDelay = Constants.LOGO_ANIMATION_DELAY_SPLASH
         )
-
     }
     LaunchedEffect(key1 = true) {
         alpha.animateTo(1f, animationSpec = tween(Constants.BACKGROUND_ANIMATION_DURATION))

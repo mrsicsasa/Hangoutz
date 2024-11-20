@@ -25,6 +25,7 @@ fun Logo(
     painter: Painter,
     initialValue: Float = 1f,
     targetValue: Float = 1f,
+    animationDelay: Long,
     modifier: Modifier
 ) {
     val scale = remember { Animatable(initialValue) }
@@ -41,7 +42,7 @@ fun Logo(
                 .scale(scale.value)
         )
         LaunchedEffect(key1 = true) {
-            delay(Constants.LOGO_ANIMATION_DELAY)
+            delay(animationDelay)
             scale.animateTo(
                 targetValue = targetValue,
                 animationSpec = tween(

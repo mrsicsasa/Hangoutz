@@ -35,15 +35,15 @@ class SplashScreenViewModel @Inject constructor(
                 Log.d("brisanje", eventRepository.deleteEvent(it.id).code().toString())
             }
         }
-
     }
+
     fun isUserLoggedIn(context: Context): Boolean {
-        SharedPreferencesManager.clearUserId(context)
         if (SharedPreferencesManager.getUserId(context = context) != null) {
             return true
         }
         return false
     }
+
     suspend private fun getEvents(): List<Event>? {
         val response = eventRepository.getEvents()
         if (response.isSuccessful && response.body() != null) {
@@ -59,5 +59,4 @@ class SplashScreenViewModel @Inject constructor(
         }
         return null
     }
-
 }
