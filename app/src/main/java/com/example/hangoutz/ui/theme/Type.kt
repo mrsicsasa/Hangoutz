@@ -16,12 +16,33 @@ val inter = FontFamily(
 )
 
 val Typography = Typography(
+    bodyMedium = TextStyle(
+        fontFamily = inter,
+        fontWeight = FontWeight.W500,
+        fontSize = 18.sp,
+        lineHeight = 23.sp,
+        letterSpacing = 0.1.sp
+    ),
     bodyLarge = TextStyle(
         fontFamily = inter,
-        fontWeight = FontWeight.Normal,
+        fontWeight = FontWeight.W700,
+        fontSize = 22.sp,
+        lineHeight = 27.sp,
+        letterSpacing = 0.1.sp
+    ),
+    labelSmall = TextStyle(
+        fontFamily = inter,
+        fontWeight = FontWeight.W400,
+        fontSize = 13.sp,
+        lineHeight = 20.sp,
+        letterSpacing = 0.1.sp
+    ),
+    bodySmall = TextStyle(
+        fontFamily = inter,
+        fontWeight = FontWeight.W400,
         fontSize = 16.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.5.sp
+        lineHeight = 21.sp,
+        letterSpacing = 0.1.sp
     ),
     titleLarge = TextStyle(
         fontFamily = inter,
