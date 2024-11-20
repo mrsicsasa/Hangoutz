@@ -41,8 +41,8 @@ val Typography = Typography(
         fontFamily = inter,
         fontWeight = FontWeight.W400,
         fontSize = 16.sp,
-        lineHeight = 21.sp,
-        letterSpacing = 0.1.sp
+        lineHeight = 24.sp,
+        letterSpacing = 0.5.sp
     ),
     titleLarge = TextStyle(
         fontFamily = inter,

@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Hangoutz</string>
     <string name="application_logo">Application logo</string>
+    <string name="background_image">Background Image</string>
     <string name="all_fields_must_be_filled">All fields must be filled!</string>
     <string name="name_error_message">Name must be 3–25 characters</string>
     <string name="email_format_error_message">Email must be in correct format</string>
