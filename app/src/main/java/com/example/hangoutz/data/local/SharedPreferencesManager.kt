@@ -19,7 +19,6 @@ object SharedPreferencesManager {
     }
 
     fun getUserId(context: Context): String? {
-        //SharedPreferencesManager.clearUserId(context)
         val sharedPreferences = getSharedPreferences(context)
         return sharedPreferences.getString(KEY_USER_ID, null)
     }

@@ -41,11 +41,7 @@ class LoginViewModel @Inject constructor(
             _uiState.value = _uiState.value.copy(
                 isEmailError = emailEmpty,
                 isPasswordError = passwordEmpty,
-                errorMessage = when {
-                    emailEmpty && passwordEmpty -> ERROR_EMPTY_FIELDS
-                    emailEmpty -> ERROR_EMPTY_FIELDS
-                    else -> ERROR_EMPTY_FIELDS
-                }
+                errorMessage =  ERROR_EMPTY_FIELDS
             )
         } else {
             _uiState.value = _uiState.value.copy(
