@@ -42,7 +42,6 @@ import com.example.hangoutz.utils.Constants.PASSWORD
 fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltViewModel()) {
     val data = viewmodel.uiState.collectAsState()
     val context = LocalContext.current
-    val isError: Boolean = false;
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -97,7 +96,12 @@ fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltVi
                 onClick = {
                     viewmodel.userAuth(
                         context,
-                        { navController.navigate(NavigationItem.MainScreen.route) })
+                        {
+                            navController.navigate(NavigationItem.MainScreen.route) {
+                                popUpTo(0)
+                                launchSingleTop
+                            }
+                        })
                 })
         }
 
