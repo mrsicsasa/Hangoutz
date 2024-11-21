@@ -12,9 +12,9 @@ object Constants {
     val LOGO_ANIMATION_DELAY : Long = 100
 
     //credentials
-    val EMAIL = "email"
-    val PASSWORD = "password"
-    val LOGIN = "login"
+    val EMAIL = "Email"
+    val PASSWORD = "Password"
+    val LOGIN = "Login"
 
     //Top bar
     val TOP_BAR_TITLE = "Hangoutz"
