@@ -8,6 +8,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hangoutz.data.local.SharedPreferencesManager
 import com.example.hangoutz.domain.repository.UserRepository
+import com.example.hangoutz.utils.Constants.ERROR_EMPTY_FIELDS
+import com.example.hangoutz.utils.Constants.ERROR_INVALID_INPUT
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,9 +21,9 @@ data class LoginData(
     var email: String = "",
     var password: String = "",
     val errorMessage: String = "",
-    val isError: Boolean = false
+    val isEmailError: Boolean = false,
+    val isPasswordError: Boolean = false
 )
-
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val userRepository: UserRepository,
@@ -32,11 +34,21 @@ class LoginViewModel @Inject constructor(
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun userAuth(context: Context, onLoginSuccess: () -> Unit) {
-        _uiState.value = _uiState.value.copy(isError = false)
-        if (_uiState.value.email.isEmpty()|| uiState.value.password.isEmpty()) {
-            _uiState.value =
-                _uiState.value.copy(errorMessage = "All fields must be filled!", isError = true)
+        _uiState.value = _uiState.value.copy(isEmailError = false, isPasswordError = false)
+        if (_uiState.value.email.isEmpty() || _uiState.value.password.isEmpty()) {
+            val emailEmpty = _uiState.value.email.isEmpty()
+            val passwordEmpty = _uiState.value.password.isEmpty()
+            _uiState.value = _uiState.value.copy(
+                isEmailError = emailEmpty,
+                isPasswordError = passwordEmpty,
+                errorMessage =  ERROR_EMPTY_FIELDS
+            )
         } else {
+            _uiState.value = _uiState.value.copy(
+                isPasswordError = false,
+                isEmailError = false,
+                errorMessage = ""
+            )
             viewModelScope.launch {
                 try {
                     val response =
@@ -50,12 +62,14 @@ class LoginViewModel @Inject constructor(
                         user?.let {
                             SharedPreferencesManager.saveUserId(context, it.id.toString())
                         }
-                        _uiState.value = _uiState.value.copy(isError = false)
+                        _uiState.value =
+                            _uiState.value.copy(isPasswordError = false, isEmailError = false)
                         onLoginSuccess()
                     } else {
                         _uiState.value = _uiState.value.copy(
-                            errorMessage = "Incorrect email or password",
-                            isError = true
+                            errorMessage = ERROR_INVALID_INPUT,
+                            isEmailError = true,
+                            isPasswordError = true
                         )
                     }
                 } catch (e: Exception) {
@@ -65,15 +79,18 @@ class LoginViewModel @Inject constructor(
             }
         }
     }
-    fun hashPassword(password: String): String {
+
+    private fun hashPassword(password: String): String {
         val messageDigest = MessageDigest.getInstance("SHA-256")
         val hashedBytes = messageDigest.digest(password.toByteArray())
         return hashedBytes.joinToString("") { "%02x".format(it) }
     }
+
     fun onTextChanged(newText: String) {
-        _uiState.value = _uiState.value.copy(email = newText)
+        _uiState.value = _uiState.value.copy(email = newText, isEmailError = false)
     }
+
     fun onPassChanged(newText: String) {
-        _uiState.value = _uiState.value.copy(password = newText)
+        _uiState.value = _uiState.value.copy(password = newText, isPasswordError = false)
     }
 }
