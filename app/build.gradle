@@ -68,6 +68,7 @@ dependencies {
     implementation libs.kotlinx.coroutines.core
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
+    implementation "androidx.constraintlayout:constraintlayout-compose:1.1.0"
     kapt(libs.hilt.android.compiler)
     kapt(libs.hilt.compiler)
     testImplementation libs.junit

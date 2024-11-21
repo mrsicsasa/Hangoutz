@@ -15,7 +15,7 @@ object Constants {
     val EMAIL = "Email"
     val PASSWORD = "Password"
     val LOGIN = "Login"
-
+    val LOGOUT = "Logout"
     //Top bar
     val TOP_BAR_TITLE = "Hangoutz"
 
