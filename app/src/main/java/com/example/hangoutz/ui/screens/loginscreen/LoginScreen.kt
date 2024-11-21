@@ -2,7 +2,6 @@ package com.example.hangoutz.ui.screens.loginscreen
 
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -43,7 +42,6 @@ import com.example.hangoutz.utils.Constants.PASSWORD
 fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltViewModel()) {
     val data = viewmodel.uiState.collectAsState()
     val context = LocalContext.current
-    val isError: Boolean = false;
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -98,13 +96,12 @@ fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltVi
                 onClick = {
                     viewmodel.userAuth(
                         context,
-                        { navController.navigate(NavigationItem.MainScreen.route){
-                            popUpTo(0) {
-                                inclusive = true
+                        {
+                            navController.navigate(NavigationItem.MainScreen.route) {
+                                popUpTo(0)
+                                launchSingleTop
                             }
-                            launchSingleTop
-                        } })
-                   // navController.popBackStack()
+                        })
                 })
         }
 
