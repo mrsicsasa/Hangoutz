@@ -99,13 +99,10 @@ fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltVi
                     viewmodel.userAuth(
                         context,
                         { navController.navigate(NavigationItem.MainScreen.route){
-                            Log.d("Navigacija",navController.currentBackStack.toString())
-                            popUpTo(NavigationItem.Login.route) {
+                            popUpTo(0) {
                                 inclusive = true
                             }
-                            popUpTo(NavigationItem.Register.route){
-                                inclusive = true
-                            }
+                            launchSingleTop
                         } })
                    // navController.popBackStack()
                 })
