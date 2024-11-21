@@ -20,13 +20,14 @@ import com.example.hangoutz.ui.theme.Ivory
 fun InputField(
     label: String,
     value: String,
-    onValueChange: (String) -> (Unit),
-    isError: Boolean,
-    isPassword: Boolean = false
+    onValueChange: (String) -> Unit,
+    isPassword: Boolean = false,
+    isError: Boolean = false
 ) {
     OutlinedTextField(
         value = value,
         label = { Text(text = label, style = MaterialTheme.typography.bodySmall) },
+        onValueChange = { onValueChange(it) },
         onValueChange = { onValueChange(it) },
         isError = isError,
         maxLines = 1,
