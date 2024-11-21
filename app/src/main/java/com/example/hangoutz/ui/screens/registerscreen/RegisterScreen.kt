@@ -54,8 +54,6 @@ fun RegisterScreen(navController: NavController, viewModel: RegisterViewModel = 
             ) {
                 Logo(
                     painterResource(id = R.drawable.logo),
-                    initialValue = 0f,
-                    targetValue = 1f,
                     modifier = Modifier.align(Alignment.Center),
                     animationDelay = Constants.LOGO_ANIMATION_DELAY
                 )

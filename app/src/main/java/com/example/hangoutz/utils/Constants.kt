@@ -18,4 +18,6 @@ object Constants {
     //Top bar
     val TOP_BAR_TITLE = "Hangoutz"
 
+    //Error codes
+    val CONFLICT = 409
 }
