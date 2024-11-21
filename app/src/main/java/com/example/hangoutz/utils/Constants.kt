@@ -14,8 +14,14 @@ object Constants {
     //credentials
     val EMAIL = "email"
     val PASSWORD = "password"
+    val LOGIN = "login"
 
     //Top bar
     val TOP_BAR_TITLE = "Hangoutz"
+
+    //Errors
+    val ERROR_EMPTY_FIELDS = "All fields must be filled!"
+    val ERROR_INVALID_INPUT = "Incorrect email or password"
+
 
 }

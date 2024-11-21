@@ -35,6 +35,7 @@ import com.example.hangoutz.ui.navigation.NavigationItem
 import com.example.hangoutz.ui.theme.Ivory
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Constants.EMAIL
+import com.example.hangoutz.utils.Constants.LOGIN
 import com.example.hangoutz.utils.Constants.PASSWORD
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -82,18 +83,19 @@ fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltVi
                 EMAIL,
                 data.value.email,
                 { viewmodel.onTextChanged(it) },
-                isError = data.value.isError
+                isError = data.value.isEmailError
             )
             InputField(
                 PASSWORD,
                 data.value.password,
                 { viewmodel.onPassChanged(it) },
-                isPassword = true, isError = data.value.isError
+                isPassword = true,
+                isError = data.value.isPasswordError
             )
             ErrorMessage(data.value.errorMessage)
             ActionButton(
                 R.drawable.enter,
-                "Login",
+                LOGIN,
                 onClick = {
                     viewmodel.userAuth(
                         context,
