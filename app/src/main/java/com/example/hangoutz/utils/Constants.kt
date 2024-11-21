@@ -12,10 +12,16 @@ object Constants {
     val LOGO_ANIMATION_DELAY : Long = 100
 
     //credentials
-    val EMAIL = "email"
-    val PASSWORD = "password"
+    val EMAIL = "Email"
+    val PASSWORD = "Password"
+    val LOGIN = "Login"
 
     //Top bar
     val TOP_BAR_TITLE = "Hangoutz"
+
+    //Errors
+    val ERROR_EMPTY_FIELDS = "All fields must be filled!"
+    val ERROR_INVALID_INPUT = "Incorrect email or password"
+
 
 }
