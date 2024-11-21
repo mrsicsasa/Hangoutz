@@ -18,6 +18,8 @@ object Constants {
     //Top bar
     val TOP_BAR_TITLE = "Hangoutz"
 
+    //Error codes
+    val CONFLICT = 409
     //Events screen
     val GET_EVENTS_ERRORS = "Loading events errors"
     val CREATE_EVENT_BUTTON = "CreateEventButton"
