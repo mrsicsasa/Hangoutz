@@ -44,7 +44,6 @@ fun InputField(
             errorBorderColor = Error,
             errorTextColor = Ivory
         ),
-
         textStyle = MaterialTheme.typography.bodySmall.copy(color = Color.White),
         modifier = Modifier
             .padding(bottom = 10.dp, top = 10.dp)
