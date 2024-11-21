@@ -9,5 +9,6 @@ data class Event(
     val city: String?,
     val street: String?,
     val place: String?,
-    val date: String
+    val date: String,
+    val owner: UUID,
 )
