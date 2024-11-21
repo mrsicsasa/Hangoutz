@@ -1,22 +1,12 @@
-package com.example.hangoutz.ui.screens.registerscreen
+package com.example.hangoutz.utils
 
 object Validator {
-
-    fun registerValidator(name: String, email: String, password: String, confirm: String): Boolean {
-        return (isValidNameLength(name) &&
-                isValidEmail(email) &&
-                isValidPassword(password) &&
-                doPasswordsMatch(
-                    password,
-                    confirm
-                ))
-    }
 
     fun areAllFieldsFilled(
         name: String,
         email: String,
         password: String,
-        confirm: String
+        confirmPassword: String
     ): Array<Boolean> {
         val errors = arrayOf(false, false, false, false)
         if (name.isEmpty()) {
@@ -31,7 +21,7 @@ object Validator {
             errors[2] = true
         }
 
-        if (confirm.isEmpty()) {
+        if (confirmPassword.isEmpty()) {
             errors[3] = true
         }
         return errors
@@ -45,11 +35,6 @@ object Validator {
         return (email.endsWith("@gmail.com") == true)
     }
 
-    fun isUniqueEmail(): Boolean {
-        // Error code 409
-        return true
-    }
-
     fun isValidPassword(password: String): Boolean {
         if (password.length >= 8) {
             val regex = Regex(".*\\d.*")
@@ -58,7 +43,7 @@ object Validator {
         return false
     }
 
-    fun doPasswordsMatch(password: String, confirm: String): Boolean {
-        return (password == confirm)
+    fun doPasswordsMatch(password: String, confirmPassword: String): Boolean {
+        return (password == confirmPassword)
     }
 }
