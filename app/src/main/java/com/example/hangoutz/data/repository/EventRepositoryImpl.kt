@@ -1,6 +1,7 @@
 package com.example.hangoutz.data.repository
 
 import com.example.hangoutz.data.models.Event
+import com.example.hangoutz.data.models.EventCardDPO
 import com.example.hangoutz.data.remote.EventAPI
 import com.example.hangoutz.domain.repository.EventRepository
 import retrofit2.Response
@@ -19,5 +20,9 @@ class EventRepositoryImpl @Inject constructor(eventAPI: EventAPI):EventRepositor
 
     override suspend fun deleteEvent(id: UUID): Response<Unit> {
         return api.deleteEvent(id = "eq.${id}")
+    }
+
+    override suspend fun getEventsWithAvatar(): Response<List<EventCardDPO>> {
+        return api.getEventsWithAvatar()
     }
 }
