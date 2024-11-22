@@ -11,14 +11,6 @@
     <string name="contains_digit">.*\\d.*</string>
     <string name="valid_email">\@gmail.com</string>
     <string name="background_image">Background Image</string>
-    <string name="all_fields_must_be_filled">All fields must be filled!</string>
-    <string name="name_error_message">Name must be 3–25 characters</string>
-    <string name="email_format_error_message">Email must be in correct format</string>
-    <string name="password_error_message">Password must contain at least one number and be minimum 8 characters long</string>
-    <string name="confirmPassword_error_message">Passwords must match</string>
-    <string name="email_duplicate_error_message">Email already in use</string>
-    <string name="generic_error_message">An error has occurred</string>
-    <string name="background_image">Background Image</string>
     <string name="default_user_image">avatar3.jpg</string>
     <string name="floating_action_button_icon_description">floating action button</string>
     <string name="decline_button_text">Decline</string>
@@ -27,16 +19,4 @@
     <string name="people_going">%1$s people going</string>
     <string name="no_one_is_going">No one is going</string>
     <string name="user_profile_image">user_profile_image</string>
-    <string name="application_logo">Application logo</string>
-    <string name="or_text">OR</string>
-    <string name="create_account_text">Create Account</string>
-    <string name="all_fields_must_be_filled">All fields must be filled!</string>
-    <string name="name_error_message">Name must be 3–25 characters</string>
-    <string name="email_format_error_message">Email must be in correct format</string>
-    <string name="password_error_message">Password must contain at least one number and be minimum 8 characters long</string>
-    <string name="confirmPassword_error_message">Passwords must match</string>
-    <string name="email_duplicate_error_message">Email already in use</string>
-    <string name="generic_error_message">An error has occurred</string>
-    <string name="contains_digit">.*\\d.*</string>
-    <string name="valid_email">\@gmail.com</string>
 </resources>
