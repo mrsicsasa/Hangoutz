@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -50,11 +51,9 @@ fun EventCard(
     title: String,
     place: String,
     date: String,
-    getCountOfAcceptedInvitesForEvent: ()->Int,
+    countOfPeople: Int,
     isInvited: Boolean = false
 ) {
-    var countOfPeople = remember { mutableStateOf(0) }
-    val coroutineScope = rememberCoroutineScope()
     Card(
         colors = CardColors(
             containerColor = backgroundColor,
@@ -137,7 +136,8 @@ fun EventCard(
                         backgroundColor = Blue,
                         fontColor = Color.White,
                         title = stringResource(R.string.decline_button_text),
-                        onClick = {}
+                        onClick = {},
+                        modifier = Modifier.testTag("DeclineInvitationButton")
                     )
                     Spacer(modifier = Modifier.width(10.dp))
                     InviteRespondButton(
@@ -156,11 +156,6 @@ fun EventCard(
                     )
                 )
             }
-        }
-    }
-    LaunchedEffect(key1 = true) {
-        coroutineScope.launch {
-           countOfPeople.value = getCountOfAcceptedInvitesForEvent()
         }
     }
 }

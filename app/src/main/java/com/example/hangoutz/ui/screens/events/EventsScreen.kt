@@ -18,42 +18,44 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.hangoutz.R
 import com.example.hangoutz.data.models.EventCardDPO
 import com.example.hangoutz.ui.theme.GreenDark
 import com.example.hangoutz.ui.theme.Orange
 import com.example.hangoutz.ui.theme.PurpleDark
+import com.example.hangoutz.utils.Constants
+import com.example.hangoutz.utils.Dimensions
 import com.example.hangoutz.utils.toDate
 import com.example.hangoutz.utils.toEventDateDPO
-import kotlinx.coroutines.launch
+import java.util.UUID
 
 @SuppressLint("StateFlowValueCalledInComposition", "NewApi")
 @Composable
 fun MyEventsScreen(viewModel: EventScreenViewModel = hiltViewModel()) {
     val data = viewModel.uiState.collectAsState()
-    val coroutineScope = rememberCoroutineScope()
-    Box(modifier = Modifier.padding(10.dp)) {
+    Box(modifier = Modifier.padding(Dimensions.SCREEN_PADDING)) {
         Column(
             modifier = Modifier
-                .padding(top = 90.dp)
-                .padding(horizontal = 5.dp)
+                .padding(top = Dimensions.CONTENT_TOP_PADDING)
+                .padding(horizontal = Dimensions.CONTENT_HORIZONTAL_PADDING)
                 .background(Color.Transparent)
                 .fillMaxSize()
         ) {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(bottom = 20.dp)
+                    .padding(bottom = Dimensions.LAZY_COLUMN_BOTTOM_PADDING)
             ) {
                 items(data.value.events) { event ->
+                    val countOfPeoplePair: Pair<UUID, Int>? =
+                        data.value.counts.find { it.first == event.id }
                     EventCard(
                         backgroundColor = getCardColor(data.value.events, event),
                         imageUrl = event.users.avatar
@@ -61,18 +63,9 @@ fun MyEventsScreen(viewModel: EventScreenViewModel = hiltViewModel()) {
                         title = event.title,
                         place = event.place ?: "",
                         date = event.date.toDate().toEventDateDPO(),
-                        getCountOfAcceptedInvitesForEvent = {
-                            coroutineScope.launch {
-                                viewModel.getCountOfAcceptedInvitesForEvent(event.id)
-                            }
-                        },
-                        isInvited = if (getCardColor(
-                                data.value.events,
-                                event
-                            ) == GreenDark
-                        ) true else false
+                        countOfPeople = (countOfPeoplePair?.second ?: 0)
                     )
-                    Spacer(modifier = Modifier.height(20.dp))
+                    Spacer(modifier = Modifier.height(Dimensions.SPACE_HEIGHT_BETWEEN_CARDS))
                 }
             }
         }
@@ -80,13 +73,14 @@ fun MyEventsScreen(viewModel: EventScreenViewModel = hiltViewModel()) {
             onClick = {},
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(20.dp)
+                .padding(Dimensions.FLOATING_BUTTON_PADDING)
                 .clip(CircleShape)
+                .testTag(Constants.CREATE_EVENT_BUTTON)
         ) {
             Icon(
                 Icons.Filled.Add,
                 stringResource(R.string.floating_action_button_icon_description),
-                modifier = Modifier.size(40.dp)
+                modifier = Modifier.size(Dimensions.FLOATING_ICON_SIZE)
             )
         }
     }

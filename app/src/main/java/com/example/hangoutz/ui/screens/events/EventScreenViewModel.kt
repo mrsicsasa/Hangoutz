@@ -1,10 +1,13 @@
 package com.example.hangoutz.ui.screens.events
 
 import android.util.Log
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.hangoutz.R
 import com.example.hangoutz.domain.repository.EventRepository
 import com.example.hangoutz.domain.repository.InviteRepository
+import com.example.hangoutz.utils.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,37 +19,46 @@ import javax.inject.Inject
 class EventScreenViewModel @Inject constructor(
     private val eventRepository: EventRepository,
     private val inviteRepository: InviteRepository
-): ViewModel() {
+) : ViewModel() {
     private val _uiState = MutableStateFlow(EventScreenState())
     val uiState: StateFlow<EventScreenState> = _uiState
+
     init {
         getEvents()
     }
+
     fun getEvents() {
         viewModelScope.launch {
             val response = eventRepository.getEventsWithAvatar()
-            if(response.isSuccessful && !response.body().isNullOrEmpty()) {
-                Log.d("event","---------------------")
+            if (response.isSuccessful && !response.body().isNullOrEmpty()) {
                 response.body()?.let {
-                   _uiState.value = _uiState.value.copy(
+                    _uiState.value = _uiState.value.copy(
                         events = it
                     )
-                    Log.d("Nije null", "Nije nul---------------")
+                    it.forEach {
+                        getCountOfAcceptedInvitesForEvent(
+                            id = it.id
+                        )
+                    }
                 }
-                Log.d("Velicina",uiState.value.events.size.toString())
-            }
-            else {
-                Log.d("Events","Loading events errors")
+            } else {
+                Log.d("Events", Constants.GET_EVENTS_ERRORS)
             }
         }
     }
-    suspend fun getCountOfAcceptedInvitesForEvent(id:UUID): Int {
-            val response = inviteRepository.getCountOfAcceptedInvitesByEvent(id = id)
-            if (response.isSuccessful && response.body() != null){
-                var count = response.body()
-                return count?.first()?.count ?: 0
-            }
 
-        return 0
+    private suspend fun getCountOfAcceptedInvitesForEvent(id: UUID) {
+        val response = inviteRepository.getCountOfAcceptedInvitesByEvent(id = id)
+        if (response.isSuccessful) {
+            var count = response.body()
+            _uiState.value = _uiState.value.copy(
+                counts = _uiState.value.counts + Pair(
+                    id,
+                    count?.first()?.count ?: 0
+                )
+            )
+        } else {
+            Log.d("Error", response.message())
+        }
     }
 }
