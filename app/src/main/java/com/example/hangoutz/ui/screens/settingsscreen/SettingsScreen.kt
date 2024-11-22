@@ -139,7 +139,9 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
 fun NameInput(onNameChanged: (String) -> Unit, name: String) {
 
     ConstraintLayout(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(end = 50.dp, start = 50.dp),
     ) {
         val (x, y) = createRefs()
         Box(modifier = Modifier.constrainAs(x) {
@@ -152,13 +154,17 @@ fun NameInput(onNameChanged: (String) -> Unit, name: String) {
                 name,
                 { onNameChanged(it) },
                 modifier = Modifier.align(Alignment.Center)
+
             )
         }
-        Box(modifier = Modifier
-            .constrainAs(y) {
-                start.linkTo(x.end)
-            }
-            .fillMaxHeight()) {
+        Box(
+            modifier = Modifier
+                .constrainAs(y) {
+                    start.linkTo(x.end)
+                }
+                .padding(start = 5.dp)
+                .fillMaxHeight()
+        ) {
             Image(
                 painterResource(R.drawable.pencil), "",
                 modifier = Modifier
