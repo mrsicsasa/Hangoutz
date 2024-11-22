@@ -19,11 +19,11 @@ object Constants {
     //Top bar
     val TOP_BAR_TITLE = "Hangoutz"
 
-    //Errors
-    val ERROR_EMPTY_FIELDS = "All fields must be filled!"
-    val ERROR_INVALID_INPUT = "Incorrect email or password"
+    //Events screen
+    val GET_EVENTS_ERRORS = "Loading events errors"
+    val CREATE_EVENT_BUTTON = "CreateEventButton"
 
-
+    //EventCard
     //Error codes
     val DUPLICATE_ITEM = 409
 
