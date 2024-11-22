@@ -67,7 +67,7 @@ fun ActionButton(
             ) {
                 Text(
                     text = buttonText,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier.padding(end = 10.dp)
                 )
                 Icon(

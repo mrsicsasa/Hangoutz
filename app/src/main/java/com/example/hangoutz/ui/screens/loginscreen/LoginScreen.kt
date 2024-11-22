@@ -24,6 +24,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.getString
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.hangoutz.R
@@ -109,20 +110,19 @@ fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltVi
 
         Column(
             modifier = Modifier
-                .padding(bottom = 40.dp)
+                .padding(bottom = 60.dp)
                 .fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "OR",
+                text = getString(context, R.string.or_text),
                 color = Ivory,
-                modifier = Modifier
-                    .padding(top = 10.dp),
+                modifier = Modifier,
                 textAlign = TextAlign.Center
             )
             Text(
-                text = "Create Account",
+                text = getString(context, R.string.create_account_text),
                 color = Ivory,
                 modifier = Modifier
                     .padding(top = 5.dp)
