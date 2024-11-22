@@ -3,6 +3,7 @@ package com.example.hangoutz.ui.screens.settingsscreen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,9 +20,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -47,7 +50,7 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
     val data = viewmodel.uiState.collectAsState()
     val context = LocalContext.current
 
-    viewmodel.getUser(context)
+
     Column(
         modifier = Modifier
             .padding(top = 70.dp)
@@ -101,7 +104,12 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
                 verticalAlignment = Alignment.CenterVertically
 
             ) {
-                NameInput({ viewmodel.onNameChanged(it) }, data.value.name)
+                NameInput(
+                    { viewmodel.onNameChanged(it) },
+                    data.value.isReadOnly,
+                    { viewmodel.onPencilClick() },
+                    data.value.name
+                )
             }
             Text(
                 text = data.value.email,
@@ -136,8 +144,13 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
 }
 
 @Composable
-fun NameInput(onNameChanged: (String) -> Unit, name: String) {
-
+fun NameInput(
+    onNameChanged: (String) -> Unit,
+    isReadOnly: Boolean,
+    onPencilClick: () -> Unit,
+    name: String
+) {
+    val focusRequester = remember { FocusRequester() }
     ConstraintLayout(
         modifier = Modifier
             .fillMaxWidth()
@@ -153,6 +166,8 @@ fun NameInput(onNameChanged: (String) -> Unit, name: String) {
             nameField(
                 name,
                 { onNameChanged(it) },
+                isReadOnly,
+                focusRequester,
                 modifier = Modifier.align(Alignment.Center)
 
             )
@@ -169,7 +184,12 @@ fun NameInput(onNameChanged: (String) -> Unit, name: String) {
                 painterResource(R.drawable.pencil), "",
                 modifier = Modifier
                     .size(25.dp)
-                    .align(Alignment.Center),
+                    .align(Alignment.Center)
+                    .clickable {
+                        onPencilClick()
+                        focusRequester.requestFocus()
+
+                    },
                 colorFilter = ColorFilter.tint(Ivory)
             )
         }

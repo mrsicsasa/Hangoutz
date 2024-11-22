@@ -1,16 +1,19 @@
 package com.example.hangoutz.ui.components
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.hangoutz.ui.theme.Ivory
@@ -20,18 +23,25 @@ import com.example.hangoutz.ui.theme.Ivory
 fun nameField(
     text: String,
     onTextChange: (String) -> Unit,
-    modifier: Modifier = Modifier
+    isReadOnly: Boolean ,
+    focusRequester: FocusRequester,
+    modifier: Modifier
+
 ) {
+        //val keyboart = remember { Keyboard }
     BasicTextField(
-        value = text,
+        value  = text,
         onValueChange = onTextChange,
         textStyle = TextStyle(
             color = Ivory,
             fontSize = 32.sp,
             textAlign = TextAlign.Center,
             ),
-        readOnly = true,
+        readOnly = isReadOnly,
         singleLine = true,
-        modifier = Modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth()
+            .focusRequester(focusRequester),
+
+
     )
 }

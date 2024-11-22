@@ -15,19 +15,33 @@ import javax.inject.Inject
 data class SettingsData(
     var name: String = "",
     var email: String = "",
+    var isReadOnly : Boolean = true,
     val avatar: String? = null
 )
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val userRepository: UserRepository,
+    private val context: Context
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SettingsData())
     val uiState: StateFlow<SettingsData> = _uiState
 
+    init {
+        getUser(context)
+    }
+
     fun onNameChanged(newText: String) {
         _uiState.value = _uiState.value.copy(name = newText)
+    }
+
+    fun onPencilClick() : Boolean{
+     val state =  !_uiState.value.isReadOnly
+        _uiState.value = _uiState.value.copy(isReadOnly = state)
+        //Log.e("LOGG------ ","STATE = ${state} & ISREADONLY ${_uiState.value.isReadOnly}")
+
+        return state
     }
 
     fun logoutUser(context: Context, onLogout: () -> Unit) {
