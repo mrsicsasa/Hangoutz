@@ -35,5 +35,10 @@ val Typography = Typography(
         fontSize = 11.sp,
         lineHeight = 16.sp,
         letterSpacing = 0.5.sp
+    ),
+    displaySmall = TextStyle(
+        fontFamily = inter,
+        fontWeight = FontWeight(400),
+        fontSize = 13.sp
     )
 )

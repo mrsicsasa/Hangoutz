@@ -13,33 +13,34 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.hangoutz.utils.Constants
+import com.example.hangoutz.utils.Dimensions
 
 @Composable
 fun InviteRespondButton(
     backgroundColor: Color,
     fontColor: Color,
     title: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Button(
         onClick = { onClick() },
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(Dimensions.INVITE_RESPOND_BUTTON_ROUNDED_RADIUS),
         colors = ButtonColors(
             containerColor = backgroundColor,
             contentColor = fontColor,
             disabledContainerColor = Color.Red,
             disabledContentColor = Color.Red
         ),
-        modifier = Modifier
-            .width(105.dp)
-            .height(30.dp)
+        modifier = modifier
+            .width(Dimensions.INVITE_RESPOND_BUTTON_WIDTH)
+            .height(Dimensions.INVITE_RESPOND_BUTTON_HEIGHT)
     ) {
         Text(
             text = title,
-            style = MaterialTheme.typography.titleLarge.copy(
-                color = fontColor,
-                fontWeight = FontWeight(400),
-                fontSize = 13.sp
+            style = MaterialTheme.typography.displaySmall.copy(
+               color = Color.White
             )
         )
     }
