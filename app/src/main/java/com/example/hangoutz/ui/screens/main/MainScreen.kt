@@ -25,10 +25,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.hangoutz.R
 import com.example.hangoutz.ui.navigation.BottomNavItem
 import com.example.hangoutz.ui.navigation.BottomNavigationDestination
-import com.example.hangoutz.ui.screens.friendsscreen.FriendsScreen
-import com.example.hangoutz.ui.screens.myevents.MyEventsScreen
-import com.example.hangoutz.ui.screens.settingsscreen.SettingsScreen
-import com.example.hangoutz.ui.theme.Ivory
+import com.example.hangoutz.ui.screens.friends.FriendsScreen
+import com.example.hangoutz.ui.screens.events.MyEventsScreen
+import com.example.hangoutz.ui.screens.settings.SettingsScreen
 import com.example.hangoutz.ui.theme.topBarBackgroundColor
 import com.example.hangoutz.utils.Constants
 
@@ -78,7 +77,7 @@ fun MainScreen(navController: NavController) {
                 .padding(innerPadding)
         ) {
             composable(route = BottomNavigationDestination.EVENTS.name) {
-                MyEventsScreen(navController)
+                MyEventsScreen()
             }
             composable(route = BottomNavigationDestination.FRIENDS.name) {
                 FriendsScreen(navController)

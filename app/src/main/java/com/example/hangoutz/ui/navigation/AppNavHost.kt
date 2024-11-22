@@ -7,13 +7,13 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.hangoutz.ui.screens.createeventscreen.CreateEventScreen
-import com.example.hangoutz.ui.screens.eventdetailsownerscreen.EventOwnerDetailsScreen
-import com.example.hangoutz.ui.screens.eventdetailsscreen.EventDetailsScreen
-import com.example.hangoutz.ui.screens.invitedscreen.InvitedScreen
-import com.example.hangoutz.ui.screens.loginscreen.LoginScreen
+import com.example.hangoutz.ui.screens.createEvent.CreateEventScreen
+import com.example.hangoutz.ui.screens.eventDetailsOwner.EventOwnerDetailsScreen
+import com.example.hangoutz.ui.screens.eventDetails.EventDetailsScreen
+import com.example.hangoutz.ui.screens.invite.InvitedScreen
+import com.example.hangoutz.ui.screens.login.LoginScreen
 import com.example.hangoutz.ui.screens.main.MainScreen
-import com.example.hangoutz.ui.screens.registerscreen.RegisterScreen
+import com.example.hangoutz.ui.screens.register.RegisterScreen
 import com.example.hangoutz.ui.screens.splash.SplashScreen
 
 @RequiresApi(Build.VERSION_CODES.O)

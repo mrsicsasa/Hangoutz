@@ -1,4 +1,4 @@
-package com.example.hangoutz.ui.screens.settingsscreen
+package com.example.hangoutz.ui.screens.settings
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding

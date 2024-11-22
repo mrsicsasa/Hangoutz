@@ -1,4 +1,4 @@
-package com.example.hangoutz.ui.screens.loginscreen
+package com.example.hangoutz.ui.screens.login
 
 import android.content.Context
 import android.os.Build

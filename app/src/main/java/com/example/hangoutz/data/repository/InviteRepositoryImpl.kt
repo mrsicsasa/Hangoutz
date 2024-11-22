@@ -1,5 +1,6 @@
 package com.example.hangoutz.data.repository
 
+import com.example.hangoutz.data.models.CountOfAcceptedInvitesForEvent
 import com.example.hangoutz.data.models.Invite
 import com.example.hangoutz.data.remote.InviteAPI
 import com.example.hangoutz.domain.repository.InviteRepository
@@ -24,5 +25,10 @@ class InviteRepositoryImpl @Inject constructor(invitesAPI: InviteAPI): InviteRep
     override suspend fun getInvitesByEventId(id: UUID): Response<List<Invite>> {
         return api.getInvitesByEventId(id = "eq.${id}")
     }
+
+    override suspend fun getCountOfAcceptedInvitesByEvent(id: UUID): Response<List<CountOfAcceptedInvitesForEvent>> {
+        return  api.getCountOfAcceptedInvitesByEvent(id="eq.${id}")
+    }
+
 
 }
