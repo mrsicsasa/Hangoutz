@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -25,7 +26,7 @@ import com.example.hangoutz.R
 import com.example.hangoutz.ui.navigation.BottomNavItem
 import com.example.hangoutz.ui.navigation.BottomNavigationDestination
 import com.example.hangoutz.ui.screens.friendsscreen.FriendsScreen
-import com.example.hangoutz.ui.screens.myeventsscreen.MyEventsScreen
+import com.example.hangoutz.ui.screens.myevents.MyEventsScreen
 import com.example.hangoutz.ui.screens.settingsscreen.SettingsScreen
 import com.example.hangoutz.ui.theme.Ivory
 import com.example.hangoutz.ui.theme.topBarBackgroundColor
@@ -43,7 +44,7 @@ fun MainScreen(navController: NavController) {
             title = {
                 Text(
                     text = Constants.TOP_BAR_TITLE,
-                    color = Ivory,
+                    color = Color.White,
                     style = MaterialTheme.typography.titleLarge,
                 )
 
