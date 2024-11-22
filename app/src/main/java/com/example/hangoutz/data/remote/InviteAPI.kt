@@ -1,6 +1,7 @@
 package com.example.hangoutz.data.remote
 
 import com.example.hangoutz.BuildConfig
+import com.example.hangoutz.data.models.CountOfAcceptedInvitesForEvent
 import com.example.hangoutz.data.models.Invite
 import retrofit2.Response
 import retrofit2.http.DELETE
@@ -25,4 +26,9 @@ interface InviteAPI {
     suspend fun deleteInvite(
         @Query("id") id: String
     ): Response<Unit>
+
+    @GET("${BuildConfig.REQUEST_URL}invites?select=count&event_status=eq.accepted")
+    suspend fun getCountOfAcceptedInvitesByEvent(
+        @Query("event_id") id: String
+    ): Response<List<CountOfAcceptedInvitesForEvent>>
 }

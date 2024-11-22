@@ -1,4 +1,4 @@
-package com.example.hangoutz.ui.screens.registerscreen
+package com.example.hangoutz.ui.screens.register
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

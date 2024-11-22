@@ -1,4 +1,4 @@
-package com.example.hangoutz.ui.screens.invitedscreen
+package com.example.hangoutz.ui.screens.invite
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding

@@ -1,4 +1,4 @@
-package com.example.hangoutz.ui.screens.myevents
+package com.example.hangoutz.ui.screens.events
 
 import com.example.hangoutz.data.models.EventCardDPO
 

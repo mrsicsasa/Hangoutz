@@ -1,11 +1,11 @@
-package com.example.hangoutz.ui.screens.myevents
+package com.example.hangoutz.ui.screens.events
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -18,21 +18,29 @@ import androidx.compose.material3.CardColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
+import com.example.hangoutz.R
+import com.example.hangoutz.data.models.CountOfAcceptedInvitesForEvent
 import com.example.hangoutz.ui.theme.Blue
 import com.example.hangoutz.ui.theme.GreenMinty
 import com.example.hangoutz.ui.theme.Ivory
 import com.example.hangoutz.ui.theme.textBodyGrayColor
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
@@ -42,8 +50,11 @@ fun EventCard(
     title: String,
     place: String,
     date: String,
+    getCountOfAcceptedInvitesForEvent: ()->Int,
     isInvited: Boolean = false
 ) {
+    var countOfPeople = remember { mutableStateOf(0) }
+    val coroutineScope = rememberCoroutineScope()
     Card(
         colors = CardColors(
             containerColor = backgroundColor,
@@ -52,15 +63,15 @@ fun EventCard(
             disabledContentColor = Color.Red
         ),
         shape = RoundedCornerShape(16.dp),
-        //  elevation =CardDefaults.cardElevation(10.dp) ,
         modifier = Modifier
             .fillMaxWidth()
             .height(135.dp)
-            //  .background(color = backgroundColor, shape = RoundedCornerShape(16.dp))
             .padding(end = 10.dp)
     ) {
         Row(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .padding(top = 16.dp)
         ) {
             Box(
                 modifier = Modifier
@@ -117,33 +128,39 @@ fun EventCard(
             contentAlignment = Alignment.BottomEnd,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(end = 20.dp)
+                .fillMaxHeight()
+                .padding(end = 20.dp, bottom = 10.dp)
         ) {
             if (isInvited) {
-                Row(){
+                Row{
                     InviteRespondButton(
                         backgroundColor = Blue,
                         fontColor = Color.White,
-                        title = "Decline",
+                        title = stringResource(R.string.decline_button_text),
                         onClick = {}
                     )
                     Spacer(modifier = Modifier.width(10.dp))
                     InviteRespondButton(
                         backgroundColor = GreenMinty,
                         fontColor = Color.Black,
-                        title = "Accept",
+                        title = stringResource(R.string.accept_button_text),
                         onClick = {}
                     )
                 }
             } else {
                 Text(
-                    text = "13 people going",
+                    text = "${countOfPeople} people going",
                     style = MaterialTheme.typography.titleLarge.copy(
                         color = textBodyGrayColor,
                         fontSize = 13.sp
                     )
                 )
             }
+        }
+    }
+    LaunchedEffect(key1 = true) {
+        coroutineScope.launch {
+           countOfPeople.value = getCountOfAcceptedInvitesForEvent()
         }
     }
 }

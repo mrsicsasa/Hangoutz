@@ -1,8 +1,10 @@
-package com.example.hangoutz.ui.screens.myevents
+package com.example.hangoutz.ui.screens.events
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,7 +24,15 @@ fun InviteRespondButton(
     Button(
         onClick = { onClick() },
         shape = RoundedCornerShape(20.dp),
-        modifier = Modifier.background(backgroundColor)
+        colors = ButtonColors(
+            containerColor = backgroundColor,
+            contentColor = fontColor,
+            disabledContainerColor = Color.Red,
+            disabledContentColor = Color.Red
+        ),
+        modifier = Modifier
+            .width(105.dp)
+            .height(30.dp)
     ) {
         Text(
             text = title,
