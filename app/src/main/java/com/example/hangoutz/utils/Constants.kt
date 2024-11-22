@@ -19,9 +19,10 @@ object Constants {
     //Top bar
     val TOP_BAR_TITLE = "Hangoutz"
 
+    //Error codes
+    val DUPLICATE_ITEM = 409
+
     //Errors
     val ERROR_EMPTY_FIELDS = "All fields must be filled!"
     val ERROR_INVALID_INPUT = "Incorrect email or password"
-
-
 }

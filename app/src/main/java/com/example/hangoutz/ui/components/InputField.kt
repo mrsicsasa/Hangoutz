@@ -20,14 +20,16 @@ import com.example.hangoutz.ui.theme.Ivory
 fun InputField(
     label: String,
     value: String,
-    onValueChange: (String) -> Unit,
-    isPassword: Boolean = false,
-    isError: Boolean = false
+    onValueChange: (String) -> (Unit),
+    isError: Boolean,
+    isPassword: Boolean = false
 ) {
     OutlinedTextField(
         value = value,
         label = { Text(text = label, style = MaterialTheme.typography.bodySmall) },
         onValueChange = { onValueChange(it) },
+        isError = isError,
+        maxLines = 1,
         shape = RoundedCornerShape(20.dp),
         visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
         colors = OutlinedTextFieldDefaults.colors(
@@ -36,15 +38,16 @@ fun InputField(
             cursorColor = Ivory,
             focusedLabelColor = Ivory,
             unfocusedLabelColor = Ivory,
-            focusedBorderColor = if (isError) Error else Ivory,
-            unfocusedBorderColor = if (isError) Error else Ivory,
+            focusedBorderColor = Ivory,
+            unfocusedBorderColor = Ivory,
             errorLabelColor = Ivory,
             errorBorderColor = Error,
             errorTextColor = Ivory
         ),
+
         textStyle = MaterialTheme.typography.bodySmall.copy(color = Color.White),
         modifier = Modifier
-            .padding(bottom = 20.dp)
+            .padding(bottom = 10.dp, top = 10.dp)
             .fillMaxWidth()
     )
 }
