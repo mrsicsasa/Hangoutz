@@ -47,7 +47,7 @@ class RegisterViewModel @Inject constructor(
     fun onTextChanged(field: Fields, newText: String) {
         when (field) {
             Fields.NAME -> _uiState.value = _uiState.value.copy(name = newText)
-            Fields.EMAIL -> _uiState.value = _uiState.value.copy(email = newText)
+            Fields.EMAIL -> _uiState.value = _uiState.value.copy(email = newText.trim())
             Fields.PASSWORD -> _uiState.value = _uiState.value.copy(password = newText)
             Fields.CONFIRMPASSWORD -> _uiState.value = _uiState.value.copy(confirmPassword = newText)
         }
@@ -55,7 +55,7 @@ class RegisterViewModel @Inject constructor(
 
     fun onCreateAccountClick(context: Context, onRegisterSuccess: () -> (Unit)) {
         if (registerValidation(context)) {
-            register(context) { onRegisterSuccess }
+            register(context, onRegisterSuccess)
         }
     }
 
