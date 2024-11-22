@@ -28,13 +28,16 @@ android {
     buildTypes {
         debug {
             buildConfigField("String", "BASE_URL", "\"https://zsjxwfjutstrybvltjov.supabase.co/\"")
+            buildConfigField("String", "BASE_URL_AVATAR", "\"https://zsjxwfjutstrybvltjov.supabase.co/storage/v1/object/public/avatar/\"")
             buildConfigField("String", "REQUEST_URL", "\"rest/v1/\"")
         }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField("String", "BASE_URL", "\"https://zsjxwfjutstrybvltjov.supabase.co/\"")
+            buildConfigField("String", "BASE_URL_AVATAR", "\"https://zsjxwfjutstrybvltjov.supabase.co/storage/v1/object/public/avatar/\"")
             buildConfigField("String", "REQUEST_URL", "\"rest/v1/\"")
+
 
         }
     }
@@ -68,7 +71,8 @@ dependencies {
     implementation libs.kotlinx.coroutines.core
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
-    implementation "androidx.constraintlayout:constraintlayout-compose:1.1.0"
+    implementation libs.androidx.constraintlayout.compose
+    implementation  libs.compose
     kapt(libs.hilt.android.compiler)
     kapt(libs.hilt.compiler)
     testImplementation libs.junit

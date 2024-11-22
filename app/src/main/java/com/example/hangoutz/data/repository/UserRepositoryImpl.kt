@@ -13,6 +13,10 @@ class UserRepositoryImpl @Inject constructor(userAPI: UserAPI): UserRepository {
         return api.getUserByName(name = "eq.${name}")
     }
 
+    override suspend fun getUserById(id: String): Response<List<User>> {
+        return api.getUserById(id = "eq.${id}")
+    }
+
     override suspend fun getUserByEmailAndPassword(email: String, password: String): Response<List<User>> {
         return api.getUserByEmailAndPassword(email = "eq.${email}", password= "eq.${password}")
     }

@@ -16,12 +16,12 @@ object Constants {
     val PASSWORD = "Password"
     val LOGIN = "Login"
     val LOGOUT = "Logout"
+    val NAME = "Name"
+
     //Top bar
     val TOP_BAR_TITLE = "Hangoutz"
 
     //Errors
     val ERROR_EMPTY_FIELDS = "All fields must be filled!"
     val ERROR_INVALID_INPUT = "Incorrect email or password"
-
-
 }
