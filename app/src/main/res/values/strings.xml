@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">Hangoutz</string>
     <string name="application_logo">application_logo</string>
+    <string name="or_text">OR</string>
+    <string name="create_account_text">Create Account</string>
 </resources>
