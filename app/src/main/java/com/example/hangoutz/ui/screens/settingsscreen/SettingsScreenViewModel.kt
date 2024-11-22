@@ -52,7 +52,7 @@ class SettingsViewModel @Inject constructor(
                         _uiState.value = _uiState.value.copy(
                             name = it.name,
                             email = it.email,
-                            avatar = if (it.avatar == null) "default-avatar.png" else it.avatar
+                            avatar = if (it.avatar == null) "avatar_default.png" else it.avatar
                         )
                     }
                 }
