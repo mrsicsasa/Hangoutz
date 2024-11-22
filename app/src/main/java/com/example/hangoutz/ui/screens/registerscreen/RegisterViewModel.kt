@@ -49,7 +49,8 @@ class RegisterViewModel @Inject constructor(
             Fields.NAME -> _uiState.value = _uiState.value.copy(name = newText)
             Fields.EMAIL -> _uiState.value = _uiState.value.copy(email = newText.trim())
             Fields.PASSWORD -> _uiState.value = _uiState.value.copy(password = newText)
-            Fields.CONFIRMPASSWORD -> _uiState.value = _uiState.value.copy(confirmPassword = newText)
+            Fields.CONFIRMPASSWORD -> _uiState.value =
+                _uiState.value.copy(confirmPassword = newText)
         }
     }
 
@@ -76,12 +77,14 @@ class RegisterViewModel @Inject constructor(
             isValid = false
         } else {
             if (!Validator.isValidNameLength(_uiState.value.name)) {
-                _uiState.value = _uiState.value.copy(nameError = context.getString(R.string.name_error_message))
+                _uiState.value =
+                    _uiState.value.copy(nameError = context.getString(R.string.name_error_message))
                 isValid = false
             }
 
             if (!Validator.isValidEmail(_uiState.value.email)) {
-                _uiState.value = _uiState.value.copy(emailError = context.getString(R.string.email_format_error_message))
+                _uiState.value =
+                    _uiState.value.copy(emailError = context.getString(R.string.email_format_error_message))
                 isValid = false
             }
 
@@ -91,8 +94,13 @@ class RegisterViewModel @Inject constructor(
                 isValid = false
             }
 
-            if (!Validator.doPasswordsMatch(_uiState.value.password, _uiState.value.confirmPassword)) {
-                _uiState.value = _uiState.value.copy(confirmPasswordError = context.getString(R.string.confirmPassword_error_message))
+            if (!Validator.doPasswordsMatch(
+                    _uiState.value.password,
+                    _uiState.value.confirmPassword
+                )
+            ) {
+                _uiState.value =
+                    _uiState.value.copy(confirmPasswordError = context.getString(R.string.confirmPassword_error_message))
                 isValid = false
             }
         }
@@ -110,15 +118,18 @@ class RegisterViewModel @Inject constructor(
                 )
                 if (response.isSuccessful) {
                     onRegisterSuccess()
-                } else if (response.code() == 409) {
-                    _uiState.value = _uiState.value.copy(emailError = context.getString(R.string.email_duplicate_error_message))
+                } else if (response.code() == Constants.CONFLICT) {
+                    _uiState.value =
+                        _uiState.value.copy(emailError = context.getString(R.string.email_duplicate_error_message))
                 }
             } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(incompleteFormError = context.getString(R.string.generic_error_message))
+                _uiState.value =
+                    _uiState.value.copy(incompleteFormError = context.getString(R.string.generic_error_message))
                 Log.e("LoginViewModel", "Login error: ${e.message}")
             }
         }
     }
+
     private fun clearErrors() {
         _uiState.value = _uiState.value.copy(
             nameError = "",

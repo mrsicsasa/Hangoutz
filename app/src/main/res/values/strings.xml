@@ -8,6 +8,8 @@
     <string name="confirmPassword_error_message">Passwords must match</string>
     <string name="email_duplicate_error_message">Email already in use</string>
     <string name="generic_error_message">An error has occurred</string>
+    <string name="contains_digit">.*\\d.*</string>
+    <string name="valid_email">\@gmail.com</string>
     <string name="background_image">Background Image</string>
     <string name="all_fields_must_be_filled">All fields must be filled!</string>
     <string name="name_error_message">Name must be 3–25 characters</string>
