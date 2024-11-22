@@ -83,13 +83,13 @@ class RegisterViewModel @Inject constructor(
                 isValid = false
             }
 
-            if (!Validator.isValidEmail(_uiState.value.email)) {
+            if (!Validator.isValidEmail(context, _uiState.value.email)) {
                 _uiState.value =
                     _uiState.value.copy(emailError = context.getString(R.string.email_format_error_message))
                 isValid = false
             }
 
-            if (!Validator.isValidPassword(_uiState.value.password)) {
+            if (!Validator.isValidPassword(context, _uiState.value.password)) {
                 _uiState.value =
                     _uiState.value.copy(passwordError = context.getString(R.string.password_error_message))
                 isValid = false
@@ -119,7 +119,7 @@ class RegisterViewModel @Inject constructor(
                 )
                 if (response.isSuccessful) {
                     onRegisterSuccess()
-                } else if (response.code() == Constants.CONFLICT) {
+                } else if (response.code() == Constants.DUPLICATE_ITEM) {
                     _uiState.value =
                         _uiState.value.copy(emailError = context.getString(R.string.email_duplicate_error_message))
                 }

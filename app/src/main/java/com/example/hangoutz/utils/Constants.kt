@@ -20,7 +20,7 @@ object Constants {
     val TOP_BAR_TITLE = "Hangoutz"
 
     //Error codes
-    val CONFLICT = 409
+    val DUPLICATE_ITEM = 409
 
     //Errors
     val ERROR_EMPTY_FIELDS = "All fields must be filled!"

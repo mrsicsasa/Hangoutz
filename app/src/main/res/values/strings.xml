@@ -8,4 +8,6 @@
     <string name="confirmPassword_error_message">Passwords must match</string>
     <string name="email_duplicate_error_message">Email already in use</string>
     <string name="generic_error_message">An error has occurred</string>
+    <string name="contains_digit">.*\\d.*</string>
+    <string name="valid_email">\@gmail.com</string>
 </resources>
