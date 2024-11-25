@@ -28,7 +28,7 @@ import com.example.hangoutz.ui.navigation.BottomNavigationDestination
 import com.example.hangoutz.ui.screens.friends.FriendsScreen
 import com.example.hangoutz.ui.screens.events.MyEventsScreen
 import com.example.hangoutz.ui.screens.settings.SettingsScreen
-import com.example.hangoutz.ui.theme.topBarBackgroundColor
+import com.example.hangoutz.ui.theme.TopBarBackgroundColor
 import com.example.hangoutz.utils.Constants
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,7 +49,7 @@ fun MainScreen(navController: NavController) {
 
             },
             colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = topBarBackgroundColor
+                containerColor = TopBarBackgroundColor
             )
         )
     },

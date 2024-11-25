@@ -26,7 +26,7 @@ import com.example.hangoutz.R
 import com.example.hangoutz.ui.components.ProfileScreen
 import com.example.hangoutz.ui.theme.Blue
 import com.example.hangoutz.ui.theme.GreenMinty
-import com.example.hangoutz.ui.theme.textBodyGrayColor
+import com.example.hangoutz.ui.theme.TextBodyGrayColor
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Dimensions
 
@@ -125,7 +125,7 @@ fun EventCard(
                         countOfPeople
                     ) else stringResource(R.string.no_one_is_going),
                     style = MaterialTheme.typography.displaySmall.copy(
-                        color = textBodyGrayColor,
+                        color = TextBodyGrayColor,
                     ),
                     modifier = Modifier.testTag(Constants.NUMBER_OF_PEOPLE)
                 )

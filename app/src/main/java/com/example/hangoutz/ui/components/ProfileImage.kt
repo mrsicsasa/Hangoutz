@@ -10,12 +10,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.hangoutz.BuildConfig
 import com.example.hangoutz.R
 import com.example.hangoutz.ui.theme.Ivory
+import com.example.hangoutz.utils.Dimensions
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
@@ -26,7 +26,7 @@ fun ProfileScreen(
 ) {
     Box(
         modifier = boxModifier
-            .size(74.dp)
+            .size(Dimensions.PROFILE_IMAGE_SIZE)
             .clip(CircleShape),
         contentAlignment = Alignment.Center
     ) {
@@ -36,9 +36,9 @@ fun ProfileScreen(
                 contentDescription = stringResource(R.string.user_profile_image),
                 contentScale = ContentScale.Crop,
                 modifier = imageModifier
-                    .size(74.dp)
+                    .size(Dimensions.PROFILE_IMAGE_SIZE)
                     .clip(CircleShape)
-                    .border(2.dp, Ivory, CircleShape)
+                    .border(Dimensions.PROFILE_IMAGE_BORDER_WIDTH, Ivory, CircleShape)
             )
         }
     }

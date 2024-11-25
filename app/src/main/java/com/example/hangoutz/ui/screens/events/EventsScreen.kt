@@ -26,10 +26,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.hangoutz.R
-import com.example.hangoutz.data.models.EventCardDPO
-import com.example.hangoutz.ui.theme.GreenDark
-import com.example.hangoutz.ui.theme.Orange
-import com.example.hangoutz.ui.theme.PurpleDark
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Dimensions
 import com.example.hangoutz.utils.toDate
@@ -57,7 +53,7 @@ fun MyEventsScreen(viewModel: EventScreenViewModel = hiltViewModel()) {
                     val countOfPeoplePair: Pair<UUID, Int>? =
                         data.value.counts.find { it.first == event.id }
                     EventCard(
-                        backgroundColor = getCardColor(data.value.events, event),
+                        backgroundColor = viewModel.getCardColor(data.value.events.indexOf(event)),
                         imageUrl = event.users.avatar
                             ?: stringResource(R.string.default_user_image),
                         title = event.title,
@@ -85,14 +81,4 @@ fun MyEventsScreen(viewModel: EventScreenViewModel = hiltViewModel()) {
             )
         }
     }
-}
-
-private fun getCardColor(list: List<EventCardDPO>, item: EventCardDPO): Color {
-    val index = list.indexOf(item)
-    if (index % 3 == 0) {
-        return PurpleDark
-    } else if (index % 3 == 1) {
-        return GreenDark
-    }
-    return Orange
 }

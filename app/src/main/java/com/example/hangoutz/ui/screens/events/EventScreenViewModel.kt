@@ -1,10 +1,14 @@
 package com.example.hangoutz.ui.screens.events
 
 import android.util.Log
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hangoutz.domain.repository.EventRepository
 import com.example.hangoutz.domain.repository.InviteRepository
+import com.example.hangoutz.ui.theme.GreenDark
+import com.example.hangoutz.ui.theme.Orange
+import com.example.hangoutz.ui.theme.PurpleDark
 import com.example.hangoutz.utils.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -58,5 +62,14 @@ class EventScreenViewModel @Inject constructor(
         } else {
             Log.d("Error", response.message())
         }
+    }
+
+    fun getCardColor(cardIndex: Int): Color {
+        if (cardIndex % 3 == 0) {
+            return PurpleDark
+        } else if (cardIndex % 3 == 1) {
+            return GreenDark
+        }
+        return Orange
     }
 }

@@ -28,4 +28,8 @@ object Dimensions {
     val SPACE_BETWEEN_PLACE_AND_DATE: Dp = 5.dp
     val INVITATION_BOX_END_PADDING: Dp = 20.dp
     val INVITATION_BOX_BOTTOM_PADDING: Dp = 10.dp
+
+    //Profile image
+    val PROFILE_IMAGE_SIZE: Dp = 74.dp
+    val PROFILE_IMAGE_BORDER_WIDTH: Dp = 2.dp
 }

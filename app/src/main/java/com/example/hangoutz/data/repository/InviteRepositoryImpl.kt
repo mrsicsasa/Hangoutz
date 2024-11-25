@@ -29,6 +29,4 @@ class InviteRepositoryImpl @Inject constructor(invitesAPI: InviteAPI): InviteRep
     override suspend fun getCountOfAcceptedInvitesByEvent(id: UUID): Response<List<CountOfAcceptedInvitesForEvent>> {
         return  api.getCountOfAcceptedInvitesByEvent(id="eq.${id}")
     }
-
-
 }
