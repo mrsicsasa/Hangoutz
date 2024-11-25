@@ -1,4 +1,4 @@
-package com.example.hangoutz.ui.screens.eventdetailsownerscreen
+package com.example.hangoutz.ui.screens.createEvent
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -10,8 +10,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 
 @Composable
-fun EventOwnerDetailsScreen(navController: NavController) {
-    Text(text = "Event owner screen")
+fun CreateEventScreen(navController: NavController) {
+    Text(text = "Create Event")
     Row(modifier = Modifier.padding(top = 30.dp, end = 30.dp)) {
         Button(
             onClick = { navController.popBackStack() }) {
