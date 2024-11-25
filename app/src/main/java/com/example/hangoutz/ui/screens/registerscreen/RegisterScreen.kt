@@ -45,27 +45,27 @@ fun RegisterScreen(navController: NavController, viewModel: RegisterViewModel = 
                     painterResource(R.drawable.main_background),
                     contentScale = ContentScale.FillHeight
                 )
-                .testTag("backgroundColumn")
+                .testTag("registerBackgroundColumn")
         ) {
             Column(
                 modifier = Modifier
                     .weight(1.5f)
                     .background(Color.Transparent)
                     .fillMaxWidth()
-                    .testTag("logoColumn")
+                    .testTag("registerLogoColumn")
             ) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .aspectRatio(1f)
-                        .testTag("logoBox"),
+                        .testTag("registerLogoBox"),
                     contentAlignment = Alignment.Center
                 ) {
                     Logo(
                         painterResource(id = R.drawable.logo),
                         modifier = Modifier
                             .align(Alignment.Center)
-                            .testTag("logo"),
+                            .testTag("registerLogo"),
                         animationDelay = Constants.LOGO_ANIMATION_DELAY
                     )
                 }
@@ -76,7 +76,7 @@ fun RegisterScreen(navController: NavController, viewModel: RegisterViewModel = 
                     .align(Alignment.CenterHorizontally)
                     .padding(start = 30.dp, end = 30.dp, bottom = 50.dp)
                     .fillMaxWidth()
-                    .testTag("formColumn")
+                    .testTag("registerFormColumn")
             ) {
                 InputField(
                     label = "Name*",
@@ -87,10 +87,10 @@ fun RegisterScreen(navController: NavController, viewModel: RegisterViewModel = 
                     isError = (data.value.name.isEmpty() && data.value.incompleteFormError.isNotEmpty())
                             || data.value.nameError.isNotEmpty(),
                     modifier = Modifier
-                        .testTag("nameInput")
+                        .testTag("registerNameInput")
                 )
                 if (data.value.nameError.isNotEmpty() && data.value.incompleteFormError.isEmpty()) {
-                    ErrorMessage(data.value.nameError, Modifier.testTag("nameError"))
+                    ErrorMessage(data.value.nameError, Modifier.testTag("registerNameError"))
                 }
                 InputField(
                     label = "Email*",
@@ -101,10 +101,10 @@ fun RegisterScreen(navController: NavController, viewModel: RegisterViewModel = 
                     isError = (data.value.email.isEmpty() && data.value.incompleteFormError.isNotEmpty())
                             || data.value.emailError.isNotEmpty(),
                     modifier = Modifier
-                        .testTag("emailInput")
+                        .testTag("registerEmailInput")
                 )
                 if (data.value.emailError.isNotEmpty() && data.value.incompleteFormError.isEmpty()) {
-                    ErrorMessage(data.value.emailError, Modifier.testTag("emailError"))
+                    ErrorMessage(data.value.emailError, Modifier.testTag("registerEmailError"))
                 }
                 InputField(
                     label = "Password*",
@@ -116,10 +116,10 @@ fun RegisterScreen(navController: NavController, viewModel: RegisterViewModel = 
                             || data.value.passwordError.isNotEmpty(),
                     isPassword = true,
                     modifier = Modifier
-                        .testTag("passwordInput")
+                        .testTag("registerPasswordInput")
                 )
                 if (data.value.passwordError.isNotEmpty() && data.value.incompleteFormError.isEmpty()) {
-                    ErrorMessage(data.value.passwordError, Modifier.testTag("passwordError"))
+                    ErrorMessage(data.value.passwordError, Modifier.testTag("registerPasswordError"))
                 }
                 InputField(
                     label = "Confirm password*",
@@ -131,18 +131,18 @@ fun RegisterScreen(navController: NavController, viewModel: RegisterViewModel = 
                             || data.value.confirmPasswordError.isNotEmpty(),
                     isPassword = true,
                     modifier = Modifier
-                        .testTag("confirmPasswordInput")
+                        .testTag("registerConfirmPasswordInput")
                 )
                 if (data.value.confirmPasswordError.isNotEmpty() && data.value.incompleteFormError.isEmpty()
                 ) {
                     ErrorMessage(
                         data.value.confirmPasswordError,
-                        Modifier.testTag("confirmPasswordError")
+                        Modifier.testTag("registerConfirmPasswordError")
                     )
                 }
                 // All fields must be filled
                 if (data.value.incompleteFormError.isNotEmpty()) {
-                    ErrorMessage(data.value.incompleteFormError, Modifier.testTag("incompleteFormError"))
+                    ErrorMessage(data.value.incompleteFormError, Modifier.testTag("registerIncompleteFormError"))
                 }
             }
             // Create account button
@@ -150,11 +150,11 @@ fun RegisterScreen(navController: NavController, viewModel: RegisterViewModel = 
                 modifier = Modifier
                     .padding(bottom = 145.dp)
                     .fillMaxWidth()
-                    .testTag("createAccountBox")
+                    .testTag("registerCreateAccountBox")
             ) {
                 ActionButton(
                     buttonText = "Create Account",
-                    modifier = Modifier.testTag("createAccountButton")
+                    modifier = Modifier.testTag("registerCreateAccountButton")
                 ) {
                     viewModel.onCreateAccountClick(context) {
                         navController.navigate(NavigationItem.Login.route) {
