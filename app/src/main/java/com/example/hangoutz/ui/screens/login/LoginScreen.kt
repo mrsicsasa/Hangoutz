@@ -33,14 +33,12 @@ import com.example.hangoutz.ui.components.ErrorMessage
 import com.example.hangoutz.ui.components.InputField
 import com.example.hangoutz.ui.components.Logo
 import com.example.hangoutz.ui.navigation.NavigationItem
-import com.example.hangoutz.ui.theme.Dimensions.actionButtonMedium1
-import com.example.hangoutz.ui.theme.Dimensions.actionButtonMedium2
-import com.example.hangoutz.ui.theme.Dimensions.actionButtonSmall1
 import com.example.hangoutz.ui.theme.Ivory
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Constants.EMAIL
 import com.example.hangoutz.utils.Constants.LOGIN
 import com.example.hangoutz.utils.Constants.PASSWORD
+import com.example.hangoutz.utils.Dimensions
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -80,7 +78,10 @@ fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltVi
                 .weight(2f)
                 .background(Color.Transparent)
                 .fillMaxWidth()
-                .padding(start = actionButtonMedium2, end = actionButtonMedium2)
+                .padding(
+                    start = Dimensions.ACTION_BUTTON_MEDIUM2,
+                    end = Dimensions.ACTION_BUTTON_MEDIUM2
+                )
         ) {
             InputField(
                 EMAIL,
@@ -109,7 +110,7 @@ fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltVi
         }
         Column(
             modifier = Modifier
-                .padding(bottom = actionButtonMedium1)
+                .padding(bottom = Dimensions.ACTION_BUTTON_MEDIUM1)
                 .fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -125,7 +126,7 @@ fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltVi
                 text = stringResource(R.string.create_account_text),
                 color = Ivory,
                 modifier = Modifier
-                    .padding(top = actionButtonSmall1)
+                    .padding(top = Dimensions.ACTION_BUTTON_SMALL2)
                     .clickable {
                         navController.navigate(NavigationItem.Register.route)
                     },

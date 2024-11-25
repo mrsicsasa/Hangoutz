@@ -32,7 +32,6 @@ import com.example.hangoutz.BuildConfig
 import com.example.hangoutz.R
 import com.example.hangoutz.ui.components.ActionButton
 import com.example.hangoutz.ui.navigation.NavigationItem
-import com.example.hangoutz.ui.screens.settingsscreen.NameInput
 import com.example.hangoutz.ui.theme.Ivory
 import com.example.hangoutz.utils.Constants.LOGOUT
 import com.example.hangoutz.utils.Constants.PROFILE_PHOTO
@@ -96,7 +95,7 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
                     .align(Alignment.CenterHorizontally)
                     .fillMaxWidth()
                     .height(Dimensions.SETTINGS_SCREEN_MEDIUM1),
-                horizontalArrangement = Arrangement.spacedBy(Dimensions.SETTINGS_SCRREEN_SMALL1),
+                horizontalArrangement = Arrangement.spacedBy(Dimensions.SETTINGS_SCREEN_SMALL1),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 NameInput(

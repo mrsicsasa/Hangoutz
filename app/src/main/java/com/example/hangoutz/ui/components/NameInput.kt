@@ -55,7 +55,7 @@ fun NameInput(
             .constrainAs(text) {
                 start.linkTo(image.end)
             }
-            .padding(Dimensions.SETTINGS_SCRREEN_SMALL1)
+            .padding(Dimensions.SETTINGS_SCREEN_SMALL1)
             .fillMaxHeight()) {
             Image(
                 painterResource(R.drawable.pencil),
