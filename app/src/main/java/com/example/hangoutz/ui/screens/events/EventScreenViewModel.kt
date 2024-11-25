@@ -1,10 +1,8 @@
 package com.example.hangoutz.ui.screens.events
 
 import android.util.Log
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.hangoutz.R
 import com.example.hangoutz.domain.repository.EventRepository
 import com.example.hangoutz.domain.repository.InviteRepository
 import com.example.hangoutz.utils.Constants
@@ -27,7 +25,7 @@ class EventScreenViewModel @Inject constructor(
         getEvents()
     }
 
-    fun getEvents() {
+    private fun getEvents() {
         viewModelScope.launch {
             val response = eventRepository.getEventsWithAvatar()
             if (response.isSuccessful && !response.body().isNullOrEmpty()) {
@@ -35,9 +33,9 @@ class EventScreenViewModel @Inject constructor(
                     _uiState.value = _uiState.value.copy(
                         events = it
                     )
-                    it.forEach {
+                    it.forEach { event ->
                         getCountOfAcceptedInvitesForEvent(
-                            id = it.id
+                            id = event.id
                         )
                     }
                 }
@@ -50,7 +48,7 @@ class EventScreenViewModel @Inject constructor(
     private suspend fun getCountOfAcceptedInvitesForEvent(id: UUID) {
         val response = inviteRepository.getCountOfAcceptedInvitesByEvent(id = id)
         if (response.isSuccessful) {
-            var count = response.body()
+            val count = response.body()
             _uiState.value = _uiState.value.copy(
                 counts = _uiState.value.counts + Pair(
                     id,

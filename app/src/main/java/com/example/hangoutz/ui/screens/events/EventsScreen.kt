@@ -63,7 +63,8 @@ fun MyEventsScreen(viewModel: EventScreenViewModel = hiltViewModel()) {
                         title = event.title,
                         place = event.place ?: "",
                         date = event.date.toDate().toEventDateDPO(),
-                        countOfPeople = (countOfPeoplePair?.second ?: 0)
+                        countOfPeople = (countOfPeoplePair?.second ?: 0),
+                        modifier = Modifier.testTag(Constants.EVENT_CARD)
                     )
                     Spacer(modifier = Modifier.height(Dimensions.SPACE_HEIGHT_BETWEEN_CARDS))
                 }

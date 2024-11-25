@@ -5,5 +5,5 @@ import java.util.UUID
 
 data class EventScreenState(
     var events: List<EventCardDPO> = emptyList(),
-    var counts: List<Pair<UUID,Int>> = emptyList()
+    var counts: List<Pair<UUID, Int>> = emptyList()
 )

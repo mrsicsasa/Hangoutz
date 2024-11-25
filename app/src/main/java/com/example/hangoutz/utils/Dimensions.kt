@@ -17,4 +17,15 @@ object Dimensions {
     val INVITE_RESPOND_BUTTON_ROUNDED_RADIUS: Dp = 20.dp
     val INVITE_RESPOND_BUTTON_WIDTH: Dp = 105.dp
     val INVITE_RESPOND_BUTTON_HEIGHT: Dp = 30.dp
+
+    //EventCard
+    val CARD_ROUNDED_CORNER_RADIUS: Dp = 16.dp
+    val CARD_HEIGHT: Dp = 135.dp
+    val CARD_END_PADDING: Dp = 10.dp
+    val CARD_ROW_HORIZONTAL_PADDING: Dp = 16.dp
+    val CARD_ROW_TOP_PADDING: Dp = 16.dp
+    val SPACE_BETWEEN_IMAGE_AND_TEXT: Dp = 10.dp
+    val SPACE_BETWEEN_PLACE_AND_DATE: Dp = 5.dp
+    val INVITATION_BOX_END_PADDING: Dp = 20.dp
+    val INVITATION_BOX_BOTTOM_PADDING: Dp = 10.dp
 }
