@@ -2,61 +2,41 @@ package com.example.hangoutz.utils
 
 object Constants {
     //SharedPreferences
-    val PREF_NAME = "hangoutz-shared-preferences"
-    val KEY_USER_ID = "user_id"
+    const val PREF_NAME = "hangoutz-shared-preferences"
+    const val KEY_USER_ID = "user_id"
 
     //Splash screen
-    val LOGO_ANIMATION_DELAY_SPLASH : Long = 800
-    val LOGO_ANIMATION_DURATION : Int = 500
-    val BACKGROUND_ANIMATION_DURATION: Int = 2000
-    val LOGO_ANIMATION_DELAY : Long = 100
+    const val LOGO_ANIMATION_DELAY_SPLASH : Long = 800
+    const val LOGO_ANIMATION_DURATION : Int = 500
+    const val BACKGROUND_ANIMATION_DURATION: Int = 2000
+    const val LOGO_ANIMATION_DELAY : Long = 100
 
     //credentials
-    val EMAIL = "Email"
-    val PASSWORD = "Password"
-    val LOGIN = "Login"
+    const val EMAIL = "Email"
+    const val PASSWORD = "Password"
+    const val LOGIN = "Login"
 
     //Top bar
-    val TOP_BAR_TITLE = "Hangoutz"
+    const val TOP_BAR_TITLE = "Hangoutz"
 
-    //Events screen
-    val GET_EVENTS_ERRORS = "Loading events errors"
-    val CREATE_EVENT_BUTTON = "CreateEventButton"
-
-    //EventCard
-    val EVENT_CARD = "EventCard"
-    val LOGO_BACKGROUND = "LogoBackground"
-    val LOGO_IMAGE = "LogoImage"
-    val DECLINE_INVITATION_BUTTON = "DeclineInvitationButton"
-    val ACCEPT_INVITATION_BUTTON = "AcceptInvitationButton"
-    val EVENT_TITLE = "EventTitle"
-    val EVENT_PLACE = "EventPlace"
-    val EVENT_DATE = "EventDate"
-    val NUMBER_OF_PEOPLE = "NumberOfPeople"
     //Error codes
-    val DUPLICATE_ITEM = 409
+    const val DUPLICATE_ITEM = 409
 
     //Errors
-    val ERROR_EMPTY_FIELDS = "All fields must be filled!"
-    val ERROR_INVALID_INPUT = "Incorrect email or password"
+    const val ERROR_EMPTY_FIELDS = "All fields must be filled!"
+    const val ERROR_INVALID_INPUT = "Incorrect email or password"
     //Events screen
-    val GET_EVENTS_ERRORS = "Loading events errors"
-    val CREATE_EVENT_BUTTON = "CreateEventButton"
+    const val GET_EVENTS_ERRORS = "Loading events errors"
+    const val CREATE_EVENT_BUTTON = "CreateEventButton"
 
     //EventCard
-    //Error codes
-    val DUPLICATE_ITEM = 409
-
-    //Errors
-    val ERROR_EMPTY_FIELDS = "All fields must be filled!"
-    val ERROR_INVALID_INPUT = "Incorrect email or password"
-    val EVENT_CARD = "EventCard"
-    val LOGO_BACKGROUND = "LogoBackground"
-    val LOGO_IMAGE = "LogoImage"
-    val DECLINE_INVITATION_BUTTON = "DeclineInvitationButton"
-    val ACCEPT_INVITATION_BUTTON = "AcceptInvitationButton"
-    val EVENT_TITLE = "EventTitle"
-    val EVENT_PLACE = "EventPlace"
-    val EVENT_DATE = "EventDate"
-    val NUMBER_OF_PEOPLE = "NumberOfPeople"
+    const val EVENT_CARD = "EventCard"
+    const val LOGO_BACKGROUND = "LogoBackground"
+    const val LOGO_IMAGE = "LogoImage"
+    const val DECLINE_INVITATION_BUTTON = "DeclineInvitationButton"
+    const val ACCEPT_INVITATION_BUTTON = "AcceptInvitationButton"
+    const val EVENT_TITLE = "EventTitle"
+    const val EVENT_PLACE = "EventPlace"
+    const val EVENT_DATE = "EventDate"
+    const val NUMBER_OF_PEOPLE = "NumberOfPeople"
 }
