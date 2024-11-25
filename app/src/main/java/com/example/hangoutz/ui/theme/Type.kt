@@ -46,21 +46,16 @@ val Typography = Typography(
     ),
     titleLarge = TextStyle(
         fontFamily = inter,
-        fontWeight = FontWeight.W600,
-        fontSize = 28.sp,
-        lineHeight = 33.sp
-    ),
-    titleMedium = TextStyle(
-        fontFamily = inter,
-        fontWeight = FontWeight.W600,
+        fontWeight = FontWeight(600),
         fontSize = 24.sp,
         lineHeight = 28.sp,
         letterSpacing = 0.sp
     ),
-    displaySmall = TextStyle(
+    displayLarge = TextStyle(
         fontFamily = inter,
-        fontWeight = FontWeight(400),
-        fontSize = 13.sp
+        fontWeight = FontWeight.Bold,
+        fontSize = 22.sp,
+        color = Color.White
     ),
     displayMedium = TextStyle(
         fontFamily = inter,
@@ -68,10 +63,16 @@ val Typography = Typography(
         fontSize = 18.sp,
         color = Color.White
     ),
-    displayLarge = TextStyle(
+    headlineSmall = TextStyle(
         fontFamily = inter,
-        fontWeight = FontWeight.Bold,
-        fontSize = 22.sp,
-        color = Color.White
-    )
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.5.sp
+    ),
+    displaySmall = TextStyle(
+        fontFamily = inter,
+        fontWeight = FontWeight(400),
+        fontSize = 13.sp
+    ),
 )
