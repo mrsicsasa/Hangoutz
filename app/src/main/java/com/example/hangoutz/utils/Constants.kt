@@ -55,6 +55,7 @@ object Constants {
     const val SETTINGS_BACKGROUND_LINES_TAG = "settingsBackgroundLines"
     const val SETTINGS_EMAIL_FIELD_TAG = "settingsEmailField"
     const val SETTINGS_LOGOUT_BUTTON = "settingsLogoutButton"
+    const val DEFAULT_USER_PHOTO = "avatar_default.png"
 
     //Settings page
     const val PROFILE_PHOTO = "Profile Photo"
