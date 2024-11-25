@@ -24,6 +24,15 @@ object Constants {
     val CREATE_EVENT_BUTTON = "CreateEventButton"
 
     //EventCard
+    val EVENT_CARD = "EventCard"
+    val LOGO_BACKGROUND = "LogoBackground"
+    val LOGO_IMAGE = "LogoImage"
+    val DECLINE_INVITATION_BUTTON = "DeclineInvitationButton"
+    val ACCEPT_INVITATION_BUTTON = "AcceptInvitationButton"
+    val EVENT_TITLE = "EventTitle"
+    val EVENT_PLACE = "EventPlace"
+    val EVENT_DATE = "EventDate"
+    val NUMBER_OF_PEOPLE = "NumberOfPeople"
     //Error codes
     val DUPLICATE_ITEM = 409
 

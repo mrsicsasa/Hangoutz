@@ -6,6 +6,9 @@
     <string name="decline_button_text">Decline</string>
     <string name="accept_button_text">Accept</string>
     <string name="error_log_tag">Error</string>
+    <string name="people_going">%1$s people going</string>
+    <string name="no_one_is_going">No one is going</string>
+    <string name="user_profile_image">user_profile_image</string>
     <string name="application_logo">Application logo</string>
     <string name="all_fields_must_be_filled">All fields must be filled!</string>
     <string name="name_error_message">Name must be 3–25 characters</string>
