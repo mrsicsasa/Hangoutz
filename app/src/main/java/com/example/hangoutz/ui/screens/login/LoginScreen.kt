@@ -35,6 +35,9 @@ import com.example.hangoutz.ui.components.ErrorMessage
 import com.example.hangoutz.ui.components.InputField
 import com.example.hangoutz.ui.components.Logo
 import com.example.hangoutz.ui.navigation.NavigationItem
+import com.example.hangoutz.ui.theme.Dimensions.ActionButton_Medium1
+import com.example.hangoutz.ui.theme.Dimensions.ActionButton_Medium2
+import com.example.hangoutz.ui.theme.Dimensions.ActionButton_Small1
 import com.example.hangoutz.ui.theme.Ivory
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Constants.EMAIL
@@ -80,7 +83,7 @@ fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltVi
                 .weight(2f)
                 .background(Color.Transparent)
                 .fillMaxWidth()
-                .padding(start = 30.dp, end = 30.dp)
+                .padding(start = ActionButton_Medium2, end = ActionButton_Medium2)
         ) {
             InputField(
                 EMAIL,
@@ -108,12 +111,13 @@ fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltVi
                                 launchSingleTop
                             }
                         })
-                }, Modifier.testTag(LOGIN_BUTTON))
+                }, Modifier.testTag(LOGIN_BUTTON)
+            )
         }
 
         Column(
             modifier = Modifier
-                .padding(bottom = 60.dp)
+                .padding(bottom = ActionButton_Medium1)
                 .fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -129,7 +133,7 @@ fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltVi
                 text = getString(context, R.string.create_account_text),
                 color = Ivory,
                 modifier = Modifier
-                    .padding(top = 5.dp)
+                    .padding(top = ActionButton_Small1)
                     .clickable {
                         navController.navigate(NavigationItem.Register.route)
                     },

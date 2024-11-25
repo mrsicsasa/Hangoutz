@@ -46,7 +46,7 @@ fun ActionButton(
     painterResource: Int,
     buttonText: String,
     onClick: () -> Unit,
-    modifier: Modifier?
+    modifier: Modifier
 ) {
     Box(
         modifier = Modifier
@@ -63,14 +63,12 @@ fun ActionButton(
                 .height(50.dp)
                 .align(Alignment.BottomCenter),
         ) {
-
             Row(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .align(Alignment.CenterVertically),
                 horizontalArrangement = Arrangement.Center
-
             ) {
-
                 Text(
                     text = buttonText,
                     style = MaterialTheme.typography.labelLarge,
@@ -80,10 +78,8 @@ fun ActionButton(
                     painter = painterResource(painterResource),
                     contentDescription = "Icon",
                     modifier = Modifier.size(20.dp)
-
-
                 )
+            }
         }
     }
-}
 }
