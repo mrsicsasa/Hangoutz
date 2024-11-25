@@ -14,6 +14,9 @@ interface UserAPI {
     suspend fun getUserByName(@Query("name") name: String): Response<List<User>>
 
     @GET("${BuildConfig.REQUEST_URL}users")
+    suspend fun getUserById(@Query("id") id: String): Response<List<User>>
+
+    @GET("${BuildConfig.REQUEST_URL}users")
     suspend fun getUserByEmailAndPassword(
         @Query("email") email: String,
         @Query("password_hash") password: String
