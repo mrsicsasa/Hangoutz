@@ -16,7 +16,7 @@
     <string name="accept_button_text">Accept</string>
     <string name="error_log_tag">Error</string>
     <string name="people_going">%1$s people going</string>
-    <string name="one_person_is_going">1 person is going</string>
+    <string name="one_person_is_going">1 person going</string>
     <string name="user_profile_image">user_profile_image</string>
     <string name="application_logo">application_logo</string>
     <string name="or_text">OR</string>
