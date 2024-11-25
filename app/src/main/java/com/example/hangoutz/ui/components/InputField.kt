@@ -22,14 +22,15 @@ fun InputField(
     value: String,
     onValueChange: (String) -> (Unit),
     isError: Boolean,
-    isPassword: Boolean = false
+    isPassword: Boolean = false,
+    modifier: Modifier = Modifier
 ) {
     OutlinedTextField(
         value = value,
         label = { Text(text = label, style = MaterialTheme.typography.bodySmall) },
         onValueChange = { onValueChange(it) },
         isError = isError,
-        maxLines = 1,
+        singleLine = true,
         shape = RoundedCornerShape(20.dp),
         visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
         colors = OutlinedTextFieldDefaults.colors(
@@ -44,9 +45,8 @@ fun InputField(
             errorBorderColor = Error,
             errorTextColor = Ivory
         ),
-
         textStyle = MaterialTheme.typography.bodySmall.copy(color = Color.White),
-        modifier = Modifier
+        modifier = modifier
             .padding(bottom = 10.dp, top = 10.dp)
             .fillMaxWidth()
     )

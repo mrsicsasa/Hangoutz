@@ -11,9 +11,9 @@ import com.example.hangoutz.ui.theme.Error
 import androidx.compose.ui.Modifier
 
 @Composable
-fun ErrorMessage(errorMessage: String) {
+fun ErrorMessage(errorMessage: String, modifier: Modifier = Modifier) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .padding(start = 10.dp, end = 10.dp)
             .fillMaxWidth()
     ) {

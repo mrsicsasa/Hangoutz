@@ -12,4 +12,5 @@
     <string name="generic_error_message">An error has occurred</string>
     <string name="contains_digit">.*\\d.*</string>
     <string name="valid_email">\@gmail.com</string>
+    <string name="at_sign">\@</string>
 </resources>

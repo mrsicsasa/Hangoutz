@@ -25,13 +25,14 @@ import com.example.hangoutz.ui.theme.Ivory
 @Composable
 fun ActionButton(
     buttonText: String,
+    modifier: Modifier = Modifier,
     onClick: () -> (Unit)
 ) {
     Button(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(containerColor = Ivory),
         shape = RoundedCornerShape(20.dp),
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(start = 50.dp, end = 50.dp)
             .height(50.dp),

@@ -35,7 +35,9 @@ object Validator {
     }
 
     fun isValidEmail(context: Context, email: String): Boolean {
-        return (email.endsWith(context.getString(R.string.valid_email)) == true)
+        return (email.endsWith(context.getString(R.string.valid_email)) == true &&
+                !email.startsWith(context.getString(R.string.at_sign)) &&
+                email.split(context.getString(R.string.at_sign)).size == 2)
     }
 
     fun isValidPassword(context: Context, password: String): Boolean {
