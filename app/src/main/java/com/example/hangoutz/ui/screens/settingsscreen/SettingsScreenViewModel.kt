@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.hangoutz.R
 import com.example.hangoutz.data.local.SharedPreferencesManager
 import com.example.hangoutz.domain.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +17,8 @@ data class SettingsData(
     var name: String = "",
     var email: String = "",
     var isReadOnly : Boolean = true,
-    val avatar: String? = null
+    val avatar: String? = null,
+    val textIcon : Int = R.drawable.pencil
 )
 
 @HiltViewModel
@@ -39,6 +41,12 @@ class SettingsViewModel @Inject constructor(
     fun onPencilClick() : Boolean{
      val state =  !_uiState.value.isReadOnly
         _uiState.value = _uiState.value.copy(isReadOnly = state)
+
+        if(_uiState.value.textIcon== R.drawable.pencil){
+            _uiState.value = _uiState.value.copy(textIcon = R.drawable.check)
+        }
+        else _uiState.value = _uiState.value.copy(textIcon = R.drawable.pencil)
+
         //Log.e("LOGG------ ","STATE = ${state} & ISREADONLY ${_uiState.value.isReadOnly}")
 
         return state

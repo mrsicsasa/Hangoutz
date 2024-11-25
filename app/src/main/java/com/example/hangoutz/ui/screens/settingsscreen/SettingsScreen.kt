@@ -108,7 +108,8 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
                     { viewmodel.onNameChanged(it) },
                     data.value.isReadOnly,
                     { viewmodel.onPencilClick() },
-                    data.value.name
+                    data.value.name,
+                    data.value.textIcon
                 )
             }
             Text(
@@ -148,9 +149,12 @@ fun NameInput(
     onNameChanged: (String) -> Unit,
     isReadOnly: Boolean,
     onPencilClick: () -> Unit,
-    name: String
+    name: String,
+    textIcon: Int
 ) {
     val focusRequester = remember { FocusRequester() }
+    val testing =
+
     ConstraintLayout(
         modifier = Modifier
             .fillMaxWidth()
@@ -180,14 +184,19 @@ fun NameInput(
                 .padding(start = 5.dp)
                 .fillMaxHeight()
         ) {
+
+
             Image(
-                painterResource(R.drawable.pencil), "",
+
+                painterResource(textIcon),
+                "",
                 modifier = Modifier
                     .size(25.dp)
                     .align(Alignment.Center)
                     .clickable {
                         onPencilClick()
                         focusRequester.requestFocus()
+
 
                     },
                 colorFilter = ColorFilter.tint(Ivory)
