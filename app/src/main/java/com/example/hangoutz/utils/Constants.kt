@@ -9,7 +9,8 @@ object Constants {
     const val LOGO_ANIMATION_DELAY_SPLASH : Long = 800
     const val LOGO_ANIMATION_DURATION : Int = 500
     const val BACKGROUND_ANIMATION_DURATION: Int = 2000
-    const val LOGO_ANIMATION_DELAY : Long = 100
+    const val SPLASH_SCREEN_BACKGROUND = "SplashScreenBackground"
+    const val SPLASH_SCREEN_LOGO = "SplashScreenLogo"
 
     //credentials
     const val EMAIL = "Email"

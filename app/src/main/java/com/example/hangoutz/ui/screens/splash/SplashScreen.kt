@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -21,12 +22,13 @@ import com.example.hangoutz.R
 import com.example.hangoutz.ui.components.Logo
 import com.example.hangoutz.ui.navigation.NavigationItem
 import com.example.hangoutz.utils.Constants
+import com.example.hangoutz.utils.Dimensions
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SplashScreen(navController: NavController) {
     val viewmodel: SplashScreenViewModel = hiltViewModel()
-    val alpha = remember { Animatable(0.4f) }
+    val alpha = remember { Animatable(Dimensions.SPLASH_SCREEN_STARTING_APLHA) }
     val context = LocalContext.current
     Box(
         modifier = Modifier
@@ -35,21 +37,24 @@ fun SplashScreen(navController: NavController) {
                 painterResource(id = R.drawable.main_background),
                 contentScale = ContentScale.FillBounds,
                 alpha = alpha.value
-            ),
+            )
+            .testTag(Constants.SPLASH_SCREEN_BACKGROUND),
         contentAlignment = Alignment.Center
     ) {
         Logo(
             painterResource(id = R.drawable.logo),
-            initialValue = 1f,
-            targetValue = 0f,
-            modifier = Modifier.align(Alignment.Center),
+            initialValue = Dimensions.SPLASH_SCREEN_LOGO_INITIAL_ALPHA_VALUE,
+            targetValue = Dimensions.SPLASH_SCREEN_LOGO_TARGETED_ALPHA_VALUE,
+            modifier = Modifier
+                .align(Alignment.Center)
+                .testTag(Constants.SPLASH_SCREEN_LOGO),
             animationDelay = Constants.LOGO_ANIMATION_DELAY_SPLASH
         )
     }
     LaunchedEffect(key1 = true) {
         alpha.animateTo(1f, animationSpec = tween(Constants.BACKGROUND_ANIMATION_DURATION))
         viewmodel.deleteEventsFromPast()
-        if(viewmodel.isUserLoggedIn(context)) {
+        if (viewmodel.isUserLoggedIn(context)) {
             navController.navigate(route = NavigationItem.MainScreen.route) {
                 popUpTo(NavigationItem.Splash.route) {
                     inclusive = true

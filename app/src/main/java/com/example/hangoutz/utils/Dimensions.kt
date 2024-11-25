@@ -32,4 +32,8 @@ object Dimensions {
     //Profile image
     val PROFILE_IMAGE_SIZE: Dp = 74.dp
     val PROFILE_IMAGE_BORDER_WIDTH: Dp = 2.dp
+    //Splash screen
+    val SPLASH_SCREEN_STARTING_APLHA = 0.4f
+    val SPLASH_SCREEN_LOGO_INITIAL_ALPHA_VALUE = 1f
+    val SPLASH_SCREEN_LOGO_TARGETED_ALPHA_VALUE = 0f
 }
