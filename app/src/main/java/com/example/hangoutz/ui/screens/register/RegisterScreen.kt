@@ -163,7 +163,7 @@ fun RegisterScreen(navController: NavController, viewModel: RegisterViewModel = 
                 modifier = Modifier
                     .padding(bottom = Dimensions.REGISTER_BOTTOM_PADDING)
                     .fillMaxWidth()
-                    .testTag("registerCreateAccountBox")
+                    .testTag(Constants.REGISTER_CREATE_ACCOUNT_BOX)
             ) {
                 ActionButton(
                     buttonText = stringResource(R.string.create_account_text),

@@ -80,5 +80,6 @@ object Constants {
     const val REGISTER_CONFIRM_PASSWORD_INPUT = "registerConfirmPasswordInput"
     const val REGISTER_CONFIRM_PASSWORD_ERROR = "registerConfirmPasswordError"
     const val REGISTER_INCOMPLETE_FORM_ERROR= "registerIncompleteFormError"
+    const val REGISTER_CREATE_ACCOUNT_BOX = "registerCreateAccountBox"
     const val REGISTER_CREATE_ACCOUNT_BUTTON = "registerCreateAccountButton"
 }
