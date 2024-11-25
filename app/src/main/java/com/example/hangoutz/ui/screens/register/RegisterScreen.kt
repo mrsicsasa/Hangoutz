@@ -1,4 +1,4 @@
-package com.example.hangoutz.ui.screens.registerscreen
+package com.example.hangoutz.ui.screens.register
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -29,6 +29,8 @@ import com.example.hangoutz.ui.components.ErrorMessage
 import com.example.hangoutz.ui.components.InputField
 import com.example.hangoutz.ui.components.Logo
 import com.example.hangoutz.ui.navigation.NavigationItem
+import com.example.hangoutz.ui.screens.registerscreen.Fields
+import com.example.hangoutz.ui.screens.registerscreen.RegisterViewModel
 import com.example.hangoutz.utils.Constants
 
 @OptIn(ExperimentalComposeUiApi::class)

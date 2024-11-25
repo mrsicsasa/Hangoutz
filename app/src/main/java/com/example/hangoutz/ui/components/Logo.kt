@@ -15,9 +15,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.example.hangoutz.R
 import com.example.hangoutz.utils.Constants
+import com.example.hangoutz.utils.Dimensions
 import kotlinx.coroutines.delay
 
 @Composable
@@ -32,13 +32,13 @@ fun Logo(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .aspectRatio(1f)
+            .aspectRatio(Dimensions.LOGO_ASPECT_RATIO)
     ) {
         Image(
             painter = painter,
             contentDescription = stringResource(R.string.application_logo),
             modifier = modifier
-                .height(50.dp)
+                .height(Dimensions.LOGO_HEIGHT)
                 .scale(scale.value)
         )
         LaunchedEffect(key1 = true) {
@@ -47,7 +47,7 @@ fun Logo(
                 targetValue = targetValue,
                 animationSpec = tween(
                     durationMillis = Constants.LOGO_ANIMATION_DURATION,
-                    easing = { OvershootInterpolator(0f).getInterpolation(it) })
+                    easing = { OvershootInterpolator(Dimensions.LOGO_OVERSHOOT_INTERPOLATOR_TENSION).getInterpolation(it) })
             )
         }
     }
