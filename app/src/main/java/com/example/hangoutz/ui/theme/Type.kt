@@ -1,6 +1,7 @@
 package com.example.hangoutz.ui.theme
 
 import androidx.compose.material3.Typography
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -45,14 +46,26 @@ val Typography = Typography(
     ),
     titleLarge = TextStyle(
         fontFamily = inter,
-        fontWeight = FontWeight.W600,
-        fontSize = 28.sp,
-        lineHeight = 33.sp
-    ),
-    titleMedium = TextStyle(
-        fontFamily = inter,
-        fontWeight = FontWeight.W600,
+        fontWeight = FontWeight(600),
         fontSize = 24.sp,
-        lineHeight = 29.sp
+        lineHeight = 28.sp,
+        letterSpacing = 0.sp
+    ),
+    displaySmall = TextStyle(
+        fontFamily = inter,
+        fontWeight = FontWeight(400),
+        fontSize = 13.sp
+    ),
+    displayMedium = TextStyle(
+        fontFamily = inter,
+        fontWeight = FontWeight.Bold,
+        fontSize = 18.sp,
+        color = Color.White
+    ),
+    displayLarge = TextStyle(
+        fontFamily = inter,
+        fontWeight = FontWeight.Bold,
+        fontSize = 22.sp,
+        color = Color.White
     )
 )

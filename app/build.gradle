@@ -29,12 +29,14 @@ android {
         debug {
             buildConfigField("String", "BASE_URL", "\"https://zsjxwfjutstrybvltjov.supabase.co/\"")
             buildConfigField("String", "REQUEST_URL", "\"rest/v1/\"")
+            buildConfigField("String", "BASE_URL_AVATAR", "\"https://zsjxwfjutstrybvltjov.supabase.co/storage/v1/object/public/avatar/\"")
         }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField("String", "BASE_URL", "\"https://zsjxwfjutstrybvltjov.supabase.co/\"")
             buildConfigField("String", "REQUEST_URL", "\"rest/v1/\"")
+            buildConfigField("String", "BASE_URL_AVATAR", "\"https://zsjxwfjutstrybvltjov.supabase.co/storage/v1/object/public/avatar/\"")
 
         }
     }
