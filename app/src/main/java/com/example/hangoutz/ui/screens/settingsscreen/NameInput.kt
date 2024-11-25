@@ -23,6 +23,7 @@ import com.example.hangoutz.ui.theme.Dimensions.Medium4
 import com.example.hangoutz.ui.theme.Dimensions.Small1
 import com.example.hangoutz.ui.theme.Ivory
 
+
 @Composable
 fun NameInput(
     name: String, isReadOnly: Boolean, onNameChanged: (String) -> Unit, onPencilClick: () -> Unit
@@ -31,7 +32,7 @@ fun NameInput(
     ConstraintLayout(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(Medium3, Medium3),
+            .padding(end = Medium3, start = Medium3),
     ) {
         val (image, text) = createRefs()
         Box(modifier = Modifier.constrainAs(image) {
@@ -45,8 +46,7 @@ fun NameInput(
                 { onNameChanged(it) },
                 isReadOnly,
                 focusRequester,
-                modifier = Modifier
-                    .align(Alignment.Center)
+                modifier = Modifier.align(Alignment.Center)
                     .testTag("nameField")
             )
         }
@@ -56,14 +56,13 @@ fun NameInput(
             }
             .padding(Small1)
             .fillMaxHeight()) {
-
             Image(
                 painterResource(R.drawable.pencil),
-                "Name change icon",
+                "nameEditIcon",
                 modifier = Modifier
                     .size(Medium4)
                     .align(Alignment.Center)
-                    .testTag("nameEditIcon")
+                    .testTag("nameChangeIcon")
                     .clickable {
                         onPencilClick()
                         focusRequester.requestFocus()

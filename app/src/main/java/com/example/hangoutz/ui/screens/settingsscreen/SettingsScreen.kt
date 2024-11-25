@@ -23,7 +23,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
@@ -37,8 +39,7 @@ import com.example.hangoutz.ui.theme.Dimensions.Large2
 import com.example.hangoutz.ui.theme.Dimensions.Medium1
 import com.example.hangoutz.ui.theme.Dimensions.Medium2
 import com.example.hangoutz.ui.theme.Dimensions.Small1
-import com.example.hangoutz.ui.theme.Dimensions.Small2
-import com.example.hangoutz.ui.theme.Dimensions.Small3
+import com.example.hangoutz.ui.theme.Dimensions.Small4
 import com.example.hangoutz.ui.theme.Ivory
 import com.example.hangoutz.utils.Constants.LOGOUT
 
@@ -50,21 +51,20 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
 
     Column(
         modifier = Modifier
-            .padding(Medium2)
+            .padding(top = Medium2)
             .fillMaxSize()
     ) {
         Box(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth(),
-
             contentAlignment = Alignment.Center
         ) {
             Box(
                 modifier = Modifier
                     .size(Large1)
                     .clip(CircleShape)
-                    .border(Small3, Ivory, CircleShape)
+                    .border(2.5f.dp, Ivory, CircleShape)
             ) {}
             GlideImage(
                 model = "${BuildConfig.BASE_URL_AVATAR}${data.value.avatar}",
@@ -75,12 +75,15 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
                     .height(Large2)
                     .clip(CircleShape)
                     .align(Alignment.Center)
+                    .testTag("userPhoto")
             )
             Image(
                 painter = painterResource(R.drawable.profilelines),
                 contentDescription = "lines",
                 contentScale = ContentScale.Crop,
-                modifier = Modifier.align(Alignment.Center),
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .testTag("backgroundLines"),
                 colorFilter = ColorFilter.tint(Ivory)
             )
         }
@@ -97,7 +100,6 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
                     .height(Medium1),
                 horizontalArrangement = Arrangement.spacedBy(Small1),
                 verticalAlignment = Alignment.CenterVertically
-
             ) {
                 NameInput(
                     data.value.name,
@@ -110,7 +112,7 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
                 text = data.value.email,
                 style = MaterialTheme.typography.displaySmall,
                 modifier = Modifier
-                    .padding(Small2)
+                    .padding(end = Small4)
                     .align(Alignment.CenterHorizontally)
             )
         }
@@ -119,7 +121,7 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
                 .weight(1f)
                 .fillMaxWidth()
                 .align(Alignment.End)
-                .padding(Small2)
+                .padding(bottom = Small4)
         ) {
             ActionButton(R.drawable.iconlogout, LOGOUT, onClick = {
                 viewmodel.logoutUser(context, {

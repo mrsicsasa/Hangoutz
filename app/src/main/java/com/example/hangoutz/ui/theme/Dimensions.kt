@@ -17,4 +17,5 @@ object Dimensions {
     val Small1 = 5.dp
     val Small2 = 15.dp
     val Small3 = 2.5f.dp
+    val Small4 = 10.dp
 }
