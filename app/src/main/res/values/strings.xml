@@ -10,7 +10,7 @@
     <string name="email_duplicate_error_message">Email already in use</string>
     <string name="generic_error_message">An error has occurred</string>
     <string name="background_image">Background Image</string>
-    <string name="default_user_image">avatar3.jpg</string>
+    <string name="default_user_image">avatar_default.png</string>
     <string name="floating_action_button_icon_description">floating action button</string>
     <string name="decline_button_text">Decline</string>
     <string name="accept_button_text">Accept</string>
