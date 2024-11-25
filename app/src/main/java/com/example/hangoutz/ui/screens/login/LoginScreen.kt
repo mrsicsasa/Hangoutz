@@ -1,6 +1,5 @@
 package com.example.hangoutz.ui.screens.login
 
-
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
@@ -98,11 +97,8 @@ fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltVi
             )
             ErrorMessage(data.value.errorMessage)
             ActionButton(
-                R.drawable.enter,
-                LOGIN,
-                onClick = {
-                    viewmodel.userAuth()
-                    {
+                R.drawable.enter, LOGIN, onClick = {
+                    viewmodel.userAuth() {
                         navController.navigate(NavigationItem.MainScreen.route) {
                             popUpTo(0)
                             launchSingleTop

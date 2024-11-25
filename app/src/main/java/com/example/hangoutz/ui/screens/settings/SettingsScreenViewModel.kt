@@ -24,7 +24,7 @@ data class SettingsData(
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val userRepository: UserRepository,
-   @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SettingsData())

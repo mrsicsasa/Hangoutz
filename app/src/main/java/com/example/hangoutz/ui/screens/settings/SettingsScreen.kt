@@ -33,7 +33,6 @@ import com.example.hangoutz.R
 import com.example.hangoutz.ui.components.ActionButton
 import com.example.hangoutz.ui.navigation.NavigationItem
 import com.example.hangoutz.ui.screens.settingsscreen.NameInput
-import com.example.hangoutz.ui.theme.Dimensions
 import com.example.hangoutz.ui.theme.Ivory
 import com.example.hangoutz.utils.Constants.LOGOUT
 import com.example.hangoutz.utils.Constants.PROFILE_PHOTO
@@ -41,6 +40,7 @@ import com.example.hangoutz.utils.Constants.SETTINGS_BACKGROUND_LINES_TAG
 import com.example.hangoutz.utils.Constants.SETTINGS_EMAIL_FIELD_TAG
 import com.example.hangoutz.utils.Constants.SETTINGS_LOGOUT_BUTTON
 import com.example.hangoutz.utils.Constants.SETTINGS_USER_PHOTO_TAG
+import com.example.hangoutz.utils.Dimensions
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
@@ -49,7 +49,7 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
 
     Column(
         modifier = Modifier
-            .padding(top = Dimensions.settingsScreenMedium2)
+            .padding(top = Dimensions.SETTINGS_SCREEN_MEDIUM2)
             .fillMaxSize()
     ) {
         Box(
@@ -60,17 +60,17 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
         ) {
             Box(
                 modifier = Modifier
-                    .size(Dimensions.settingsScreenLarge1)
+                    .size(Dimensions.SETTINGS_SCREEN_LARGE1)
                     .clip(CircleShape)
-                    .border(Dimensions.settingsScreenSmall3, Ivory, CircleShape)
+                    .border(Dimensions.SETTINGS_SCREEN_SMALL3, Ivory, CircleShape)
             ) {}
             GlideImage(
                 model = "${BuildConfig.BASE_URL_AVATAR}${data.value.avatar}",
                 contentDescription = PROFILE_PHOTO,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .width(Dimensions.settingsScreenLarge2)
-                    .height(Dimensions.settingsScreenLarge2)
+                    .width(Dimensions.SETTINGS_SCREEN_LARGE2)
+                    .height(Dimensions.SETTINGS_SCREEN_LARGE2)
                     .clip(CircleShape)
                     .align(Alignment.Center)
                     .testTag(SETTINGS_USER_PHOTO_TAG)
@@ -95,8 +95,8 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .fillMaxWidth()
-                    .height(Dimensions.settingsScreenMedium1),
-                horizontalArrangement = Arrangement.spacedBy(Dimensions.settingsScreenSmall1),
+                    .height(Dimensions.SETTINGS_SCREEN_MEDIUM1),
+                horizontalArrangement = Arrangement.spacedBy(Dimensions.SETTINGS_SCRREEN_SMALL1),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 NameInput(
@@ -110,7 +110,7 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
                 text = data.value.email,
                 style = MaterialTheme.typography.headlineMedium,
                 modifier = Modifier
-                    .padding(end = Dimensions.settingsScreenSmall4)
+                    .padding(end = Dimensions.SETTINGS_SCREEN_SMALL4)
                     .align(Alignment.CenterHorizontally)
                     .testTag(SETTINGS_EMAIL_FIELD_TAG)
             )
@@ -120,11 +120,14 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
                 .weight(1f)
                 .fillMaxWidth()
                 .align(Alignment.End)
-                .padding(bottom = Dimensions.settingsScreenSmall2)
+                .padding(bottom = Dimensions.SETTINGS_SCREEN_SMALL2)
         ) {
             ActionButton(R.drawable.iconlogout, LOGOUT, onClick = {
                 viewmodel.logoutUser {
-                    navController.navigate(NavigationItem.Login.route)
+                    navController.navigate(NavigationItem.Login.route) {
+                        popUpTo(0)
+                    }
+
                 }
             }, modifier = Modifier.testTag(SETTINGS_LOGOUT_BUTTON))
         }
