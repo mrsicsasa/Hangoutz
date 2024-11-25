@@ -32,4 +32,23 @@ object Dimensions {
     //Profile image
     val PROFILE_IMAGE_SIZE: Dp = 74.dp
     val PROFILE_IMAGE_BORDER_WIDTH: Dp = 2.dp
+
+    //Splash screen
+    const val SPLASH_SCREEN_STARTING_ALPHA = 0.4f
+    const val SPLASH_SCREEN_TARGETED_ALPHA = 1f
+    const val SPLASH_SCREEN_LOGO_INITIAL_ALPHA= 1f
+    const val SPLASH_SCREEN_LOGO_TARGETED_ALPHA = 0f
+
+
+    // Logo
+    const val LOGO_ASPECT_RATIO = 1f
+    val LOGO_HEIGHT = 50.dp
+    const val LOGO_OVERSHOOT_INTERPOLATOR_TENSION = 0f
+
+    // BottomBarNavigation
+    val BOTTOM_NAVIGATION_BAR_HEIGHT = 67.dp
+    val BOTTOM_NAVIGATION_ICON_SIZE = 30.dp
+
+    //Top bar
+    val TOP_BAR_HEIGHT = 55.dp
 }
