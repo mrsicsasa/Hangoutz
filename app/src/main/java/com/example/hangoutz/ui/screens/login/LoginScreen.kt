@@ -41,7 +41,6 @@ import com.example.hangoutz.ui.theme.Ivory
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Constants.EMAIL
 import com.example.hangoutz.utils.Constants.LOGIN
-import com.example.hangoutz.utils.Constants.LOGIN_BUTTON
 import com.example.hangoutz.utils.Constants.PASSWORD
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -102,17 +101,16 @@ fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltVi
                 R.drawable.enter,
                 LOGIN,
                 onClick = {
-                    viewmodel.userAuth(
-                        {
-                            navController.navigate(NavigationItem.MainScreen.route) {
-                                popUpTo(0)
-                                launchSingleTop
-                            }
-                        })
-                }, Modifier.testTag(LOGIN_BUTTON)
+                    viewmodel.userAuth()
+                    {
+                        navController.navigate(NavigationItem.MainScreen.route) {
+                            popUpTo(0)
+                            launchSingleTop
+                        }
+                    }
+                }, Modifier.testTag(Constants.SETTINGS_LOGOUT_BUTTON)
             )
         }
-
         Column(
             modifier = Modifier
                 .padding(bottom = actionButtonMedium1)

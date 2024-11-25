@@ -22,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -124,9 +123,9 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
                 .padding(bottom = Dimensions.settingsScreenSmall2)
         ) {
             ActionButton(R.drawable.iconlogout, LOGOUT, onClick = {
-                viewmodel.logoutUser({
+                viewmodel.logoutUser {
                     navController.navigate(NavigationItem.Login.route)
-                })
+                }
             }, modifier = Modifier.testTag(SETTINGS_LOGOUT_BUTTON))
         }
     }
