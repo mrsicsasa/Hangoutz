@@ -83,7 +83,7 @@ fun EventCard(
                 Spacer(modifier = Modifier.height(Dimensions.SPACE_BETWEEN_PLACE_AND_DATE))
                 Text(
                     text = date,
-                    style = MaterialTheme.typography.bodyLarge.copy(
+                    style = MaterialTheme.typography.headlineSmall.copy(
                         color = Color.White
                     ),
                     modifier = Modifier.testTag(Constants.EVENT_DATE)
