@@ -1,4 +1,4 @@
-package com.example.hangoutz.ui.screens.settingsscreen
+package com.example.hangoutz.ui.screens.settings
 
 import android.content.Context
 import android.util.Log
@@ -8,6 +8,7 @@ import com.example.hangoutz.data.local.SharedPreferencesManager
 import com.example.hangoutz.domain.repository.UserRepository
 import com.example.hangoutz.utils.Constants.DEFAULT_USER_PHOTO
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -23,14 +24,14 @@ data class SettingsData(
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val userRepository: UserRepository,
-    private val context: Context
+   @ApplicationContext private val context: Context
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SettingsData())
     val uiState: StateFlow<SettingsData> = _uiState
 
     init {
-        getUser(context)
+        getUser()
     }
 
     fun onNameChanged(newText: String) {
@@ -43,12 +44,12 @@ class SettingsViewModel @Inject constructor(
         return isReadOnlyState
     }
 
-    fun logoutUser(context: Context, onLogout: () -> Unit) {
+    fun logoutUser(onLogout: () -> Unit) {
         SharedPreferencesManager.clearUserId(context)
         onLogout()
     }
 
-    fun getUser(context: Context) {
+    private fun getUser() {
         val userID = SharedPreferencesManager.getUserId(context)
         viewModelScope.launch {
             try {

@@ -21,12 +21,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat.getString
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.hangoutz.R
@@ -35,9 +34,9 @@ import com.example.hangoutz.ui.components.ErrorMessage
 import com.example.hangoutz.ui.components.InputField
 import com.example.hangoutz.ui.components.Logo
 import com.example.hangoutz.ui.navigation.NavigationItem
-import com.example.hangoutz.ui.theme.Dimensions.ActionButton_Medium1
-import com.example.hangoutz.ui.theme.Dimensions.ActionButton_Medium2
-import com.example.hangoutz.ui.theme.Dimensions.ActionButton_Small1
+import com.example.hangoutz.ui.theme.Dimensions.actionButtonMedium1
+import com.example.hangoutz.ui.theme.Dimensions.actionButtonMedium2
+import com.example.hangoutz.ui.theme.Dimensions.actionButtonSmall1
 import com.example.hangoutz.ui.theme.Ivory
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Constants.EMAIL
@@ -49,7 +48,7 @@ import com.example.hangoutz.utils.Constants.PASSWORD
 @Composable
 fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltViewModel()) {
     val data = viewmodel.uiState.collectAsState()
-    val context = LocalContext.current
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -83,7 +82,7 @@ fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltVi
                 .weight(2f)
                 .background(Color.Transparent)
                 .fillMaxWidth()
-                .padding(start = ActionButton_Medium2, end = ActionButton_Medium2)
+                .padding(start = actionButtonMedium2, end = actionButtonMedium2)
         ) {
             InputField(
                 EMAIL,
@@ -104,7 +103,6 @@ fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltVi
                 LOGIN,
                 onClick = {
                     viewmodel.userAuth(
-                        context,
                         {
                             navController.navigate(NavigationItem.MainScreen.route) {
                                 popUpTo(0)
@@ -117,23 +115,23 @@ fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltVi
 
         Column(
             modifier = Modifier
-                .padding(bottom = ActionButton_Medium1)
+                .padding(bottom = actionButtonMedium1)
                 .fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = getString(context, R.string.or_text),
+                text = stringResource(R.string.or_text),
                 color = Ivory,
                 modifier = Modifier,
                 style = MaterialTheme.typography.labelLarge,
                 textAlign = TextAlign.Center
             )
             Text(
-                text = getString(context, R.string.create_account_text),
+                text = stringResource(R.string.create_account_text),
                 color = Ivory,
                 modifier = Modifier
-                    .padding(top = ActionButton_Small1)
+                    .padding(top = actionButtonSmall1)
                     .clickable {
                         navController.navigate(NavigationItem.Register.route)
                     },

@@ -34,18 +34,11 @@ import com.example.hangoutz.R
 import com.example.hangoutz.ui.components.ActionButton
 import com.example.hangoutz.ui.navigation.NavigationItem
 import com.example.hangoutz.ui.screens.settingsscreen.NameInput
-import com.example.hangoutz.ui.screens.settingsscreen.SettingsViewModel
-import com.example.hangoutz.ui.theme.Dimensions.SettingsScreen_Large1
-import com.example.hangoutz.ui.theme.Dimensions.SettingsScreen_Large2
-import com.example.hangoutz.ui.theme.Dimensions.SettingsScreen_Medium1
-import com.example.hangoutz.ui.theme.Dimensions.SettingsScreen_Medium2
-import com.example.hangoutz.ui.theme.Dimensions.SettingsScreen_Small1
-import com.example.hangoutz.ui.theme.Dimensions.SettingsScreen_Small2
-import com.example.hangoutz.ui.theme.Dimensions.SettingsScreen_Small3
-import com.example.hangoutz.ui.theme.Dimensions.SettingsScreen_Small4
+import com.example.hangoutz.ui.theme.Dimensions
 import com.example.hangoutz.ui.theme.Ivory
-import com.example.hangoutz.utils.Constants.SETTINGS_BACKGROUND_LINES_TAG
 import com.example.hangoutz.utils.Constants.LOGOUT
+import com.example.hangoutz.utils.Constants.PROFILE_PHOTO
+import com.example.hangoutz.utils.Constants.SETTINGS_BACKGROUND_LINES_TAG
 import com.example.hangoutz.utils.Constants.SETTINGS_EMAIL_FIELD_TAG
 import com.example.hangoutz.utils.Constants.SETTINGS_LOGOUT_BUTTON
 import com.example.hangoutz.utils.Constants.SETTINGS_USER_PHOTO_TAG
@@ -54,11 +47,10 @@ import com.example.hangoutz.utils.Constants.SETTINGS_USER_PHOTO_TAG
 @Composable
 fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = hiltViewModel()) {
     val data = viewmodel.uiState.collectAsState()
-    val context = LocalContext.current
 
     Column(
         modifier = Modifier
-            .padding(top = SettingsScreen_Medium2)
+            .padding(top = Dimensions.settingsScreenMedium2)
             .fillMaxSize()
     ) {
         Box(
@@ -69,17 +61,17 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
         ) {
             Box(
                 modifier = Modifier
-                    .size(SettingsScreen_Large1)
+                    .size(Dimensions.settingsScreenLarge1)
                     .clip(CircleShape)
-                    .border(SettingsScreen_Small3, Ivory, CircleShape)
+                    .border(Dimensions.settingsScreenSmall3, Ivory, CircleShape)
             ) {}
             GlideImage(
                 model = "${BuildConfig.BASE_URL_AVATAR}${data.value.avatar}",
-                contentDescription = "Profile image",
+                contentDescription = PROFILE_PHOTO,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .width(SettingsScreen_Large2)
-                    .height(SettingsScreen_Large2)
+                    .width(Dimensions.settingsScreenLarge2)
+                    .height(Dimensions.settingsScreenLarge2)
                     .clip(CircleShape)
                     .align(Alignment.Center)
                     .testTag(SETTINGS_USER_PHOTO_TAG)
@@ -104,8 +96,8 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .fillMaxWidth()
-                    .height(SettingsScreen_Medium1),
-                horizontalArrangement = Arrangement.spacedBy(SettingsScreen_Small1),
+                    .height(Dimensions.settingsScreenMedium1),
+                horizontalArrangement = Arrangement.spacedBy(Dimensions.settingsScreenSmall1),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 NameInput(
@@ -119,7 +111,7 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
                 text = data.value.email,
                 style = MaterialTheme.typography.headlineMedium,
                 modifier = Modifier
-                    .padding(end = SettingsScreen_Small4)
+                    .padding(end = Dimensions.settingsScreenSmall4)
                     .align(Alignment.CenterHorizontally)
                     .testTag(SETTINGS_EMAIL_FIELD_TAG)
             )
@@ -129,10 +121,10 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
                 .weight(1f)
                 .fillMaxWidth()
                 .align(Alignment.End)
-                .padding(bottom = SettingsScreen_Small2)
+                .padding(bottom = Dimensions.settingsScreenSmall2)
         ) {
             ActionButton(R.drawable.iconlogout, LOGOUT, onClick = {
-                viewmodel.logoutUser(context, {
+                viewmodel.logoutUser({
                     navController.navigate(NavigationItem.Login.route)
                 })
             }, modifier = Modifier.testTag(SETTINGS_LOGOUT_BUTTON))

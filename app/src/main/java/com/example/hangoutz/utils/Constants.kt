@@ -58,4 +58,7 @@ object Constants {
 
    //Test tag login screen
     const val  LOGIN_BUTTON = "LoginButton"
+
+    //Settings page
+    const val PROFILE_PHOTO = "Profile Photo"
 }
