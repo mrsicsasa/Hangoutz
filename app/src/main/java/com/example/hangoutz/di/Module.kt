@@ -1,7 +1,6 @@
 package com.example.hangoutz.di
 
 import android.content.Context
-import androidx.compose.ui.platform.LocalContext
 import com.example.hangoutz.BuildConfig
 import com.example.hangoutz.data.remote.EventAPI
 import com.example.hangoutz.data.remote.InviteAPI
@@ -49,7 +48,7 @@ object Module {
     }
 
     @Provides
-    fun providesInviteApi(retrofit: Retrofit): InviteAPI{
+    fun providesInviteApi(retrofit: Retrofit): InviteAPI {
         return retrofit.create(InviteAPI::class.java)
     }
 
@@ -57,8 +56,9 @@ object Module {
     fun providesUserRepository(userAPI: UserAPI): UserRepository {
         return UserRepositoryImpl(userAPI)
     }
+
     @Provides
-    fun provideEventRepository(eventAPI: EventAPI): EventRepository{
+    fun provideEventRepository(eventAPI: EventAPI): EventRepository {
         return EventRepositoryImpl(eventAPI)
     }
 
@@ -66,8 +66,9 @@ object Module {
     fun provideInviteRepository(invitesAPI: InviteAPI): InviteRepository {
         return InviteRepositoryImpl(invitesAPI)
     }
+
     @Provides
-    fun provideContext(@ApplicationContext appContext: Context): Context{
+    fun provideContext(@ApplicationContext appContext: Context): Context {
         return appContext
     }
 }

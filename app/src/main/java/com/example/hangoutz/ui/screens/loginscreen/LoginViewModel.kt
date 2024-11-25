@@ -24,6 +24,7 @@ data class LoginData(
     val isEmailError: Boolean = false,
     val isPasswordError: Boolean = false
 )
+
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val userRepository: UserRepository,
@@ -41,7 +42,7 @@ class LoginViewModel @Inject constructor(
             _uiState.value = _uiState.value.copy(
                 isEmailError = emailEmpty,
                 isPasswordError = passwordEmpty,
-                errorMessage =  ERROR_EMPTY_FIELDS
+                errorMessage = ERROR_EMPTY_FIELDS
             )
         } else {
             _uiState.value = _uiState.value.copy(

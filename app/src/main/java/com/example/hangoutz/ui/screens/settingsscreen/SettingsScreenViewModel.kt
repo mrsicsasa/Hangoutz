@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hangoutz.data.local.SharedPreferencesManager
 import com.example.hangoutz.domain.repository.UserRepository
+import com.example.hangoutz.utils.Constants.DEFAULT_USER_PHOTO
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,7 +16,7 @@ import javax.inject.Inject
 data class SettingsData(
     var name: String = "",
     var email: String = "",
-    var isReadOnly : Boolean = true,
+    var isReadOnly: Boolean = true,
     val avatar: String? = null
 )
 
@@ -36,12 +37,10 @@ class SettingsViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(name = newText)
     }
 
-    fun onPencilClick() : Boolean{
-     val state =  !_uiState.value.isReadOnly
-        _uiState.value = _uiState.value.copy(isReadOnly = state)
-        //Log.e("LOGG------ ","STATE = ${state} & ISREADONLY ${_uiState.value.isReadOnly}")
-
-        return state
+    fun onPencilClick(): Boolean {
+        val isReadOnlyState = !_uiState.value.isReadOnly
+        _uiState.value = _uiState.value.copy(isReadOnly = isReadOnlyState)
+        return isReadOnlyState
     }
 
     fun logoutUser(context: Context, onLogout: () -> Unit) {
@@ -50,23 +49,21 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun getUser(context: Context) {
-
         val userID = SharedPreferencesManager.getUserId(context)
         viewModelScope.launch {
             try {
                 val response =
                     userRepository.getUserById(
-                        userID!!,
+                        userID!!
                     )
                 if (response.isSuccessful && !response.body().isNullOrEmpty()
                 ) {
                     val user = response.body()?.first()
                     user?.let {
-
                         _uiState.value = _uiState.value.copy(
                             name = it.name,
                             email = it.email,
-                            avatar = if (it.avatar == null) "avatar_default.png" else it.avatar
+                            avatar = if (it.avatar == null) DEFAULT_USER_PHOTO else it.avatar
                         )
                     }
                 }

@@ -24,4 +24,7 @@ object Constants {
     //Errors
     val ERROR_EMPTY_FIELDS = "All fields must be filled!"
     val ERROR_INVALID_INPUT = "Incorrect email or password"
+
+    //Default user photo
+    val DEFAULT_USER_PHOTO = "avatar_default.png"
 }

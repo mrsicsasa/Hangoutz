@@ -5,6 +5,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import com.example.hangoutz.R
 
@@ -35,5 +36,15 @@ val Typography = Typography(
         fontSize = 11.sp,
         lineHeight = 16.sp,
         letterSpacing = 0.5.sp
-    )
+    ),
+    displayMedium = TextStyle(
+        color = Ivory,
+        fontSize = 32.sp,
+        textAlign = TextAlign.Center,
+    ),
+    displaySmall = TextStyle(
+        color = Ivory,
+        fontSize = 20.sp,
+        textAlign = TextAlign.Center,
+    ),
 )
