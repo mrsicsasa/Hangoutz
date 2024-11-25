@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -30,6 +31,7 @@ import com.example.hangoutz.ui.screens.events.MyEventsScreen
 import com.example.hangoutz.ui.screens.settings.SettingsScreen
 import com.example.hangoutz.ui.theme.TopBarBackgroundColor
 import com.example.hangoutz.utils.Constants
+import com.example.hangoutz.utils.Dimensions
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,13 +40,15 @@ fun MainScreen(navController: NavController) {
     Scaffold(topBar = {
         TopAppBar(
             modifier = Modifier
-                .height(55.dp)
-                .wrapContentHeight(align = Alignment.CenterVertically),
+                .height(Dimensions.TOP_BAR_HEIGHT)
+                .wrapContentHeight(align = Alignment.CenterVertically)
+                .testTag(Constants.TOP_BAR),
             title = {
                 Text(
                     text = Constants.TOP_BAR_TITLE,
                     color = Color.White,
                     style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.testTag(Constants.TOP_BAR_TITLE)
                 )
 
             },

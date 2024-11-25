@@ -9,7 +9,9 @@ object Constants {
     const val LOGO_ANIMATION_DELAY_SPLASH : Long = 800
     const val LOGO_ANIMATION_DURATION : Int = 500
     const val BACKGROUND_ANIMATION_DURATION: Int = 2000
-    const val LOGO_ANIMATION_DELAY : Long = 100
+    const val SPLASH_SCREEN_BACKGROUND = "SplashScreenBackground"
+    const val SPLASH_SCREEN_LOGO = "SplashScreenLogo"
+    const val LOGO_ANIMATION_DELAY: Long = 500
 
     //credentials
     const val EMAIL = "Email"
@@ -43,4 +45,11 @@ object Constants {
     //Extension
     const val DAY_THRESHOLD = 7
     const val PADDING_ZERO_THRESHOLD = 10
+
+    //BottomNavigation bar
+    const val BOTTOM_NAVIGATION_BAR = "BottomNavigationBar"
+    const val BOTTOM_NAVIGATION_BAR_ITEM = "BottomNavigationBarItem"
+
+    //Main screen
+    const val TOP_BAR = "TopBar"
 }
