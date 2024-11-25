@@ -74,7 +74,7 @@ fun EventCard(
                     modifier = Modifier.testTag(Constants.EVENT_TITLE)
                 )
                 Text(
-                    text = "@ ${place}",
+                    text = "@ $place",
                     style = MaterialTheme.typography.displayMedium,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -122,8 +122,8 @@ fun EventCard(
                 Text(
                     text = if (countOfPeople > 0) stringResource(
                         R.string.people_going,
-                        countOfPeople
-                    ) else stringResource(R.string.no_one_is_going),
+                        countOfPeople+1
+                    ) else stringResource(R.string.one_person_is_going),
                     style = MaterialTheme.typography.displaySmall.copy(
                         color = TextBodyGrayColor,
                     ),

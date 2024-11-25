@@ -31,25 +31,22 @@ object Constants {
 
     //Events screen
     const val GET_EVENTS_ERRORS = "Loading events errors"
-    const val CREATE_EVENT_BUTTON = "CreateEventButton"
+    const val CREATE_EVENT_BUTTON = "createEventButton"
 
     //EventCard
-    const val EVENT_CARD = "EventCard"
-    const val LOGO_BACKGROUND = "LogoBackground"
-    const val LOGO_IMAGE = "LogoImage"
-    const val DECLINE_INVITATION_BUTTON = "DeclineInvitationButton"
-    const val ACCEPT_INVITATION_BUTTON = "AcceptInvitationButton"
-    const val EVENT_TITLE = "EventTitle"
-    const val EVENT_PLACE = "EventPlace"
-    const val EVENT_DATE = "EventDate"
-    const val NUMBER_OF_PEOPLE = "NumberOfPeople"
+    const val EVENT_CARD = "eventCard"
+    const val LOGO_BACKGROUND = "logoBackground"
+    const val LOGO_IMAGE = "logoImage"
+    const val DECLINE_INVITATION_BUTTON = "declineInvitationButton"
+    const val ACCEPT_INVITATION_BUTTON = "acceptInvitationButton"
+    const val EVENT_TITLE = "eventTitle"
+    const val EVENT_PLACE = "eventPlace"
+    const val EVENT_DATE = "eventDate"
+    const val NUMBER_OF_PEOPLE = "numberOfPeople"
 
     //Extension
     const val DAY_THRESHOLD = 7
     const val PADDING_ZERO_THRESHOLD = 10
-
-    //Default user photo
-    const val DEFAULT_USER_PHOTO = "avatar_default.png"
 
     //Test tags settings screen
     const val SETTINGS_NAME_FIELD_TAG = "settingsNameField"
@@ -63,11 +60,11 @@ object Constants {
     const val PROFILE_PHOTO = "Profile Photo"
 
     //BottomNavigation bar
-    const val BOTTOM_NAVIGATION_BAR = "BottomNavigationBar"
-    const val BOTTOM_NAVIGATION_BAR_ITEM = "BottomNavigationBarItem"
+    const val BOTTOM_NAVIGATION_BAR = "bottomNavigationBar"
+    const val BOTTOM_NAVIGATION_BAR_ITEM = "bottomNavigationBarItem"
 
     //Main screen
-    const val TOP_BAR = "TopBar"
+    const val TOP_BAR = "topBar"
 
     //Validator strings
     const val AT_SIGN = "@"

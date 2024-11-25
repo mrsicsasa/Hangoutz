@@ -7,13 +7,13 @@
     <string name="input_password">Password*</string>
     <string name="input_confirm_password">Confirm password*</string>
     <string name="background_image">Background Image</string>
-    <string name="default_user_image">avatar3.jpg</string>
+    <string name="default_user_image">avatar_default.png</string>
     <string name="floating_action_button_icon_description">floating action button</string>
     <string name="decline_button_text">Decline</string>
     <string name="accept_button_text">Accept</string>
     <string name="error_log_tag">Error</string>
     <string name="people_going">%1$s people going</string>
-    <string name="no_one_is_going">No one is going</string>
+    <string name="one_person_is_going">1 person is going</string>
     <string name="user_profile_image">user_profile_image</string>
     <string name="application_logo">application_logo</string>
     <string name="or_text">OR</string>
