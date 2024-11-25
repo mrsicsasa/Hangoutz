@@ -1,4 +1,4 @@
-package com.example.hangoutz.ui.screens.settingsscreen
+package com.example.hangoutz.ui.screens.settings
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -33,6 +33,8 @@ import com.example.hangoutz.BuildConfig
 import com.example.hangoutz.R
 import com.example.hangoutz.ui.components.ActionButton
 import com.example.hangoutz.ui.navigation.NavigationItem
+import com.example.hangoutz.ui.screens.settingsscreen.NameInput
+import com.example.hangoutz.ui.screens.settingsscreen.SettingsViewModel
 import com.example.hangoutz.ui.theme.Dimensions.SettingsScreen_Large1
 import com.example.hangoutz.ui.theme.Dimensions.SettingsScreen_Large2
 import com.example.hangoutz.ui.theme.Dimensions.SettingsScreen_Medium1
@@ -42,7 +44,11 @@ import com.example.hangoutz.ui.theme.Dimensions.SettingsScreen_Small2
 import com.example.hangoutz.ui.theme.Dimensions.SettingsScreen_Small3
 import com.example.hangoutz.ui.theme.Dimensions.SettingsScreen_Small4
 import com.example.hangoutz.ui.theme.Ivory
+import com.example.hangoutz.utils.Constants.SETTINGS_BACKGROUND_LINES_TAG
 import com.example.hangoutz.utils.Constants.LOGOUT
+import com.example.hangoutz.utils.Constants.SETTINGS_EMAIL_FIELD_TAG
+import com.example.hangoutz.utils.Constants.SETTINGS_LOGOUT_BUTTON
+import com.example.hangoutz.utils.Constants.SETTINGS_USER_PHOTO_TAG
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
@@ -76,7 +82,7 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
                     .height(SettingsScreen_Large2)
                     .clip(CircleShape)
                     .align(Alignment.Center)
-                    .testTag("userPhoto")
+                    .testTag(SETTINGS_USER_PHOTO_TAG)
             )
             Image(
                 painter = painterResource(R.drawable.profilelines),
@@ -84,7 +90,7 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .testTag("backgroundLines"),
+                    .testTag(SETTINGS_BACKGROUND_LINES_TAG),
                 colorFilter = ColorFilter.tint(Ivory)
             )
         }
@@ -111,10 +117,11 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
             }
             Text(
                 text = data.value.email,
-                style = MaterialTheme.typography.displaySmall,
+                style = MaterialTheme.typography.headlineMedium,
                 modifier = Modifier
                     .padding(end = SettingsScreen_Small4)
                     .align(Alignment.CenterHorizontally)
+                    .testTag(SETTINGS_EMAIL_FIELD_TAG)
             )
         }
         Column(
@@ -128,7 +135,7 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
                 viewmodel.logoutUser(context, {
                     navController.navigate(NavigationItem.Login.route)
                 })
-            })
+            }, modifier = Modifier.testTag(SETTINGS_LOGOUT_BUTTON))
         }
     }
 }

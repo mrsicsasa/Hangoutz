@@ -22,6 +22,7 @@ import com.example.hangoutz.ui.theme.Dimensions.SettingsScreen_Medium3
 import com.example.hangoutz.ui.theme.Dimensions.SettingsScreen_Medium4
 import com.example.hangoutz.ui.theme.Dimensions.SettingsScreen_Small1
 import com.example.hangoutz.ui.theme.Ivory
+import com.example.hangoutz.utils.Constants.SETTINGS_NAME_ICON_TAG
 
 
 @Composable
@@ -47,7 +48,6 @@ fun NameInput(
                 isReadOnly,
                 focusRequester,
                 modifier = Modifier.align(Alignment.Center)
-                    .testTag("nameField")
             )
         }
         Box(modifier = Modifier
@@ -62,7 +62,7 @@ fun NameInput(
                 modifier = Modifier
                     .size(SettingsScreen_Medium4)
                     .align(Alignment.Center)
-                    .testTag("nameChangeIcon")
+                    .testTag(SETTINGS_NAME_ICON_TAG)
                     .clickable {
                         onPencilClick()
                         focusRequester.requestFocus()

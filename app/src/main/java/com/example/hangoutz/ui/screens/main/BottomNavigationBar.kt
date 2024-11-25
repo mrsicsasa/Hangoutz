@@ -2,7 +2,6 @@ package com.example.hangoutz.ui.screens.main
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -18,7 +17,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.hangoutz.ui.navigation.BottomNavItem
 import com.example.hangoutz.ui.theme.Ivory
-import com.example.hangoutz.ui.theme.bottomNavigationColor
+import com.example.hangoutz.ui.theme.BottomNavigationColor
 
 @Composable
 fun TabView(
@@ -27,7 +26,7 @@ fun TabView(
 ) {
     NavigationBar(
         modifier = Modifier.height(67.dp),
-        containerColor = bottomNavigationColor,
+        containerColor = BottomNavigationColor,
     ) {
         val currentBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = currentBackStackEntry?.destination?.route
@@ -50,8 +49,8 @@ fun TabView(
                 colors = NavigationBarItemColors(
                     selectedIconColor = Ivory,
                     selectedTextColor = Ivory,
-                    selectedIndicatorColor = bottomNavigationColor,
-                    unselectedIconColor = bottomNavigationColor,
+                    selectedIndicatorColor = BottomNavigationColor,
+                    unselectedIconColor = BottomNavigationColor,
                     unselectedTextColor = Ivory,
                     disabledIconColor = Color.Blue,
                     disabledTextColor = Color.Blue

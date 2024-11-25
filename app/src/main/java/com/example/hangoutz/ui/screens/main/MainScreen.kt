@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -24,11 +25,10 @@ import androidx.navigation.compose.rememberNavController
 import com.example.hangoutz.R
 import com.example.hangoutz.ui.navigation.BottomNavItem
 import com.example.hangoutz.ui.navigation.BottomNavigationDestination
-import com.example.hangoutz.ui.screens.friendsscreen.FriendsScreen
-import com.example.hangoutz.ui.screens.myeventsscreen.MyEventsScreen
-import com.example.hangoutz.ui.screens.settingsscreen.SettingsScreen
-import com.example.hangoutz.ui.theme.Ivory
-import com.example.hangoutz.ui.theme.topBarBackgroundColor
+import com.example.hangoutz.ui.screens.friends.FriendsScreen
+import com.example.hangoutz.ui.screens.events.MyEventsScreen
+import com.example.hangoutz.ui.screens.settings.SettingsScreen
+import com.example.hangoutz.ui.theme.TopBarBackgroundColor
 import com.example.hangoutz.utils.Constants
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -43,13 +43,13 @@ fun MainScreen(navController: NavController) {
             title = {
                 Text(
                     text = Constants.TOP_BAR_TITLE,
-                    color = Ivory,
+                    color = Color.White,
                     style = MaterialTheme.typography.titleLarge,
                 )
 
             },
             colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = topBarBackgroundColor
+                containerColor = TopBarBackgroundColor
             )
         )
     },
@@ -77,7 +77,7 @@ fun MainScreen(navController: NavController) {
                 .padding(innerPadding)
         ) {
             composable(route = BottomNavigationDestination.EVENTS.name) {
-                MyEventsScreen(navController)
+                MyEventsScreen()
             }
             composable(route = BottomNavigationDestination.FRIENDS.name) {
                 FriendsScreen(navController)

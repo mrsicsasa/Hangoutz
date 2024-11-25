@@ -1,4 +1,4 @@
-package com.example.hangoutz.ui.screens.loginscreen
+package com.example.hangoutz.ui.screens.login
 
 
 import android.os.Build
@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -21,9 +22,11 @@ import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.getString
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.hangoutz.R
@@ -36,6 +39,7 @@ import com.example.hangoutz.ui.theme.Ivory
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Constants.EMAIL
 import com.example.hangoutz.utils.Constants.LOGIN
+import com.example.hangoutz.utils.Constants.LOGIN_BUTTON
 import com.example.hangoutz.utils.Constants.PASSWORD
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -104,31 +108,32 @@ fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltVi
                                 launchSingleTop
                             }
                         })
-                })
+                }, Modifier.testTag(LOGIN_BUTTON))
         }
 
         Column(
             modifier = Modifier
-                .padding(bottom = 40.dp)
+                .padding(bottom = 60.dp)
                 .fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "OR",
+                text = getString(context, R.string.or_text),
                 color = Ivory,
-                modifier = Modifier
-                    .padding(top = 10.dp),
+                modifier = Modifier,
+                style = MaterialTheme.typography.labelLarge,
                 textAlign = TextAlign.Center
             )
             Text(
-                text = "Create Account",
+                text = getString(context, R.string.create_account_text),
                 color = Ivory,
                 modifier = Modifier
                     .padding(top = 5.dp)
                     .clickable {
                         navController.navigate(NavigationItem.Register.route)
                     },
+                style = MaterialTheme.typography.labelLarge,
                 textAlign = TextAlign.Center
             )
         }
