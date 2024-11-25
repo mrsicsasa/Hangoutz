@@ -74,7 +74,7 @@ fun EventCard(
                     modifier = Modifier.testTag(Constants.EVENT_TITLE)
                 )
                 Text(
-                    text = "@ ${place}",
+                    text = "@ $place",
                     style = MaterialTheme.typography.displayMedium,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
