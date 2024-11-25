@@ -28,7 +28,7 @@ import com.example.hangoutz.utils.Dimensions
 @Composable
 fun SplashScreen(navController: NavController) {
     val viewmodel: SplashScreenViewModel = hiltViewModel()
-    val alpha = remember { Animatable(Dimensions.SPLASH_SCREEN_STARTING_APLHA) }
+    val alpha = remember { Animatable(Dimensions.SPLASH_SCREEN_STARTING_ALPHA) }
     val context = LocalContext.current
     Box(
         modifier = Modifier
@@ -43,8 +43,8 @@ fun SplashScreen(navController: NavController) {
     ) {
         Logo(
             painterResource(id = R.drawable.logo),
-            initialValue = Dimensions.SPLASH_SCREEN_LOGO_INITIAL_ALPHA_VALUE,
-            targetValue = Dimensions.SPLASH_SCREEN_LOGO_TARGETED_ALPHA_VALUE,
+            initialValue = Dimensions.SPLASH_SCREEN_LOGO_INITIAL_ALPHA,
+            targetValue = Dimensions.SPLASH_SCREEN_LOGO_TARGETED_ALPHA,
             modifier = Modifier
                 .align(Alignment.Center)
                 .testTag(Constants.SPLASH_SCREEN_LOGO),
@@ -52,7 +52,7 @@ fun SplashScreen(navController: NavController) {
         )
     }
     LaunchedEffect(key1 = true) {
-        alpha.animateTo(1f, animationSpec = tween(Constants.BACKGROUND_ANIMATION_DURATION))
+        alpha.animateTo(Dimensions.SPLASH_SCREEN_TARGETED_ALPHA, animationSpec = tween(Constants.BACKGROUND_ANIMATION_DURATION))
         viewmodel.deleteEventsFromPast()
         if (viewmodel.isUserLoggedIn(context)) {
             navController.navigate(route = NavigationItem.MainScreen.route) {
