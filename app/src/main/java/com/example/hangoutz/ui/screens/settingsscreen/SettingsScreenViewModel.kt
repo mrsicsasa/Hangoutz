@@ -53,17 +53,19 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val response =
-                    userRepository.getUserById(
-                        userID!!
-                    )
-                if (response.isSuccessful && !response.body().isNullOrEmpty()
+                    userID?.let {
+                        userRepository.getUserById(
+                            it
+                        )
+                    }
+                if (response?.isSuccessful == true && !response.body().isNullOrEmpty()
                 ) {
                     val user = response.body()?.first()
                     user?.let {
                         _uiState.value = _uiState.value.copy(
                             name = it.name,
                             email = it.email,
-                            avatar = if (it.avatar == null) DEFAULT_USER_PHOTO else it.avatar
+                            avatar = it.avatar ?: DEFAULT_USER_PHOTO
                         )
                     }
                 }
