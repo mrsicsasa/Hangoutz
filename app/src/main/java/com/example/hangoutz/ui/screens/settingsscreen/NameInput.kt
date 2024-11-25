@@ -18,9 +18,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.hangoutz.R
 import com.example.hangoutz.ui.components.nameField
-import com.example.hangoutz.ui.theme.Dimensions.Medium3
-import com.example.hangoutz.ui.theme.Dimensions.Medium4
-import com.example.hangoutz.ui.theme.Dimensions.Small1
+import com.example.hangoutz.ui.theme.Dimensions.SettingsScreen_Medium3
+import com.example.hangoutz.ui.theme.Dimensions.SettingsScreen_Medium4
+import com.example.hangoutz.ui.theme.Dimensions.SettingsScreen_Small1
 import com.example.hangoutz.ui.theme.Ivory
 
 
@@ -32,7 +32,7 @@ fun NameInput(
     ConstraintLayout(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(end = Medium3, start = Medium3),
+            .padding(end = SettingsScreen_Medium3, start = SettingsScreen_Medium3),
     ) {
         val (image, text) = createRefs()
         Box(modifier = Modifier.constrainAs(image) {
@@ -54,13 +54,13 @@ fun NameInput(
             .constrainAs(text) {
                 start.linkTo(image.end)
             }
-            .padding(Small1)
+            .padding(SettingsScreen_Small1)
             .fillMaxHeight()) {
             Image(
                 painterResource(R.drawable.pencil),
                 "nameEditIcon",
                 modifier = Modifier
-                    .size(Medium4)
+                    .size(SettingsScreen_Medium4)
                     .align(Alignment.Center)
                     .testTag("nameChangeIcon")
                     .clickable {

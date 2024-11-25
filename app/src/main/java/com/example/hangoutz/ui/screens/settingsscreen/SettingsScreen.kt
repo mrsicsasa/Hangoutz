@@ -25,7 +25,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
@@ -34,12 +33,14 @@ import com.example.hangoutz.BuildConfig
 import com.example.hangoutz.R
 import com.example.hangoutz.ui.components.ActionButton
 import com.example.hangoutz.ui.navigation.NavigationItem
-import com.example.hangoutz.ui.theme.Dimensions.Large1
-import com.example.hangoutz.ui.theme.Dimensions.Large2
-import com.example.hangoutz.ui.theme.Dimensions.Medium1
-import com.example.hangoutz.ui.theme.Dimensions.Medium2
-import com.example.hangoutz.ui.theme.Dimensions.Small1
-import com.example.hangoutz.ui.theme.Dimensions.Small4
+import com.example.hangoutz.ui.theme.Dimensions.SettingsScreen_Large1
+import com.example.hangoutz.ui.theme.Dimensions.SettingsScreen_Large2
+import com.example.hangoutz.ui.theme.Dimensions.SettingsScreen_Medium1
+import com.example.hangoutz.ui.theme.Dimensions.SettingsScreen_Medium2
+import com.example.hangoutz.ui.theme.Dimensions.SettingsScreen_Small1
+import com.example.hangoutz.ui.theme.Dimensions.SettingsScreen_Small2
+import com.example.hangoutz.ui.theme.Dimensions.SettingsScreen_Small3
+import com.example.hangoutz.ui.theme.Dimensions.SettingsScreen_Small4
 import com.example.hangoutz.ui.theme.Ivory
 import com.example.hangoutz.utils.Constants.LOGOUT
 
@@ -51,7 +52,7 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
 
     Column(
         modifier = Modifier
-            .padding(top = Medium2)
+            .padding(top = SettingsScreen_Medium2)
             .fillMaxSize()
     ) {
         Box(
@@ -62,17 +63,17 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
         ) {
             Box(
                 modifier = Modifier
-                    .size(Large1)
+                    .size(SettingsScreen_Large1)
                     .clip(CircleShape)
-                    .border(2.5f.dp, Ivory, CircleShape)
+                    .border(SettingsScreen_Small3, Ivory, CircleShape)
             ) {}
             GlideImage(
                 model = "${BuildConfig.BASE_URL_AVATAR}${data.value.avatar}",
                 contentDescription = "Profile image",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .width(Large2)
-                    .height(Large2)
+                    .width(SettingsScreen_Large2)
+                    .height(SettingsScreen_Large2)
                     .clip(CircleShape)
                     .align(Alignment.Center)
                     .testTag("userPhoto")
@@ -97,8 +98,8 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .fillMaxWidth()
-                    .height(Medium1),
-                horizontalArrangement = Arrangement.spacedBy(Small1),
+                    .height(SettingsScreen_Medium1),
+                horizontalArrangement = Arrangement.spacedBy(SettingsScreen_Small1),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 NameInput(
@@ -112,7 +113,7 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
                 text = data.value.email,
                 style = MaterialTheme.typography.displaySmall,
                 modifier = Modifier
-                    .padding(end = Small4)
+                    .padding(end = SettingsScreen_Small4)
                     .align(Alignment.CenterHorizontally)
             )
         }
@@ -121,7 +122,7 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
                 .weight(1f)
                 .fillMaxWidth()
                 .align(Alignment.End)
-                .padding(bottom = Small4)
+                .padding(bottom = SettingsScreen_Small2)
         ) {
             ActionButton(R.drawable.iconlogout, LOGOUT, onClick = {
                 viewmodel.logoutUser(context, {
