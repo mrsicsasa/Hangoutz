@@ -39,6 +39,10 @@ object Dimensions {
     const val SPLASH_SCREEN_LOGO_INITIAL_ALPHA= 1f
     const val SPLASH_SCREEN_LOGO_TARGETED_ALPHA = 0f
 
+    // Register Screen
+    val REGISTER_BOTTOM_PADDING = 145.dp
+    val REGISTER_FORM_SIDE_PADDING = 30.dp
+    val REGISTER_FORM_BOTTOM_PADDING = 50.dp
 
     // Logo
     const val LOGO_ASPECT_RATIO = 1f
