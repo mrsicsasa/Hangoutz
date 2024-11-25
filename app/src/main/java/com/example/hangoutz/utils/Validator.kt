@@ -28,7 +28,7 @@ object Validator {
     }
 
     fun isValidNameLength(name: String): Boolean {
-        return (name.length >= 3 && name.length <= 25)
+        return (name.length >= Constants.MIN_NAME_LENGTH && name.length <= Constants.MAX_NAME_LENGTH)
     }
 
     fun isValidEmail(email: String): Boolean {
@@ -38,7 +38,7 @@ object Validator {
     }
 
     fun isValidPassword(password: String): Boolean {
-        if (password.length >= 8) {
+        if (password.length >= Constants.MIN_PASSWORD_LENGTH) {
             val regex = Regex(Constants.CONTAINS_DIGIT)
             return regex.containsMatchIn(password)
         }

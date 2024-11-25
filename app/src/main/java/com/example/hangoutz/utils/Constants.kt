@@ -75,6 +75,9 @@ object Constants {
     const val CONTAINS_DIGIT = ".*\\\\d.*"
 
     //RegisterViewModel
+    const val MIN_NAME_LENGTH = 3
+    const val MAX_NAME_LENGTH = 25
+    const val MIN_PASSWORD_LENGTH = 8
     const val NAME_ERROR_MESSAGE = "Name must be 3–25 characters"
     const val EMAIL_FORMAT_ERROR_MESSAGE = "Email must be in correct format"
     const val EMAIL_DUPLICATE_ERROR_MESSAGE = "Email already in use"
