@@ -16,6 +16,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.hangoutz.R
@@ -38,7 +40,9 @@ fun SplashScreen(navController: NavController) {
                 contentScale = ContentScale.FillBounds,
                 alpha = alpha.value
             )
-            .testTag(Constants.SPLASH_SCREEN_BACKGROUND),
+            .semantics {
+                contentDescription = Constants.SPLASH_SCREEN_BACKGROUND
+            },
         contentAlignment = Alignment.Center
     ) {
         Logo(
@@ -47,7 +51,9 @@ fun SplashScreen(navController: NavController) {
             targetValue = Dimensions.SPLASH_SCREEN_LOGO_TARGETED_ALPHA,
             modifier = Modifier
                 .align(Alignment.Center)
-                .testTag(Constants.SPLASH_SCREEN_LOGO),
+                .semantics {
+                    contentDescription = Constants.SPLASH_SCREEN_LOGO
+                },
             animationDelay = Constants.LOGO_ANIMATION_DELAY_SPLASH
         )
     }

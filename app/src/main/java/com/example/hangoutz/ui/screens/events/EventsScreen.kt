@@ -32,8 +32,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.hangoutz.R
@@ -107,7 +108,9 @@ fun EventsList(
                         place = event.place ?: "",
                         date = event.date.toDate().toEventDateDPO(),
                         countOfPeople = (countOfPeoplePair?.second ?: 0),
-                        modifier = Modifier.testTag(Constants.EVENT_CARD)
+                        modifier = Modifier.semantics {
+                            contentDescription = Constants.EVENT_CARD
+                        }
                     )
                     Spacer(modifier = Modifier.height(Dimensions.SPACE_HEIGHT_BETWEEN_CARDS))
                 }
@@ -119,7 +122,9 @@ fun EventsList(
                 .align(Alignment.BottomEnd)
                 .padding(Dimensions.FLOATING_BUTTON_PADDING)
                 .clip(CircleShape)
-                .testTag(Constants.CREATE_EVENT_BUTTON)
+                .semantics {
+                    contentDescription = Constants.CREATE_EVENT_BUTTON
+                }
         ) {
             Icon(
                 Icons.Filled.Add,
