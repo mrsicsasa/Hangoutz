@@ -12,9 +12,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.unit.dp
 import com.example.hangoutz.ui.theme.Error
 import com.example.hangoutz.ui.theme.Ivory
+import com.example.hangoutz.utils.Dimensions
 
 @Composable
 fun InputField(
@@ -22,15 +22,16 @@ fun InputField(
     value: String,
     onValueChange: (String) -> (Unit),
     isError: Boolean,
-    isPassword: Boolean = false
+    isPassword: Boolean = false,
+    modifier: Modifier = Modifier
 ) {
     OutlinedTextField(
         value = value,
         label = { Text(text = label, style = MaterialTheme.typography.bodySmall) },
         onValueChange = { onValueChange(it) },
         isError = isError,
-        maxLines = 1,
-        shape = RoundedCornerShape(20.dp),
+        singleLine = true,
+        shape = RoundedCornerShape(Dimensions.INPUT_FIELD_ROUNDED_CORNERS),
         visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
         colors = OutlinedTextFieldDefaults.colors(
             focusedTextColor = Ivory,
@@ -44,10 +45,12 @@ fun InputField(
             errorBorderColor = Error,
             errorTextColor = Ivory
         ),
-
         textStyle = MaterialTheme.typography.bodySmall.copy(color = Color.White),
-        modifier = Modifier
-            .padding(bottom = 10.dp, top = 10.dp)
+        modifier = modifier
+            .padding(
+                bottom = Dimensions.INPUT_FIELD_PADDING_SMALL,
+                top = Dimensions.INPUT_FIELD_PADDING_SMALL
+            )
             .fillMaxWidth()
     )
 }

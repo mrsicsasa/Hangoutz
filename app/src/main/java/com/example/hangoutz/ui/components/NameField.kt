@@ -7,7 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import com.example.hangoutz.utils.Constants.SETTINGS_NAME_FIELD_TAG
 
 @Composable
@@ -28,6 +29,6 @@ fun nameField(
         modifier = modifier
             .fillMaxWidth()
             .focusRequester(focusRequester)
-            .testTag(SETTINGS_NAME_FIELD_TAG)
+            .semantics { contentDescription = SETTINGS_NAME_FIELD_TAG }
     )
 }
