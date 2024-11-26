@@ -1,6 +1,8 @@
 package com.example.hangoutz.ui.screens.events
 
 import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,13 +13,19 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PageSize
+import androidx.compose.foundation.pager.PagerDefaults
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,7 +44,33 @@ import java.util.UUID
 @Composable
 fun MyEventsScreen(viewModel: EventScreenViewModel = hiltViewModel()) {
     val data = viewModel.uiState.collectAsState()
+    val pagerState = rememberPagerState(pageCount = { 3 })
+    val scope = rememberCoroutineScope()
     Box(modifier = Modifier.padding(Dimensions.SCREEN_PADDING)) {
+        Box(modifier = Modifier.align(Alignment.TopCenter)) {
+            FilterBar(pagerState = pagerState, scope = scope)
+        }
+        HorizontalPager(
+            state = pagerState,
+            pageSize = PageSize.Fill,
+            beyondViewportPageCount = PagerDefaults.BeyondViewportPageCount,
+            modifier = Modifier
+                .fillMaxSize()
+                .testTag("Pager")
+        ) { page ->
+            when (page) {
+                0 -> EventsList(data, viewModel)
+                1 -> EventsList(data , viewModel)
+                2 -> EventsList(data, viewModel)
+            }
+        }
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun EventsList(data: State<EventScreenState>, viewModel: EventScreenViewModel) {
+    Box() {
         Column(
             modifier = Modifier
                 .padding(top = Dimensions.CONTENT_TOP_PADDING)
