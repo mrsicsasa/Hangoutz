@@ -14,9 +14,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.hangoutz.R
@@ -39,27 +39,27 @@ fun RegisterScreen(navController: NavController, viewModel: RegisterViewModel = 
                 painterResource(R.drawable.main_background),
                 contentScale = ContentScale.FillHeight
             )
-            .testTag(Constants.REGISTER_BACKGROUND_COLUMN)
+            .semantics { Constants.REGISTER_BACKGROUND_COLUMN }
     ) {
         Column(
             modifier = Modifier
                 .weight(1.5f)
                 .background(Color.Transparent)
                 .fillMaxWidth()
-                .testTag(Constants.REGISTER_LOGO_COLUMN)
+                .semantics { Constants.REGISTER_LOGO_COLUMN }
         ) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .aspectRatio(1f)
-                    .testTag(Constants.REGISTER_LOGO_BOX),
+                    .semantics { Constants.REGISTER_LOGO_BOX },
                 contentAlignment = Alignment.Center
             ) {
                 Logo(
                     painterResource(id = R.drawable.logo),
                     modifier = Modifier
                         .align(Alignment.Center)
-                        .testTag(Constants.REGISTER_LOGO),
+                        .semantics { Constants.REGISTER_LOGO },
                     animationDelay = Constants.LOGO_ANIMATION_DELAY
                 )
             }
@@ -74,7 +74,7 @@ fun RegisterScreen(navController: NavController, viewModel: RegisterViewModel = 
                     bottom = Dimensions.REGISTER_FORM_BOTTOM_PADDING
                 )
                 .fillMaxWidth()
-                .testTag(Constants.REGISTER_FORM_COLUMN)
+                .semantics { Constants.REGISTER_FORM_COLUMN }
         ) {
             InputField(
                 label = stringResource(R.string.input_name),
@@ -85,12 +85,12 @@ fun RegisterScreen(navController: NavController, viewModel: RegisterViewModel = 
                 isError = (data.value.name.isEmpty() && data.value.incompleteFormError.isNotEmpty())
                         || data.value.nameError.isNotEmpty(),
                 modifier = Modifier
-                    .testTag(Constants.REGISTER_NAME_INPUT)
+                    .semantics { Constants.REGISTER_NAME_INPUT }
             )
             if (data.value.nameError.isNotEmpty() && data.value.incompleteFormError.isEmpty()) {
                 ErrorMessage(
                     data.value.nameError,
-                    Modifier.testTag(Constants.REGISTER_NAME_ERROR)
+                    Modifier.semantics { Constants.REGISTER_NAME_ERROR }
                 )
             }
             InputField(
@@ -102,12 +102,12 @@ fun RegisterScreen(navController: NavController, viewModel: RegisterViewModel = 
                 isError = (data.value.email.isEmpty() && data.value.incompleteFormError.isNotEmpty())
                         || data.value.emailError.isNotEmpty(),
                 modifier = Modifier
-                    .testTag(Constants.REGISTER_EMAIL_INPUT)
+                    .semantics { Constants.REGISTER_EMAIL_INPUT }
             )
             if (data.value.emailError.isNotEmpty() && data.value.incompleteFormError.isEmpty()) {
                 ErrorMessage(
                     data.value.emailError,
-                    Modifier.testTag(Constants.REGISTER_EMAIL_ERROR)
+                    Modifier.semantics { Constants.REGISTER_EMAIL_ERROR }
                 )
             }
             InputField(
@@ -120,12 +120,12 @@ fun RegisterScreen(navController: NavController, viewModel: RegisterViewModel = 
                         || data.value.passwordError.isNotEmpty(),
                 isPassword = true,
                 modifier = Modifier
-                    .testTag(Constants.REGISTER_PASSWORD_INPUT)
+                    .semantics { Constants.REGISTER_PASSWORD_INPUT }
             )
             if (data.value.passwordError.isNotEmpty() && data.value.incompleteFormError.isEmpty()) {
                 ErrorMessage(
                     data.value.passwordError,
-                    Modifier.testTag(Constants.REGISTER_PASSWORD_ERROR)
+                    Modifier.semantics { Constants.REGISTER_PASSWORD_ERROR }
                 )
             }
             InputField(
@@ -138,20 +138,20 @@ fun RegisterScreen(navController: NavController, viewModel: RegisterViewModel = 
                         || data.value.confirmPasswordError.isNotEmpty(),
                 isPassword = true,
                 modifier = Modifier
-                    .testTag(Constants.REGISTER_CONFIRM_PASSWORD_INPUT)
+                    .semantics { Constants.REGISTER_CONFIRM_PASSWORD_INPUT }
             )
             if (data.value.confirmPasswordError.isNotEmpty() && data.value.incompleteFormError.isEmpty()
             ) {
                 ErrorMessage(
                     data.value.confirmPasswordError,
-                    Modifier.testTag(Constants.REGISTER_CONFIRM_PASSWORD_ERROR)
+                    Modifier.semantics { Constants.REGISTER_CONFIRM_PASSWORD_ERROR }
                 )
             }
             // All fields must be filled
             if (data.value.incompleteFormError.isNotEmpty()) {
                 ErrorMessage(
                     data.value.incompleteFormError,
-                    Modifier.testTag(Constants.REGISTER_INCOMPLETE_FORM_ERROR)
+                    Modifier.semantics { Constants.REGISTER_INCOMPLETE_FORM_ERROR }
                 )
             }
         }
@@ -160,11 +160,11 @@ fun RegisterScreen(navController: NavController, viewModel: RegisterViewModel = 
             modifier = Modifier
                 .padding(bottom = Dimensions.REGISTER_BOTTOM_PADDING)
                 .fillMaxWidth()
-                .testTag(Constants.REGISTER_CREATE_ACCOUNT_BOX)
+                .semantics { Constants.REGISTER_CREATE_ACCOUNT_BOX }
         ) {
             ActionButton(
                 buttonText = stringResource(R.string.create_account_text),
-                modifier = Modifier.testTag(Constants.REGISTER_CREATE_ACCOUNT_BUTTON)
+                modifier = Modifier.semantics { Constants.REGISTER_CREATE_ACCOUNT_BUTTON }
             ) {
                 viewModel.onCreateAccountClick {
                     navController.navigate(NavigationItem.Login.route) {
