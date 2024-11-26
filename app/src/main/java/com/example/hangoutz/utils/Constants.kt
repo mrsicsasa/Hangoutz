@@ -104,4 +104,9 @@ object Constants {
     const val REGISTER_INCOMPLETE_FORM_ERROR= "registerIncompleteFormError"
     const val REGISTER_CREATE_ACCOUNT_BOX = "registerCreateAccountBox"
     const val REGISTER_CREATE_ACCOUNT_BUTTON = "registerCreateAccountButton"
+
+    //Friends tags
+    const val FRIENDS_PROFILE_PICTURE_DESCRIPTION = "Author's profile photo"
+    const val FRIENDS_LIST_PHOTO = "friendsListPhoto"
+    const val FRIENDS_LIST_NAME = "friendsListName"
 }
