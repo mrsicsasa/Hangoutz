@@ -36,7 +36,7 @@ object Dimensions {
     //Splash screen
     const val SPLASH_SCREEN_STARTING_ALPHA = 0.4f
     const val SPLASH_SCREEN_TARGETED_ALPHA = 1f
-    const val SPLASH_SCREEN_LOGO_INITIAL_ALPHA= 1f
+    const val SPLASH_SCREEN_LOGO_INITIAL_ALPHA = 1f
     const val SPLASH_SCREEN_LOGO_TARGETED_ALPHA = 0f
 
     // Register Screen
@@ -55,4 +55,31 @@ object Dimensions {
 
     //Top bar
     val TOP_BAR_HEIGHT = 55.dp
+
+    //Large range 100.dp and above
+    val SETTINGS_SCREEN_LARGE1 = 215.dp
+    val SETTINGS_SCREEN_LARGE2 = 200.dp
+
+    //Medium range 20-99.dp
+    val SETTINGS_SCREEN_MEDIUM1 = 45.dp
+    val SETTINGS_SCREEN_MEDIUM2 = 70.dp
+    val SETTINGS_SCREEN_MEDIUM3 = 50.dp
+    val SETTINGS_SCREEN_MEDIUM4 = 25.dp
+
+    //Small range 1-19.dp
+    val SETTINGS_SCREEN_SMALL1 = 5.dp
+    val SETTINGS_SCREEN_SMALL2 = 15.dp
+    val SETTINGS_SCREEN_SMALL3 = 2.5f.dp
+    val SETTINGS_SCREEN_SMALL4 = 10.dp
+
+    //Small range 1-19.dp
+    val ACTION_BUTTON_SMALL1 = 10.dp
+    val ACTION_BUTTON_SMALL2 = 5.dp
+
+    //Medium range 20-99.dp
+    val ACTION_BUTTON_MEDIUM1 = 50.dp
+    val ACTION_BUTTON_MEDIUM2 = 30.dp
+    val ACTION_BUTTON_MEDIUM3 = 20.dp
 }
+
+

@@ -27,7 +27,7 @@ data class LoginData(
 )
 
 @HiltViewModel
-class LoginViewModel @Inject constructor (
+class LoginViewModel @Inject constructor(
     private val userRepository: UserRepository,
     @ApplicationContext private val context: Context
 ) : ViewModel() {
