@@ -41,39 +41,48 @@ class SettingsViewModel @Inject constructor(
     }
 
 fun onPencilClick() {
+
+
+    if (_uiState.value.name.length >= 3 && _uiState.value.name.length <= 25) {
         val isReadOnlyState = !_uiState.value.isReadOnly
-
-
         iconSwitch()
         saveName()
 
         _uiState.value = _uiState.value.copy(isReadOnly = isReadOnlyState)
     }
+    else{
+        Log.e("IME ", " NIJE ISPRAVAN UNOS")
+    }
 
- fun saveName() {
-
-        if (!_uiState.value.isReadOnly) {
-            viewModelScope.launch {
-                val userID = SharedPreferencesManager.getUserId(context)
-                val newName =  _uiState.value.name
-
-                val response = userID?.let {
-                    userRepository.patchUserNameById(it, newName)
-
-                }
-                if (response != null) {
-                    if (response.isSuccessful) {
-                        Log.e("USPESNO IZMMENJEO", " ${response.code()}")
-                    } else {
-                        Log.e("Doslo je do greske ", " ${response.code()}")
-                    }
-                }
-            }
-
-        }
 
 
     }
+
+ fun saveName() {
+
+        if (!_uiState.value.isReadOnly ) {
+
+
+
+                viewModelScope.launch {
+                    val userID = SharedPreferencesManager.getUserId(context)
+                    val newName = _uiState.value.name
+
+                    val response = userID?.let {
+                        userRepository.patchUserNameById(it, newName)
+
+                    }
+                    if (response != null) {
+                        if (response.isSuccessful) {
+                            Log.e("USPESNO IZMMENJEO", " ${response.code()}")
+                        } else {
+                            Log.e("Doslo je do greske ", " ${response.code()}")
+                        }
+                    }
+                }
+        }
+        }
+
 
     fun iconSwitch() {
 
