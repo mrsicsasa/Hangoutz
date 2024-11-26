@@ -2,7 +2,6 @@ package com.example.hangoutz.ui.screens.settings
 
 import android.content.Context
 import android.util.Log
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hangoutz.R
@@ -17,11 +16,11 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class SettingsData(
-    var name: String = "" ,
+    var name: String = "",
     var email: String = "",
     var isReadOnly: Boolean = true,
     val avatar: String? = null,
-    val textIcon : Int = R.drawable.pencil
+    val textIcon: Int = R.drawable.pencil
 )
 
 @HiltViewModel
@@ -41,16 +40,47 @@ class SettingsViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(name = newText)
     }
 
-    fun onPencilClick(): Boolean {
+fun onPencilClick() {
         val isReadOnlyState = !_uiState.value.isReadOnly
+
+
+        iconSwitch()
+        saveName()
+
         _uiState.value = _uiState.value.copy(isReadOnly = isReadOnlyState)
+    }
 
-        if(_uiState.value.textIcon== R.drawable.pencil){
-            _uiState.value = _uiState.value.copy(textIcon = R.drawable.check)
+ fun saveName() {
+
+        if (!_uiState.value.isReadOnly) {
+            viewModelScope.launch {
+                val userID = SharedPreferencesManager.getUserId(context)
+                val newName =  _uiState.value.name
+
+                val response = userID?.let {
+                    userRepository.patchUserNameById(it, newName)
+
+                }
+                if (response != null) {
+                    if (response.isSuccessful) {
+                        Log.e("USPESNO IZMMENJEO", " ${response.code()}")
+                    } else {
+                        Log.e("Doslo je do greske ", " ${response.code()}")
+                    }
+                }
+            }
+
         }
-        else _uiState.value = _uiState.value.copy(textIcon = R.drawable.pencil)
 
-        return isReadOnlyState
+
+    }
+
+    fun iconSwitch() {
+
+        if (_uiState.value.textIcon == R.drawable.pencil) {
+            _uiState.value = _uiState.value.copy(textIcon = R.drawable.check)
+        } else _uiState.value = _uiState.value.copy(textIcon = R.drawable.pencil)
+
     }
 
     fun logoutUser(onLogout: () -> Unit) {

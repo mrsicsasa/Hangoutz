@@ -2,6 +2,7 @@ package com.example.hangoutz.data.repository
 
 import com.example.hangoutz.data.models.User
 import com.example.hangoutz.data.models.UserRequest
+import com.example.hangoutz.data.models.UserUpdateRequest
 import com.example.hangoutz.data.remote.UserAPI
 import com.example.hangoutz.domain.repository.UserRepository
 import retrofit2.Response
@@ -23,5 +24,12 @@ class UserRepositoryImpl @Inject constructor(userAPI: UserAPI): UserRepository {
 
     override suspend fun insertUser(userRequest: UserRequest): Response<Unit> {
         return  api.insertUser(userRequest)
+    }
+
+    override suspend fun patchUserNameById(id : String,  newName: String): Response<Unit> {
+        return api.patchUserById(
+            id = "eq.${id}",
+            UserUpdateRequest(name = newName)
+        )
     }
 }

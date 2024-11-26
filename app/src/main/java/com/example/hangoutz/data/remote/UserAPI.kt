@@ -3,10 +3,13 @@ package com.example.hangoutz.data.remote
 import com.example.hangoutz.BuildConfig
 import com.example.hangoutz.data.models.User
 import com.example.hangoutz.data.models.UserRequest
+import com.example.hangoutz.data.models.UserUpdateRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface UserAPI {
@@ -23,5 +26,11 @@ interface UserAPI {
     ): Response<List<User>>
 
     @POST("${BuildConfig.REQUEST_URL}users")
-    suspend fun insertUser(@Body user: UserRequest) : Response<Unit>
+    suspend fun insertUser(@Body user: UserRequest): Response<Unit>
+
+    @PATCH("${BuildConfig.REQUEST_URL}users")
+    suspend fun patchUserById(
+        @Query("id") id: String,
+        @Body  newName: UserUpdateRequest
+    ) : Response<Unit>
 }
