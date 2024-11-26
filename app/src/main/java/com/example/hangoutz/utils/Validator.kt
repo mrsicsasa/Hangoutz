@@ -34,7 +34,7 @@ object Validator {
     fun isValidEmail(email: String): Boolean {
         return (email.endsWith(Constants.VALID_EMAIL) == true &&
                 !email.startsWith(Constants.AT_SIGN) &&
-                email.split(Constants.AT_SIGN).size == 2)
+                email.split(Constants.AT_SIGN).size == Constants.TWO_HALVES)
     }
 
     fun isValidPassword(password: String): Boolean {

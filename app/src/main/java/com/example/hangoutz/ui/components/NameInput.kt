@@ -1,4 +1,4 @@
-package com.example.hangoutz.ui.screens.settings
+package com.example.hangoutz.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -17,7 +17,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.hangoutz.R
-import com.example.hangoutz.ui.components.nameField
 import com.example.hangoutz.ui.theme.Ivory
 import com.example.hangoutz.utils.Constants.SETTINGS_NAME_ICON_TAG
 import com.example.hangoutz.utils.Dimensions

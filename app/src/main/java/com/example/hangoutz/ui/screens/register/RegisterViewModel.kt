@@ -1,4 +1,4 @@
-package com.example.hangoutz.ui.screens.registerscreen
+package com.example.hangoutz.ui.screens.register
 
 import android.util.Log
 import androidx.lifecycle.ViewModel

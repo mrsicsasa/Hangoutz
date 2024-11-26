@@ -18,7 +18,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import com.example.hangoutz.ui.theme.Chestnut
 import com.example.hangoutz.ui.theme.Ivory
 import com.example.hangoutz.utils.Dimensions
@@ -32,11 +31,14 @@ fun ActionButton(
     Button(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(containerColor = Ivory),
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(Dimensions.ACTION_BUTTON_MEDIUM3),
         modifier = modifier
             .fillMaxWidth()
-            .padding(start = 50.dp, end = 50.dp)
-            .height(50.dp),
+            .padding(
+                start = Dimensions.ACTION_BUTTON_MEDIUM1,
+                end = Dimensions.ACTION_BUTTON_MEDIUM1
+            )
+            .height(Dimensions.ACTION_BUTTON_MEDIUM1),
     ) {
         Text(text = buttonText, style = MaterialTheme.typography.bodyMedium.copy(color = Chestnut))
     }
@@ -59,9 +61,12 @@ fun ActionButton(
             onClick = onClick,
             colors = ButtonDefaults.buttonColors(containerColor = Ivory, contentColor = Chestnut),
             shape = RoundedCornerShape(Dimensions.ACTION_BUTTON_MEDIUM3),
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth()
-                .padding(start = Dimensions.ACTION_BUTTON_MEDIUM3, end = Dimensions.ACTION_BUTTON_MEDIUM3)
+                .padding(
+                    start = Dimensions.ACTION_BUTTON_MEDIUM3,
+                    end = Dimensions.ACTION_BUTTON_MEDIUM3
+                )
                 .height(Dimensions.ACTION_BUTTON_MEDIUM1)
                 .align(Alignment.BottomCenter),
         ) {

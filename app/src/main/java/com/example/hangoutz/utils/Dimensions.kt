@@ -80,6 +80,13 @@ object Dimensions {
     val ACTION_BUTTON_MEDIUM1 = 50.dp
     val ACTION_BUTTON_MEDIUM2 = 30.dp
     val ACTION_BUTTON_MEDIUM3 = 20.dp
+
+    //Error message
+    val ERROR_MESSAGE_PADDING_SMALL = 10.dp
+
+    //Input Field
+    val INPUT_FIELD_ROUNDED_CORNERS = 20.dp
+    val INPUT_FIELD_PADDING_SMALL = 10.dp
 }
 
 
