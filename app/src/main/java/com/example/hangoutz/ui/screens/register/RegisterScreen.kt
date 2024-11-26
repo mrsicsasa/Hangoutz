@@ -1,6 +1,5 @@
 package com.example.hangoutz.ui.screens.register
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
@@ -12,7 +11,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -45,15 +43,12 @@ fun RegisterScreen(navController: NavController, viewModel: RegisterViewModel = 
         Column(
             modifier = Modifier
                 .weight(1.5f)
-                .background(Color.Transparent)
                 .fillMaxWidth()
-                .semantics { contentDescription = Constants.REGISTER_LOGO_COLUMN }
         ) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .aspectRatio(1f)
-                    .semantics { contentDescription = Constants.REGISTER_LOGO_BOX },
+                    .aspectRatio(1f),
                 contentAlignment = Alignment.Center
             ) {
                 Logo(
@@ -75,7 +70,6 @@ fun RegisterScreen(navController: NavController, viewModel: RegisterViewModel = 
                     bottom = Dimensions.REGISTER_FORM_BOTTOM_PADDING
                 )
                 .fillMaxWidth()
-                .semantics { contentDescription = Constants.REGISTER_FORM_COLUMN }
         ) {
             InputField(
                 label = stringResource(R.string.input_name),

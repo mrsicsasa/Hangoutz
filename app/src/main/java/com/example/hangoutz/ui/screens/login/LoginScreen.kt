@@ -76,7 +76,6 @@ fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltVi
         Column(
             modifier = Modifier
                 .weight(2f)
-                .background(Color.Transparent)
                 .fillMaxWidth()
                 .padding(
                     start = Dimensions.ACTION_BUTTON_MEDIUM2,

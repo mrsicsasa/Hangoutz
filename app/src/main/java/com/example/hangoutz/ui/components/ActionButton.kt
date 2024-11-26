@@ -18,8 +18,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import com.example.hangoutz.ui.theme.Chestnut
 import com.example.hangoutz.ui.theme.Ivory
+import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Dimensions
 
 @Composable
@@ -40,7 +43,13 @@ fun ActionButton(
             )
             .height(Dimensions.ACTION_BUTTON_MEDIUM1),
     ) {
-        Text(text = buttonText, style = MaterialTheme.typography.bodyMedium.copy(color = Chestnut))
+        Text(
+            text = buttonText,
+            style = MaterialTheme.typography.bodyMedium.copy(color = Chestnut),
+            modifier = Modifier.semantics {
+                contentDescription =
+                    Constants.ACTION_BUTTON_TEXT
+            })
     }
 }
 

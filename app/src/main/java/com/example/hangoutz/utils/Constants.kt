@@ -48,6 +48,9 @@ object Constants {
     const val DAY_THRESHOLD = 7
     const val PADDING_ZERO_THRESHOLD = 10
 
+    //Component tags
+    const val ACTION_BUTTON_TEXT = "actionButtonText"
+
     //Test tags settings screen
     const val SETTINGS_NAME_FIELD_TAG = "settingsNameField"
     const val SETTINGS_NAME_ICON_TAG = "settingsNameIcon"
