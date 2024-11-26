@@ -99,6 +99,7 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 NameInput(
+                    data.value.textIcon,
                     data.value.name,
                     data.value.isReadOnly,
                     { viewmodel.onNameChanged(it) },

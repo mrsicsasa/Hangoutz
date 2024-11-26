@@ -2,6 +2,7 @@ package com.example.hangoutz.ui.screens.settings
 
 import android.content.Context
 import android.util.Log
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hangoutz.R
@@ -16,11 +17,11 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class SettingsData(
-    var name: String = "",
+    var name: String = "" ,
     var email: String = "",
     var isReadOnly: Boolean = true,
     val avatar: String? = null,
-    val textIcon : Int = R.drawable.check
+    val textIcon : Int = R.drawable.pencil
 )
 
 @HiltViewModel

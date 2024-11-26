@@ -15,8 +15,8 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.constraintlayout.compose.ConstraintLayout
-import com.example.hangoutz.R
 import com.example.hangoutz.ui.components.nameField
 import com.example.hangoutz.ui.theme.Ivory
 import com.example.hangoutz.utils.Constants.SETTINGS_NAME_ICON_TAG
@@ -25,7 +25,7 @@ import com.example.hangoutz.utils.Dimensions
 
 @Composable
 fun NameInput(
-    name: String, isReadOnly: Boolean, onNameChanged: (String) -> Unit, onPencilClick: () -> Unit
+   icon: Int, name: String, isReadOnly: Boolean, onNameChanged: (String) -> Unit, onPencilClick: () -> Unit
 ) {
     val focusRequester = remember { FocusRequester() }
     ConstraintLayout(
@@ -58,7 +58,7 @@ fun NameInput(
             .padding(Dimensions.SETTINGS_SCREEN_SMALL1)
             .fillMaxHeight()) {
             Image(
-                painterResource(R.drawable.pencil),
+                painterResource(icon),
                 "",
                 modifier = Modifier
                     .size(Dimensions.SETTINGS_SCREEN_MEDIUM4)
