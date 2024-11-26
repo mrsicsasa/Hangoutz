@@ -25,7 +25,7 @@ import com.example.hangoutz.utils.Dimensions
 
 @Composable
 fun NameInput(
-   icon: Int, name: String, isReadOnly: Boolean, onNameChanged: (String) -> Unit, onPencilClick: () -> Unit
+   icon: Int, name: TextFieldValue, isReadOnly: Boolean, onNameChanged: (TextFieldValue) -> Unit, onPencilClick: () -> Unit
 ) {
     val focusRequester = remember { FocusRequester() }
     ConstraintLayout(
@@ -44,7 +44,7 @@ fun NameInput(
             bottom.linkTo(parent.bottom)
         }) {
             nameField(
-                name,
+               name,
                 { onNameChanged(it) },
                 isReadOnly,
                 focusRequester,

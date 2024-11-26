@@ -23,8 +23,8 @@ import com.example.hangoutz.utils.Constants.SETTINGS_NAME_FIELD_TAG
 
 @Composable
 fun nameField(
-    name :String,
-    onTextChange: (String) -> Unit,
+    name : TextFieldValue,
+    onTextChange: (TextFieldValue) -> Unit,
     isReadOnly: Boolean,
     focusRequester: FocusRequester,
     modifier: Modifier
