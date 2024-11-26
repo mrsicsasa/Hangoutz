@@ -1,4 +1,4 @@
-package com.example.hangoutz.ui.screens.friendsscreen
+package com.example.hangoutz.ui.screens.friends
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding

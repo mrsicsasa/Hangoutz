@@ -2,7 +2,6 @@ package com.example.hangoutz.ui.screens.main
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -12,13 +11,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.hangoutz.R
 import com.example.hangoutz.ui.navigation.BottomNavItem
+import com.example.hangoutz.ui.theme.BottomNavigationColor
 import com.example.hangoutz.ui.theme.Ivory
-import com.example.hangoutz.ui.theme.bottomNavigationColor
+import com.example.hangoutz.utils.Constants
+import com.example.hangoutz.utils.Dimensions
 
 @Composable
 fun TabView(
@@ -26,13 +29,16 @@ fun TabView(
     navController: NavController,
 ) {
     NavigationBar(
-        modifier = Modifier.height(67.dp),
-        containerColor = bottomNavigationColor,
+        modifier = Modifier
+            .height(Dimensions.BOTTOM_NAVIGATION_BAR_HEIGHT)
+            .testTag(Constants.BOTTOM_NAVIGATION_BAR),
+        containerColor = BottomNavigationColor,
     ) {
         val currentBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = currentBackStackEntry?.destination?.route
         tabBarItems.forEach { tabBarItem ->
             NavigationBarItem(
+                modifier = Modifier.testTag(Constants.BOTTOM_NAVIGATION_BAR_ITEM),
                 selected = tabBarItem.route.name == currentRoute,
                 onClick = {
                     if (tabBarItem.route.name != currentRoute) {
@@ -42,16 +48,16 @@ fun TabView(
                 icon = {
                     Image(
                         painterResource(isBottomItemSelectedIcon(tabBarItem, currentRoute)),
-                        contentDescription = "",
-                        modifier = Modifier.size(30.dp),
+                        contentDescription = stringResource(R.string.bottom_navigation_item_icon),
+                        modifier = Modifier.size(Dimensions.BOTTOM_NAVIGATION_ICON_SIZE),
                         contentScale = ContentScale.FillBounds
                     )
                 },
                 colors = NavigationBarItemColors(
                     selectedIconColor = Ivory,
                     selectedTextColor = Ivory,
-                    selectedIndicatorColor = bottomNavigationColor,
-                    unselectedIconColor = bottomNavigationColor,
+                    selectedIndicatorColor = BottomNavigationColor,
+                    unselectedIconColor = BottomNavigationColor,
                     unselectedTextColor = Ivory,
                     disabledIconColor = Color.Blue,
                     disabledTextColor = Color.Blue

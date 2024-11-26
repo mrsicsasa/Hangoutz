@@ -49,7 +49,7 @@ object Module {
     }
 
     @Provides
-    fun providesInviteApi(retrofit: Retrofit): InviteAPI{
+    fun providesInviteApi(retrofit: Retrofit): InviteAPI {
         return retrofit.create(InviteAPI::class.java)
     }
 
@@ -57,8 +57,9 @@ object Module {
     fun providesUserRepository(userAPI: UserAPI): UserRepository {
         return UserRepositoryImpl(userAPI)
     }
+
     @Provides
-    fun provideEventRepository(eventAPI: EventAPI): EventRepository{
+    fun provideEventRepository(eventAPI: EventAPI): EventRepository {
         return EventRepositoryImpl(eventAPI)
     }
 

@@ -1,4 +1,4 @@
-package com.example.hangoutz.ui.screens.loginscreen
+package com.example.hangoutz.ui.screens.login
 
 import android.content.Context
 import android.os.Build
@@ -11,6 +11,7 @@ import com.example.hangoutz.domain.repository.UserRepository
 import com.example.hangoutz.utils.Constants.ERROR_EMPTY_FIELDS
 import com.example.hangoutz.utils.Constants.ERROR_INVALID_INPUT
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -24,16 +25,18 @@ data class LoginData(
     val isEmailError: Boolean = false,
     val isPasswordError: Boolean = false
 )
+
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val userRepository: UserRepository,
+    @ApplicationContext private val context: Context
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(LoginData())
     val uiState: StateFlow<LoginData> = _uiState
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun userAuth(context: Context, onLoginSuccess: () -> Unit) {
+    fun userAuth(onLoginSuccess: () -> Unit) {
         _uiState.value = _uiState.value.copy(isEmailError = false, isPasswordError = false)
         if (_uiState.value.email.isEmpty() || _uiState.value.password.isEmpty()) {
             val emailEmpty = _uiState.value.email.isEmpty()
@@ -41,7 +44,7 @@ class LoginViewModel @Inject constructor(
             _uiState.value = _uiState.value.copy(
                 isEmailError = emailEmpty,
                 isPasswordError = passwordEmpty,
-                errorMessage =  ERROR_EMPTY_FIELDS
+                errorMessage = ERROR_EMPTY_FIELDS
             )
         } else {
             _uiState.value = _uiState.value.copy(

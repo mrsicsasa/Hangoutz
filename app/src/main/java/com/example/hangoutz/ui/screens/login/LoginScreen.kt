@@ -1,5 +1,4 @@
-package com.example.hangoutz.ui.screens.loginscreen
-
+package com.example.hangoutz.ui.screens.login
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -12,6 +11,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -20,8 +20,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -37,12 +38,13 @@ import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Constants.EMAIL
 import com.example.hangoutz.utils.Constants.LOGIN
 import com.example.hangoutz.utils.Constants.PASSWORD
+import com.example.hangoutz.utils.Dimensions
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltViewModel()) {
     val data = viewmodel.uiState.collectAsState()
-    val context = LocalContext.current
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -76,7 +78,10 @@ fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltVi
                 .weight(2f)
                 .background(Color.Transparent)
                 .fillMaxWidth()
-                .padding(start = 30.dp, end = 30.dp)
+                .padding(
+                    start = Dimensions.ACTION_BUTTON_MEDIUM2,
+                    end = Dimensions.ACTION_BUTTON_MEDIUM2
+                )
         ) {
             InputField(
                 EMAIL,
@@ -93,42 +98,39 @@ fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltVi
             )
             ErrorMessage(data.value.errorMessage)
             ActionButton(
-                R.drawable.enter,
-                LOGIN,
-                onClick = {
-                    viewmodel.userAuth(
-                        context,
-                        {
-                            navController.navigate(NavigationItem.MainScreen.route) {
-                                popUpTo(0)
-                                launchSingleTop
-                            }
-                        })
-                })
+                R.drawable.enter, LOGIN, onClick = {
+                    viewmodel.userAuth() {
+                        navController.navigate(NavigationItem.MainScreen.route) {
+                            popUpTo(0)
+                            launchSingleTop
+                        }
+                    }
+                }, Modifier.testTag(Constants.SETTINGS_LOGOUT_BUTTON)
+            )
         }
-
         Column(
             modifier = Modifier
-                .padding(bottom = 40.dp)
+                .padding(bottom = Dimensions.ACTION_BUTTON_MEDIUM1)
                 .fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "OR",
+                text = stringResource(R.string.or_text),
                 color = Ivory,
-                modifier = Modifier
-                    .padding(top = 10.dp),
+                modifier = Modifier,
+                style = MaterialTheme.typography.labelLarge,
                 textAlign = TextAlign.Center
             )
             Text(
-                text = "Create Account",
+                text = stringResource(R.string.create_account_text),
                 color = Ivory,
                 modifier = Modifier
-                    .padding(top = 5.dp)
+                    .padding(top = Dimensions.ACTION_BUTTON_SMALL2)
                     .clickable {
                         navController.navigate(NavigationItem.Register.route)
                     },
+                style = MaterialTheme.typography.labelLarge,
                 textAlign = TextAlign.Center
             )
         }

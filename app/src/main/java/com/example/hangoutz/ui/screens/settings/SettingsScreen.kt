@@ -1,14 +1,11 @@
-package com.example.hangoutz.ui.screens.settingsscreen
-
+package com.example.hangoutz.ui.screens.settings
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,18 +17,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
@@ -39,53 +31,56 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.example.hangoutz.BuildConfig
 import com.example.hangoutz.R
 import com.example.hangoutz.ui.components.ActionButton
-import com.example.hangoutz.ui.components.nameField
 import com.example.hangoutz.ui.navigation.NavigationItem
 import com.example.hangoutz.ui.theme.Ivory
 import com.example.hangoutz.utils.Constants.LOGOUT
+import com.example.hangoutz.utils.Constants.PROFILE_PHOTO
+import com.example.hangoutz.utils.Constants.SETTINGS_BACKGROUND_LINES_TAG
+import com.example.hangoutz.utils.Constants.SETTINGS_EMAIL_FIELD_TAG
+import com.example.hangoutz.utils.Constants.SETTINGS_LOGOUT_BUTTON
+import com.example.hangoutz.utils.Constants.SETTINGS_USER_PHOTO_TAG
+import com.example.hangoutz.utils.Dimensions
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = hiltViewModel()) {
     val data = viewmodel.uiState.collectAsState()
-    val context = LocalContext.current
-
 
     Column(
         modifier = Modifier
-            .padding(top = 70.dp)
+            .padding(top = Dimensions.SETTINGS_SCREEN_MEDIUM2)
             .fillMaxSize()
     ) {
         Box(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth(),
-
             contentAlignment = Alignment.Center
         ) {
             Box(
                 modifier = Modifier
-                    .size(215.dp)
+                    .size(Dimensions.SETTINGS_SCREEN_LARGE1)
                     .clip(CircleShape)
-                    .border(2.5f.dp, Ivory, CircleShape)
-            ) {
-            }
+                    .border(Dimensions.SETTINGS_SCREEN_SMALL3, Ivory, CircleShape)
+            ) {}
             GlideImage(
                 model = "${BuildConfig.BASE_URL_AVATAR}${data.value.avatar}",
-                contentDescription = "",
+                contentDescription = PROFILE_PHOTO,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .width(200.dp)
-                    .height(200.dp)
+                    .width(Dimensions.SETTINGS_SCREEN_LARGE2)
+                    .height(Dimensions.SETTINGS_SCREEN_LARGE2)
                     .clip(CircleShape)
                     .align(Alignment.Center)
+                    .testTag(SETTINGS_USER_PHOTO_TAG)
             )
             Image(
                 painter = painterResource(R.drawable.profilelines),
                 contentDescription = "lines",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .align(Alignment.Center),
+                    .align(Alignment.Center)
+                    .testTag(SETTINGS_BACKGROUND_LINES_TAG),
                 colorFilter = ColorFilter.tint(Ivory)
             )
         }
@@ -99,27 +94,24 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .fillMaxWidth()
-                    .height(45.dp),
-                horizontalArrangement = Arrangement.spacedBy(5.dp),
+                    .height(Dimensions.SETTINGS_SCREEN_MEDIUM1),
+                horizontalArrangement = Arrangement.spacedBy(Dimensions.SETTINGS_SCREEN_SMALL1),
                 verticalAlignment = Alignment.CenterVertically
-
             ) {
                 NameInput(
-                    { viewmodel.onNameChanged(it) },
-                    data.value.isReadOnly,
-                    { viewmodel.onPencilClick() },
                     data.value.name,
-                    data.value.textIcon
+                    data.value.isReadOnly,
+                    { viewmodel.onNameChanged(it) },
+                    { viewmodel.onPencilClick() },
                 )
             }
             Text(
                 text = data.value.email,
-                style = MaterialTheme.typography.bodyLarge,
-                color = Ivory,
-                fontSize = 20.sp,
+                style = MaterialTheme.typography.headlineMedium,
                 modifier = Modifier
-                    .padding(end = 10.dp)
+                    .padding(end = Dimensions.SETTINGS_SCREEN_SMALL4)
                     .align(Alignment.CenterHorizontally)
+                    .testTag(SETTINGS_EMAIL_FIELD_TAG)
             )
         }
         Column(
@@ -127,80 +119,16 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
                 .weight(1f)
                 .fillMaxWidth()
                 .align(Alignment.End)
-                .padding(bottom = 10.dp)
+                .padding(bottom = Dimensions.SETTINGS_SCREEN_SMALL2)
         ) {
-            ActionButton(
-                R.drawable.iconlogout, LOGOUT,
-                onClick = {
-                    viewmodel.logoutUser(
-                        context,
-                        {
-                            navController.navigate(NavigationItem.Login.route)
-                        }
-                    )
+            ActionButton(R.drawable.iconlogout, LOGOUT, onClick = {
+                viewmodel.logoutUser {
+                    navController.navigate(NavigationItem.Login.route) {
+                        popUpTo(0)
+                    }
+
                 }
-            )
-        }
-    }
-}
-
-@Composable
-fun NameInput(
-    onNameChanged: (String) -> Unit,
-    isReadOnly: Boolean,
-    onPencilClick: () -> Unit,
-    name: String,
-    textIcon: Int
-) {
-    val focusRequester = remember { FocusRequester() }
-    val testing =
-
-    ConstraintLayout(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(end = 50.dp, start = 50.dp),
-    ) {
-        val (x, y) = createRefs()
-        Box(modifier = Modifier.constrainAs(x) {
-            start.linkTo(parent.start)
-            end.linkTo(parent.end)
-            top.linkTo(parent.top)
-            bottom.linkTo(parent.bottom)
-        }) {
-            nameField(
-                name,
-                { onNameChanged(it) },
-                isReadOnly,
-                focusRequester,
-                modifier = Modifier.align(Alignment.Center)
-
-            )
-        }
-        Box(
-            modifier = Modifier
-                .constrainAs(y) {
-                    start.linkTo(x.end)
-                }
-                .padding(start = 5.dp)
-                .fillMaxHeight()
-        ) {
-
-
-            Image(
-
-                painterResource(textIcon),
-                "",
-                modifier = Modifier
-                    .size(25.dp)
-                    .align(Alignment.Center)
-                    .clickable {
-                        onPencilClick()
-                        focusRequester.requestFocus()
-
-
-                    },
-                colorFilter = ColorFilter.tint(Ivory)
-            )
+            }, modifier = Modifier.testTag(SETTINGS_LOGOUT_BUTTON))
         }
     }
 }

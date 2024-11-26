@@ -1,4 +1,4 @@
-package com.example.hangoutz.ui.screens.settingsscreen
+package com.example.hangoutz.ui.screens.settings
 
 import android.content.Context
 import android.util.Log
@@ -7,7 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.hangoutz.R
 import com.example.hangoutz.data.local.SharedPreferencesManager
 import com.example.hangoutz.domain.repository.UserRepository
+import com.example.hangoutz.utils.Constants.DEFAULT_USER_PHOTO
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -16,65 +18,63 @@ import javax.inject.Inject
 data class SettingsData(
     var name: String = "",
     var email: String = "",
-    var isReadOnly : Boolean = true,
+    var isReadOnly: Boolean = true,
     val avatar: String? = null,
-    val textIcon : Int = R.drawable.pencil
+    val textIcon : Int = R.drawable.check
 )
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val userRepository: UserRepository,
-    private val context: Context
+    @ApplicationContext private val context: Context
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SettingsData())
     val uiState: StateFlow<SettingsData> = _uiState
 
     init {
-        getUser(context)
+        getUser()
     }
 
     fun onNameChanged(newText: String) {
         _uiState.value = _uiState.value.copy(name = newText)
     }
 
-    fun onPencilClick() : Boolean{
-     val state =  !_uiState.value.isReadOnly
-        _uiState.value = _uiState.value.copy(isReadOnly = state)
+    fun onPencilClick(): Boolean {
+        val isReadOnlyState = !_uiState.value.isReadOnly
+        _uiState.value = _uiState.value.copy(isReadOnly = isReadOnlyState)
 
         if(_uiState.value.textIcon== R.drawable.pencil){
             _uiState.value = _uiState.value.copy(textIcon = R.drawable.check)
         }
         else _uiState.value = _uiState.value.copy(textIcon = R.drawable.pencil)
 
-        //Log.e("LOGG------ ","STATE = ${state} & ISREADONLY ${_uiState.value.isReadOnly}")
-
-        return state
+        return isReadOnlyState
     }
 
-    fun logoutUser(context: Context, onLogout: () -> Unit) {
+    fun logoutUser(onLogout: () -> Unit) {
         SharedPreferencesManager.clearUserId(context)
         onLogout()
     }
 
-    fun getUser(context: Context) {
-
+    private fun getUser() {
         val userID = SharedPreferencesManager.getUserId(context)
         viewModelScope.launch {
             try {
                 val response =
-                    userRepository.getUserById(
-                        userID!!,
-                    )
-                if (response.isSuccessful && !response.body().isNullOrEmpty()
+                    userID?.let {
+                        userRepository.getUserById(
+                            it
+                        )
+                    }
+                if (response?.isSuccessful == true && !response.body().isNullOrEmpty()
                 ) {
                     val user = response.body()?.first()
                     user?.let {
-
                         _uiState.value = _uiState.value.copy(
                             name = it.name,
                             email = it.email,
-                            avatar = if (it.avatar == null) "avatar_default.png" else it.avatar
+                            avatar = it.avatar ?: DEFAULT_USER_PHOTO
                         )
                     }
                 }

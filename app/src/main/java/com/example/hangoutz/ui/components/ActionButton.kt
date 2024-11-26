@@ -21,6 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.hangoutz.ui.theme.Chestnut
 import com.example.hangoutz.ui.theme.Ivory
+import com.example.hangoutz.utils.Dimensions
 
 @Composable
 fun ActionButton(
@@ -39,40 +40,45 @@ fun ActionButton(
         Text(text = buttonText, style = MaterialTheme.typography.bodyMedium.copy(color = Chestnut))
     }
 }
+
 @Override
 @Composable
 fun ActionButton(
     painterResource: Int,
     buttonText: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier
 ) {
     Box(
         modifier = Modifier
             .fillMaxHeight()
-            .padding(bottom = 30.dp)
+            .padding(bottom = Dimensions.ACTION_BUTTON_MEDIUM2)
     ) {
         Button(
             onClick = onClick,
             colors = ButtonDefaults.buttonColors(containerColor = Ivory, contentColor = Chestnut),
-            shape = RoundedCornerShape(20.dp),
-            modifier = Modifier
+            shape = RoundedCornerShape(Dimensions.ACTION_BUTTON_MEDIUM3),
+            modifier = modifier
                 .fillMaxWidth()
-                .padding(start = 20.dp, end = 20.dp)
-                .height(50.dp)
+                .padding(start = Dimensions.ACTION_BUTTON_MEDIUM3, end = Dimensions.ACTION_BUTTON_MEDIUM3)
+                .height(Dimensions.ACTION_BUTTON_MEDIUM1)
                 .align(Alignment.BottomCenter),
-            ) {
+        ) {
             Row(
-                modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.CenterVertically),
+                horizontalArrangement = Arrangement.Center
             ) {
                 Text(
                     text = buttonText,
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.padding(end = 10.dp)
+                    style = MaterialTheme.typography.labelLarge,
+                    modifier = Modifier.padding(end = Dimensions.ACTION_BUTTON_SMALL1)
                 )
                 Icon(
                     painter = painterResource(painterResource),
-                    contentDescription = "Login icon",
-                    modifier = Modifier.size(20.dp)
+                    contentDescription = "Icon",
+                    modifier = Modifier.size(Dimensions.ACTION_BUTTON_MEDIUM3)
                 )
             }
         }

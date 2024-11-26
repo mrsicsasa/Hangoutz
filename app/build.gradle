@@ -37,8 +37,6 @@ android {
             buildConfigField("String", "BASE_URL", "\"https://zsjxwfjutstrybvltjov.supabase.co/\"")
             buildConfigField("String", "BASE_URL_AVATAR", "\"https://zsjxwfjutstrybvltjov.supabase.co/storage/v1/object/public/avatar/\"")
             buildConfigField("String", "REQUEST_URL", "\"rest/v1/\"")
-
-
         }
     }
     compileOptions {
@@ -69,10 +67,10 @@ dependencies {
     implementation libs.converter.gson
     implementation libs.kotlinx.coroutines.android
     implementation libs.kotlinx.coroutines.core
-    implementation(libs.hilt.android)
-    implementation(libs.androidx.hilt.navigation.compose)
+    implementation libs.hilt.android
+    implementation libs.androidx.hilt.navigation.compose
     implementation libs.androidx.constraintlayout.compose
-    implementation  libs.compose
+    implementation libs.compose
     kapt(libs.hilt.android.compiler)
     kapt(libs.hilt.compiler)
     testImplementation libs.junit
