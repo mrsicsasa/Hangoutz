@@ -21,6 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.hangoutz.ui.theme.Chestnut
 import com.example.hangoutz.ui.theme.Ivory
+import com.example.hangoutz.utils.Dimensions
 
 @Composable
 fun ActionButton(
@@ -51,16 +52,16 @@ fun ActionButton(
     Box(
         modifier = Modifier
             .fillMaxHeight()
-            .padding(bottom = 30.dp)
+            .padding(bottom = Dimensions.ACTION_BUTTON_MEDIUM2)
     ) {
         Button(
             onClick = onClick,
             colors = ButtonDefaults.buttonColors(containerColor = Ivory, contentColor = Chestnut),
-            shape = RoundedCornerShape(20.dp),
+            shape = RoundedCornerShape(Dimensions.ACTION_BUTTON_MEDIUM3),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 20.dp, end = 20.dp)
-                .height(50.dp)
+                .padding(start = Dimensions.ACTION_BUTTON_MEDIUM3, end = Dimensions.ACTION_BUTTON_MEDIUM3)
+                .height(Dimensions.ACTION_BUTTON_MEDIUM1)
                 .align(Alignment.BottomCenter),
         ) {
             Row(
@@ -72,12 +73,12 @@ fun ActionButton(
                 Text(
                     text = buttonText,
                     style = MaterialTheme.typography.labelLarge,
-                    modifier = Modifier.padding(end = 10.dp)
+                    modifier = Modifier.padding(end = Dimensions.ACTION_BUTTON_SMALL1)
                 )
                 Icon(
                     painter = painterResource(painterResource),
                     contentDescription = "Icon",
-                    modifier = Modifier.size(20.dp)
+                    modifier = Modifier.size(Dimensions.ACTION_BUTTON_MEDIUM3)
                 )
             }
         }

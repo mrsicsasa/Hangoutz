@@ -1,4 +1,4 @@
-package com.example.hangoutz.ui.screens.settingsscreen
+package com.example.hangoutz.ui.screens.settings
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -18,11 +18,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.hangoutz.R
 import com.example.hangoutz.ui.components.nameField
-import com.example.hangoutz.ui.theme.Dimensions.settingsScreenMedium3
-import com.example.hangoutz.ui.theme.Dimensions.settingsScreenMedium4
-import com.example.hangoutz.ui.theme.Dimensions.settingsScreenSmall1
 import com.example.hangoutz.ui.theme.Ivory
 import com.example.hangoutz.utils.Constants.SETTINGS_NAME_ICON_TAG
+import com.example.hangoutz.utils.Dimensions
 
 
 @Composable
@@ -33,7 +31,10 @@ fun NameInput(
     ConstraintLayout(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(end = settingsScreenMedium3, start = settingsScreenMedium3),
+            .padding(
+                end = Dimensions.SETTINGS_SCREEN_MEDIUM3,
+                start = Dimensions.SETTINGS_SCREEN_MEDIUM3
+            ),
     ) {
         val (image, text) = createRefs()
         Box(modifier = Modifier.constrainAs(image) {
@@ -54,13 +55,13 @@ fun NameInput(
             .constrainAs(text) {
                 start.linkTo(image.end)
             }
-            .padding(settingsScreenSmall1)
+            .padding(Dimensions.SETTINGS_SCREEN_SMALL1)
             .fillMaxHeight()) {
             Image(
                 painterResource(R.drawable.pencil),
-                "nameEditIcon",
+                "",
                 modifier = Modifier
-                    .size(settingsScreenMedium4)
+                    .size(Dimensions.SETTINGS_SCREEN_MEDIUM4)
                     .align(Alignment.Center)
                     .testTag(SETTINGS_NAME_ICON_TAG)
                     .clickable {
