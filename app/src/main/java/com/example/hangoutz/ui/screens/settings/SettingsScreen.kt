@@ -1,5 +1,6 @@
 package com.example.hangoutz.ui.screens.settings
 
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -39,12 +40,29 @@ import com.example.hangoutz.utils.Constants.SETTINGS_BACKGROUND_LINES_TAG
 import com.example.hangoutz.utils.Constants.SETTINGS_EMAIL_FIELD_TAG
 import com.example.hangoutz.utils.Constants.SETTINGS_LOGOUT_BUTTON
 import com.example.hangoutz.utils.Constants.SETTINGS_USER_PHOTO_TAG
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.clickable
 import com.example.hangoutz.utils.Dimensions
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = hiltViewModel()) {
     val data = viewmodel.uiState.collectAsState()
+
+    // Registers a photo picker activity launcher in single-select mode.
+    val pickMedia = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+
+        if (uri != null) {
+           viewmodel.updateAvatarUri(uri.toString())
+            Log.d("PhotoPicker", "Selected URI: $uri")
+        } else {
+            Log.d("PhotoPicker", "No media selected")
+        }
+    }
+
 
     Column(
         modifier = Modifier
@@ -64,7 +82,7 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
                     .border(Dimensions.SETTINGS_SCREEN_SMALL3, Ivory, CircleShape)
             ) {}
             GlideImage(
-                model = "${BuildConfig.BASE_URL_AVATAR}${data.value.avatar}",
+                model = data.value.avatarUri ?: "${BuildConfig.BASE_URL_AVATAR}${data.value.avatar}",
                 contentDescription = PROFILE_PHOTO,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -73,6 +91,7 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
                     .clip(CircleShape)
                     .align(Alignment.Center)
                     .testTag(SETTINGS_USER_PHOTO_TAG)
+                    .clickable {  pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) }
             )
             Image(
                 painter = painterResource(R.drawable.profilelines),
@@ -132,4 +151,7 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
             }, modifier = Modifier.testTag(SETTINGS_LOGOUT_BUTTON))
         }
     }
+
+
 }
+

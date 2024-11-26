@@ -3,6 +3,7 @@ package com.example.hangoutz.domain.repository
 import com.example.hangoutz.data.models.User
 import com.example.hangoutz.data.models.UserRequest
 import com.example.hangoutz.data.models.UserUpdateRequest
+import okhttp3.MultipartBody
 import retrofit2.Response
 
 interface UserRepository {
@@ -11,4 +12,5 @@ interface UserRepository {
     suspend fun insertUser(userRequest: UserRequest): Response<Unit>
     suspend fun getUserById(id: String): Response<List<User>>
     suspend fun patchUserNameById(id: String, newName: String): Response<Unit>
+    suspend fun patchAvatarById(newAvatar: MultipartBody.Part): Response<Unit>
 }

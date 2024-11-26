@@ -1,10 +1,12 @@
 package com.example.hangoutz.data.repository
 
+import com.example.hangoutz.data.models.AvatarRequest
 import com.example.hangoutz.data.models.User
 import com.example.hangoutz.data.models.UserRequest
 import com.example.hangoutz.data.models.UserUpdateRequest
 import com.example.hangoutz.data.remote.UserAPI
 import com.example.hangoutz.domain.repository.UserRepository
+import okhttp3.MultipartBody
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -30,6 +32,11 @@ class UserRepositoryImpl @Inject constructor(userAPI: UserAPI): UserRepository {
         return api.patchUserById(
             id = "eq.${id}",
             UserUpdateRequest(name = newName)
+        )
+    }
+    override suspend fun patchAvatarById(newAvatar: MultipartBody.Part): Response<Unit> {
+        return api.patchAvatarById(
+             newAvatar
         )
     }
 }
