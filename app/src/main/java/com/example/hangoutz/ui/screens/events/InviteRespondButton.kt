@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Dimensions
 
 @Composable
@@ -41,7 +42,7 @@ fun InviteRespondButton(
                 color = Color.White
             ),
             modifier = Modifier.semantics {
-                contentDescription =
+                contentDescription = Constants.INVITE_RESPOND_BUTTON_TEXT
             }
         )
     }
