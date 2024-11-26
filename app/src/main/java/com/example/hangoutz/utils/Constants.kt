@@ -9,9 +9,9 @@ object Constants {
     const val LOGO_ANIMATION_DELAY_SPLASH: Long = 800
     const val LOGO_ANIMATION_DURATION: Int = 500
     const val BACKGROUND_ANIMATION_DURATION: Int = 2000
-    const val SPLASH_SCREEN_BACKGROUND = "SplashScreenBackground"
-    const val SPLASH_SCREEN_LOGO = "SplashScreenLogo"
-    const val LOGO_ANIMATION_DELAY: Long = 500
+    const val LOGO_ANIMATION_DELAY: Long = 100
+    const val SPLASH_SCREEN_BACKGROUND = "splashScreenBackground"
+    const val SPLASH_SCREEN_LOGO = "splashScreenLogo"
 
     //credentials
     const val EMAIL = "Email"
@@ -67,6 +67,9 @@ object Constants {
     //Main screen
     const val TOP_BAR = "topBar"
 
+    //Invite respond button
+    const val INVITE_RESPOND_BUTTON_TEXT = "inviteRespondButtonText"
+
     //Validator strings
     const val AT_SIGN = "@"
     const val VALID_EMAIL = "@gmail.com"
@@ -86,10 +89,7 @@ object Constants {
 
     //Register tags
     const val REGISTER_BACKGROUND_COLUMN = "registerBackgroundColumn"
-    const val REGISTER_LOGO_COLUMN= "registerLogoColumn"
-    const val REGISTER_LOGO_BOX = "registerLogoBox"
     const val REGISTER_LOGO = "registerLogo"
-    const val REGISTER_FORM_COLUMN = "registerFormColumn"
     const val REGISTER_NAME_INPUT = "registerNameInput"
     const val REGISTER_NAME_ERROR = "registerNameError"
     const val REGISTER_EMAIL_INPUT = "registerEmailInput"
