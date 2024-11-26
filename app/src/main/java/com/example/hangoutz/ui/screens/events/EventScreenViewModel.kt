@@ -26,27 +26,31 @@ class EventScreenViewModel @Inject constructor(
     val uiState: StateFlow<EventScreenState> = _uiState
 
     init {
-        getEvents()
+      //  getEvents()
     }
-
-    private fun getEvents() {
-        viewModelScope.launch {
-            val response = eventRepository.getEventsWithAvatar()
-            if (response.isSuccessful && !response.body().isNullOrEmpty()) {
-                response.body()?.let {
-                    _uiState.value = _uiState.value.copy(
-                        events = it
-                    )
-                    it.forEach { event ->
-                        getCountOfAcceptedInvitesForEvent(
-                            id = event.id
-                        )
-                    }
-                }
-            } else {
-                Log.d("Events", Constants.GET_EVENTS_ERRORS)
-            }
-        }
+     fun getEvents(page: String = "going") {
+         _uiState.value.copy(
+             events = emptyList()
+         )
+         if (page == "going") {
+             viewModelScope.launch {
+                 val response = eventRepository.getEventsWithAvatar()
+                 if (response.isSuccessful && !response.body().isNullOrEmpty()) {
+                     response.body()?.let {
+                         _uiState.value = _uiState.value.copy(
+                             events = it
+                         )
+                         it.forEach { event ->
+                             getCountOfAcceptedInvitesForEvent(
+                                 id = event.id
+                             )
+                         }
+                     }
+                 } else {
+                     Log.d("Events", Constants.GET_EVENTS_ERRORS)
+                 }
+             }
+         }
     }
 
     private suspend fun getCountOfAcceptedInvitesForEvent(id: UUID) {
@@ -72,4 +76,5 @@ class EventScreenViewModel @Inject constructor(
         }
         return Orange
     }
+
 }

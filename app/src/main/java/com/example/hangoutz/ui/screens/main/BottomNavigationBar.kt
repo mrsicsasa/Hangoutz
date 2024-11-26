@@ -15,6 +15,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.hangoutz.R
 import com.example.hangoutz.ui.navigation.BottomNavItem
@@ -42,7 +43,13 @@ fun TabView(
                 selected = tabBarItem.route.name == currentRoute,
                 onClick = {
                     if (tabBarItem.route.name != currentRoute) {
-                        navController.navigate(route = tabBarItem.route.name)
+                        navController.navigate(route = tabBarItem.route.name) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
                     }
                 },
                 icon = {

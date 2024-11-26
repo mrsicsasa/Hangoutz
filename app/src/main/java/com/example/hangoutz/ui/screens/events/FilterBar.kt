@@ -32,8 +32,10 @@ import kotlinx.coroutines.launch
 fun FilterBar(
     pagerState: PagerState,
     tabTitles: List<String> = listOf("GOING", "INVITED", "MINE"),
-    scope: CoroutineScope
+    scope: CoroutineScope,
+    modifier: Modifier = Modifier
 ) {
+    val coroutineScope = rememberCoroutineScope()
     TabRow(
         selectedTabIndex = pagerState.currentPage,
         containerColor = Color(0xFF53576D).copy(
@@ -48,14 +50,14 @@ fun FilterBar(
                         .width(82.dp)
                         .padding(horizontal = 16.dp)
                         .clip(CircleShape)
-                        .background(Orange)
+                        .background(Orange.copy(alpha = 0.8f))
                 }
             )
         },
         divider = {
 
         },
-        modifier = Modifier
+        modifier = modifier
             //  .padding(horizontal = 16.dp)
             .height(44.dp)
             .clip(CircleShape.copy(CornerSize(20)))
@@ -64,8 +66,7 @@ fun FilterBar(
             Tab(
                 selected = pagerState.currentPage == index,
                 onClick = {
-                    Log.d("Filter", "---------------------")
-                    scope.launch { pagerState.scrollToPage(index) }
+                    coroutineScope.launch { pagerState.animateScrollToPage(index) }
                     //  viewModel.filterEventsByTab(index)
                 },
                 modifier = Modifier
@@ -80,10 +81,6 @@ fun FilterBar(
                         color = if (pagerState.currentPage == index) Color.Black else Orange
                     ),
                     //  modifier = Modifier.align(Alignment.CenterHorizontally)
-                    modifier = Modifier.clickable {
-                        Log.d("Filter", "---------------------")
-                        scope.launch { pagerState.scrollToPage(index) }
-                    }
                 )
             }
         }

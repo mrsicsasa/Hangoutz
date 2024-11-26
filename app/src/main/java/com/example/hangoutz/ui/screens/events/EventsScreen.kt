@@ -2,6 +2,7 @@ package com.example.hangoutz.ui.screens.events
 
 import android.annotation.SuppressLint
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -23,6 +24,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
@@ -32,6 +34,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.hangoutz.R
 import com.example.hangoutz.utils.Constants
@@ -46,22 +49,28 @@ fun MyEventsScreen(viewModel: EventScreenViewModel = hiltViewModel()) {
     val data = viewModel.uiState.collectAsState()
     val pagerState = rememberPagerState(pageCount = { 3 })
     val scope = rememberCoroutineScope()
-    Box(modifier = Modifier.padding(Dimensions.SCREEN_PADDING)) {
-        Box(modifier = Modifier.align(Alignment.TopCenter)) {
-            FilterBar(pagerState = pagerState, scope = scope)
-        }
+    Column(
+        modifier = Modifier
+            .padding(top = 10.dp)
+            .padding(horizontal = Dimensions.CONTENT_HORIZONTAL_PADDING)
+    ) {
+        FilterBar(
+            pagerState = pagerState,
+            scope = scope,
+            modifier = Modifier.padding(end = 10.dp, start = 5.dp)
+        )
         HorizontalPager(
             state = pagerState,
             pageSize = PageSize.Fill,
             beyondViewportPageCount = PagerDefaults.BeyondViewportPageCount,
             modifier = Modifier
-                .fillMaxSize()
                 .testTag("Pager")
+
         ) { page ->
             when (page) {
-                0 -> EventsList(data, viewModel)
-                1 -> EventsList(data , viewModel)
-                2 -> EventsList(data, viewModel)
+                0 -> EventsList(data, viewModel,page = "going")
+                1 -> EventsList(data, viewModel, page = "invited")
+                2 -> EventsList(data, viewModel, page = "mine")
             }
         }
     }
@@ -69,12 +78,16 @@ fun MyEventsScreen(viewModel: EventScreenViewModel = hiltViewModel()) {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun EventsList(data: State<EventScreenState>, viewModel: EventScreenViewModel) {
+fun EventsList(
+    data: State<EventScreenState>,
+    viewModel: EventScreenViewModel,
+    page: String,
+) {
     Box() {
         Column(
             modifier = Modifier
                 .padding(top = Dimensions.CONTENT_TOP_PADDING)
-                .padding(horizontal = Dimensions.CONTENT_HORIZONTAL_PADDING)
+                //     .padding(horizontal = Dimensions.CONTENT_HORIZONTAL_PADDING)
                 .background(Color.Transparent)
                 .fillMaxSize()
         ) {
@@ -114,5 +127,9 @@ fun EventsList(data: State<EventScreenState>, viewModel: EventScreenViewModel) {
                 modifier = Modifier.size(Dimensions.FLOATING_ICON_SIZE)
             )
         }
+    }
+    LaunchedEffect(key1 = true) {
+        Log.d("Filter","-------------${page}")
+        viewModel.getEvents(page = page)
     }
 }
