@@ -29,7 +29,7 @@ class EventScreenViewModel @Inject constructor(
       //  getEvents()
     }
      fun getEvents(page: String = "going") {
-         _uiState.value.copy(
+         _uiState.value = _uiState.value.copy(
              events = emptyList()
          )
          if (page == "going") {

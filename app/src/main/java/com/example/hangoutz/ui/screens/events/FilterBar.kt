@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -24,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import com.example.hangoutz.ui.theme.Orange
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -35,7 +37,6 @@ fun FilterBar(
     scope: CoroutineScope,
     modifier: Modifier = Modifier
 ) {
-    val coroutineScope = rememberCoroutineScope()
     TabRow(
         selectedTabIndex = pagerState.currentPage,
         containerColor = Color(0xFF53576D).copy(
@@ -46,42 +47,42 @@ fun FilterBar(
             Box(
                 modifier = Modifier.run {
                     tabIndicatorOffset(tabPositions[pagerState.currentPage])
-                        .height(42.dp)
+                        .fillMaxHeight()
                         .width(82.dp)
                         .padding(horizontal = 16.dp)
                         .clip(CircleShape)
                         .background(Orange.copy(alpha = 0.8f))
+                        .zIndex(-1f)
                 }
             )
         },
-        divider = {
-
-        },
+        divider = { },
         modifier = modifier
             //  .padding(horizontal = 16.dp)
             .height(44.dp)
-            .clip(CircleShape.copy(CornerSize(20)))
+            .clip(CircleShape.copy(CornerSize(35)))
     ) {
         tabTitles.forEachIndexed { index, title ->
             Tab(
                 selected = pagerState.currentPage == index,
                 onClick = {
-                    coroutineScope.launch { pagerState.animateScrollToPage(index) }
+                    scope.launch { pagerState.animateScrollToPage(index) }
                     //  viewModel.filterEventsByTab(index)
                 },
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(horizontal = 16.dp)
             ) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        fontSize = 13.sp,
-                        fontWeight = FontWeight(400),
-                        color = if (pagerState.currentPage == index) Color.Black else Orange
-                    ),
-                    //  modifier = Modifier.align(Alignment.CenterHorizontally)
-                )
+                Box {
+                    Text(
+                        text = title,
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight(400),
+                            color = if (pagerState.currentPage == index) Color.Black else Orange
+                        ),
+                    )
+                }
             }
         }
     }
