@@ -52,4 +52,7 @@ object Constants {
 
     //Main screen
     const val TOP_BAR = "TopBar"
+
+    //Invite respond button
+    const val INVITE_RESPOND_BUTTON = ""
 }

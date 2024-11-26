@@ -18,8 +18,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.hangoutz.R
@@ -61,8 +62,8 @@ fun EventCard(
         ) {
             ProfileScreen(
                 imageUrl = imageUrl,
-                boxModifier = Modifier.testTag(Constants.LOGO_BACKGROUND),
-                imageModifier = Modifier.testTag(Constants.LOGO_IMAGE)
+                boxModifier = Modifier.semantics { contentDescription = Constants.LOGO_BACKGROUND },
+                imageModifier = Modifier.semantics { contentDescription = Constants.LOGO_IMAGE }
             )
             Spacer(modifier = Modifier.width(Dimensions.SPACE_BETWEEN_IMAGE_AND_TEXT))
             Column {
@@ -71,14 +72,14 @@ fun EventCard(
                     style = MaterialTheme.typography.displayLarge,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.testTag(Constants.EVENT_TITLE)
+                    modifier = Modifier.semantics { Constants.EVENT_TITLE }
                 )
                 Text(
                     text = "@ ${place}",
                     style = MaterialTheme.typography.displayMedium,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.testTag(Constants.EVENT_PLACE)
+                    modifier = Modifier.semantics { contentDescription = Constants.EVENT_PLACE }
                 )
                 Spacer(modifier = Modifier.height(Dimensions.SPACE_BETWEEN_PLACE_AND_DATE))
                 Text(
@@ -86,7 +87,7 @@ fun EventCard(
                     style = MaterialTheme.typography.headlineSmall.copy(
                         color = Color.White
                     ),
-                    modifier = Modifier.testTag(Constants.EVENT_DATE)
+                    modifier = Modifier.semantics { contentDescription = Constants.EVENT_DATE }
                 )
             }
         }
@@ -107,7 +108,7 @@ fun EventCard(
                         fontColor = Color.White,
                         title = stringResource(R.string.decline_button_text),
                         onClick = {},
-                        modifier = Modifier.testTag(Constants.DECLINE_INVITATION_BUTTON)
+                        modifier = Modifier.semantics { contentDescription = Constants.DECLINE_INVITATION_BUTTON }
                     )
                     Spacer(modifier = Modifier.width(10.dp))
                     InviteRespondButton(
@@ -115,7 +116,7 @@ fun EventCard(
                         fontColor = Color.Black,
                         title = stringResource(R.string.accept_button_text),
                         onClick = {},
-                        modifier = Modifier.testTag(Constants.ACCEPT_INVITATION_BUTTON)
+                        modifier = Modifier.semantics { contentDescription = Constants.ACCEPT_INVITATION_BUTTON }
                     )
                 }
             } else {
@@ -127,7 +128,7 @@ fun EventCard(
                     style = MaterialTheme.typography.displaySmall.copy(
                         color = TextBodyGrayColor,
                     ),
-                    modifier = Modifier.testTag(Constants.NUMBER_OF_PEOPLE)
+                    modifier = Modifier.semantics { contentDescription = Constants.NUMBER_OF_PEOPLE }
                 )
             }
         }

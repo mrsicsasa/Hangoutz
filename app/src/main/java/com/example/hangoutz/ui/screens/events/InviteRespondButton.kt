@@ -10,6 +10,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import com.example.hangoutz.utils.Dimensions
 
 @Composable
@@ -37,7 +39,10 @@ fun InviteRespondButton(
             text = title,
             style = MaterialTheme.typography.displaySmall.copy(
                 color = Color.White
-            )
+            ),
+            modifier = Modifier.semantics {
+                contentDescription =
+            }
         )
     }
 }
