@@ -1,5 +1,5 @@
 package com.example.hangoutz.data.models
 
-data class FriendRoot(
+data class ListOfFriends(
     val users: Friend
 )

@@ -10,8 +10,12 @@ object Dimensions {
     val CONTENT_HORIZONTAL_PADDING: Dp = 5.dp
     val LAZY_COLUMN_BOTTOM_PADDING: Dp = 20.dp
     val SPACE_HEIGHT_BETWEEN_CARDS: Dp = 20.dp
+
+    //Floating Button
     val FLOATING_BUTTON_PADDING: Dp = 20.dp
     val FLOATING_ICON_SIZE: Dp = 40.dp
+    val FLOATING_BUTTON_BORDER = 2.dp
+
 
     //InviteRespondButton
     val INVITE_RESPOND_BUTTON_ROUNDED_RADIUS: Dp = 20.dp

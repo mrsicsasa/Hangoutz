@@ -112,5 +112,4 @@ object Constants {
     const val FRIENDS_LIST_PHOTO = "friendsListPhoto"
     const val FRIENDS_LIST_NAME = "friendsListName"
     const val FRIENDS_ADD_BUTTON = "friendsAddButton"
-    const val FRIENDS_ADD_ICON = "friendsAddIcon"
 }
