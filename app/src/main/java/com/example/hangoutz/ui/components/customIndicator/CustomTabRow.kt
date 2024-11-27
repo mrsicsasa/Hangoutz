@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -104,7 +103,7 @@ fun CustomTab(
 
     Box(
         modifier = modifier
-            .fillMaxWidth()
+            .width(if (LocalConfiguration.current.screenWidthDp > 400) 120.dp * items.size +10.dp else 100.dp * items.size +10.dp)
             .clip(CircleShape)
             .background(
                 Color(0xFF53576D75).copy(
@@ -112,8 +111,8 @@ fun CustomTab(
                 )
             )
             .height(if (LocalConfiguration.current.screenWidthDp > 400) 40.dp else 30.dp)
-        //  .padding(8.dp)
-           .padding(if( LocalConfiguration.current.screenWidthDp > 400) 5.dp else 0.dp)
+            //  .padding(8.dp)
+            .padding(if (LocalConfiguration.current.screenWidthDp > 400) 5.dp else 0.dp)
     ) {
         MyTabIndicator(
             indicatorWidth = if (LocalConfiguration.current.screenWidthDp > 400) 120.dp else 100.dp,

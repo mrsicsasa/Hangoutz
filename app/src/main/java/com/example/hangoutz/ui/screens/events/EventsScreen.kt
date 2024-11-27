@@ -113,7 +113,7 @@ fun EventsList(
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(bottom = Dimensions.LAZY_COLUMN_BOTTOM_PADDING)
+                 //   .padding(bottom = Dimensions.LAZY_COLUMN_BOTTOM_PADDING)
             ) {
                 items(events) { event ->
                     val countOfPeoplePair: Pair<UUID, Int>? =
@@ -123,12 +123,8 @@ fun EventsList(
                         event.users.avatar
                             ?: stringResource(R.string.default_user_image)
                     } else {
-                        if(userAvatar?.second != null) {
-                            userAvatar.second
-                        } else{
-                            stringResource(R.string.default_user_image)
-                        }
-                    })?.let {
+                        userAvatar?.second ?: stringResource(R.string.default_user_image)
+                    }).let {
                         EventCard(
                             backgroundColor = viewModel.getCardColor(events.indexOf(event)),
                             imageUrl = it,
@@ -138,7 +134,8 @@ fun EventsList(
                             countOfPeople = (countOfPeoplePair?.second ?: 0),
                             modifier = Modifier.semantics {
                                 contentDescription = Constants.EVENT_CARD
-                            }
+                            },
+                            isInvited = if(page == EventsFilterOptions.INVITED.name) true else false
                         )
                     }
                     Spacer(modifier = Modifier.height(Dimensions.SPACE_HEIGHT_BETWEEN_CARDS))
