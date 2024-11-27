@@ -127,7 +127,7 @@ fun FriendsScreen(navController: NavController, viewModel: FriendsViewModel = hi
                 contentDescription = stringResource(R.string.floating_action_button_icon_description),
                 modifier = Modifier
                     .size(Dimensions.FLOATING_ICON_SIZE)
-                    .semantics{
+                    .semantics {
                         contentDescription = Constants.FRIENDS_ADD_ICON
                     }
             )
