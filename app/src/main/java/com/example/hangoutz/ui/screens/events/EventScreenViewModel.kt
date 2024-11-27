@@ -10,6 +10,7 @@ import com.example.hangoutz.data.local.SharedPreferencesManager
 import com.example.hangoutz.data.models.toEventCardDPO
 import com.example.hangoutz.domain.repository.EventRepository
 import com.example.hangoutz.domain.repository.InviteRepository
+import com.example.hangoutz.domain.repository.UserRepository
 import com.example.hangoutz.ui.theme.GreenDark
 import com.example.hangoutz.ui.theme.Orange
 import com.example.hangoutz.ui.theme.PurpleDark
@@ -26,6 +27,7 @@ import javax.inject.Inject
 class EventScreenViewModel @Inject constructor(
     private val eventRepository: EventRepository,
     private val inviteRepository: InviteRepository,
+    private val userRepository: UserRepository,
     @ApplicationContext private val context: Context
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(EventScreenState())
@@ -59,7 +61,25 @@ class EventScreenViewModel @Inject constructor(
             Log.d("Error", response.message())
         }
     }
+    private suspend fun getAvatars(id: UUID) {
+        val response = userRepository.getUserAvatar(id.toString())
+        Log.d("Avatars", response?.body().toString())
+        if (response != null) {
+            if (response.isSuccessful) {
+                response.body()?.let {
 
+                    _uiState.value = _uiState.value.copy(
+                        avatars = _uiState.value.avatars + Pair(
+                            id,
+                            it.first().avatar
+                            )
+                    )
+                }
+            } else {
+                Log.d("Error", response.message())
+            }
+        }
+    }
     fun getCardColor(cardIndex: Int): Color {
         if (cardIndex % 3 == 0) {
             return PurpleDark
@@ -122,7 +142,7 @@ class EventScreenViewModel @Inject constructor(
                         }
                     )
                     it.forEach { event ->
-                        // getCountOfAcceptedInvitesForEvent(id = event.)
+                        getAvatars(event.events.owner)
                     }
                 }
 
@@ -158,7 +178,7 @@ class EventScreenViewModel @Inject constructor(
                             }
                     )
                     it.forEach { event ->
-                        // getCountOfAcceptedInvitesForEvent(id = event.)
+                        getAvatars(event.events.owner)
                     }
                 }
 

@@ -1,5 +1,6 @@
 package com.example.hangoutz.data.repository
 
+import com.example.hangoutz.data.models.EventCardAvatar
 import com.example.hangoutz.data.models.User
 import com.example.hangoutz.data.models.UserRequest
 import com.example.hangoutz.data.remote.UserAPI
@@ -15,6 +16,10 @@ class UserRepositoryImpl @Inject constructor(userAPI: UserAPI) : UserRepository 
 
     override suspend fun getUserById(id: String): Response<List<User>> {
         return api.getUserById(id = "eq.${id}")
+    }
+
+    override suspend fun getUserAvatar(id: String): Response<List<EventCardAvatar>> {
+        return api.getUserAvatar(id = "eq.$id")
     }
 
     override suspend fun getUserByEmailAndPassword(

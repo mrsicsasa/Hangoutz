@@ -118,18 +118,29 @@ fun EventsList(
                 items(events) { event ->
                     val countOfPeoplePair: Pair<UUID, Int>? =
                         data.value.counts.find { it.first == event.id }
-                    EventCard(
-                        backgroundColor = viewModel.getCardColor(events.indexOf(event)),
-                        imageUrl = event.users.avatar
-                            ?: stringResource(R.string.default_user_image),
-                        title = event.title,
-                        place = event.place ?: "",
-                        date = event.date.toDate().toEventDateDPO(),
-                        countOfPeople = (countOfPeoplePair?.second ?: 0),
-                        modifier = Modifier.semantics {
-                            contentDescription = Constants.EVENT_CARD
+                    val userAvatar: Pair<UUID, String?>? = data.value.avatars.find { it.first == event.owner }
+                    (if(page == EventsFilterOptions.MINE.name) {
+                        event.users.avatar
+                            ?: stringResource(R.string.default_user_image)
+                    } else {
+                        if(userAvatar?.second != null) {
+                            userAvatar.second
+                        } else{
+                            stringResource(R.string.default_user_image)
                         }
-                    )
+                    })?.let {
+                        EventCard(
+                            backgroundColor = viewModel.getCardColor(events.indexOf(event)),
+                            imageUrl = it,
+                            title = event.title,
+                            place = event.place ?: "",
+                            date = event.date.toDate().toEventDateDPO(),
+                            countOfPeople = (countOfPeoplePair?.second ?: 0),
+                            modifier = Modifier.semantics {
+                                contentDescription = Constants.EVENT_CARD
+                            }
+                        )
+                    }
                     Spacer(modifier = Modifier.height(Dimensions.SPACE_HEIGHT_BETWEEN_CARDS))
                 }
             }

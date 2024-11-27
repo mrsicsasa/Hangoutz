@@ -9,5 +9,5 @@ data class EventScreenState(
     var eventsMine: List<EventCardDPO> = emptyList(),
     var counts: List<Pair<UUID, Int>> = emptyList(),
     var isLoading: Boolean = true,
-    var avatars: List<Pair<UUID, String>> = emptyList()
+    var avatars: List<Pair<UUID, String?>> = emptyList()
 )
