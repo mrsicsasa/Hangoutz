@@ -13,7 +13,6 @@ object Constants {
     const val SPLASH_SCREEN_BACKGROUND = "splashScreenBackground"
     const val SPLASH_SCREEN_LOGO = "splashScreenLogo"
 
-
     //credentials
     const val EMAIL = "Email"
     const val PASSWORD = "Password"
@@ -49,6 +48,9 @@ object Constants {
     const val DAY_THRESHOLD = 7
     const val PADDING_ZERO_THRESHOLD = 10
 
+    //Component tags
+    const val ACTION_BUTTON_TEXT = "actionButtonText"
+
     //Test tags settings screen
     const val SETTINGS_NAME_FIELD_TAG = "settingsNameField"
     const val SETTINGS_NAME_ICON_TAG = "settingsNameIcon"
@@ -71,4 +73,35 @@ object Constants {
     //Invite respond button
     const val INVITE_RESPOND_BUTTON_TEXT = "inviteRespondButtonText"
 
+    //Validator strings
+    const val AT_SIGN = "@"
+    const val VALID_EMAIL = "@gmail.com"
+    const val CONTAINS_DIGIT = ".*\\d.*"
+
+    //RegisterViewModel
+    const val MIN_NAME_LENGTH = 3
+    const val MAX_NAME_LENGTH = 25
+    const val MIN_PASSWORD_LENGTH = 8
+    const val TWO_HALVES = 2
+    const val NAME_ERROR_MESSAGE = "Name must be 3–25 characters"
+    const val EMAIL_FORMAT_ERROR_MESSAGE = "Email must be in correct format"
+    const val EMAIL_DUPLICATE_ERROR_MESSAGE = "Email already in use"
+    const val PASSWORD_ERROR_MESSAGE = "Password must contain at least one number and be minimum 8 characters long"
+    const val CONFIRM_PASSWORD_ERROR_MESSAGE = "Passwords must match"
+    const val GENERIC_ERROR_MESSAGE = "An error has occurred"
+
+    //Register tags
+    const val REGISTER_BACKGROUND_COLUMN = "registerBackgroundColumn"
+    const val REGISTER_LOGO = "registerLogo"
+    const val REGISTER_NAME_INPUT = "registerNameInput"
+    const val REGISTER_NAME_ERROR = "registerNameError"
+    const val REGISTER_EMAIL_INPUT = "registerEmailInput"
+    const val REGISTER_EMAIL_ERROR = "registerEmailError"
+    const val REGISTER_PASSWORD_INPUT = "registerPasswordInput"
+    const val REGISTER_PASSWORD_ERROR = "registerPasswordError"
+    const val REGISTER_CONFIRM_PASSWORD_INPUT = "registerConfirmPasswordInput"
+    const val REGISTER_CONFIRM_PASSWORD_ERROR = "registerConfirmPasswordError"
+    const val REGISTER_INCOMPLETE_FORM_ERROR= "registerIncompleteFormError"
+    const val REGISTER_CREATE_ACCOUNT_BOX = "registerCreateAccountBox"
+    const val REGISTER_CREATE_ACCOUNT_BUTTON = "registerCreateAccountButton"
 }

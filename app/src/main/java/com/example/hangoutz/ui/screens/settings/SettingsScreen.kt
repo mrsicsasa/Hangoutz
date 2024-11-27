@@ -31,6 +31,7 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.example.hangoutz.BuildConfig
 import com.example.hangoutz.R
 import com.example.hangoutz.ui.components.ActionButton
+import com.example.hangoutz.ui.components.NameInput
 import com.example.hangoutz.ui.navigation.NavigationItem
 import com.example.hangoutz.ui.theme.Ivory
 import com.example.hangoutz.utils.Constants.LOGOUT

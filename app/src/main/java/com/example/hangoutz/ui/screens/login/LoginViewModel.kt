@@ -90,10 +90,10 @@ class LoginViewModel @Inject constructor(
     }
 
     fun onTextChanged(newText: String) {
-        _uiState.value = _uiState.value.copy(email = newText, isEmailError = false)
+        _uiState.value = _uiState.value.copy(email = newText.trim(), isEmailError = false)
     }
 
     fun onPassChanged(newText: String) {
-        _uiState.value = _uiState.value.copy(password = newText, isPasswordError = false)
+        _uiState.value = _uiState.value.copy(password = newText.trim(), isPasswordError = false)
     }
 }

@@ -1,8 +1,5 @@
 package com.example.hangoutz.utils
 
-import android.content.Context
-import com.example.hangoutz.R
-
 object Validator {
 
     fun areAllFieldsFilled(
@@ -31,16 +28,18 @@ object Validator {
     }
 
     fun isValidNameLength(name: String): Boolean {
-        return (name.length >= 3 && name.length <= 25)
+        return (name.length >= Constants.MIN_NAME_LENGTH && name.length <= Constants.MAX_NAME_LENGTH)
     }
 
-    fun isValidEmail(context: Context, email: String): Boolean {
-        return (email.endsWith(context.getString(R.string.valid_email)) == true)
+    fun isValidEmail(email: String): Boolean {
+        return (email.endsWith(Constants.VALID_EMAIL) == true &&
+                !email.startsWith(Constants.AT_SIGN) &&
+                email.split(Constants.AT_SIGN).size == Constants.TWO_HALVES)
     }
 
-    fun isValidPassword(context: Context, password: String): Boolean {
-        if (password.length >= 8) {
-            val regex = Regex(context.getString(R.string.contains_digit))
+    fun isValidPassword(password: String): Boolean {
+        if (password.length >= Constants.MIN_PASSWORD_LENGTH) {
+            val regex = Regex(Constants.CONTAINS_DIGIT)
             return regex.containsMatchIn(password)
         }
         return false
