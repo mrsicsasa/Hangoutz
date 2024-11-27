@@ -43,9 +43,14 @@ class FriendsViewModel @Inject constructor(
             }
             if (response.value.isSuccessful) {
                 response.value.body()?.let {
-                    _uiState.value = _uiState.value.copy(friendWrappers = it)
+                    // TODO: Pitaj kako tačno sortirati imena
+                    _uiState.value = _uiState.value.copy(friendWrappers = uiState.value.friendWrappers + it.sortedBy { it.users.name.uppercase() })
                 }
             }
         }
+    }
+
+    fun onAddFriendClick() {
+        return
     }
 }
