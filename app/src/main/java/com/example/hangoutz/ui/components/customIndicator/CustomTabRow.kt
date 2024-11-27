@@ -28,6 +28,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.hangoutz.ui.theme.Ivory
 import com.example.hangoutz.ui.theme.Orange
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -65,9 +66,9 @@ private fun MyTabItem(
 ) {
     val tabTextColor: Color by animateColorAsState(
         targetValue = if (isSelected) {
-            White
+            Color(0xFF534F4F)
         } else {
-            Color.Black
+            Orange
         },
         animationSpec = tween(easing = LinearEasing),
     )
@@ -92,7 +93,6 @@ fun CustomTab(
     selectedItemIndex: Int,
     items: List<String>,
     modifier: Modifier = Modifier,
-    onClick: (index: Int) -> Unit,
     scope: CoroutineScope,
     pagerState: PagerState
 ) {
@@ -103,7 +103,7 @@ fun CustomTab(
 
     Box(
         modifier = modifier
-            .width(if (LocalConfiguration.current.screenWidthDp > 400) 120.dp * items.size +10.dp else 100.dp * items.size +10.dp)
+            .width(if (LocalConfiguration.current.screenWidthDp > 400) 120.dp * items.size + 10.dp else 100.dp * items.size + 10.dp)
             .clip(CircleShape)
             .background(
                 Color(0xFF53576D75).copy(

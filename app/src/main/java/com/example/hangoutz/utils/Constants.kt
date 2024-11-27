@@ -32,6 +32,9 @@ object Constants {
     //Events screen
     const val GET_EVENTS_ERRORS = "Loading events errors"
     const val CREATE_EVENT_BUTTON = "createEventButton"
+    const val FILTER_BAR_ITEM_COUNT: Int = 3
+    const val INVITE_STATUS_ACCEPTED = "accepted"
+    const val INVITE_STATUS_INVITED = "invited"
 
     //EventCard
     const val EVENT_CARD = "eventCard"

@@ -1,6 +1,5 @@
 package com.example.hangoutz.ui.screens.events
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import androidx.compose.ui.graphics.Color
@@ -33,16 +32,21 @@ class EventScreenViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(EventScreenState())
     val uiState: StateFlow<EventScreenState> = _uiState
 
-    @SuppressLint("SuspiciousIndentation")
+
     fun getEvents(page: String = EventsFilterOptions.GOING.name) {
         viewModelScope.launch {
-            if (page == EventsFilterOptions.MINE.name) {
-                getMineEvents()
-            } else if (page == EventsFilterOptions.GOING.name) {
-                getGoingEvents()
-            }
-            else if(page == EventsFilterOptions.INVITED.name){
-                getInvitedEvents()
+            when (page) {
+                EventsFilterOptions.MINE.name -> {
+                    getMineEvents()
+                }
+
+                EventsFilterOptions.GOING.name -> {
+                    getEventsFromInvites(page = page)
+                }
+
+                EventsFilterOptions.INVITED.name -> {
+                    getEventsFromInvites(page = page)
+                }
             }
         }
     }
@@ -61,25 +65,24 @@ class EventScreenViewModel @Inject constructor(
             Log.d("Error", response.message())
         }
     }
+
     private suspend fun getAvatars(id: UUID) {
         val response = userRepository.getUserAvatar(id.toString())
-        Log.d("Avatars", response?.body().toString())
-        if (response != null) {
-            if (response.isSuccessful) {
-                response.body()?.let {
+        if (response.isSuccessful) {
+            response.body()?.let {
 
-                    _uiState.value = _uiState.value.copy(
-                        avatars = _uiState.value.avatars + Pair(
-                            id,
-                            it.first().avatar
-                            )
+                _uiState.value = _uiState.value.copy(
+                    avatars = _uiState.value.avatars + Pair(
+                        id,
+                        it.first().avatar
                     )
-                }
-            } else {
-                Log.d("Error", response.message())
+                )
             }
+        } else {
+            Log.d("Error", response.message())
         }
     }
+
     fun getCardColor(cardIndex: Int): Color {
         if (cardIndex % 3 == 0) {
             return PurpleDark
@@ -90,6 +93,7 @@ class EventScreenViewModel @Inject constructor(
     }
 
     private suspend fun getMineEvents() {
+        Log.d("Events", "pozvano")
         _uiState.value = _uiState.value.copy(
             eventsMine = emptyList(),
             counts = emptyList(),
@@ -118,7 +122,7 @@ class EventScreenViewModel @Inject constructor(
         )
     }
 
-    private suspend fun getGoingEvents() {
+    private suspend fun getEventsFromInvites(page: String) {
         _uiState.value = _uiState.value.copy(
             eventsGoing = emptyList(),
             avatars = emptyList(),
@@ -128,55 +132,26 @@ class EventScreenViewModel @Inject constructor(
             SharedPreferencesManager.getUserId(context)
                 ?.let {
                     eventRepository.getEventsFromInvites(
-                        eventStatus = "accepted",
+                        eventStatus = if (page == EventsFilterOptions.GOING.name) Constants.INVITE_STATUS_ACCEPTED else Constants.INVITE_STATUS_INVITED,
                         userID = it
                     )
                 }
-        Log.d("Events", response?.body().toString())
         if (response != null) {
             if (response.isSuccessful && !response.body().isNullOrEmpty()) {
                 response.body()?.let {
-                    _uiState.value = _uiState.value.copy(
-                        eventsGoing = _uiState.value.eventsGoing + it.map { event ->
-                            event.toEventCardDPO()
-                        }
-                    )
-                    it.forEach { event ->
-                        getAvatars(event.events.owner)
-                    }
-                }
-
-            } else {
-                Log.d("Events", Constants.GET_EVENTS_ERRORS)
-            }
-        }
-        _uiState.value = _uiState.value.copy(
-            isLoading = false
-        )
-    }
-    private suspend fun getInvitedEvents() {
-        _uiState.value = _uiState.value.copy(
-            eventsInveted = emptyList(),
-            avatars = emptyList(),
-            isLoading = true
-        )
-        val response =
-            SharedPreferencesManager.getUserId(context)
-                ?.let {
-                    eventRepository.getEventsFromInvites(
-                        eventStatus = "invited",
-                        userID = it
-                    )
-                }
-        Log.d("Events", response?.body().toString())
-        if (response != null) {
-            if (response.isSuccessful && !response.body().isNullOrEmpty()) {
-                response.body()?.let {
-                    _uiState.value = _uiState.value.copy(
-                        eventsInveted = _uiState.value.eventsInveted + it.map { event ->
+                    if (page == EventsFilterOptions.GOING.name) {
+                        _uiState.value = _uiState.value.copy(
+                            eventsGoing = _uiState.value.eventsGoing + it.map { event ->
                                 event.toEventCardDPO()
                             }
-                    )
+                        )
+                    } else {
+                        _uiState.value = _uiState.value.copy(
+                            eventsInveted = _uiState.value.eventsGoing + it.map { event ->
+                                event.toEventCardDPO()
+                            }
+                        )
+                    }
                     it.forEach { event ->
                         getAvatars(event.events.owner)
                     }

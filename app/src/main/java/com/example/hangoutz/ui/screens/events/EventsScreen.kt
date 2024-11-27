@@ -2,7 +2,6 @@ package com.example.hangoutz.ui.screens.events
 
 import android.annotation.SuppressLint
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -17,7 +16,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.PagerDefaults
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -27,10 +25,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -55,25 +50,20 @@ import java.util.UUID
 @Composable
 fun MyEventsScreen(viewModel: EventScreenViewModel = hiltViewModel()) {
     val data = viewModel.uiState.collectAsState()
-    val pagerState = rememberPagerState(pageCount = { 3 })
     val scope = rememberCoroutineScope()
-    val (selected, setSelected) = remember {
-        mutableStateOf(0)
-    }
     Column(
         modifier = Modifier
             .padding(top = 10.dp)
             .padding(horizontal = Dimensions.CONTENT_HORIZONTAL_PADDING)
     ) {
         CustomTab(
-            items = listOf("GOING", "INVITED","MINE"),
-            selectedItemIndex = pagerState.currentPage,
-            onClick = setSelected,
+            items = listOf("GOING", "INVITED", "MINE"),
+            selectedItemIndex = data.value.pagerState.currentPage,
             scope = scope,
-            pagerState = pagerState
+            pagerState = data.value.pagerState
         )
         HorizontalPager(
-            state = pagerState,
+            state = data.value.pagerState,
             pageSize = PageSize.Fill,
             beyondViewportPageCount = PagerDefaults.BeyondViewportPageCount,
             modifier = Modifier
@@ -81,9 +71,35 @@ fun MyEventsScreen(viewModel: EventScreenViewModel = hiltViewModel()) {
 
         ) { page ->
             when (page) {
-                0 -> EventsList(data, viewModel,page = EventsFilterOptions.GOING.name,data.value.eventsGoing)
-                1 -> EventsList(data, viewModel, page = EventsFilterOptions.INVITED.name,data.value.eventsInveted)
-                2 -> EventsList(data, viewModel, page = EventsFilterOptions.MINE.name,data.value.eventsMine)
+                0 -> EventsList(
+                    page = EventsFilterOptions.GOING.name,
+                    events = data.value.eventsGoing,
+                    isLoading = data.value.isLoading,
+                    counts = data.value.counts,
+                    avatars = data.value.avatars,
+                    getBackgroundColor = { viewModel.getCardColor(it) },
+                    getEvents = { viewModel.getEvents(it) }
+                )
+
+                1 -> EventsList(
+                    page = EventsFilterOptions.INVITED.name,
+                    events = data.value.eventsInveted,
+                    isLoading = data.value.isLoading,
+                    counts = data.value.counts,
+                    avatars = data.value.avatars,
+                    getBackgroundColor = { viewModel.getCardColor(it) },
+                    getEvents = { viewModel.getEvents(it) }
+                )
+
+                2 -> EventsList(
+                    page = EventsFilterOptions.MINE.name,
+                    events = data.value.eventsMine,
+                    isLoading = data.value.isLoading,
+                    counts = data.value.counts,
+                    avatars = data.value.avatars,
+                    getBackgroundColor = { viewModel.getCardColor(it) },
+                    getEvents = { viewModel.getEvents(it) }
+                )
             }
         }
     }
@@ -92,17 +108,19 @@ fun MyEventsScreen(viewModel: EventScreenViewModel = hiltViewModel()) {
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun EventsList(
-    data: State<EventScreenState>,
-    viewModel: EventScreenViewModel,
     page: String,
-    events:List<EventCardDPO>
+    events: List<EventCardDPO>,
+    isLoading: Boolean,
+    counts: List<Pair<UUID, Int>>,
+    avatars: List<Pair<UUID, String?>>,
+    getBackgroundColor: (index: Int) -> Color,
+    getEvents: (page: String) -> Unit
 ) {
     Box(contentAlignment = Alignment.Center) {
-        if (data.value.isLoading) {
+        if (isLoading) {
             CircularProgressIndicator()
-        }
-        else if(events.isEmpty() && !data.value.isLoading) {
-            Text("No events available", color = Color.LightGray)
+        } else if (events.isEmpty()) {
+            Text(stringResource(R.string.no_events_available), color = Color.LightGray)
         }
         Column(
             modifier = Modifier
@@ -113,20 +131,20 @@ fun EventsList(
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                 //   .padding(bottom = Dimensions.LAZY_COLUMN_BOTTOM_PADDING)
             ) {
                 items(events) { event ->
                     val countOfPeoplePair: Pair<UUID, Int>? =
-                        data.value.counts.find { it.first == event.id }
-                    val userAvatar: Pair<UUID, String?>? = data.value.avatars.find { it.first == event.owner }
-                    (if(page == EventsFilterOptions.MINE.name) {
+                        counts.find { it.first == event.id }
+                    val userAvatar: Pair<UUID, String?>? =
+                        avatars.find { it.first == event.owner }
+                    (if (page == EventsFilterOptions.MINE.name) {
                         event.users.avatar
                             ?: stringResource(R.string.default_user_image)
                     } else {
                         userAvatar?.second ?: stringResource(R.string.default_user_image)
                     }).let {
                         EventCard(
-                            backgroundColor = viewModel.getCardColor(events.indexOf(event)),
+                            backgroundColor = getBackgroundColor(events.indexOf(event)),
                             imageUrl = it,
                             title = event.title,
                             place = event.place ?: "",
@@ -135,7 +153,7 @@ fun EventsList(
                             modifier = Modifier.semantics {
                                 contentDescription = Constants.EVENT_CARD
                             },
-                            isInvited = if(page == EventsFilterOptions.INVITED.name) true else false
+                            isInvited = if (page == EventsFilterOptions.INVITED.name) true else false
                         )
                     }
                     Spacer(modifier = Modifier.height(Dimensions.SPACE_HEIGHT_BETWEEN_CARDS))
@@ -160,7 +178,6 @@ fun EventsList(
         }
     }
     LaunchedEffect(key1 = true) {
-        Log.d("Filter","-------------${page}")
-        viewModel.getEvents(page = page)
+        getEvents(page)
     }
 }
