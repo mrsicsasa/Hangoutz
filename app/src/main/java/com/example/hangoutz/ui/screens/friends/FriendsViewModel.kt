@@ -4,8 +4,10 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hangoutz.data.local.SharedPreferencesManager
+import com.example.hangoutz.data.models.Friend
 import com.example.hangoutz.data.models.FriendRoot
 import com.example.hangoutz.domain.repository.FriendsRepository
+import com.example.hangoutz.utils.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -48,6 +50,10 @@ class FriendsViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun userPictureOrDefault(friend: Friend): String {
+        return friend.avatar ?: Constants.DEFAULT_USER_PHOTO
     }
 
     fun onAddFriendClick() {

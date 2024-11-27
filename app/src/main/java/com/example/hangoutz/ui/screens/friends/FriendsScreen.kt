@@ -89,7 +89,11 @@ fun FriendsScreen(navController: NavController, viewModel: FriendsViewModel = hi
                         ) {
                             // Avatar
                             GlideImage(
-                                model = "${BuildConfig.BASE_URL_AVATAR}${friendRoot.users.avatar}",
+                                model = "${BuildConfig.BASE_URL_AVATAR}${
+                                    viewModel.userPictureOrDefault(
+                                        friendRoot.users
+                                    )
+                                }",
                                 contentDescription = Constants.FRIENDS_PROFILE_PICTURE_DESCRIPTION,
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier
