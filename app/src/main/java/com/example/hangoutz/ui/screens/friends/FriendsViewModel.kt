@@ -4,9 +4,10 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hangoutz.data.local.SharedPreferencesManager
-import com.example.hangoutz.data.models.User
+import com.example.hangoutz.data.models.FriendRoot
 import com.example.hangoutz.domain.repository.FriendsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,15 +16,15 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 data class FriendsUIState(
-    val friends: List<User>
+    val friendWrappers: List<FriendRoot> = emptyList()
 )
 
 @HiltViewModel
 class FriendsViewModel @Inject constructor(
     private val friendsRepository: FriendsRepository,
-    private val context: Context
+    @ApplicationContext private val context: Context
 ) : ViewModel() {
-    private lateinit var _uiState: MutableStateFlow<FriendsUIState>
+    private var _uiState = MutableStateFlow(FriendsUIState())
     var uiState: StateFlow<FriendsUIState>
 
     init {
@@ -42,9 +43,7 @@ class FriendsViewModel @Inject constructor(
             }
             if (response.value.isSuccessful) {
                 response.value.body()?.let {
-                    if (it.isNotEmpty()) {
-                        _uiState.value.copy(friends = it)
-                    }
+                    _uiState.value = _uiState.value.copy(friendWrappers = it)
                 }
             }
         }

@@ -1,8 +1,6 @@
 package com.example.hangoutz.ui.screens.friends
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -21,30 +19,23 @@ import androidx.navigation.NavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.hangoutz.BuildConfig
-import com.example.hangoutz.data.models.User
+import com.example.hangoutz.data.models.Friend
 import com.example.hangoutz.utils.Constants
-
-@Composable
-fun FriendsScreen(navController: NavController) {
-    Text(text = "Friends List")
-    Column(modifier = Modifier.padding(top = 30.dp, end = 30.dp)) {
-    }
-}
 
 @Composable
 fun FriendsScreen(navController: NavController, viewModel: FriendsViewModel = hiltViewModel()) {
     val data = viewModel.uiState.collectAsState()
     // MBLINTER-7: Search bar
     LazyColumn {
-        items(data.value.friends) { friend ->
-            FriendItem(friend)
+        items(data.value.friendWrappers) { friendRoot ->
+            FriendItem(friendRoot.users)
         }
     }
 }
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun FriendItem(friend: User, modifier: Modifier = Modifier) {
+fun FriendItem(friend: Friend, modifier: Modifier = Modifier) {
     // Avatar
     GlideImage(
         model = "${BuildConfig.BASE_URL_AVATAR}${friend.avatar}",
@@ -56,8 +47,9 @@ fun FriendItem(friend: User, modifier: Modifier = Modifier) {
             .clip(CircleShape)
             .semantics { contentDescription = Constants.FRIENDS_LIST_PHOTO }
     )
-// Name
+    // Name
     Text(
         text = friend.name,
-        modifier = modifier.semantics { contentDescription = Constants.FRIENDS_LIST_NAME })
+        modifier = modifier.semantics { contentDescription = Constants.FRIENDS_LIST_NAME }
+    )
 }
