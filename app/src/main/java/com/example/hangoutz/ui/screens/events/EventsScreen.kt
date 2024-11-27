@@ -21,6 +21,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -28,6 +29,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,7 +43,8 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.hangoutz.R
-import com.example.hangoutz.ui.theme.TextBodyGrayColor
+import com.example.hangoutz.data.models.EventCardDPO
+import com.example.hangoutz.ui.components.customIndicator.CustomTab
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Dimensions
 import com.example.hangoutz.utils.toDate
@@ -53,15 +57,20 @@ fun MyEventsScreen(viewModel: EventScreenViewModel = hiltViewModel()) {
     val data = viewModel.uiState.collectAsState()
     val pagerState = rememberPagerState(pageCount = { 3 })
     val scope = rememberCoroutineScope()
+    val (selected, setSelected) = remember {
+        mutableStateOf(0)
+    }
     Column(
         modifier = Modifier
             .padding(top = 10.dp)
             .padding(horizontal = Dimensions.CONTENT_HORIZONTAL_PADDING)
     ) {
-        FilterBar(
-            pagerState = pagerState,
+        CustomTab(
+            items = listOf("GOING", "INVITED","MINE"),
+            selectedItemIndex = pagerState.currentPage,
+            onClick = setSelected,
             scope = scope,
-            modifier = Modifier.padding(end = 10.dp, start = 5.dp)
+            pagerState = pagerState
         )
         HorizontalPager(
             state = pagerState,
@@ -72,9 +81,9 @@ fun MyEventsScreen(viewModel: EventScreenViewModel = hiltViewModel()) {
 
         ) { page ->
             when (page) {
-                0 -> EventsList(data, viewModel,page = "going")
-                1 -> EventsList(data, viewModel, page = "invited")
-                2 -> EventsList(data, viewModel, page = "mine")
+                0 -> EventsList(data, viewModel,page = EventsFilterOptions.GOING.name,data.value.eventsGoing)
+                1 -> EventsList(data, viewModel, page = EventsFilterOptions.INVITED.name,data.value.eventsInveted)
+                2 -> EventsList(data, viewModel, page = EventsFilterOptions.MINE.name,data.value.eventsMine)
             }
         }
     }
@@ -86,15 +95,18 @@ fun EventsList(
     data: State<EventScreenState>,
     viewModel: EventScreenViewModel,
     page: String,
+    events:List<EventCardDPO>
 ) {
     Box(contentAlignment = Alignment.Center) {
-        if(data.value.events.isEmpty()) {
+        if (data.value.isLoading) {
+            CircularProgressIndicator()
+        }
+        else if(events.isEmpty() && !data.value.isLoading) {
             Text("No events available", color = Color.LightGray)
         }
         Column(
             modifier = Modifier
                 .padding(top = Dimensions.CONTENT_TOP_PADDING)
-                //     .padding(horizontal = Dimensions.CONTENT_HORIZONTAL_PADDING)
                 .background(Color.Transparent)
                 .fillMaxSize()
         ) {
@@ -103,11 +115,11 @@ fun EventsList(
                     .fillMaxSize()
                     .padding(bottom = Dimensions.LAZY_COLUMN_BOTTOM_PADDING)
             ) {
-                items(data.value.events) { event ->
+                items(events) { event ->
                     val countOfPeoplePair: Pair<UUID, Int>? =
                         data.value.counts.find { it.first == event.id }
                     EventCard(
-                        backgroundColor = viewModel.getCardColor(data.value.events.indexOf(event)),
+                        backgroundColor = viewModel.getCardColor(events.indexOf(event)),
                         imageUrl = event.users.avatar
                             ?: stringResource(R.string.default_user_image),
                         title = event.title,
