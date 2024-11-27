@@ -47,9 +47,9 @@ class RegisterViewModel @Inject constructor(
         when (field) {
             Fields.NAME -> _uiState.value = _uiState.value.copy(name = newText)
             Fields.EMAIL -> _uiState.value = _uiState.value.copy(email = newText.trim())
-            Fields.PASSWORD -> _uiState.value = _uiState.value.copy(password = newText)
+            Fields.PASSWORD -> _uiState.value = _uiState.value.copy(password = newText.trim())
             Fields.CONFIRMPASSWORD -> _uiState.value =
-                _uiState.value.copy(confirmPassword = newText)
+                _uiState.value.copy(confirmPassword = newText.trim())
         }
     }
 
@@ -111,7 +111,7 @@ class RegisterViewModel @Inject constructor(
             try {
                 val response = userRepository.insertUser(
                     UserRequest(
-                        _uiState.value.name, null, _uiState.value.email,
+                        _uiState.value.name.trim(), null, _uiState.value.email,
                         HashPassword.hashPassword(_uiState.value.password)
                     )
                 )

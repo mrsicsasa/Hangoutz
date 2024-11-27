@@ -155,23 +155,19 @@ fun RegisterScreen(navController: NavController, viewModel: RegisterViewModel = 
             }
         }
         // Create account button
-        Box(
+        ActionButton(
+            buttonText = stringResource(R.string.create_account_text),
             modifier = Modifier
                 .padding(bottom = Dimensions.REGISTER_BOTTOM_PADDING)
                 .fillMaxWidth()
-                .semantics { contentDescription = Constants.REGISTER_CREATE_ACCOUNT_BOX }
-        ) {
-            ActionButton(
-                buttonText = stringResource(R.string.create_account_text),
-                modifier = Modifier.semantics {
+                .semantics {
                     contentDescription = Constants.REGISTER_CREATE_ACCOUNT_BUTTON
                 }
-            ) {
-                viewModel.onCreateAccountClick {
-                    navController.navigate(NavigationItem.Login.route) {
-                        popUpTo(NavigationItem.Login.route) {
-                            inclusive = true
-                        }
+        ) {
+            viewModel.onCreateAccountClick {
+                navController.navigate(NavigationItem.Login.route) {
+                    popUpTo(NavigationItem.Login.route) {
+                        inclusive = true
                     }
                 }
             }

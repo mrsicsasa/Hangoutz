@@ -88,12 +88,22 @@ fun ActionButton(
                 Text(
                     text = buttonText,
                     style = MaterialTheme.typography.labelLarge,
-                    modifier = Modifier.padding(end = Dimensions.ACTION_BUTTON_SMALL1)
+                    modifier = Modifier
+                        .padding(end = Dimensions.ACTION_BUTTON_SMALL1)
+                        .semantics {
+                            contentDescription =
+                                Constants.ACTION_BUTTON_TEXT
+                        }
                 )
                 Icon(
                     painter = painterResource(painterResource),
                     contentDescription = "Icon",
-                    modifier = Modifier.size(Dimensions.ACTION_BUTTON_MEDIUM3)
+                    modifier = Modifier
+                        .size(Dimensions.ACTION_BUTTON_MEDIUM3)
+                        .semantics {
+                            contentDescription =
+                                Constants.ACTION_BUTTON_ICON
+                        }
                 )
             }
         }
