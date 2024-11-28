@@ -69,7 +69,9 @@ fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltVi
                     painterResource(id = R.drawable.logo),
                     initialValue = 0f,
                     targetValue = 1f,
-                    modifier = Modifier.align(Alignment.Center),
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .semantics { contentDescription = Constants.LOGIN_ICON },
                     animationDelay = Constants.LOGO_ANIMATION_DELAY
                 )
             }
@@ -87,14 +89,20 @@ fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltVi
                 EMAIL,
                 data.value.email,
                 { viewmodel.onTextChanged(it) },
-                isError = data.value.isEmailError
+                isError = data.value.isEmailError,
+                modifier = Modifier.semantics {
+                    contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
+                }
             )
             InputField(
                 PASSWORD,
                 data.value.password,
                 { viewmodel.onPassChanged(it) },
                 isPassword = true,
-                isError = data.value.isPasswordError
+                isError = data.value.isPasswordError,
+                modifier = Modifier.semantics {
+                    contentDescription = Constants.LOGIN_PASSWORD_INPUT_FIELD
+                }
             )
             ErrorMessage(data.value.errorMessage)
             ActionButton(
@@ -106,7 +114,7 @@ fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltVi
                         }
                     }
                 },
-                Modifier.semantics { contentDescription = Constants.SETTINGS_LOGOUT_BUTTON }
+                Modifier.semantics { contentDescription = Constants.LOGIN_SIGN_IN_BUTTON }
             )
         }
         Column(
@@ -130,6 +138,9 @@ fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltVi
                     .padding(top = Dimensions.ACTION_BUTTON_SMALL2)
                     .clickable {
                         navController.navigate(NavigationItem.Register.route)
+                    }
+                    .semantics {
+                        contentDescription = Constants.LOGIN_CREATE_ACCOUNT
                     },
                 style = MaterialTheme.typography.labelLarge,
                 textAlign = TextAlign.Center

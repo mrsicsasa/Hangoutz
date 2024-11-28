@@ -13,6 +13,13 @@ object Constants {
     const val SPLASH_SCREEN_BACKGROUND = "splashScreenBackground"
     const val SPLASH_SCREEN_LOGO = "splashScreenLogo"
 
+    //LOGIN
+    const val LOGIN_SIGN_IN_BUTTON = "loginSignInButton"
+    const val LOGIN_CREATE_ACCOUNT = "loginCreateAccount"
+    const val LOGIN_EMAIL_INPUT_FIELD = "loginEmailInputField"
+    const val LOGIN_PASSWORD_INPUT_FIELD = "loginPasswordInputField"
+    const val LOGIN_ICON = "loginIcon"
+
     //credentials
     const val EMAIL = "Email"
     const val PASSWORD = "Password"
@@ -35,7 +42,7 @@ object Constants {
     const val FILTER_BAR_ITEM_COUNT: Int = 3
     const val INVITE_STATUS_ACCEPTED = "accepted"
     const val INVITE_STATUS_INVITED = "invited"
-    const val HORIZONTAL_PAGER= "horizontalPager"
+    const val HORIZONTAL_PAGER = "horizontalPager"
 
     //EventCard
     const val EVENT_CARD = "eventCard"
@@ -51,6 +58,7 @@ object Constants {
     const val NUMBER_OF_PEOPLE_ADD_OWNER = 1
 
     const val SCREEN_SIZE_THRESHOLD = 400
+
     //Extension
     const val DAY_THRESHOLD = 7
     const val PADDING_ZERO_THRESHOLD = 10
@@ -94,7 +102,8 @@ object Constants {
     const val NAME_ERROR_MESSAGE = "Name must be 3–25 characters"
     const val EMAIL_FORMAT_ERROR_MESSAGE = "Email must be in correct format"
     const val EMAIL_DUPLICATE_ERROR_MESSAGE = "Email already in use"
-    const val PASSWORD_ERROR_MESSAGE = "Password must contain at least one number and be minimum 8 characters long"
+    const val PASSWORD_ERROR_MESSAGE =
+        "Password must contain at least one number and be minimum 8 characters long"
     const val CONFIRM_PASSWORD_ERROR_MESSAGE = "Passwords must match"
     const val GENERIC_ERROR_MESSAGE = "An error has occurred"
 
@@ -109,7 +118,7 @@ object Constants {
     const val REGISTER_PASSWORD_ERROR = "registerPasswordError"
     const val REGISTER_CONFIRM_PASSWORD_INPUT = "registerConfirmPasswordInput"
     const val REGISTER_CONFIRM_PASSWORD_ERROR = "registerConfirmPasswordError"
-    const val REGISTER_INCOMPLETE_FORM_ERROR= "registerIncompleteFormError"
+    const val REGISTER_INCOMPLETE_FORM_ERROR = "registerIncompleteFormError"
     const val REGISTER_CREATE_ACCOUNT_BUTTON = "registerCreateAccountButton"
 
     //Friends tags
