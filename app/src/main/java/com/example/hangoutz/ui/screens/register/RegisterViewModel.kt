@@ -75,6 +75,7 @@ class RegisterViewModel @Inject constructor(
             )
             isValid = false
         } else {
+            _uiState.value = _uiState.value.copy(_uiState.value.name.trim())
             if (!Validator.isValidNameLength(_uiState.value.name)) {
                 _uiState.value =
                     _uiState.value.copy(nameError = Constants.NAME_ERROR_MESSAGE)
@@ -111,7 +112,7 @@ class RegisterViewModel @Inject constructor(
             try {
                 val response = userRepository.insertUser(
                     UserRequest(
-                        _uiState.value.name.trim(), null, _uiState.value.email,
+                        _uiState.value.name, null, _uiState.value.email,
                         HashPassword.hashPassword(_uiState.value.password)
                     )
                 )
