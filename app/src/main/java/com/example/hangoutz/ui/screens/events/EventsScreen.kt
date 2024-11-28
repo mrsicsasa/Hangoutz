@@ -48,62 +48,83 @@ import java.util.UUID
 fun MyEventsScreen(viewModel: EventScreenViewModel = hiltViewModel()) {
     val data = viewModel.uiState.collectAsState()
     val scope = rememberCoroutineScope()
-    Column(
-        modifier = Modifier
-            .padding(top = Dimensions.FILTER_BAR_TOP_PADDING)
-            .padding(horizontal = Dimensions.CONTENT_HORIZONTAL_PADDING)
-    ) {
-        FilterBar(
-            items = listOf(
-                EventsFilterOptions.GOING.name.uppercase(),
-                EventsFilterOptions.INVITED.name.uppercase(),
-                EventsFilterOptions.MINE.name.uppercase()
-            ),
-            selectedItemIndex = data.value.pagerState.currentPage,
-            scope = scope,
-            pagerState = data.value.pagerState
-        )
-        HorizontalPager(
-            state = data.value.pagerState,
-            pageSize = PageSize.Fill,
-            beyondViewportPageCount = PagerDefaults.BeyondViewportPageCount,
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(
             modifier = Modifier
-                .semantics {
-                    contentDescription = Constants.HORIZONTAL_PAGER
+                .padding(
+                    top = Dimensions.FILTER_BAR_TOP_PADDING,
+                    start = Dimensions.CONTENT_START_PADDING,
+                    end = Dimensions.CONTENT_END_PADDING
+                )
+        ) {
+            FilterBar(
+                items = listOf(
+                    EventsFilterOptions.GOING.name.uppercase(),
+                    EventsFilterOptions.INVITED.name.uppercase(),
+                    EventsFilterOptions.MINE.name.uppercase()
+                ),
+                selectedItemIndex = data.value.pagerState.currentPage,
+                scope = scope,
+                pagerState = data.value.pagerState
+            )
+            HorizontalPager(
+                state = data.value.pagerState,
+                pageSize = PageSize.Fill,
+                beyondViewportPageCount = PagerDefaults.BeyondViewportPageCount,
+                modifier = Modifier
+                    .semantics {
+                        contentDescription = Constants.HORIZONTAL_PAGER
+                    }
+
+            ) { page ->
+                when (page) {
+                    0 -> EventsList(
+                        page = EventsFilterOptions.GOING.name,
+                        events = data.value.eventsGoing,
+                        isLoading = data.value.isLoading,
+                        counts = data.value.counts,
+                        avatars = data.value.avatars,
+                        getBackgroundColor = { viewModel.getCardColor(it) },
+                        getEvents = { viewModel.getEvents(it) }
+                    )
+
+                    1 -> EventsList(
+                        page = EventsFilterOptions.INVITED.name,
+                        events = data.value.eventsInveted,
+                        isLoading = data.value.isLoading,
+                        counts = data.value.counts,
+                        avatars = data.value.avatars,
+                        getBackgroundColor = { viewModel.getCardColor(it) },
+                        getEvents = { viewModel.getEvents(it) }
+                    )
+
+                    2 -> EventsList(
+                        page = EventsFilterOptions.MINE.name,
+                        events = data.value.eventsMine,
+                        isLoading = data.value.isLoading,
+                        counts = data.value.counts,
+                        avatars = data.value.avatars,
+                        getBackgroundColor = { viewModel.getCardColor(it) },
+                        getEvents = { viewModel.getEvents(it) }
+                    )
                 }
-
-        ) { page ->
-            when (page) {
-                0 -> EventsList(
-                    page = EventsFilterOptions.GOING.name,
-                    events = data.value.eventsGoing,
-                    isLoading = data.value.isLoading,
-                    counts = data.value.counts,
-                    avatars = data.value.avatars,
-                    getBackgroundColor = { viewModel.getCardColor(it) },
-                    getEvents = { viewModel.getEvents(it) }
-                )
-
-                1 -> EventsList(
-                    page = EventsFilterOptions.INVITED.name,
-                    events = data.value.eventsInveted,
-                    isLoading = data.value.isLoading,
-                    counts = data.value.counts,
-                    avatars = data.value.avatars,
-                    getBackgroundColor = { viewModel.getCardColor(it) },
-                    getEvents = { viewModel.getEvents(it) }
-                )
-
-                2 -> EventsList(
-                    page = EventsFilterOptions.MINE.name,
-                    events = data.value.eventsMine,
-                    isLoading = data.value.isLoading,
-                    counts = data.value.counts,
-                    avatars = data.value.avatars,
-                    getBackgroundColor = { viewModel.getCardColor(it) },
-                    getEvents = { viewModel.getEvents(it) }
-                )
             }
+        }
+        FloatingActionButton(
+            onClick = {},
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(Dimensions.FLOATING_BUTTON_PADDING)
+                .clip(CircleShape)
+                .semantics {
+                    contentDescription = Constants.CREATE_EVENT_BUTTON
+                }
+        ) {
+            Icon(
+                Icons.Filled.Add,
+                stringResource(R.string.floating_action_button_icon_description),
+                modifier = Modifier.size(Dimensions.FLOATING_ICON_SIZE)
+            )
         }
     }
 }
@@ -162,22 +183,6 @@ fun EventsList(
                     Spacer(modifier = Modifier.height(Dimensions.SPACE_HEIGHT_BETWEEN_CARDS))
                 }
             }
-        }
-        FloatingActionButton(
-            onClick = {},
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(Dimensions.FLOATING_BUTTON_PADDING)
-                .clip(CircleShape)
-                .semantics {
-                    contentDescription = Constants.CREATE_EVENT_BUTTON
-                }
-        ) {
-            Icon(
-                Icons.Filled.Add,
-                stringResource(R.string.floating_action_button_icon_description),
-                modifier = Modifier.size(Dimensions.FLOATING_ICON_SIZE)
-            )
         }
     }
     LaunchedEffect(key1 = true) {

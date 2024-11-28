@@ -7,7 +7,8 @@ import androidx.compose.ui.unit.sp
 object Dimensions {
     //Events
     val CONTENT_TOP_PADDING: Dp = 40.dp
-    val CONTENT_HORIZONTAL_PADDING: Dp = 15.dp
+    val CONTENT_START_PADDING: Dp = 15.dp
+    val CONTENT_END_PADDING: Dp = 5.dp
     val SPACE_HEIGHT_BETWEEN_CARDS: Dp = 20.dp
     val FLOATING_BUTTON_PADDING: Dp = 20.dp
     val FLOATING_ICON_SIZE: Dp = 40.dp
