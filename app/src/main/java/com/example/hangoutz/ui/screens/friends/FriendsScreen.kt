@@ -22,7 +22,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.hangoutz.BuildConfig
@@ -35,7 +34,7 @@ import com.example.hangoutz.utils.Dimensions
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun FriendsScreen(navController: NavController, viewModel: FriendsViewModel = hiltViewModel()) {
+fun FriendsScreen(viewModel: FriendsViewModel = hiltViewModel()) {
     val data = viewModel.uiState.collectAsState()
     Box(
         modifier = Modifier
@@ -110,6 +109,6 @@ fun FriendsScreen(navController: NavController, viewModel: FriendsViewModel = hi
             .align(Alignment.BottomEnd)
             .semantics {
                 contentDescription = Constants.FRIENDS_ADD_BUTTON
-            }) { viewModel.onAddFriendClick() }
+            }) {}
     }
 }

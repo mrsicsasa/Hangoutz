@@ -48,8 +48,4 @@ class FriendsViewModel @Inject constructor(
             }
         }
     }
-
-    fun onAddFriendClick() {
-        return
-    }
 }
