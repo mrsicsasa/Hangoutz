@@ -73,7 +73,7 @@ fun EventCard(
                     style = MaterialTheme.typography.displayLarge,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.semantics { Constants.EVENT_TITLE }
+                    modifier = Modifier.semantics { contentDescription = Constants.EVENT_TITLE }
                 )
                 Text(
                     text = "@ $place",

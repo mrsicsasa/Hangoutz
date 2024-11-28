@@ -35,7 +35,7 @@ interface InviteAPI {
         @Query("event_id") id: String
     ): Response<List<CountOfAcceptedInvitesForEvent>>
 
-    @PATCH("${BuildConfig.REQUEST_URL}invites")
+    @PATCH("${BuildConfig.REQUEST_URL}invites?")
     suspend fun updateInviteStatus(
         @Query("event_id") eventID: String,
         @Query("user_id") userID: String,
