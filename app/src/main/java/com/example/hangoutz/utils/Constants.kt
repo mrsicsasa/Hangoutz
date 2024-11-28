@@ -32,6 +32,10 @@ object Constants {
     //Events screen
     const val GET_EVENTS_ERRORS = "Loading events errors"
     const val CREATE_EVENT_BUTTON = "createEventButton"
+    const val FILTER_BAR_ITEM_COUNT: Int = 3
+    const val INVITE_STATUS_ACCEPTED = "accepted"
+    const val INVITE_STATUS_INVITED = "invited"
+    const val HORIZONTAL_PAGER= "horizontalPager"
 
     //EventCard
     const val EVENT_CARD = "eventCard"
@@ -43,7 +47,10 @@ object Constants {
     const val EVENT_PLACE = "eventPlace"
     const val EVENT_DATE = "eventDate"
     const val NUMBER_OF_PEOPLE = "numberOfPeople"
+    const val NUMBER_OF_PEOPLE_THRESHOLD = 0
+    const val NUMBER_OF_PEOPLE_ADD_OWNER = 1
 
+    const val SCREEN_SIZE_THRESHOLD = 400
     //Extension
     const val DAY_THRESHOLD = 7
     const val PADDING_ZERO_THRESHOLD = 10
