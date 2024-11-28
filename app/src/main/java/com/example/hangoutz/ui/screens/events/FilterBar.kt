@@ -25,9 +25,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
+import com.example.hangoutz.ui.theme.Charcoal
 import com.example.hangoutz.ui.theme.FilteBarBackground
 import com.example.hangoutz.ui.theme.Orange
-import com.example.hangoutz.ui.theme.UnselectedFilterOptionColor
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Dimensions
 import kotlinx.coroutines.CoroutineScope
@@ -66,7 +66,7 @@ private fun MyTabItem(
 ) {
     val tabTextColor: Color by animateColorAsState(
         targetValue = if (isSelected) {
-            UnselectedFilterOptionColor
+            Charcoal
         } else {
             Orange
         },
