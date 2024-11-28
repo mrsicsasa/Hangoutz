@@ -2,6 +2,7 @@ package com.example.hangoutz.ui.screens.events
 
 import android.annotation.SuppressLint
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -95,7 +96,9 @@ fun MyEventsScreen(viewModel: EventScreenViewModel = hiltViewModel()) {
                         counts = data.value.counts,
                         avatars = data.value.avatars,
                         getBackgroundColor = { viewModel.getCardColor(it) },
-                        getEvents = { viewModel.getEvents(it) }
+                        getEvents = { viewModel.getEvents(it) },
+                        onRejected = { viewModel.updateInvitesStatus(status = "declined", eventId = it) },
+                        onAccepted = { viewModel.updateInvitesStatus(status = "accepted", eventId = it) }
                     )
 
                     2 -> EventsList(
@@ -138,7 +141,9 @@ fun EventsList(
     counts: List<Pair<UUID, Int>>,
     avatars: List<Pair<UUID, String?>>,
     getBackgroundColor: (index: Int) -> Color,
-    getEvents: (page: String) -> Unit
+    getEvents: (page: String) -> Unit,
+    onRejected: (id: UUID) -> Unit = {},
+    onAccepted: (id: UUID) -> Unit = {}
 ) {
     Box(contentAlignment = Alignment.Center) {
         if (isLoading) {
@@ -177,7 +182,9 @@ fun EventsList(
                             modifier = Modifier.semantics {
                                 contentDescription = Constants.EVENT_CARD
                             },
-                            isInvited = page == EventsFilterOptions.INVITED.name
+                            isInvited = page == EventsFilterOptions.INVITED.name,
+                            onAccepted = { onAccepted(event.id) },
+                            onRejected = { onRejected(event.id) }
                         )
                     }
                     Spacer(modifier = Modifier.height(Dimensions.SPACE_HEIGHT_BETWEEN_CARDS))

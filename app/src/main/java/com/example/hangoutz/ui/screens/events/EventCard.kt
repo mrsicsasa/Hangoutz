@@ -39,7 +39,9 @@ fun EventCard(
     date: String,
     countOfPeople: Int,
     isInvited: Boolean = false,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onAccepted: () -> Unit = {},
+    onRejected: () -> Unit = {}
 ) {
     Card(
         colors = CardColors(
@@ -106,7 +108,7 @@ fun EventCard(
                         backgroundColor = Blue,
                         fontColor = Color.White,
                         title = stringResource(R.string.decline_button_text),
-                        onClick = {},
+                        onClick = {onRejected()},
                         modifier = Modifier.semantics {
                             contentDescription = Constants.DECLINE_INVITATION_BUTTON
                         }
@@ -116,7 +118,7 @@ fun EventCard(
                         backgroundColor = GreenMinty,
                         fontColor = Color.Black,
                         title = stringResource(R.string.accept_button_text),
-                        onClick = {},
+                        onClick = {onAccepted()},
                         modifier = Modifier.semantics {
                             contentDescription = Constants.ACCEPT_INVITATION_BUTTON
                         }

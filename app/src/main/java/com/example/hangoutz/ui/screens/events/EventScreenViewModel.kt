@@ -6,6 +6,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hangoutz.data.local.SharedPreferencesManager
+import com.example.hangoutz.data.models.UpdateEventStatusDTO
 import com.example.hangoutz.data.models.toEventCardDPO
 import com.example.hangoutz.domain.repository.EventRepository
 import com.example.hangoutz.domain.repository.InviteRepository
@@ -164,5 +165,23 @@ class EventScreenViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(
             isLoading = false
         )
+    }
+    fun updateInvitesStatus(status: String, eventId: UUID) {
+        viewModelScope.launch {
+            val response =    SharedPreferencesManager.getUserId(context)
+                ?.let {
+                    Log.d("Funkcija", "radi")
+                    inviteRepository.updateInviteStatus(
+                        eventId = eventId,
+                        userId = it,
+                        body = UpdateEventStatusDTO(eventStatus = status)
+                    )
+                }
+            if(response?.isSuccessful == true) {
+                getEvents(EventsFilterOptions.INVITED.name)
+            } else{
+                Log.d("ERROR", response?.code().toString())
+            }
+        }
     }
 }
