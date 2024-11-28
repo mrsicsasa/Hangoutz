@@ -19,4 +19,5 @@
     <string name="or_text">OR</string>
     <string name="create_account_text">Create Account</string>
     <string name="bottom_navigation_item_icon">bottom navigation item icon</string>
+    <string name="searchbar_placeholder">Search...</string>
 </resources>

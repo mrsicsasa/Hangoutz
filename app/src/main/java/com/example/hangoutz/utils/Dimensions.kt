@@ -102,6 +102,7 @@ object Dimensions {
     val FRIENDS_AVATAR_BORDER = 3.dp
     val FRIENDS_TEXT_START_PADDING = 10.dp
     val FRIENDS_FLOATING_BUTTON_PADDING = 20.dp
+    val FRIENDS_SEARCH_BAR_HEIGHT = 50.dp
 }
 
 

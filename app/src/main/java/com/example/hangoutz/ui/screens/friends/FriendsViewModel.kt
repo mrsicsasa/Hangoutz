@@ -16,6 +16,8 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 data class FriendsUIState(
+    val searchQuery : String = "",
+    val isActive: Boolean = false,
     val listOfFriends: List<ListOfFriends> = emptyList()
 )
 
@@ -47,5 +49,9 @@ class FriendsViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun onSearchInput(newText: String) {
+        _uiState.value = _uiState.value.copy(searchQuery = newText)
     }
 }
