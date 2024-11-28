@@ -34,9 +34,24 @@ class UserRepositoryImpl @Inject constructor(userAPI: UserAPI): UserRepository {
             UserUpdateRequest(name = newName)
         )
     }
-    override suspend fun patchAvatarById(newAvatar: MultipartBody.Part): Response<Unit> {
-        return api.patchAvatarById(
-             newAvatar
+
+    override suspend fun patchUserAvatarById(id : String,  newAvatar: String): Response<Unit> {
+        return api.patchUserAvatarById(
+            id = "eq.${id}",
+            AvatarRequest(avatar = newAvatar)
         )
     }
+
+    override suspend fun deleteUserAvatarByName(newAvatar: String): Response<Unit> {
+        return api.deleteAvatarByName(
+            newAvatar
+        )
+    }
+    override suspend fun postAvatar(newAvatar: MultipartBody.Part, avatarName : String): Response<Unit> {
+        return api.postAvatar(
+             newAvatar,
+            avatarName
+        )
+    }
+
 }

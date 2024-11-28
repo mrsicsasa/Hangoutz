@@ -1,6 +1,11 @@
 package com.example.hangoutz.ui.screens.settings
 
 
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Environment
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -45,22 +50,106 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.hangoutz.utils.Dimensions
+import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Objects
+
+
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = hiltViewModel()) {
     val data = viewmodel.uiState.collectAsState()
+    val context = LocalContext.current
+    var showBottomSheet by remember { mutableStateOf(false) }
+    var tempUri by remember { mutableStateOf<Uri?>(null) }
 
-    // Registers a photo picker activity launcher in single-select mode.
-    val pickMedia = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
 
-        if (uri != null) {
-           viewmodel.updateAvatarUri(uri.toString())
-            Log.d("PhotoPicker", "Selected URI: $uri")
-        } else {
-            Log.d("PhotoPicker", "No media selected")
+    // for takePhotoLauncher used
+    fun getTempUri(): Uri? {
+        val directory = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "MyAppImages")
+        directory?.let {
+            it.mkdirs()
+            val file = try {
+                Log.e("SettingsScreen", "fajl napravljen")
+                File.createTempFile(
+                    "image_" + System.currentTimeMillis().toString(),
+                    ".jpg",
+                   it
+                )
+            } catch (e: Exception) {
+                Log.e("SettingsScreen", "Failed to create temp file: ${e.message}")
+                return null
+            }
+
+
+            return FileProvider.getUriForFile(
+                context,
+                "com.example.hangoutz.fileprovider",
+                file
+            )
         }
+        return null
+    }
+
+    val imagePicker = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia(),
+        onResult = {
+            it?.let {
+                viewmodel.updateAvatarUri(it)
+            }
+        }
+    )
+
+    val takePhotoLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.TakePicture(),
+        onResult = { isSaved ->
+            tempUri?.let {
+                      // Here, you can do something with the URI, like updating the viewmodel or UI
+                    viewmodel.testUpd(it)
+
+            }
+
+
+        }
+    )
+
+
+    if (showBottomSheet) {
+        imageHandleDialog(
+            onDismiss = { showBottomSheet = false },
+            onCaptureFromCamera = {
+                showBottomSheet = false
+                val tmpUri = getTempUri()
+                tempUri = tmpUri
+                tempUri?.let { takePhotoLauncher.launch(it) }
+            },
+            onPickFromGallery = {
+                showBottomSheet = false
+                imagePicker.launch(
+                    PickVisualMediaRequest(
+                        ActivityResultContracts.PickVisualMedia.ImageOnly
+                    )
+                )
+            }
+        )
     }
 
 
@@ -91,7 +180,9 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
                     .clip(CircleShape)
                     .align(Alignment.Center)
                     .testTag(SETTINGS_USER_PHOTO_TAG)
-                    .clickable {  pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) }
+                    .clickable {
+                       showBottomSheet = true
+                    }
             )
             Image(
                 painter = painterResource(R.drawable.profilelines),
@@ -150,8 +241,9 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
                 }
             }, modifier = Modifier.testTag(SETTINGS_LOGOUT_BUTTON))
         }
+
+
     }
 
 
 }
-

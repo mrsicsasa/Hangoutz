@@ -1,32 +1,44 @@
 package com.example.hangoutz.ui.screens.settings
 
 
+import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.ImageDecoder
 import android.net.Uri
+import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.hangoutz.BuildConfig
+
 import com.example.hangoutz.R
 import com.example.hangoutz.data.local.SharedPreferencesManager
 import com.example.hangoutz.domain.repository.UserRepository
+import com.example.hangoutz.ui.components.getRandomString
 import com.example.hangoutz.utils.Constants.DEFAULT_USER_PHOTO
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope.coroutineContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.FileNotFoundException
+import java.io.IOException
 import java.io.InputStream
+import java.text.SimpleDateFormat
+import java.util.Date
 import javax.inject.Inject
 
 
@@ -36,7 +48,8 @@ data class SettingsData(
     var isReadOnly: Boolean = true,
     val avatar: String? = null,
     val avatarUri: String? = null,
-    val textIcon: Int = R.drawable.pencil
+    val textIcon: Int = R.drawable.pencil,
+    val currentCameraUri : Uri? = null
 
 )
 
@@ -58,7 +71,6 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun onPencilClick() {
-
 
         if (_uiState.value.name.text.length >= 3 && _uiState.value.name.text.length <= 25) {
             val isReadOnlyState = !_uiState.value.isReadOnly
@@ -95,9 +107,9 @@ class SettingsViewModel @Inject constructor(
                 }
                 if (response != null) {
                     if (response.isSuccessful) {
-                        Log.e("USPESNO IZMMENJEO", " ${response.code()}")
+                        Log.e("Successfully  edited", " ${response.code()}")
                     } else {
-                        Log.e("Doslo je do greske ", " ${response.code()}")
+                        Log.e("An error has occurred ", " ${response.code()}")
                     }
                 }
             }
@@ -144,99 +156,111 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun handleImage(imageUri: String, context: Context) {
-        val uri = Uri.parse(imageUri)
+    fun handleImage(imageUri: Uri) {
+
+
         try {
             viewModelScope.launch {
+                //   val imagePath = getRealPathFromURI(imageUri, context)
+                //
+
                 val userID = SharedPreferencesManager.getUserId(context)
-                //val parsedUri = compressImageToByteArray(uri, context)
-                val file = File(getRealPathFromURI(uri, context))
-                val requestFile = RequestBody.create(MediaType.parse("image/jpeg"), file)
-                val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
-//                val parsedUri = userRepository.patchAvatarById(body)
+//                val file = getRealPathFromURI(imageUri, context)?.let { File(it) }
+                val inputStream = context.contentResolver.openInputStream(imageUri)
+                inputStream?.let {
+                    // Read the bytes from the InputStream and create the RequestBody
+                    val requestFile = RequestBody.create(
+                        MediaType.parse("image/jpeg"),
+                        it.readBytes() // Read bytes from the InputStream
+                    )
+//                val requestFile = file?.let {
+//                    RequestBody.create(
+//                        MediaType.parse("image/jpeg"),
+//                        it
+//                    )
 
+                val body = MultipartBody.Part.createFormData("file", "image_${System.currentTimeMillis()}.jpg", requestFile)
+
+                val avatarNameGenerator = getRandomString(20) + ".jpg"
+
+                if (_uiState.value.avatar != "avatar_default.png") {
+                    val response3 =
+                        userRepository.deleteUserAvatarByName(_uiState.value.avatar ?: "")
+                    if (response3.isSuccessful) {
+                        Log.i("Info", "sucessfuly deleted old avatar - " + response3.code())
+                    } else {
+                        Log.e("Error", "An error has occured" + response3.code())
+                    }
+                }
                 val response =
-
-                    userRepository.patchAvatarById(body)
-
-
-
+                    userRepository.postAvatar(body, avatarNameGenerator)
                 if (response != null) {
                     if (response.isSuccessful) {
-                        Log.e("USPESNO IZMMENJEO", " ${response.code()}")
+                        val response2 =
+                            userRepository.patchUserAvatarById(userID ?: "", avatarNameGenerator)
+                        Log.e("Sucessfuly edited", " ${response.code()}")
                     } else {
-                        Log.e("Doslo je do greske ", " ${response.code()}")
-                        Log.e("Doslo je do greske ", " ${response}")
+                        Log.e("An error has ocurred ", " ${response.code()}")
                     }
                 }
             }
-        } catch (e: Exception) {
-
+        } }catch (e: Exception) {
             Log.e("LoginViewModel", "Login error: ${e.message}")
+        }
+    }
 
+
+    fun testUpd(imageUri: Uri) {
+
+        _uiState.value = _uiState.value.copy(avatarUri = imageUri.toString())
+        Log.e("AVATARURI", " ${_uiState.value.avatar}")
+        Log.e("AVATARURI", " ${_uiState.value.avatarUri}")
+
+
+
+        handleImage(imageUri)
+
+    }
+
+    fun onReceive(intent: Intent) = viewModelScope.launch(coroutineContext) {
+        when (intent) {
+            is Intent.OnFinishPickingImagesWith -> { /* TODO */
+            }
+
+            is Intent.OnImageSavedWith -> { /* TODO */
+            }
+
+            is Intent.OnImageSavingCanceled -> { /* TODO */
+            }
         }
 
     }
 
+    fun updateAvatarUri(uri: Uri) {
 
-    fun updateAvatarUri(uri: String) {
-        _uiState.value = _uiState.value.copy(avatarUri = uri)
-        handleImage(uri, context)
+        _uiState.value = _uiState.value.copy(avatarUri = uri.toString())
+        handleImage(uri)
     }
 
-//
-//    fun createvImg(){
-//        val file = File(cacheDir, "img.png")
-//        file.createNewFile()
-//        file.outputStream().use {
-//            assets.open("img.png").copyTo(it)
-//        }
-       // viewModel.uploadImage(file)
+    fun getRealPathFromURI(contentUri: Uri, context: Context): String? {
 
-//    fun compressImageToByteArray(uri: Uri, context: Context) {
-//        try {
-//
-//            val inputStream: InputStream? = context.contentResolver.openInputStream(uri)
-//
-//            // Decode the input stream into a Bitmap
-//            val bitmap = BitmapFactory.decodeStream(inputStream)
-//
-//            // Prepare a ByteArrayOutputStream to hold the compressed image
-//            val byteArrayOutputStream = ByteArrayOutputStream()
-//
-//            // Compress the Bitmap into JPEG format and write to the ByteArrayOutputStream
-//           // val quality = 50 // Set the compression quality (0 to 100)
-//           // bitmap.compress(Bitmap.CompressFormat.JPEG, quality, byteArrayOutputStream)
-//
-//            // Return the byte array of the compressed image
-//            val byteArray= byteArrayOutputStream.toByteArray()
-//            return byteArrayOutputStream.writeBytes()
-//
-//        } catch (e: Exception) {
-//            e.printStackTrace()
-//        }
-//        return null
-//    }
-
-
-    fun funkcija(uri : Uri , context: Context) {
-
-        val file = File(getRealPathFromURI(uri, context))
-        val requestFile = RequestBody.create(MediaType.parse("image/jpeg"), file)
-        val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
-    }
-
-    fun getRealPathFromURI(uri: Uri, context: Context): String? {
-        val cursor: Cursor? = context.contentResolver.query(uri, null, null, null, null)
-        cursor?.let {
-            it.moveToFirst()
-            val columnIndex = it.getColumnIndex(MediaStore.Images.Media.DATA)
-            if (columnIndex != -1) {
-                return it.getString(columnIndex)
-            }
+        val proj = arrayOf(MediaStore.Images.Media.DATA)
+        val cursor = context.contentResolver.query(contentUri, proj, null, null, null)
+        if (cursor != null && cursor.moveToFirst()) {
+            val columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+            val filePath = cursor.getString(columnIndex)
+            cursor.close()
+            return filePath
         }
         return null
     }
 
-
+    fun getInputStreamFromUri(uri: Uri): InputStream? {
+        return try {
+            context.contentResolver.openInputStream(uri)  // Open the InputStream directly
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace()
+            null
+        }
+    }
 }
