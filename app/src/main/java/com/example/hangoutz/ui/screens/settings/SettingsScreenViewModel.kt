@@ -229,24 +229,14 @@ class SettingsViewModel @Inject constructor(
 
     }
 
-    fun onReceive(intent: Intent) = viewModelScope.launch(coroutineContext) {
-        when (intent) {
-            is Intent.OnFinishPickingImagesWith -> { /* TODO */
-            }
-
-            is Intent.OnImageSavedWith -> { /* TODO */
-            }
-
-            is Intent.OnImageSavingCanceled -> { /* TODO */
-            }
-        }
-
-    }
-
     fun updateAvatarUri(uri: Uri) {
 
         _uiState.value = _uiState.value.copy(avatarUri = uri.toString())
         handleImage(uri)
+    }
+    fun setAvatarUri(){
+       _uiState.value = _uiState.value.copy(avatarUri = "${BuildConfig.BASE_URL_AVATAR}${_uiState.value.avatar}",)
+
     }
 
     fun getRealPathFromURI(contentUri: Uri, context: Context): String? {

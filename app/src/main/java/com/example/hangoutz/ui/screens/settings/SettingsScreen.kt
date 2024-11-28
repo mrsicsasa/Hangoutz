@@ -2,12 +2,16 @@ package com.example.hangoutz.ui.screens.settings
 
 
 import android.Manifest
-import android.content.Context
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Environment
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,13 +27,20 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
@@ -45,32 +56,8 @@ import com.example.hangoutz.utils.Constants.SETTINGS_BACKGROUND_LINES_TAG
 import com.example.hangoutz.utils.Constants.SETTINGS_EMAIL_FIELD_TAG
 import com.example.hangoutz.utils.Constants.SETTINGS_LOGOUT_BUTTON
 import com.example.hangoutz.utils.Constants.SETTINGS_USER_PHOTO_TAG
-import android.util.Log
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
-import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.hangoutz.utils.Dimensions
 import java.io.File
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Objects
-
 
 
 @OptIn(ExperimentalGlideComposeApi::class)
@@ -84,7 +71,10 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
 
     // for takePhotoLauncher used
     fun getTempUri(): Uri? {
-        val directory = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "MyAppImages")
+        val directory = File(
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+            "MyAppImages"
+        )
         directory?.let {
             it.mkdirs()
             val file = try {
@@ -92,7 +82,7 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
                 File.createTempFile(
                     "image_" + System.currentTimeMillis().toString(),
                     ".jpg",
-                   it
+                    it
                 )
             } catch (e: Exception) {
                 Log.e("SettingsScreen", "Failed to create temp file: ${e.message}")
@@ -121,12 +111,15 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
     val takePhotoLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicture(),
         onResult = { isSaved ->
-            tempUri?.let {
-                      // Here, you can do something with the URI, like updating the viewmodel or UI
+            if (isSaved) {
+                tempUri?.let {
+                    // Here, you can do something with the URI, like updating the viewmodel or UI
                     viewmodel.testUpd(it)
+                }
 
+            } else {
+                viewmodel.setAvatarUri()
             }
-
 
         }
     )
@@ -139,7 +132,7 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
             tempUri = tmpUri
             tempUri?.let { takePhotoLauncher.launch(it) }
         } else {
-            // Permission is denied, handle it accordingly
+            viewmodel.setAvatarUri()
         }
     }
 
@@ -150,14 +143,17 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
             onCaptureFromCamera = {
                 showBottomSheet = false
                 val permission = Manifest.permission.CAMERA
-                if (ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED
+                if (ContextCompat.checkSelfPermission(
+                        context,
+                        permission
+                    ) == PackageManager.PERMISSION_GRANTED
                 ) {
                     // Permission is already granted, proceed to step 2
                     val tmpUri = getTempUri()
                     tempUri = tmpUri
                     tempUri?.let { takePhotoLauncher.launch(it) }
                 } else {
-                    // Permission is not granted, request it
+
                     cameraPermissionLauncher.launch(permission)
                 }
 
@@ -192,7 +188,8 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
                     .border(Dimensions.SETTINGS_SCREEN_SMALL3, Ivory, CircleShape)
             ) {}
             GlideImage(
-                model = data.value.avatarUri ?: "${BuildConfig.BASE_URL_AVATAR}${data.value.avatar}",
+                model = data.value.avatarUri
+                    ?: "${BuildConfig.BASE_URL_AVATAR}${data.value.avatar}",
                 contentDescription = PROFILE_PHOTO,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -202,7 +199,7 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
                     .align(Alignment.Center)
                     .testTag(SETTINGS_USER_PHOTO_TAG)
                     .clickable {
-                       showBottomSheet = true
+                        showBottomSheet = true
                     }
             )
             Image(
