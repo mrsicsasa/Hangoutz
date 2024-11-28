@@ -2,7 +2,6 @@ package com.example.hangoutz.ui.screens.events
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -26,10 +25,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.hangoutz.R
-import com.example.hangoutz.ui.theme.PurpleDark
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Dimensions
 import com.example.hangoutz.utils.toDate
@@ -77,7 +74,6 @@ fun MyEventsScreen(viewModel: EventScreenViewModel = hiltViewModel()) {
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(Dimensions.FLOATING_BUTTON_PADDING)
-                .border(2.dp, PurpleDark, CircleShape)
                 .clip(CircleShape)
                 .semantics {
                     contentDescription = Constants.CREATE_EVENT_BUTTON
