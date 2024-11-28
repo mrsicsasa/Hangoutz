@@ -27,8 +27,7 @@ interface UserAPI {
 
     @GET("${BuildConfig.REQUEST_URL}users")
     suspend fun getUserByEmailAndPassword(
-        @Query("email") email: String,
-        @Query("password_hash") password: String
+        @Query("email") email: String, @Query("password_hash") password: String
     ): Response<List<User>>
 
     @POST("${BuildConfig.REQUEST_URL}users")
@@ -36,28 +35,25 @@ interface UserAPI {
 
     @PATCH("${BuildConfig.REQUEST_URL}users")
     suspend fun patchUserById(
-        @Query("id") id: String,
-        @Body newName: UserUpdateRequest
-    ) : Response<Unit>
+        @Query("id") id: String, @Body newName: UserUpdateRequest
+    ): Response<Unit>
 
     @PATCH("${BuildConfig.REQUEST_URL}users")
     suspend fun patchUserAvatarById(
-        @Query("id") id: String,
-        @Body newAvatar: AvatarRequest
-    ) : Response<Unit>
+        @Query("id") id: String, @Body newAvatar: AvatarRequest
+    ): Response<Unit>
 
     @Headers("Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpzanh3Zmp1dHN0cnlidmx0am92Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczMDgwODE0MSwiZXhwIjoyMDQ2Mzg0MTQxfQ.nBHlsKMnhgB-_iwXFa_FNZXJ6t-15c-5srRy4QjRXN0")
     @DELETE("https://zsjxwfjutstrybvltjov.supabase.co/storage/v1/object/avatar/{avatarName}")
     suspend fun deleteAvatarByName(
-        @Path("avatarName") avatarName : String
-    ) : Response<Unit>
+        @Path("avatarName") avatarName: String
+    ): Response<Unit>
 
 
     @Headers("Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpzanh3Zmp1dHN0cnlidmx0am92Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczMDgwODE0MSwiZXhwIjoyMDQ2Mzg0MTQxfQ.nBHlsKMnhgB-_iwXFa_FNZXJ6t-15c-5srRy4QjRXN0")
     @Multipart
     @POST("https://zsjxwfjutstrybvltjov.supabase.co/storage/v1/object/avatar/{avatarName}")
     suspend fun postAvatar(
-        @Part image: MultipartBody.Part,
-        @Path("avatarName") avatarName : String
-    ) : Response<Unit>
+        @Part image: MultipartBody.Part, @Path("avatarName") avatarName: String
+    ): Response<Unit>
 }

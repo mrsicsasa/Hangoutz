@@ -59,7 +59,6 @@ import com.example.hangoutz.utils.Constants.SETTINGS_USER_PHOTO_TAG
 import com.example.hangoutz.utils.Dimensions
 import java.io.File
 
-
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = hiltViewModel()) {
@@ -68,8 +67,6 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
     var showBottomSheet by remember { mutableStateOf(false) }
     var tempUri by remember { mutableStateOf<Uri?>(null) }
 
-
-    // for takePhotoLauncher used
     fun getTempUri(): Uri? {
         val directory = File(
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
@@ -78,7 +75,7 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
         directory?.let {
             it.mkdirs()
             val file = try {
-                Log.e("SettingsScreen", "fajl napravljen")
+                Log.e("SettingsScreen", "File created")
                 File.createTempFile(
                     "image_" + System.currentTimeMillis().toString(),
                     ".jpg",
@@ -88,8 +85,6 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
                 Log.e("SettingsScreen", "Failed to create temp file: ${e.message}")
                 return null
             }
-
-
             return FileProvider.getUriForFile(
                 context,
                 "com.example.hangoutz.fileprovider",
@@ -107,27 +102,22 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
             }
         }
     )
-
     val takePhotoLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicture(),
         onResult = { isSaved ->
             if (isSaved) {
                 tempUri?.let {
-                    // Here, you can do something with the URI, like updating the viewmodel or UI
-                    viewmodel.testUpd(it)
+                    viewmodel.updateAvatarUri(it)
                 }
-
             } else {
                 viewmodel.setAvatarUri()
             }
-
         }
     )
     val cameraPermissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
     ) { isGranted: Boolean ->
         if (isGranted) {
-            // Permission is granted, launch takePhotoLauncher
             val tmpUri = getTempUri()
             tempUri = tmpUri
             tempUri?.let { takePhotoLauncher.launch(it) }
@@ -135,7 +125,6 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
             viewmodel.setAvatarUri()
         }
     }
-
 
     if (showBottomSheet) {
         imageHandleDialog(
@@ -148,7 +137,6 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
                         permission
                     ) == PackageManager.PERMISSION_GRANTED
                 ) {
-                    // Permission is already granted, proceed to step 2
                     val tmpUri = getTempUri()
                     tempUri = tmpUri
                     tempUri?.let { takePhotoLauncher.launch(it) }
@@ -156,7 +144,6 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
 
                     cameraPermissionLauncher.launch(permission)
                 }
-
             },
             onPickFromGallery = {
                 showBottomSheet = false
@@ -168,8 +155,6 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
             }
         )
     }
-
-
     Column(
         modifier = Modifier
             .padding(top = Dimensions.SETTINGS_SCREEN_MEDIUM2)
@@ -255,13 +240,8 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
                     navController.navigate(NavigationItem.Login.route) {
                         popUpTo(0)
                     }
-
                 }
             }, modifier = Modifier.testTag(SETTINGS_LOGOUT_BUTTON))
         }
-
-
     }
-
-
 }

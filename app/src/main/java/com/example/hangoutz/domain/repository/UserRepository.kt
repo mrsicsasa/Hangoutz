@@ -14,5 +14,4 @@ interface UserRepository {
     suspend fun patchUserAvatarById(id: String, newName: String): Response<Unit>
     suspend fun deleteUserAvatarByName(newName: String): Response<Unit>
     suspend fun postAvatar(newAvatar: MultipartBody.Part, avatarName: String): Response<Unit>
-
 }

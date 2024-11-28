@@ -10,7 +10,7 @@ import okhttp3.MultipartBody
 import retrofit2.Response
 import javax.inject.Inject
 
-class UserRepositoryImpl @Inject constructor(userAPI: UserAPI): UserRepository {
+class UserRepositoryImpl @Inject constructor(userAPI: UserAPI) : UserRepository {
     private val api: UserAPI = userAPI
     override suspend fun getUserByName(name: String): Response<List<User>> {
         return api.getUserByName(name = "eq.${name}")
@@ -20,25 +20,25 @@ class UserRepositoryImpl @Inject constructor(userAPI: UserAPI): UserRepository {
         return api.getUserById(id = "eq.${id}")
     }
 
-    override suspend fun getUserByEmailAndPassword(email: String, password: String): Response<List<User>> {
-        return api.getUserByEmailAndPassword(email = "eq.${email}", password= "eq.${password}")
+    override suspend fun getUserByEmailAndPassword(
+        email: String, password: String
+    ): Response<List<User>> {
+        return api.getUserByEmailAndPassword(email = "eq.${email}", password = "eq.${password}")
     }
 
     override suspend fun insertUser(userRequest: UserRequest): Response<Unit> {
-        return  api.insertUser(userRequest)
+        return api.insertUser(userRequest)
     }
 
-    override suspend fun patchUserNameById(id : String,  newName: String): Response<Unit> {
+    override suspend fun patchUserNameById(id: String, newName: String): Response<Unit> {
         return api.patchUserById(
-            id = "eq.${id}",
-            UserUpdateRequest(name = newName)
+            id = "eq.${id}", UserUpdateRequest(name = newName)
         )
     }
 
-    override suspend fun patchUserAvatarById(id : String,  newAvatar: String): Response<Unit> {
+    override suspend fun patchUserAvatarById(id: String, newAvatar: String): Response<Unit> {
         return api.patchUserAvatarById(
-            id = "eq.${id}",
-            AvatarRequest(avatar = newAvatar)
+            id = "eq.${id}", AvatarRequest(avatar = newAvatar)
         )
     }
 
@@ -47,10 +47,12 @@ class UserRepositoryImpl @Inject constructor(userAPI: UserAPI): UserRepository {
             newAvatar
         )
     }
-    override suspend fun postAvatar(newAvatar: MultipartBody.Part, avatarName : String): Response<Unit> {
+
+    override suspend fun postAvatar(
+        newAvatar: MultipartBody.Part, avatarName: String
+    ): Response<Unit> {
         return api.postAvatar(
-             newAvatar,
-            avatarName
+            newAvatar, avatarName
         )
     }
 
