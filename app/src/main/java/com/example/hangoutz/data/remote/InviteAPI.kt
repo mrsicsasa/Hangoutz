@@ -3,9 +3,12 @@ package com.example.hangoutz.data.remote
 import com.example.hangoutz.BuildConfig
 import com.example.hangoutz.data.models.CountOfAcceptedInvitesForEvent
 import com.example.hangoutz.data.models.Invite
+import com.example.hangoutz.data.models.UpdateEventStatusDTO
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.Query
 
 interface InviteAPI {
@@ -31,4 +34,11 @@ interface InviteAPI {
     suspend fun getCountOfAcceptedInvitesByEvent(
         @Query("event_id") id: String
     ): Response<List<CountOfAcceptedInvitesForEvent>>
+
+    @PATCH("${BuildConfig.REQUEST_URL}invites")
+    suspend fun updateInviteStatus(
+        @Query("event_id") eventID: String,
+        @Query("user_id") userID: String,
+        @Body body: UpdateEventStatusDTO
+    ): Response<Unit>
 }
