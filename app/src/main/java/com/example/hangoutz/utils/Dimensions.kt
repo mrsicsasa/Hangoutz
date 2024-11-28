@@ -10,9 +10,13 @@ object Dimensions {
     val CONTENT_START_PADDING: Dp = 15.dp
     val CONTENT_END_PADDING: Dp = 5.dp
     val SPACE_HEIGHT_BETWEEN_CARDS: Dp = 20.dp
+
+    //Floating Button
     val FLOATING_BUTTON_PADDING: Dp = 20.dp
     val FLOATING_ICON_SIZE: Dp = 40.dp
     val FILTER_BAR_TOP_PADDING = 10.dp
+    val FLOATING_BUTTON_BORDER = 2.dp
+
 
     //InviteRespondButton
     val INVITE_RESPOND_BUTTON_ROUNDED_RADIUS: Dp = 20.dp
@@ -106,6 +110,17 @@ object Dimensions {
     val INDICATOR_TAB_TOP_PADDING_MEDIUM_SCREEN = 5.dp
     val INDICATOR_TAB_TOP_PADDING_SMALL_SCREEN = 0.dp
     val INDICATOR_PADDING_START = 2.dp
+
+    //Friends Screen
+    val FRIENDS_OUTER_PADDING = 10.dp
+    val FRIENDS_HORIZONTAL_PADDING = 15.dp
+    val FRIENDS_FIELD_VERTICAL_PADDING = 20.dp
+    val FRIENDS_FIELD_ROUNDED_CORNER = 20.dp
+    val FRIENDS_INNER_VERTICAL_PADDING = 10.dp
+    val FRIENDS_AVATAR_SIZE = 40.dp
+    val FRIENDS_AVATAR_BORDER = 3.dp
+    val FRIENDS_TEXT_START_PADDING = 10.dp
+    val FRIENDS_FLOATING_BUTTON_PADDING = 20.dp
 }
 
 

@@ -52,6 +52,13 @@ val Typography = Typography(
         lineHeight = 28.sp,
         letterSpacing = 0.sp
     ),
+    titleMedium = TextStyle(
+        fontFamily = inter,
+        fontWeight = FontWeight(600),
+        fontSize = 20.sp,
+        lineHeight = 28.sp,
+        letterSpacing = 0.sp
+    ),
     displayLarge = TextStyle(
         fontFamily = inter,
         fontWeight = FontWeight.Bold,

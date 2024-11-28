@@ -47,9 +47,9 @@ class RegisterViewModel @Inject constructor(
         when (field) {
             Fields.NAME -> _uiState.value = _uiState.value.copy(name = newText)
             Fields.EMAIL -> _uiState.value = _uiState.value.copy(email = newText.trim())
-            Fields.PASSWORD -> _uiState.value = _uiState.value.copy(password = newText)
+            Fields.PASSWORD -> _uiState.value = _uiState.value.copy(password = newText.trim())
             Fields.CONFIRMPASSWORD -> _uiState.value =
-                _uiState.value.copy(confirmPassword = newText)
+                _uiState.value.copy(confirmPassword = newText.trim())
         }
     }
 
@@ -75,6 +75,7 @@ class RegisterViewModel @Inject constructor(
             )
             isValid = false
         } else {
+            _uiState.value = _uiState.value.copy(_uiState.value.name.trim())
             if (!Validator.isValidNameLength(_uiState.value.name)) {
                 _uiState.value =
                     _uiState.value.copy(nameError = Constants.NAME_ERROR_MESSAGE)

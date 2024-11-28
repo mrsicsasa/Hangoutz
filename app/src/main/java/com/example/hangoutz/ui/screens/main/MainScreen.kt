@@ -88,7 +88,7 @@ fun MainScreen(navController: NavController) {
                 MyEventsScreen()
             }
             composable(route = BottomNavigationDestination.FRIENDS.name) {
-                FriendsScreen(navController)
+                FriendsScreen()
             }
             composable(route = BottomNavigationDestination.SETTINGS.name) {
                 SettingsScreen(navController)

@@ -57,6 +57,7 @@ object Constants {
 
     //Component tags
     const val ACTION_BUTTON_TEXT = "actionButtonText"
+    const val ACTION_BUTTON_ICON = "actionButtonIcon"
 
     //Test tags settings screen
     const val SETTINGS_NAME_FIELD_TAG = "settingsNameField"
@@ -109,6 +110,13 @@ object Constants {
     const val REGISTER_CONFIRM_PASSWORD_INPUT = "registerConfirmPasswordInput"
     const val REGISTER_CONFIRM_PASSWORD_ERROR = "registerConfirmPasswordError"
     const val REGISTER_INCOMPLETE_FORM_ERROR= "registerIncompleteFormError"
-    const val REGISTER_CREATE_ACCOUNT_BOX = "registerCreateAccountBox"
     const val REGISTER_CREATE_ACCOUNT_BUTTON = "registerCreateAccountButton"
+
+    //Friends tags
+    const val FRIENDS_BACKGROUND_BOX = "friendsBackgroundBox"
+    const val FRIENDS_LIST_ELEMENT = "friendsListElement"
+    const val FRIENDS_PROFILE_PICTURE_DESCRIPTION = "Author's profile photo"
+    const val FRIENDS_LIST_PHOTO = "friendsListPhoto"
+    const val FRIENDS_LIST_NAME = "friendsListName"
+    const val FRIENDS_ADD_BUTTON = "friendsAddButton"
 }
