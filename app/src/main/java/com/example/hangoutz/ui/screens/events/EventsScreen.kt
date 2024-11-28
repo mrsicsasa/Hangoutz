@@ -94,13 +94,13 @@ fun MyEventsScreen(viewModel: EventScreenViewModel = hiltViewModel()) {
                         getEvents = { viewModel.getEvents(it) },
                         onRejected = {
                             viewModel.updateInvitesStatus(
-                                status = "declined",
+                                status = Constants.EVENT_STATUS_DECLINED,
                                 eventId = it
                             )
                         },
                         onAccepted = {
                             viewModel.updateInvitesStatus(
-                                status = "accepted",
+                                status = Constants.EVENT_STATUS_ACCEPTED,
                                 eventId = it
                             )
                         }
@@ -121,7 +121,8 @@ fun MyEventsScreen(viewModel: EventScreenViewModel = hiltViewModel()) {
         FloatingPlusButton(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(bottom = Dimensions.FLOATING_BUTTON_PADDING, end = 10.dp),
+                .padding(bottom = Dimensions.FLOATING_BUTTON_PADDING, end = 10.dp)
+                .semantics { contentDescription = Constants.CREATE_EVENT_BUTTON },
             onClickAction = {}
         )
     }
