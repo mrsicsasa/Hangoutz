@@ -130,6 +130,18 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
 
         }
     )
+    val cameraPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            // Permission is granted, launch takePhotoLauncher
+            val tmpUri = getTempUri()
+            tempUri = tmpUri
+            tempUri?.let { takePhotoLauncher.launch(it) }
+        } else {
+            // Permission is denied, handle it accordingly
+        }
+    }
 
 
     if (showBottomSheet) {
@@ -137,9 +149,18 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
             onDismiss = { showBottomSheet = false },
             onCaptureFromCamera = {
                 showBottomSheet = false
-                val tmpUri = getTempUri()
-                tempUri = tmpUri
-                tempUri?.let { takePhotoLauncher.launch(it) }
+                val permission = Manifest.permission.CAMERA
+                if (ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED
+                ) {
+                    // Permission is already granted, proceed to step 2
+                    val tmpUri = getTempUri()
+                    tempUri = tmpUri
+                    tempUri?.let { takePhotoLauncher.launch(it) }
+                } else {
+                    // Permission is not granted, request it
+                    cameraPermissionLauncher.launch(permission)
+                }
+
             },
             onPickFromGallery = {
                 showBottomSheet = false

@@ -71,6 +71,13 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun onPencilClick() {
+        val currentText = _uiState.value.name.text
+        _uiState.value = _uiState.value.copy(
+            name = TextFieldValue(
+                text = currentText.trimEnd().trimStart(),
+                selection = TextRange(currentText.length)
+            ))
+
 
         if (_uiState.value.name.text.length >= 3 && _uiState.value.name.text.length <= 25) {
             val isReadOnlyState = !_uiState.value.isReadOnly
