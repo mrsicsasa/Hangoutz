@@ -1,4 +1,4 @@
-package com.example.hangoutz.ui.components.customIndicator
+package com.example.hangoutz.ui.screens.events
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.LinearEasing
@@ -22,14 +22,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.example.hangoutz.ui.theme.Ivory
+import com.example.hangoutz.ui.theme.FilteBarBackground
 import com.example.hangoutz.ui.theme.Orange
+import com.example.hangoutz.ui.theme.UnselectedFilterOptionColor
+import com.example.hangoutz.utils.Constants
+import com.example.hangoutz.utils.Dimensions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -66,7 +66,7 @@ private fun MyTabItem(
 ) {
     val tabTextColor: Color by animateColorAsState(
         targetValue = if (isSelected) {
-            Color(0xFF534F4F)
+            UnselectedFilterOptionColor
         } else {
             Orange
         },
@@ -79,17 +79,17 @@ private fun MyTabItem(
                 onClick()
             }
             .width(tabWidth)
-            .height(if (LocalConfiguration.current.screenWidthDp > 400) 48.dp else 38.dp)
-            .padding(top = 2.dp),
+            .height(if (LocalConfiguration.current.screenWidthDp > Constants.SCREEN_SIZE_THRESHOLD) Dimensions.TAB_TEXT_HEIGHT_MEDIUM_SCREEN else Dimensions.TAB_TEXT_HEIGHT_SMALL_SCREEN)
+            .padding(top = Dimensions.TAB_TEXT_TOP_PADDING),
         text = text,
         color = tabTextColor,
         textAlign = TextAlign.Center,
-        fontSize = if (LocalConfiguration.current.screenWidthDp > 400) 12.sp else 10.sp
+        fontSize = if (LocalConfiguration.current.screenWidthDp > Constants.SCREEN_SIZE_THRESHOLD) Dimensions.TAB_TEXT_FONT_SIZE_MEDIUM_SCREEN else Dimensions.TAB_TEXT_FONT_SIZE_SMALL_SCREEN
     )
 }
 
 @Composable
-fun CustomTab(
+fun FilterBar(
     selectedItemIndex: Int,
     items: List<String>,
     modifier: Modifier = Modifier,
@@ -97,25 +97,25 @@ fun CustomTab(
     pagerState: PagerState
 ) {
     val indicatorOffset: Dp by animateDpAsState(
-        targetValue = if (LocalConfiguration.current.screenWidthDp > 400) 120.dp * selectedItemIndex else 100.dp * selectedItemIndex,
+        targetValue = if (LocalConfiguration.current.screenWidthDp > Constants.SCREEN_SIZE_THRESHOLD) Dimensions.INDICATOR_WIDTH_MEDIUM_SCREEN * selectedItemIndex else Dimensions.INDICATOR_WIDTH_SMALL_SCREEN * selectedItemIndex,
         animationSpec = tween(easing = LinearEasing),
     )
 
     Box(
         modifier = modifier
-            .width(if (LocalConfiguration.current.screenWidthDp > 400) 120.dp * items.size + 10.dp else 100.dp * items.size + 10.dp)
+            .width(if (LocalConfiguration.current.screenWidthDp > Constants.SCREEN_SIZE_THRESHOLD) Dimensions.INDICATOR_WIDTH_MEDIUM_SCREEN * items.size + Dimensions.INDICATOR_WIDTH_SPACE else Dimensions.INDICATOR_WIDTH_SMALL_SCREEN * items.size + Dimensions.INDICATOR_WIDTH_SPACE)
             .clip(CircleShape)
             .background(
-                Color(0xFF53576D75).copy(
-                    alpha = 0.46f
+                FilteBarBackground.copy(
+                    alpha = Dimensions.FILTER_BAR_ALPHA
                 )
             )
-            .height(if (LocalConfiguration.current.screenWidthDp > 400) 40.dp else 30.dp)
-            //  .padding(8.dp)
-            .padding(if (LocalConfiguration.current.screenWidthDp > 400) 5.dp else 0.dp)
+            .height(if (LocalConfiguration.current.screenWidthDp > Constants.SCREEN_SIZE_THRESHOLD) Dimensions.INDICATOR_HEIGHT_MEDIUM_SCREEN else Dimensions.INDICATOR_HEIGHT_SMALL_SCREEN)
+            .padding(if (LocalConfiguration.current.screenWidthDp > Constants.SCREEN_SIZE_THRESHOLD) Dimensions.INDICATOR_TAB_TOP_PADDING_MEDIUM_SCREEN else Dimensions.INDICATOR_TAB_TOP_PADDING_SMALL_SCREEN)
+            .padding(start = Dimensions.INDICATOR_PADDING_START)
     ) {
         MyTabIndicator(
-            indicatorWidth = if (LocalConfiguration.current.screenWidthDp > 400) 120.dp else 100.dp,
+            indicatorWidth = if (LocalConfiguration.current.screenWidthDp > Constants.SCREEN_SIZE_THRESHOLD) Dimensions.INDICATOR_WIDTH_MEDIUM_SCREEN else Dimensions.INDICATOR_WIDTH_SMALL_SCREEN,
             indicatorOffset = indicatorOffset,
             indicatorColor = Orange,
         )
@@ -130,7 +130,7 @@ fun CustomTab(
                     onClick = {
                         scope.launch { pagerState.animateScrollToPage(index) }
                     },
-                    tabWidth = if (LocalConfiguration.current.screenWidthDp > 400) 120.dp else 100.dp,
+                    tabWidth = if (LocalConfiguration.current.screenWidthDp > Constants.SCREEN_SIZE_THRESHOLD) Dimensions.INDICATOR_WIDTH_MEDIUM_SCREEN else Dimensions.INDICATOR_WIDTH_SMALL_SCREEN,
                     text = text,
                 )
             }

@@ -31,15 +31,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.hangoutz.R
 import com.example.hangoutz.data.models.EventCardDPO
-import com.example.hangoutz.ui.components.customIndicator.CustomTab
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Dimensions
 import com.example.hangoutz.utils.toDate
@@ -53,11 +50,15 @@ fun MyEventsScreen(viewModel: EventScreenViewModel = hiltViewModel()) {
     val scope = rememberCoroutineScope()
     Column(
         modifier = Modifier
-            .padding(top = 10.dp)
+            .padding(top = Dimensions.FILTER_BAR_TOP_PADDING)
             .padding(horizontal = Dimensions.CONTENT_HORIZONTAL_PADDING)
     ) {
-        CustomTab(
-            items = listOf("GOING", "INVITED", "MINE"),
+        FilterBar(
+            items = listOf(
+                EventsFilterOptions.GOING.name.uppercase(),
+                EventsFilterOptions.INVITED.name.uppercase(),
+                EventsFilterOptions.MINE.name.uppercase()
+            ),
             selectedItemIndex = data.value.pagerState.currentPage,
             scope = scope,
             pagerState = data.value.pagerState
@@ -67,7 +68,9 @@ fun MyEventsScreen(viewModel: EventScreenViewModel = hiltViewModel()) {
             pageSize = PageSize.Fill,
             beyondViewportPageCount = PagerDefaults.BeyondViewportPageCount,
             modifier = Modifier
-                .testTag("Pager")
+                .semantics {
+                    contentDescription = Constants.HORIZONTAL_PAGER
+                }
 
         ) { page ->
             when (page) {
@@ -153,7 +156,7 @@ fun EventsList(
                             modifier = Modifier.semantics {
                                 contentDescription = Constants.EVENT_CARD
                             },
-                            isInvited = if (page == EventsFilterOptions.INVITED.name) true else false
+                            isInvited = page == EventsFilterOptions.INVITED.name
                         )
                     }
                     Spacer(modifier = Modifier.height(Dimensions.SPACE_HEIGHT_BETWEEN_CARDS))
