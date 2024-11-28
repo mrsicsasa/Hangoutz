@@ -70,7 +70,6 @@ class EventScreenViewModel @Inject constructor(
         val response = userRepository.getUserAvatar(id.toString())
         if (response.isSuccessful) {
             response.body()?.let {
-
                 _uiState.value = _uiState.value.copy(
                     avatars = _uiState.value.avatars + Pair(
                         id,
@@ -93,7 +92,6 @@ class EventScreenViewModel @Inject constructor(
     }
 
     private suspend fun getMineEvents() {
-        Log.d("Events", "pozvano")
         _uiState.value = _uiState.value.copy(
             eventsMine = emptyList(),
             counts = emptyList(),
