@@ -1,6 +1,7 @@
 package com.example.hangoutz.data.repository
 
 import com.example.hangoutz.data.models.AvatarRequest
+import com.example.hangoutz.data.models.EventCardAvatar
 import com.example.hangoutz.data.models.User
 import com.example.hangoutz.data.models.UserRequest
 import com.example.hangoutz.data.models.UserUpdateRequest
@@ -21,13 +22,17 @@ class UserRepositoryImpl @Inject constructor(userAPI: UserAPI) : UserRepository 
     }
 
     override suspend fun getUserByEmailAndPassword(
-        email: String, password: String
+        email: String,
+        password: String
     ): Response<List<User>> {
         return api.getUserByEmailAndPassword(email = "eq.${email}", password = "eq.${password}")
     }
 
     override suspend fun insertUser(userRequest: UserRequest): Response<Unit> {
         return api.insertUser(userRequest)
+    }
+    override suspend fun getUserAvatar(id: String): Response<List<EventCardAvatar>> {
+        return api.getUserAvatar(id = "eq.$id")
     }
 
     override suspend fun patchUserNameById(id: String, newName: String): Response<Unit> {

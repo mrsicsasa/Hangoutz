@@ -4,13 +4,16 @@ import android.content.Context
 import androidx.compose.ui.platform.LocalContext
 import com.example.hangoutz.BuildConfig
 import com.example.hangoutz.data.remote.EventAPI
+import com.example.hangoutz.data.remote.FriendsAPI
 import com.example.hangoutz.data.remote.InviteAPI
 import com.example.hangoutz.data.remote.RetrofitInterceptor
 import com.example.hangoutz.data.remote.UserAPI
 import com.example.hangoutz.data.repository.EventRepositoryImpl
+import com.example.hangoutz.data.repository.FriendsRepositoryImpl
 import com.example.hangoutz.data.repository.InviteRepositoryImpl
 import com.example.hangoutz.data.repository.UserRepositoryImpl
 import com.example.hangoutz.domain.repository.EventRepository
+import com.example.hangoutz.domain.repository.FriendsRepository
 import com.example.hangoutz.domain.repository.InviteRepository
 import com.example.hangoutz.domain.repository.UserRepository
 import dagger.Module
@@ -44,6 +47,11 @@ object Module {
     }
 
     @Provides
+    fun providesFriendsAPI(retrofit: Retrofit): FriendsAPI {
+        return retrofit.create(FriendsAPI::class.java)
+    }
+
+    @Provides
     fun providesEventAPI(retrofit: Retrofit): EventAPI {
         return retrofit.create(EventAPI::class.java)
     }
@@ -56,6 +64,11 @@ object Module {
     @Provides
     fun providesUserRepository(userAPI: UserAPI): UserRepository {
         return UserRepositoryImpl(userAPI)
+    }
+
+    @Provides
+    fun providesFriendsRepository(friendsAPI: FriendsAPI): FriendsRepository {
+        return FriendsRepositoryImpl(friendsAPI)
     }
 
     @Provides

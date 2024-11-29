@@ -16,9 +16,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -26,8 +26,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.hangoutz.R
 import com.example.hangoutz.ui.navigation.BottomNavItem
 import com.example.hangoutz.ui.navigation.BottomNavigationDestination
-import com.example.hangoutz.ui.screens.friends.FriendsScreen
 import com.example.hangoutz.ui.screens.events.MyEventsScreen
+import com.example.hangoutz.ui.screens.friends.FriendsScreen
 import com.example.hangoutz.ui.screens.settings.SettingsScreen
 import com.example.hangoutz.ui.theme.TopBarBackgroundColor
 import com.example.hangoutz.utils.Constants
@@ -42,13 +42,17 @@ fun MainScreen(navController: NavController) {
             modifier = Modifier
                 .height(Dimensions.TOP_BAR_HEIGHT)
                 .wrapContentHeight(align = Alignment.CenterVertically)
-                .testTag(Constants.TOP_BAR),
+                .semantics {
+                    contentDescription = Constants.TOP_BAR
+                },
             title = {
                 Text(
                     text = Constants.TOP_BAR_TITLE,
                     color = Color.White,
                     style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.testTag(Constants.TOP_BAR_TITLE)
+                    modifier = Modifier.semantics {
+                        contentDescription = Constants.TOP_BAR_TITLE
+                    }
                 )
 
             },
@@ -84,7 +88,7 @@ fun MainScreen(navController: NavController) {
                 MyEventsScreen()
             }
             composable(route = BottomNavigationDestination.FRIENDS.name) {
-                FriendsScreen(navController)
+                FriendsScreen()
             }
             composable(route = BottomNavigationDestination.SETTINGS.name) {
                 SettingsScreen(navController)

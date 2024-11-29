@@ -2,16 +2,21 @@ package com.example.hangoutz.utils
 
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 object Dimensions {
     //Events
-    val SCREEN_PADDING: Dp = 10.dp
-    val CONTENT_TOP_PADDING: Dp = 90.dp
-    val CONTENT_HORIZONTAL_PADDING: Dp = 5.dp
-    val LAZY_COLUMN_BOTTOM_PADDING: Dp = 20.dp
+    val CONTENT_TOP_PADDING: Dp = 40.dp
+    val CONTENT_START_PADDING: Dp = 15.dp
+    val CONTENT_END_PADDING: Dp = 5.dp
     val SPACE_HEIGHT_BETWEEN_CARDS: Dp = 20.dp
+
+    //Floating Button
     val FLOATING_BUTTON_PADDING: Dp = 20.dp
     val FLOATING_ICON_SIZE: Dp = 40.dp
+    val FILTER_BAR_TOP_PADDING = 10.dp
+    val FLOATING_BUTTON_BORDER = 2.dp
+
 
     //InviteRespondButton
     val INVITE_RESPOND_BUTTON_ROUNDED_RADIUS: Dp = 20.dp
@@ -28,6 +33,7 @@ object Dimensions {
     val SPACE_BETWEEN_PLACE_AND_DATE: Dp = 5.dp
     val INVITATION_BOX_END_PADDING: Dp = 20.dp
     val INVITATION_BOX_BOTTOM_PADDING: Dp = 10.dp
+    val INVITATION_BUTTONS_SEPARATION_WIDTH = 10.dp
 
     //Profile image
     val PROFILE_IMAGE_SIZE: Dp = 74.dp
@@ -39,6 +45,10 @@ object Dimensions {
     const val SPLASH_SCREEN_LOGO_INITIAL_ALPHA = 1f
     const val SPLASH_SCREEN_LOGO_TARGETED_ALPHA = 0f
 
+    // Register Screen
+    val REGISTER_BOTTOM_PADDING = 145.dp
+    val REGISTER_FORM_SIDE_PADDING = 30.dp
+    val REGISTER_FORM_BOTTOM_PADDING = 50.dp
 
     // Logo
     const val LOGO_ASPECT_RATIO = 1f
@@ -76,6 +86,41 @@ object Dimensions {
     val ACTION_BUTTON_MEDIUM1 = 50.dp
     val ACTION_BUTTON_MEDIUM2 = 30.dp
     val ACTION_BUTTON_MEDIUM3 = 20.dp
+
+    //Error message
+    val ERROR_MESSAGE_PADDING_SMALL = 10.dp
+
+    //Input Field
+    val INPUT_FIELD_ROUNDED_CORNERS = 20.dp
+    val INPUT_FIELD_PADDING_SMALL = 10.dp
+
+    // Filter bar
+
+    val TAB_TEXT_HEIGHT_MEDIUM_SCREEN = 48.dp
+    val TAB_TEXT_HEIGHT_SMALL_SCREEN = 38.dp
+    val TAB_TEXT_TOP_PADDING = 2.dp
+    val TAB_TEXT_FONT_SIZE_MEDIUM_SCREEN = 12.sp
+    val TAB_TEXT_FONT_SIZE_SMALL_SCREEN = 10.sp
+    val INDICATOR_WIDTH_MEDIUM_SCREEN = 120 .dp
+    val INDICATOR_WIDTH_SMALL_SCREEN = 100.dp
+    val INDICATOR_WIDTH_SPACE = 10.dp
+    val FILTER_BAR_ALPHA = 0.46f
+    val INDICATOR_HEIGHT_MEDIUM_SCREEN = 40.dp
+    val INDICATOR_HEIGHT_SMALL_SCREEN = 30.dp
+    val INDICATOR_TAB_TOP_PADDING_MEDIUM_SCREEN = 5.dp
+    val INDICATOR_TAB_TOP_PADDING_SMALL_SCREEN = 0.dp
+    val INDICATOR_PADDING_START = 2.dp
+
+    //Friends Screen
+    val FRIENDS_OUTER_PADDING = 10.dp
+    val FRIENDS_HORIZONTAL_PADDING = 15.dp
+    val FRIENDS_FIELD_VERTICAL_PADDING = 20.dp
+    val FRIENDS_FIELD_ROUNDED_CORNER = 20.dp
+    val FRIENDS_INNER_VERTICAL_PADDING = 10.dp
+    val FRIENDS_AVATAR_SIZE = 40.dp
+    val FRIENDS_AVATAR_BORDER = 3.dp
+    val FRIENDS_TEXT_START_PADDING = 10.dp
+    val FRIENDS_FLOATING_BUTTON_PADDING = 20.dp
 }
 
 

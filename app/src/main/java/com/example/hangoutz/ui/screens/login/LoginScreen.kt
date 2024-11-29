@@ -20,9 +20,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -68,7 +69,9 @@ fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltVi
                     painterResource(id = R.drawable.logo),
                     initialValue = 0f,
                     targetValue = 1f,
-                    modifier = Modifier.align(Alignment.Center),
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .semantics { contentDescription = Constants.LOGIN_ICON },
                     animationDelay = Constants.LOGO_ANIMATION_DELAY
                 )
             }
@@ -76,7 +79,6 @@ fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltVi
         Column(
             modifier = Modifier
                 .weight(2f)
-                .background(Color.Transparent)
                 .fillMaxWidth()
                 .padding(
                     start = Dimensions.ACTION_BUTTON_MEDIUM2,
@@ -87,14 +89,20 @@ fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltVi
                 EMAIL,
                 data.value.email,
                 { viewmodel.onTextChanged(it) },
-                isError = data.value.isEmailError
+                isError = data.value.isEmailError,
+                modifier = Modifier.semantics {
+                    contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
+                }
             )
             InputField(
                 PASSWORD,
                 data.value.password,
                 { viewmodel.onPassChanged(it) },
                 isPassword = true,
-                isError = data.value.isPasswordError
+                isError = data.value.isPasswordError,
+                modifier = Modifier.semantics {
+                    contentDescription = Constants.LOGIN_PASSWORD_INPUT_FIELD
+                }
             )
             ErrorMessage(data.value.errorMessage)
             ActionButton(
@@ -105,7 +113,8 @@ fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltVi
                             launchSingleTop
                         }
                     }
-                }, Modifier.testTag(Constants.SETTINGS_LOGOUT_BUTTON)
+                },
+                Modifier.semantics { contentDescription = Constants.LOGIN_SIGN_IN_BUTTON }
             )
         }
         Column(
@@ -129,6 +138,9 @@ fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltVi
                     .padding(top = Dimensions.ACTION_BUTTON_SMALL2)
                     .clickable {
                         navController.navigate(NavigationItem.Register.route)
+                    }
+                    .semantics {
+                        contentDescription = Constants.LOGIN_CREATE_ACCOUNT
                     },
                 style = MaterialTheme.typography.labelLarge,
                 textAlign = TextAlign.Center

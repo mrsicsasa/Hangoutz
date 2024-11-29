@@ -12,6 +12,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
@@ -39,6 +41,6 @@ fun nameField(
         modifier = modifier
             .fillMaxWidth()
             .focusRequester(focusRequester)
-            .testTag(SETTINGS_NAME_FIELD_TAG)
+            .semantics { contentDescription = SETTINGS_NAME_FIELD_TAG }
     )
 }

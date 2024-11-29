@@ -3,6 +3,7 @@ package com.example.hangoutz.data.remote
 import com.example.hangoutz.BuildConfig
 import com.example.hangoutz.data.models.Event
 import com.example.hangoutz.data.models.EventCardDPO
+import com.example.hangoutz.data.models.EventsFromInvites
 import retrofit2.Response
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -21,6 +22,16 @@ interface EventAPI {
     suspend fun deleteEvent(
         @Query("id") id: String
     ): Response<Unit>
+
     @GET("${BuildConfig.REQUEST_URL}events?select=*,users(avatar)&order=date")
-    suspend fun getEventsWithAvatar():Response<List<EventCardDPO>>
+    suspend fun getEventsWithAvatar(
+        @Query("owner") userId: String
+    ): Response<List<EventCardDPO>>
+
+    @GET("${BuildConfig.REQUEST_URL}invites?select=events(*)")
+    suspend fun getEventsFromInvites(
+        @Query("event_status") eventStatus: String,
+        @Query("user_id") id: String,
+        @Query("order") orderBy: String = "events(date)"
+    ): Response<List<EventsFromInvites>>
 }

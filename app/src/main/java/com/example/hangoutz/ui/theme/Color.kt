@@ -14,4 +14,5 @@ val Error = Color(0xFFFA626C)
 val TopBarBackgroundColor = Color(0xCC788995)
 val BottomNavigationColor = Color(0xFF2B2A3A)
 val TextBodyGrayColor = Color(0xFFE5E5E5)
-
+val FilteBarBackground = Color(0xFF53576D)
+val Charcoal = Color(0xFF534F4F)

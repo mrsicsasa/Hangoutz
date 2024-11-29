@@ -2,6 +2,7 @@ package com.example.hangoutz.data.remote
 
 import com.example.hangoutz.BuildConfig
 import com.example.hangoutz.data.models.AvatarRequest
+import com.example.hangoutz.data.models.EventCardAvatar
 import com.example.hangoutz.data.models.User
 import com.example.hangoutz.data.models.UserRequest
 import com.example.hangoutz.data.models.UserUpdateRequest
@@ -31,7 +32,12 @@ interface UserAPI {
     ): Response<List<User>>
 
     @POST("${BuildConfig.REQUEST_URL}users")
-    suspend fun insertUser(@Body user: UserRequest): Response<Unit>
+    suspend fun insertUser(@Body user: UserRequest) : Response<Unit>
+
+    @GET("${BuildConfig.REQUEST_URL}users?select=avatar")
+    suspend fun getUserAvatar(
+        @Query("id") id: String
+    ): Response<List<EventCardAvatar>>
 
     @PATCH("${BuildConfig.REQUEST_URL}users")
     suspend fun patchUserById(
@@ -56,4 +62,5 @@ interface UserAPI {
     suspend fun postAvatar(
         @Part image: MultipartBody.Part, @Path("avatarName") avatarName: String
     ): Response<Unit>
+}
 }

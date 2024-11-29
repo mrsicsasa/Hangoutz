@@ -18,26 +18,38 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import com.example.hangoutz.ui.theme.Chestnut
 import com.example.hangoutz.ui.theme.Ivory
+import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Dimensions
 
 @Composable
 fun ActionButton(
     buttonText: String,
+    modifier: Modifier = Modifier,
     onClick: () -> (Unit)
 ) {
     Button(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(containerColor = Ivory),
-        shape = RoundedCornerShape(20.dp),
-        modifier = Modifier
+        shape = RoundedCornerShape(Dimensions.ACTION_BUTTON_MEDIUM3),
+        modifier = modifier
             .fillMaxWidth()
-            .padding(start = 50.dp, end = 50.dp)
-            .height(50.dp),
+            .padding(
+                start = Dimensions.ACTION_BUTTON_MEDIUM1,
+                end = Dimensions.ACTION_BUTTON_MEDIUM1
+            )
+            .height(Dimensions.ACTION_BUTTON_MEDIUM1),
     ) {
-        Text(text = buttonText, style = MaterialTheme.typography.bodyMedium.copy(color = Chestnut))
+        Text(
+            text = buttonText,
+            style = MaterialTheme.typography.bodyMedium.copy(color = Chestnut),
+            modifier = Modifier.semantics {
+                contentDescription =
+                    Constants.ACTION_BUTTON_TEXT
+            })
     }
 }
 
@@ -60,7 +72,10 @@ fun ActionButton(
             shape = RoundedCornerShape(Dimensions.ACTION_BUTTON_MEDIUM3),
             modifier = modifier
                 .fillMaxWidth()
-                .padding(start = Dimensions.ACTION_BUTTON_MEDIUM3, end = Dimensions.ACTION_BUTTON_MEDIUM3)
+                .padding(
+                    start = Dimensions.ACTION_BUTTON_MEDIUM3,
+                    end = Dimensions.ACTION_BUTTON_MEDIUM3
+                )
                 .height(Dimensions.ACTION_BUTTON_MEDIUM1)
                 .align(Alignment.BottomCenter),
         ) {
@@ -73,13 +88,24 @@ fun ActionButton(
                 Text(
                     text = buttonText,
                     style = MaterialTheme.typography.labelLarge,
-                    modifier = Modifier.padding(end = Dimensions.ACTION_BUTTON_SMALL1)
+                    modifier = Modifier
+                        .padding(end = Dimensions.ACTION_BUTTON_SMALL1)
+                        .semantics {
+                            contentDescription =
+                                Constants.ACTION_BUTTON_TEXT
+                        }
                 )
                 Icon(
                     painter = painterResource(painterResource),
                     contentDescription = "Icon",
-                    modifier = Modifier.size(Dimensions.ACTION_BUTTON_MEDIUM3)
+                    modifier = Modifier
+                        .size(Dimensions.ACTION_BUTTON_MEDIUM3)
                         .align(Alignment.CenterVertically)
+                        .semantics {
+                            contentDescription =
+                                Constants.ACTION_BUTTON_ICON
+                        }
+
                 )
             }
         }

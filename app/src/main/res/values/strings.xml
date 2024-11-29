@@ -23,4 +23,9 @@
     <string name="create_account_text">Create Account</string>
     <string name="bottom_navigation_item_icon">bottom navigation item icon</string>
     <string name="fileprovider">com.jerry.jetpack_take_select_photo_image.components.fileprovider</string>
+    <string name="no_events_available">No events available</string>
+    <string name="input_name">Name*</string>
+    <string name="input_email">Email*</string>
+    <string name="input_password">Password*</string>
+    <string name="input_confirm_password">Confirm password*</string>
 </resources>
