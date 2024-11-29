@@ -29,8 +29,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.hangoutz.ui.theme.Charcoal
 import com.example.hangoutz.ui.theme.FilteBarBackground
 import com.example.hangoutz.ui.theme.Orange
@@ -96,10 +94,16 @@ private fun MyTabItem(
                 badge = {
                     Badge(
                         modifier = Modifier
-                            .padding(start = 5.dp)
-                            .size(18.dp),
+                            .padding(start = Dimensions.BADGE_START_PADDING)
+                            .size(Dimensions.BADGE_SIZE),
                         containerColor = OrangeDark
-                    ) { Text(text = numberOfInvites.toString(), fontSize = 14.sp, color = Charcoal) }
+                    ) {
+                        Text(
+                            text = numberOfInvites.toString(),
+                            fontSize = Dimensions.BADGE_FONT_SIZE,
+                            color = Charcoal
+                        )
+                    }
                 },
                 modifier = Modifier.align(Alignment.Center)
             ) {
