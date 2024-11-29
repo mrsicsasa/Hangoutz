@@ -74,6 +74,7 @@ object Constants {
     //Test tags settings screen
     const val SETTINGS_NAME_FIELD_TAG = "settingsNameField"
     const val SETTINGS_NAME_ICON_TAG = "settingsNameIcon"
+    const val SETTINGS_NAME_VALIDATOR_ICON_TAG = "settingsNameValidatorIcon"
     const val SETTINGS_USER_PHOTO_TAG = "settingsUserPhoto"
     const val SETTINGS_BACKGROUND_LINES_TAG = "settingsBackgroundLines"
     const val SETTINGS_EMAIL_FIELD_TAG = "settingsEmailField"
