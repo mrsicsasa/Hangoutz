@@ -78,6 +78,7 @@ object Dimensions {
     val SETTINGS_SCREEN_SMALL3 = 2.5f.dp
     val SETTINGS_SCREEN_SMALL4 = 10.dp
 
+
     //Small range 1-19.dp
     val ACTION_BUTTON_SMALL1 = 10.dp
     val ACTION_BUTTON_SMALL2 = 5.dp
@@ -101,7 +102,7 @@ object Dimensions {
     val TAB_TEXT_TOP_PADDING = 2.dp
     val TAB_TEXT_FONT_SIZE_MEDIUM_SCREEN = 12.sp
     val TAB_TEXT_FONT_SIZE_SMALL_SCREEN = 10.sp
-    val INDICATOR_WIDTH_MEDIUM_SCREEN = 120 .dp
+    val INDICATOR_WIDTH_MEDIUM_SCREEN = 120.dp
     val INDICATOR_WIDTH_SMALL_SCREEN = 100.dp
     val INDICATOR_WIDTH_SPACE = 10.dp
     val FILTER_BAR_ALPHA = 0.46f

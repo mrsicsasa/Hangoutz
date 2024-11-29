@@ -78,6 +78,9 @@ object Constants {
 
     //Settings page
     const val PROFILE_PHOTO = "Profile Photo"
+    const val SETTINGS_CAMERA = "Capture from Camera"
+    const val SETTINGS_GALLERY = "Pick from gallery"
+    const val SETTINGS_ACTION = "Choose Action"
 
     //BottomNavigation bar
     const val BOTTOM_NAVIGATION_BAR = "bottomNavigationBar"

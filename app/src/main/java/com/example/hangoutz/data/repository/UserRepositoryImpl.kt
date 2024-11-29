@@ -31,6 +31,7 @@ class UserRepositoryImpl @Inject constructor(userAPI: UserAPI) : UserRepository 
     override suspend fun insertUser(userRequest: UserRequest): Response<Unit> {
         return api.insertUser(userRequest)
     }
+
     override suspend fun getUserAvatar(id: String): Response<List<EventCardAvatar>> {
         return api.getUserAvatar(id = "eq.$id")
     }
@@ -60,5 +61,4 @@ class UserRepositoryImpl @Inject constructor(userAPI: UserAPI) : UserRepository 
             newAvatar, avatarName
         )
     }
-
 }

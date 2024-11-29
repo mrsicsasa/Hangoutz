@@ -105,7 +105,6 @@ fun ActionButton(
                             contentDescription =
                                 Constants.ACTION_BUTTON_ICON
                         }
-
                 )
             }
         }

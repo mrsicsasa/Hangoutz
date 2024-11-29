@@ -4,8 +4,6 @@ package com.example.hangoutz.ui.screens.settings
 import android.Manifest
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Environment
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -40,7 +38,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
@@ -58,7 +55,6 @@ import com.example.hangoutz.utils.Constants.SETTINGS_EMAIL_FIELD_TAG
 import com.example.hangoutz.utils.Constants.SETTINGS_LOGOUT_BUTTON
 import com.example.hangoutz.utils.Constants.SETTINGS_USER_PHOTO_TAG
 import com.example.hangoutz.utils.Dimensions
-import java.io.File
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
@@ -68,32 +64,7 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
     var showBottomSheet by remember { mutableStateOf(false) }
     var tempUri by remember { mutableStateOf<Uri?>(null) }
 
-    fun getTempUri(): Uri? {
-        val directory = File(
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-            "MyAppImages"
-        )
-        directory?.let {
-            it.mkdirs()
-            val file = try {
-                Log.e("SettingsScreen", "File created")
-                File.createTempFile(
-                    "image_" + System.currentTimeMillis().toString(),
-                    ".jpg",
-                    it
-                )
-            } catch (e: Exception) {
-                Log.e("SettingsScreen", "Failed to create temp file: ${e.message}")
-                return null
-            }
-            return FileProvider.getUriForFile(
-                context,
-                "com.example.hangoutz.fileprovider",
-                file
-            )
-        }
-        return null
-    }
+    getTempUri(context)
 
     val imagePicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
@@ -119,7 +90,7 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
         contract = ActivityResultContracts.RequestPermission()
     ) { isGranted: Boolean ->
         if (isGranted) {
-            val tmpUri = getTempUri()
+            val tmpUri = getTempUri(context)
             tempUri = tmpUri
             tempUri?.let { takePhotoLauncher.launch(it) }
         } else {
@@ -128,7 +99,7 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
     }
 
     if (showBottomSheet) {
-        imageHandleDialog(
+        ImageHandleDialog(
             onDismiss = { showBottomSheet = false },
             onCaptureFromCamera = {
                 showBottomSheet = false
@@ -138,7 +109,7 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
                         permission
                     ) == PackageManager.PERMISSION_GRANTED
                 ) {
-                    val tmpUri = getTempUri()
+                    val tmpUri = getTempUri(context)
                     tempUri = tmpUri
                     tempUri?.let { takePhotoLauncher.launch(it) }
                 } else {

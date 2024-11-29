@@ -60,7 +60,6 @@ class SettingsViewModel @Inject constructor(
                 text = currentText.trimEnd().trimStart(), selection = TextRange(currentText.length)
             )
         )
-
         if (_uiState.value.name.text.length >= 3 && _uiState.value.name.text.length <= 25) {
             val isReadOnlyState = !_uiState.value.isReadOnly
             val currentText = _uiState.value.name.text
@@ -79,9 +78,7 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun saveName() {
-
         if (!_uiState.value.isReadOnly) {
-
             viewModelScope.launch {
                 val userID = SharedPreferencesManager.getUserId(context)
                 val newName = _uiState.value.name
@@ -102,7 +99,6 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun iconSwitch() {
-
         if (_uiState.value.textIcon == R.drawable.pencil) {
             _uiState.value = _uiState.value.copy(textIcon = R.drawable.checkmark)
         } else _uiState.value = _uiState.value.copy(textIcon = R.drawable.pencil)

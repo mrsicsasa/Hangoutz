@@ -80,6 +80,7 @@ object Module {
     fun provideInviteRepository(invitesAPI: InviteAPI): InviteRepository {
         return InviteRepositoryImpl(invitesAPI)
     }
+
     @Provides
     fun provideContext(@ApplicationContext appContext: Context): Context{
         return appContext

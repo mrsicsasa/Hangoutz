@@ -32,7 +32,7 @@ interface UserAPI {
     ): Response<List<User>>
 
     @POST("${BuildConfig.REQUEST_URL}users")
-    suspend fun insertUser(@Body user: UserRequest) : Response<Unit>
+    suspend fun insertUser(@Body user: UserRequest): Response<Unit>
 
     @GET("${BuildConfig.REQUEST_URL}users?select=avatar")
     suspend fun getUserAvatar(
@@ -55,12 +55,10 @@ interface UserAPI {
         @Path("avatarName") avatarName: String
     ): Response<Unit>
 
-
     @Headers("Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpzanh3Zmp1dHN0cnlidmx0am92Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczMDgwODE0MSwiZXhwIjoyMDQ2Mzg0MTQxfQ.nBHlsKMnhgB-_iwXFa_FNZXJ6t-15c-5srRy4QjRXN0")
     @Multipart
     @POST("https://zsjxwfjutstrybvltjov.supabase.co/storage/v1/object/avatar/{avatarName}")
     suspend fun postAvatar(
         @Part image: MultipartBody.Part, @Path("avatarName") avatarName: String
     ): Response<Unit>
-}
 }

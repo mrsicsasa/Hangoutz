@@ -97,7 +97,6 @@ val Typography = Typography(
         fontFamily = inter,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
-      //  lineHeight = 16.sp,
         letterSpacing = 0.5.sp
     ),
 )
