@@ -2,6 +2,7 @@ package com.example.hangoutz.ui.screens.events
 
 import android.annotation.SuppressLint
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -142,9 +143,9 @@ fun EventsList(
 ) {
     Box(contentAlignment = Alignment.Center) {
         if (isLoading) {
-            CircularProgressIndicator()
+            CircularProgressIndicator(modifier = Modifier.semantics { Constants.EVENTS_LOADING_SPINNER })
         } else if (events.isEmpty()) {
-            Text(stringResource(R.string.no_events_available), color = Color.LightGray)
+            Text(stringResource(R.string.no_events_available), color = Color.LightGray, modifier = Modifier.semantics { contentDescription = Constants.NO_EVENTS_AVAILABLE_MESSAGE })
         }
         Column(
             modifier = Modifier
@@ -183,6 +184,7 @@ fun EventsList(
                         )
                     }
                     Spacer(modifier = Modifier.height(Dimensions.SPACE_HEIGHT_BETWEEN_CARDS))
+                    Log.d("Events",event.toString())
                 }
             }
         }

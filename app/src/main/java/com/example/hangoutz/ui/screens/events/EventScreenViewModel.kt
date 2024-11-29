@@ -123,12 +123,17 @@ class EventScreenViewModel @Inject constructor(
     }
 
     private suspend fun getEventsFromInvites(page: String) {
-        _uiState.value = _uiState.value.copy(
-            eventsGoing = emptyList(),
-            eventsInveted = emptyList(),
-            avatars = emptyList(),
-            isLoading = true
-        )
+        if (page == EventsFilterOptions.GOING.name) {
+            _uiState.value = _uiState.value.copy(
+                eventsGoing = emptyList(),
+                isLoading = true
+            )
+        } else {
+            _uiState.value = _uiState.value.copy(
+                eventsInveted = emptyList(),
+                isLoading = true
+            )
+        }
         val response =
             SharedPreferencesManager.getUserId(context)
                 ?.let {
@@ -144,13 +149,13 @@ class EventScreenViewModel @Inject constructor(
                         _uiState.value = _uiState.value.copy(
                             eventsGoing = _uiState.value.eventsGoing + it.map { event ->
                                 event.toEventCardDPO()
-                            }
+                            },
                         )
                     } else {
                         _uiState.value = _uiState.value.copy(
-                            eventsInveted = _uiState.value.eventsGoing + it.map { event ->
+                            eventsInveted = _uiState.value.eventsInveted + it.map { event ->
                                 event.toEventCardDPO()
-                            }
+                            },
                         )
                     }
                     it.forEach { event ->

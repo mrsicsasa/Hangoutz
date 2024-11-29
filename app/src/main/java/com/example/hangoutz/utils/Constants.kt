@@ -45,6 +45,8 @@ object Constants {
     const val HORIZONTAL_PAGER= "horizontalPager"
     const val EVENT_STATUS_ACCEPTED = "accepted"
     const val EVENT_STATUS_DECLINED = "declined"
+    const val NO_EVENTS_AVAILABLE_MESSAGE = "noEventsAvailableMessage"
+    const val EVENTS_LOADING_SPINNER = "eventsLoadingSpinner"
 
     //EventCard
     const val EVENT_CARD = "eventCard"
