@@ -60,7 +60,8 @@ fun MyEventsScreen(viewModel: EventScreenViewModel = hiltViewModel()) {
                 ),
                 selectedItemIndex = data.value.pagerState.currentPage,
                 scope = scope,
-                pagerState = data.value.pagerState
+                pagerState = data.value.pagerState,
+                numberOfInvites = data.value.countOfInvites
             )
             HorizontalPager(
                 state = data.value.pagerState,
@@ -90,7 +91,19 @@ fun MyEventsScreen(viewModel: EventScreenViewModel = hiltViewModel()) {
                         counts = data.value.counts,
                         avatars = data.value.avatars,
                         getBackgroundColor = { viewModel.getCardColor(it) },
-                        getEvents = { viewModel.getEvents(it) }
+                        getEvents = { viewModel.getEvents(it) },
+                        onRejected = {
+                            viewModel.updateInvitesStatus(
+                                status = Constants.EVENT_STATUS_DECLINED,
+                                eventId = it
+                            )
+                        },
+                        onAccepted = {
+                            viewModel.updateInvitesStatus(
+                                status = Constants.EVENT_STATUS_ACCEPTED,
+                                eventId = it
+                            )
+                        }
                     )
 
                     2 -> EventsList(
@@ -108,7 +121,10 @@ fun MyEventsScreen(viewModel: EventScreenViewModel = hiltViewModel()) {
         FloatingPlusButton(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(bottom = Dimensions.FLOATING_BUTTON_PADDING, end = Dimensions.FLOATING_BUTTON_PADDING)
+                .padding(
+                    bottom = Dimensions.FLOATING_BUTTON_PADDING,
+                    end = Dimensions.FLOATING_BUTTON_PADDING
+                )
                 .semantics { contentDescription = Constants.CREATE_EVENT_BUTTON },
             onClickAction = {}
         )
@@ -124,13 +140,20 @@ fun EventsList(
     counts: List<Pair<UUID, Int>>,
     avatars: List<Pair<UUID, String?>>,
     getBackgroundColor: (index: Int) -> Color,
-    getEvents: (page: String) -> Unit
+    getEvents: (page: String) -> Unit,
+    onRejected: (id: UUID) -> Unit = {},
+    onAccepted: (id: UUID) -> Unit = {}
 ) {
     Box(contentAlignment = Alignment.Center) {
         if (isLoading) {
             CircularProgressIndicator(modifier = Modifier.semantics { Constants.EVENTS_LOADING_SPINNER })
         } else if (events.isEmpty()) {
-            Text(stringResource(R.string.no_events_available), color = Color.LightGray, modifier = Modifier.semantics { contentDescription = Constants.NO_EVENTS_AVAILABLE_MESSAGE })
+            Text(
+                stringResource(R.string.no_events_available),
+                color = Color.LightGray,
+                modifier = Modifier.semantics {
+                    contentDescription = Constants.NO_EVENTS_AVAILABLE_MESSAGE
+                })
         }
         Column(
             modifier = Modifier
@@ -163,11 +186,13 @@ fun EventsList(
                             modifier = Modifier.semantics {
                                 contentDescription = Constants.EVENT_CARD
                             },
-                            isInvited = page == EventsFilterOptions.INVITED.name
+                            isInvited = page == EventsFilterOptions.INVITED.name,
+                            onAccepted = { onAccepted(event.id) },
+                            onRejected = { onRejected(event.id) }
                         )
                     }
                     Spacer(modifier = Modifier.height(Dimensions.SPACE_HEIGHT_BETWEEN_CARDS))
-                    Log.d("Events",event.toString())
+                    Log.d("Events", event.toString())
                 }
             }
         }

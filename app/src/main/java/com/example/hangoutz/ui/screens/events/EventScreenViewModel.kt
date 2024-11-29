@@ -6,6 +6,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hangoutz.data.local.SharedPreferencesManager
+import com.example.hangoutz.data.models.UpdateEventStatusDTO
 import com.example.hangoutz.data.models.toEventCardDPO
 import com.example.hangoutz.domain.repository.EventRepository
 import com.example.hangoutz.domain.repository.InviteRepository
@@ -35,6 +36,7 @@ class EventScreenViewModel @Inject constructor(
 
     fun getEvents(page: String = EventsFilterOptions.GOING.name) {
         viewModelScope.launch {
+            getCountOfInvites()
             when (page) {
                 EventsFilterOptions.MINE.name -> {
                     getMineEvents()
@@ -168,5 +170,45 @@ class EventScreenViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(
             isLoading = false
         )
+    }
+
+    fun updateInvitesStatus(status: String, eventId: UUID) {
+        viewModelScope.launch {
+            val response = SharedPreferencesManager.getUserId(context)
+                ?.let {
+                    inviteRepository.updateInviteStatus(
+                        eventId = eventId,
+                        userId = it,
+                        body = UpdateEventStatusDTO(event_status = status)
+                    )
+                }
+            if (response?.isSuccessful == true) {
+                getEvents(EventsFilterOptions.INVITED.name)
+            } else {
+                Log.d("ERROR", response?.code().toString())
+            }
+        }
+    }
+
+    private fun getCountOfInvites() {
+        viewModelScope.launch {
+            val response =
+                SharedPreferencesManager.getUserId(context)
+                    ?.let {
+                        eventRepository.getEventsFromInvites(
+                            eventStatus = "invited",
+                            userID = it
+                        )
+                    }
+            if (response != null) {
+                if (response.isSuccessful && response.body() != null) {
+                    _uiState.value = response.body()?.size?.let {
+                        _uiState.value.copy(
+                            countOfInvites = it
+                        )
+                    }!!
+                }
+            }
+        }
     }
 }

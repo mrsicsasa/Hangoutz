@@ -14,5 +14,6 @@ data class EventScreenState(
     var avatars: List<Pair<UUID, String?>> = emptyList(),
     var pagerState: PagerState = object : PagerState() {
         override val pageCount: Int = Constants.FILTER_BAR_ITEM_COUNT
-    }
+    },
+    var countOfInvites: Int = 0
 )
