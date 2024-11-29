@@ -128,9 +128,9 @@ fun EventsList(
 ) {
     Box(contentAlignment = Alignment.Center) {
         if (isLoading) {
-            CircularProgressIndicator()
+            CircularProgressIndicator(modifier = Modifier.semantics { Constants.EVENTS_LOADING_SPINNER })
         } else if (events.isEmpty()) {
-            Text(stringResource(R.string.no_events_available), color = Color.LightGray)
+            Text(stringResource(R.string.no_events_available), color = Color.LightGray, modifier = Modifier.semantics { contentDescription = Constants.NO_EVENTS_AVAILABLE_MESSAGE })
         }
         Column(
             modifier = Modifier

@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import com.example.hangoutz.ui.theme.Charcoal
 import com.example.hangoutz.ui.theme.FilteBarBackground
 import com.example.hangoutz.ui.theme.Orange
@@ -62,6 +63,7 @@ private fun MyTabItem(
     isSelected: Boolean,
     onClick: () -> Unit,
     tabWidth: Dp,
+    tabHeight: Dp,
     text: String,
 ) {
     val tabTextColor: Color by animateColorAsState(
@@ -79,7 +81,7 @@ private fun MyTabItem(
                 onClick()
             }
             .width(tabWidth)
-            .height(if (LocalConfiguration.current.screenWidthDp > Constants.SCREEN_SIZE_THRESHOLD) Dimensions.TAB_TEXT_HEIGHT_MEDIUM_SCREEN else Dimensions.TAB_TEXT_HEIGHT_SMALL_SCREEN)
+            .height(tabHeight)
             .padding(top = Dimensions.TAB_TEXT_TOP_PADDING),
         text = text,
         color = tabTextColor,
@@ -96,28 +98,36 @@ fun FilterBar(
     scope: CoroutineScope,
     pagerState: PagerState
 ) {
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+    val screenHeight = configuration.screenHeightDp.dp
+    val barWidth = screenWidth * Dimensions.BAR_WIDTH_SCREEN_PERCENT
+    val barHeight = screenHeight * Dimensions.BAR_HEIGHT_SCREEN_PERCENT
+    val tabWidth = (barWidth - Dimensions.TAB_SPACE_FROM_BAR) / items.size
+    val tabHeight = barHeight - Dimensions.TAB_SPACE_FROM_BAR
     val indicatorOffset: Dp by animateDpAsState(
-        targetValue = if (LocalConfiguration.current.screenWidthDp > Constants.SCREEN_SIZE_THRESHOLD) Dimensions.INDICATOR_WIDTH_MEDIUM_SCREEN * selectedItemIndex else Dimensions.INDICATOR_WIDTH_SMALL_SCREEN * selectedItemIndex,
+        targetValue = tabWidth * selectedItemIndex,
         animationSpec = tween(easing = LinearEasing),
     )
 
+
     Box(
         modifier = modifier
-            .width(if (LocalConfiguration.current.screenWidthDp > Constants.SCREEN_SIZE_THRESHOLD) Dimensions.INDICATOR_WIDTH_MEDIUM_SCREEN * items.size + Dimensions.INDICATOR_WIDTH_SPACE else Dimensions.INDICATOR_WIDTH_SMALL_SCREEN * items.size + Dimensions.INDICATOR_WIDTH_SPACE)
+            .height(barHeight)
+            .width(barWidth)
             .clip(CircleShape)
             .background(
                 FilteBarBackground.copy(
                     alpha = Dimensions.FILTER_BAR_ALPHA
                 )
             )
-            .height(if (LocalConfiguration.current.screenWidthDp > Constants.SCREEN_SIZE_THRESHOLD) Dimensions.INDICATOR_HEIGHT_MEDIUM_SCREEN else Dimensions.INDICATOR_HEIGHT_SMALL_SCREEN)
             .padding(if (LocalConfiguration.current.screenWidthDp > Constants.SCREEN_SIZE_THRESHOLD) Dimensions.INDICATOR_TAB_TOP_PADDING_MEDIUM_SCREEN else Dimensions.INDICATOR_TAB_TOP_PADDING_SMALL_SCREEN)
             .padding(start = Dimensions.INDICATOR_PADDING_START)
     ) {
         MyTabIndicator(
-            indicatorWidth = if (LocalConfiguration.current.screenWidthDp > Constants.SCREEN_SIZE_THRESHOLD) Dimensions.INDICATOR_WIDTH_MEDIUM_SCREEN else Dimensions.INDICATOR_WIDTH_SMALL_SCREEN,
             indicatorOffset = indicatorOffset,
             indicatorColor = Orange,
+            indicatorWidth = tabWidth
         )
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -130,7 +140,8 @@ fun FilterBar(
                     onClick = {
                         scope.launch { pagerState.animateScrollToPage(index) }
                     },
-                    tabWidth = if (LocalConfiguration.current.screenWidthDp > Constants.SCREEN_SIZE_THRESHOLD) Dimensions.INDICATOR_WIDTH_MEDIUM_SCREEN else Dimensions.INDICATOR_WIDTH_SMALL_SCREEN,
+                    tabWidth = tabWidth,
+                    tabHeight = tabHeight,
                     text = text,
                 )
             }
