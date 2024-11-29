@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.hangoutz.data.local.SharedPreferencesManager
 import com.example.hangoutz.data.models.ListOfFriends
 import com.example.hangoutz.domain.repository.FriendsRepository
+import com.example.hangoutz.utils.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -18,6 +19,7 @@ import javax.inject.Inject
 data class FriendsUIState(
     val searchQuery: String = "",
     val isActive: Boolean = false,
+    val isLoading: Boolean = true,
     val listOfFriends: List<ListOfFriends> = emptyList()
 )
 
@@ -31,7 +33,7 @@ class FriendsViewModel @Inject constructor(
 
     fun onSearchInput(newText: String) {
         _uiState.value = _uiState.value.copy(searchQuery = newText)
-        if (_uiState.value.searchQuery.length > 2) {
+        if (_uiState.value.searchQuery.length >= Constants.MIN_SEARCH_LENGTH) {
             fetchFriends(isSearching = true)
         } else {
             fetchFriends(isSearching = false)
@@ -63,5 +65,13 @@ class FriendsViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun clearSearchInput() {
+        _uiState.value = _uiState.value.copy(searchQuery = "")
+    }
+
+    fun loadFriends(isLoading: Boolean) {
+        _uiState.value = _uiState.value.copy(isLoading = isLoading)
     }
 }

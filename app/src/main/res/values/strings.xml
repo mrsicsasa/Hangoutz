@@ -21,4 +21,5 @@
     <string name="bottom_navigation_item_icon">bottom navigation item icon</string>
     <string name="no_events_available">No events available</string>
     <string name="searchbar_placeholder">Search…</string>
+    <string name="no_friends_found">No friends found</string>
 </resources>
