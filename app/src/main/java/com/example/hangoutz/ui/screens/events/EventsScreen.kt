@@ -37,6 +37,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.hangoutz.R
 import com.example.hangoutz.data.models.EventCardDPO
+import com.example.hangoutz.ui.components.FloatingPlusButton
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Dimensions
 import com.example.hangoutz.utils.toDate
@@ -110,22 +111,13 @@ fun MyEventsScreen(viewModel: EventScreenViewModel = hiltViewModel()) {
                 }
             }
         }
-        FloatingActionButton(
-            onClick = {},
+        FloatingPlusButton(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(Dimensions.FLOATING_BUTTON_PADDING)
-                .clip(CircleShape)
-                .semantics {
-                    contentDescription = Constants.CREATE_EVENT_BUTTON
-                }
-        ) {
-            Icon(
-                Icons.Filled.Add,
-                stringResource(R.string.floating_action_button_icon_description),
-                modifier = Modifier.size(Dimensions.FLOATING_ICON_SIZE)
-            )
-        }
+                .padding(bottom = Dimensions.FLOATING_BUTTON_PADDING, end = Dimensions.FLOATING_BUTTON_PADDING)
+                .semantics { contentDescription = Constants.CREATE_EVENT_BUTTON },
+            onClickAction = {}
+        )
     }
 }
 

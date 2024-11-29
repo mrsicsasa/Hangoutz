@@ -12,7 +12,7 @@ object Dimensions {
     val SPACE_HEIGHT_BETWEEN_CARDS: Dp = 20.dp
 
     //Floating Button
-    val FLOATING_BUTTON_PADDING: Dp = 20.dp
+    val FLOATING_BUTTON_PADDING: Dp = 10.dp
     val FLOATING_ICON_SIZE: Dp = 40.dp
     val FILTER_BAR_TOP_PADDING = 10.dp
     val FLOATING_BUTTON_BORDER = 2.dp
