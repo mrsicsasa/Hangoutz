@@ -13,7 +13,9 @@ import com.example.hangoutz.R
 import com.example.hangoutz.data.local.SharedPreferencesManager
 import com.example.hangoutz.domain.repository.UserRepository
 import com.example.hangoutz.ui.components.getRandomString
+import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Constants.DEFAULT_USER_PHOTO
+import com.example.hangoutz.utils.getTempUri
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,7 +34,8 @@ data class SettingsData(
     val avatar: String? = null,
     val avatarUri: String? = null,
     val textIcon: Int = R.drawable.pencil,
-    val currentCameraUri: Uri? = null
+    val tempUri: Uri? = null,
+    val showBottomSheet: Boolean = false
 
 )
 
@@ -47,10 +50,19 @@ class SettingsViewModel @Inject constructor(
 
     init {
         getUser()
+        getTempUri(context)
     }
 
     fun onNameChanged(newText: TextFieldValue) {
         _uiState.value = _uiState.value.copy(name = newText)
+    }
+
+    fun setUri(uri : Uri){
+        _uiState.value = _uiState.value.copy(tempUri = uri)
+    }
+
+    fun setShowBottomSheet(showBottomSheet: Boolean){
+        _uiState.value = _uiState.value.copy(showBottomSheet = showBottomSheet)
     }
 
     fun onPencilClick() {
@@ -60,7 +72,7 @@ class SettingsViewModel @Inject constructor(
                 text = currentText.trimEnd().trimStart(), selection = TextRange(currentText.length)
             )
         )
-        if (_uiState.value.name.text.length >= 3 && _uiState.value.name.text.length <= 25) {
+        if (_uiState.value.name.text.length >= Constants.MIN_NAME_LENGTH && _uiState.value.name.text.length <=  Constants.MAX_NAME_LENGTH) {
             val isReadOnlyState = !_uiState.value.isReadOnly
             val currentText = _uiState.value.name.text
             _uiState.value = _uiState.value.copy(
@@ -147,25 +159,29 @@ class SettingsViewModel @Inject constructor(
                     val body = MultipartBody.Part.createFormData(
                         "file", "image_${System.currentTimeMillis()}.jpg", requestFile
                     )
-                    val avatarNameGenerator = getRandomString(20) + ".jpg"
-                    if (_uiState.value.avatar != "avatar_default.png") {
-                        val response3 =
-                            userRepository.deleteUserAvatarByName(_uiState.value.avatar ?: "")
-                        if (response3.isSuccessful) {
-                            Log.i("Info", "sucessfuly deleted old avatar - " + response3.code())
-                        } else {
-                            Log.e("Error", "An error has occured" + response3.code())
+                    val avatarNameGenerator = Constants.TEMPIMAGE + System.currentTimeMillis().toString() + getRandomString(Constants.RANDOM_STRING_LENGTH) + Constants.JPG
+                    if (_uiState.value.avatar !=  Constants.DEFAULT_USER_PHOTO) {
+                        val oldAvatar = _uiState.value.avatar ?: _uiState.value.avatarUri
+                        if (!oldAvatar.isNullOrEmpty()) {
+                            val deleteAvatarResponse =  userRepository.deleteUserAvatarByName(oldAvatar)
+                            if (deleteAvatarResponse.isSuccessful) {
+                                Log.i("Info", "sucessfuly deleted old avatar - " + deleteAvatarResponse.code())
+                            } else {
+                                Log.e("Error", "An error has occured" + deleteAvatarResponse.code())
+                            }
                         }
+
+
                     }
-                    val response = userRepository.postAvatar(body, avatarNameGenerator)
-                    if (response != null) {
-                        if (response.isSuccessful) {
-                            val response2 = userRepository.patchUserAvatarById(
+                    val postAvatarResponse = userRepository.postAvatar(body, avatarNameGenerator)
+                    if (postAvatarResponse != null) {
+                        if (postAvatarResponse.isSuccessful) {
+                            val patchAvatarResponse = userRepository.patchUserAvatarById(
                                 userID ?: "", avatarNameGenerator
                             )
-                            Log.e("Successfully edited", " ${response.code()}")
+                            Log.e("Successfully edited", " ${postAvatarResponse.code()}")
                         } else {
-                            Log.e("An error has ocurred ", " ${response.code()}")
+                            Log.e("An error has ocurred ", " ${postAvatarResponse.code()}")
                         }
                     }
                 }

@@ -49,15 +49,15 @@ interface UserAPI {
         @Query("id") id: String, @Body newAvatar: AvatarRequest
     ): Response<Unit>
 
-    @Headers("Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpzanh3Zmp1dHN0cnlidmx0am92Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczMDgwODE0MSwiZXhwIjoyMDQ2Mzg0MTQxfQ.nBHlsKMnhgB-_iwXFa_FNZXJ6t-15c-5srRy4QjRXN0")
-    @DELETE("https://zsjxwfjutstrybvltjov.supabase.co/storage/v1/object/avatar/{avatarName}")
+    @Headers("Authorization: ${BuildConfig.BEARER_TOKEN}")
+    @DELETE("${BuildConfig.AVATAR_URL}{avatarName}")
     suspend fun deleteAvatarByName(
         @Path("avatarName") avatarName: String
     ): Response<Unit>
 
-    @Headers("Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpzanh3Zmp1dHN0cnlidmx0am92Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTczMDgwODE0MSwiZXhwIjoyMDQ2Mzg0MTQxfQ.nBHlsKMnhgB-_iwXFa_FNZXJ6t-15c-5srRy4QjRXN0")
+    @Headers("Authorization: ${BuildConfig.BEARER_TOKEN}")
     @Multipart
-    @POST("https://zsjxwfjutstrybvltjov.supabase.co/storage/v1/object/avatar/{avatarName}")
+    @POST("${BuildConfig.AVATAR_URL}{avatarName}")
     suspend fun postAvatar(
         @Part image: MultipartBody.Part, @Path("avatarName") avatarName: String
     ): Response<Unit>

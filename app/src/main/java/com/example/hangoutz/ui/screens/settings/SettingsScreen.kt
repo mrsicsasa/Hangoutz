@@ -55,16 +55,14 @@ import com.example.hangoutz.utils.Constants.SETTINGS_EMAIL_FIELD_TAG
 import com.example.hangoutz.utils.Constants.SETTINGS_LOGOUT_BUTTON
 import com.example.hangoutz.utils.Constants.SETTINGS_USER_PHOTO_TAG
 import com.example.hangoutz.utils.Dimensions
+import com.example.hangoutz.utils.getTempUri
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = hiltViewModel()) {
     val data = viewmodel.uiState.collectAsState()
     val context = LocalContext.current
-    var showBottomSheet by remember { mutableStateOf(false) }
     var tempUri by remember { mutableStateOf<Uri?>(null) }
-
-    getTempUri(context)
 
     val imagePicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
@@ -98,11 +96,11 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
         }
     }
 
-    if (showBottomSheet) {
+    if (data.value.showBottomSheet) {
         ImageHandleDialog(
-            onDismiss = { showBottomSheet = false },
+            onDismiss = {viewmodel.setShowBottomSheet(false)},
             onCaptureFromCamera = {
-                showBottomSheet = false
+                viewmodel.setShowBottomSheet(false)
                 val permission = Manifest.permission.CAMERA
                 if (ContextCompat.checkSelfPermission(
                         context,
@@ -118,7 +116,7 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
                 }
             },
             onPickFromGallery = {
-                showBottomSheet = false
+                viewmodel.setShowBottomSheet(false)
                 imagePicker.launch(
                     PickVisualMediaRequest(
                         ActivityResultContracts.PickVisualMedia.ImageOnly
@@ -156,7 +154,7 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
                     .align(Alignment.Center)
                     .testTag(SETTINGS_USER_PHOTO_TAG)
                     .clickable {
-                        showBottomSheet = true
+                        viewmodel.setShowBottomSheet(true)
                     }
             )
             Image(

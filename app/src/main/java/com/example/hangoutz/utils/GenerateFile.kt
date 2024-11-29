@@ -1,4 +1,4 @@
-package com.example.hangoutz.ui.screens.settings
+package com.example.hangoutz.utils
 
 import android.content.Context
 import android.net.Uri
@@ -17,8 +17,8 @@ fun getTempUri(context: Context): Uri? {
         val file = try {
             Log.e("SettingsScreen", "File created")
             File.createTempFile(
-                "image_" + System.currentTimeMillis().toString(),
-                ".jpg",
+                Constants.TEMPIMAGE + System.currentTimeMillis().toString(),
+                Constants.JPG,
                 it
             )
         } catch (e: Exception) {

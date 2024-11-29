@@ -86,6 +86,10 @@ object Constants {
     const val SETTINGS_CAMERA = "Capture from Camera"
     const val SETTINGS_GALLERY = "Pick from gallery"
     const val SETTINGS_ACTION = "Choose Action"
+    const val RANDOM_STRING_LENGTH = 3
+    const val JPG = ".jpg"
+    const val TEMPIMAGE = "_image"
+    const val IMAGEDIRECTORY = "MyAppImages"
 
     //BottomNavigation bar
     const val BOTTOM_NAVIGATION_BAR = "bottomNavigationBar"
@@ -136,4 +140,6 @@ object Constants {
     const val FRIENDS_LIST_PHOTO = "friendsListPhoto"
     const val FRIENDS_LIST_NAME = "friendsListName"
     const val FRIENDS_ADD_BUTTON = "friendsAddButton"
+
+
 }
