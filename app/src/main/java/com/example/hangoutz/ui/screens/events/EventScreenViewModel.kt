@@ -200,7 +200,7 @@ class EventScreenViewModel @Inject constructor(
                             userID = it
                         )
                     }
-            if(response != null) {
+            if (response != null) {
                 if (response.isSuccessful && response.body() != null) {
                     _uiState.value = response.body()?.size?.let {
                         _uiState.value.copy(

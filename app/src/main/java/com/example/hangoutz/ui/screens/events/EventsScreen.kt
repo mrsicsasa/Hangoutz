@@ -121,7 +121,10 @@ fun MyEventsScreen(viewModel: EventScreenViewModel = hiltViewModel()) {
         FloatingPlusButton(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(bottom = Dimensions.FLOATING_BUTTON_PADDING, end = Dimensions.FLOATING_BUTTON_PADDING)
+                .padding(
+                    bottom = Dimensions.FLOATING_BUTTON_PADDING,
+                    end = Dimensions.FLOATING_BUTTON_PADDING
+                )
                 .semantics { contentDescription = Constants.CREATE_EVENT_BUTTON },
             onClickAction = {}
         )
@@ -145,7 +148,12 @@ fun EventsList(
         if (isLoading) {
             CircularProgressIndicator(modifier = Modifier.semantics { Constants.EVENTS_LOADING_SPINNER })
         } else if (events.isEmpty()) {
-            Text(stringResource(R.string.no_events_available), color = Color.LightGray, modifier = Modifier.semantics { contentDescription = Constants.NO_EVENTS_AVAILABLE_MESSAGE })
+            Text(
+                stringResource(R.string.no_events_available),
+                color = Color.LightGray,
+                modifier = Modifier.semantics {
+                    contentDescription = Constants.NO_EVENTS_AVAILABLE_MESSAGE
+                })
         }
         Column(
             modifier = Modifier
@@ -184,7 +192,7 @@ fun EventsList(
                         )
                     }
                     Spacer(modifier = Modifier.height(Dimensions.SPACE_HEIGHT_BETWEEN_CARDS))
-                    Log.d("Events",event.toString())
+                    Log.d("Events", event.toString())
                 }
             }
         }
