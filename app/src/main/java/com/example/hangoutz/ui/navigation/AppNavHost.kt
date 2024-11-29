@@ -46,11 +46,11 @@ fun AppNavHost(
         composable(NavigationItem.CreateEvent.route) {
             CreateEventScreen(navController)
         }
-        composable(NavigationItem.EventDetails.route) {
-            EventDetailsScreen(navController)
-        }
         composable(NavigationItem.EventDetailsOwner.route) {
             EventOwnerDetailsScreen(navController)
+        }
+        composable(NavigationItem.EventDetails.route) {
+            EventDetailsScreen(navController)
         }
     }
 }

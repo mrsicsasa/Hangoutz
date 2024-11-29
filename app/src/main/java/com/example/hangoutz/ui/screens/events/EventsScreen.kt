@@ -5,6 +5,7 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -29,9 +30,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.example.hangoutz.R
 import com.example.hangoutz.data.models.EventCardDPO
 import com.example.hangoutz.ui.components.FloatingPlusButton
+import com.example.hangoutz.ui.navigation.NavigationItem
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Dimensions
 import com.example.hangoutz.utils.toDate
@@ -40,7 +43,7 @@ import java.util.UUID
 
 @SuppressLint("StateFlowValueCalledInComposition", "NewApi")
 @Composable
-fun MyEventsScreen(viewModel: EventScreenViewModel = hiltViewModel()) {
+fun MyEventsScreen(navController: NavController, viewModel: EventScreenViewModel = hiltViewModel()) {
     val data = viewModel.uiState.collectAsState()
     val scope = rememberCoroutineScope()
     Box(modifier = Modifier.fillMaxSize()) {
@@ -75,6 +78,7 @@ fun MyEventsScreen(viewModel: EventScreenViewModel = hiltViewModel()) {
             ) { page ->
                 when (page) {
                     0 -> EventsList(
+                        navController,
                         page = EventsFilterOptions.GOING.name,
                         events = data.value.eventsGoing,
                         isLoading = data.value.isLoading,
@@ -85,6 +89,7 @@ fun MyEventsScreen(viewModel: EventScreenViewModel = hiltViewModel()) {
                     )
 
                     1 -> EventsList(
+                        navController,
                         page = EventsFilterOptions.INVITED.name,
                         events = data.value.eventsInveted,
                         isLoading = data.value.isLoading,
@@ -107,6 +112,7 @@ fun MyEventsScreen(viewModel: EventScreenViewModel = hiltViewModel()) {
                     )
 
                     2 -> EventsList(
+                        navController,
                         page = EventsFilterOptions.MINE.name,
                         events = data.value.eventsMine,
                         isLoading = data.value.isLoading,
@@ -134,6 +140,7 @@ fun MyEventsScreen(viewModel: EventScreenViewModel = hiltViewModel()) {
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun EventsList(
+    navController: NavController,
     page: String,
     events: List<EventCardDPO>,
     isLoading: Boolean,
@@ -144,6 +151,7 @@ fun EventsList(
     onRejected: (id: UUID) -> Unit = {},
     onAccepted: (id: UUID) -> Unit = {}
 ) {
+
     Box(contentAlignment = Alignment.Center) {
         if (isLoading) {
             CircularProgressIndicator(modifier = Modifier.semantics { Constants.EVENTS_LOADING_SPINNER })
@@ -183,7 +191,8 @@ fun EventsList(
                             place = event.place ?: "",
                             date = event.date.toDate().toEventDateDPO(),
                             countOfPeople = (countOfPeoplePair?.second ?: 0),
-                            modifier = Modifier.semantics {
+                            modifier = Modifier.clickable { navController.navigate(NavigationItem.EventDetails.route)  }
+                                .semantics {
                                 contentDescription = Constants.EVENT_CARD
                             },
                             isInvited = page == EventsFilterOptions.INVITED.name,

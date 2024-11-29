@@ -20,14 +20,19 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.hangoutz.R
 import com.example.hangoutz.ui.navigation.BottomNavItem
 import com.example.hangoutz.ui.navigation.BottomNavigationDestination
+import com.example.hangoutz.ui.navigation.NavigationItem
+import com.example.hangoutz.ui.screens.eventDetails.EventDetailsScreen
+import com.example.hangoutz.ui.screens.eventDetailsOwner.EventOwnerDetailsScreen
 import com.example.hangoutz.ui.screens.events.MyEventsScreen
 import com.example.hangoutz.ui.screens.friends.FriendsScreen
+import com.example.hangoutz.ui.screens.login.LoginScreen
 import com.example.hangoutz.ui.screens.settings.SettingsScreen
 import com.example.hangoutz.ui.theme.TopBarBackgroundColor
 import com.example.hangoutz.utils.Constants
@@ -37,6 +42,7 @@ import com.example.hangoutz.utils.Dimensions
 @Composable
 fun MainScreen(navController: NavController) {
     val bottomNavController = rememberNavController()
+    val eventDetailsNavController = rememberNavController()
     Scaffold(topBar = {
         TopAppBar(
             modifier = Modifier
@@ -61,6 +67,7 @@ fun MainScreen(navController: NavController) {
             )
         )
     },
+
         bottomBar = {
             TabView(
                 tabBarItems = listOf(
@@ -71,6 +78,7 @@ fun MainScreen(navController: NavController) {
                 navController = bottomNavController
             )
         }
+
 
     ) { innerPadding ->
         NavHost(
@@ -85,7 +93,7 @@ fun MainScreen(navController: NavController) {
                 .padding(innerPadding)
         ) {
             composable(route = BottomNavigationDestination.EVENTS.name) {
-                MyEventsScreen()
+                MyEventsScreen(navController)
             }
             composable(route = BottomNavigationDestination.FRIENDS.name) {
                 FriendsScreen()
@@ -94,6 +102,5 @@ fun MainScreen(navController: NavController) {
                 SettingsScreen(navController)
             }
         }
-    }
-}
+}}
 
