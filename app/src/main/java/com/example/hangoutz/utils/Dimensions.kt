@@ -12,7 +12,7 @@ object Dimensions {
     val SPACE_HEIGHT_BETWEEN_CARDS: Dp = 20.dp
 
     //Floating Button
-    val FLOATING_BUTTON_PADDING: Dp = 20.dp
+    val FLOATING_BUTTON_PADDING = 10.dp
     val FLOATING_ICON_SIZE: Dp = 40.dp
     val FILTER_BAR_TOP_PADDING = 10.dp
     val FLOATING_BUTTON_BORDER = 2.dp
@@ -22,6 +22,8 @@ object Dimensions {
     val INVITE_RESPOND_BUTTON_ROUNDED_RADIUS: Dp = 20.dp
     val INVITE_RESPOND_BUTTON_WIDTH: Dp = 105.dp
     val INVITE_RESPOND_BUTTON_HEIGHT: Dp = 30.dp
+    val INVITE_RESPOND_BUTTON_FONT_SIZE = 12.sp
+
 
     //EventCard
     val CARD_ROUNDED_CORNER_RADIUS: Dp = 16.dp
@@ -78,7 +80,6 @@ object Dimensions {
     val SETTINGS_SCREEN_SMALL3 = 2.5f.dp
     val SETTINGS_SCREEN_SMALL4 = 10.dp
 
-
     //Small range 1-19.dp
     val ACTION_BUTTON_SMALL1 = 10.dp
     val ACTION_BUTTON_SMALL2 = 5.dp
@@ -97,9 +98,7 @@ object Dimensions {
 
     // Filter bar
 
-    val TAB_TEXT_HEIGHT_MEDIUM_SCREEN = 48.dp
-    val TAB_TEXT_HEIGHT_SMALL_SCREEN = 38.dp
-    val TAB_TEXT_TOP_PADDING = 2.dp
+    val TAB_TEXT_TOP_PADDING = 4.dp
     val TAB_TEXT_FONT_SIZE_MEDIUM_SCREEN = 12.sp
     val TAB_TEXT_FONT_SIZE_SMALL_SCREEN = 10.sp
     val INDICATOR_WIDTH_MEDIUM_SCREEN = 120.dp
@@ -111,6 +110,12 @@ object Dimensions {
     val INDICATOR_TAB_TOP_PADDING_MEDIUM_SCREEN = 5.dp
     val INDICATOR_TAB_TOP_PADDING_SMALL_SCREEN = 0.dp
     val INDICATOR_PADDING_START = 2.dp
+    const val BAR_WIDTH_SCREEN_PERCENT = 0.9f
+    const val BAR_HEIGHT_SCREEN_PERCENT = 0.05f
+    val TAB_SPACE_FROM_BAR = 10.dp
+    val BADGE_START_PADDING = 5.dp
+    val BADGE_SIZE = 18.dp
+    val BADGE_FONT_SIZE = 14.sp
 
     //Friends Screen
     val FRIENDS_OUTER_PADDING = 10.dp
