@@ -13,6 +13,13 @@ object Constants {
     const val SPLASH_SCREEN_BACKGROUND = "splashScreenBackground"
     const val SPLASH_SCREEN_LOGO = "splashScreenLogo"
 
+    //LOGIN
+    const val LOGIN_SIGN_IN_BUTTON = "loginSignInButton"
+    const val LOGIN_CREATE_ACCOUNT = "loginCreateAccount"
+    const val LOGIN_EMAIL_INPUT_FIELD = "loginEmailInputField"
+    const val LOGIN_PASSWORD_INPUT_FIELD = "loginPasswordInputField"
+    const val LOGIN_ICON = "loginIcon"
+
     //credentials
     const val EMAIL = "Email"
     const val PASSWORD = "Password"
@@ -53,6 +60,7 @@ object Constants {
     const val NUMBER_OF_PEOPLE_ADD_OWNER = 1
 
     const val SCREEN_SIZE_THRESHOLD = 400
+
     //Extension
     const val DAY_THRESHOLD = 7
     const val PADDING_ZERO_THRESHOLD = 10
@@ -111,7 +119,7 @@ object Constants {
     const val REGISTER_PASSWORD_ERROR = "registerPasswordError"
     const val REGISTER_CONFIRM_PASSWORD_INPUT = "registerConfirmPasswordInput"
     const val REGISTER_CONFIRM_PASSWORD_ERROR = "registerConfirmPasswordError"
-    const val REGISTER_INCOMPLETE_FORM_ERROR= "registerIncompleteFormError"
+    const val REGISTER_INCOMPLETE_FORM_ERROR = "registerIncompleteFormError"
     const val REGISTER_CREATE_ACCOUNT_BUTTON = "registerCreateAccountButton"
 
     //Friends tags
