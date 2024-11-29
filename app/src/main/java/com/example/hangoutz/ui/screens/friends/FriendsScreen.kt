@@ -76,6 +76,7 @@ fun FriendsScreen(viewModel: FriendsViewModel = hiltViewModel()) {
                 searchQuery = data.value.searchQuery,
                 textColor = Ivory,
                 backgroundColor = CoolGray,
+                clearText = { viewModel.clearSearchInput() },
                 modifier = Modifier
                     .padding(
                         start = Dimensions.FRIENDS_HORIZONTAL_PADDING,
@@ -171,7 +172,6 @@ fun FriendsScreen(viewModel: FriendsViewModel = hiltViewModel()) {
     }
 
     LaunchedEffect(key1 = true) {
-        viewModel.fetchFriends(false)
         viewModel.clearSearchInput()
     }
 }

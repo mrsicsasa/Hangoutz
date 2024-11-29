@@ -69,6 +69,7 @@ class FriendsViewModel @Inject constructor(
 
     fun clearSearchInput() {
         _uiState.value = _uiState.value.copy(searchQuery = "")
+        fetchFriends(false)
     }
 
     fun loadFriends(isLoading: Boolean) {

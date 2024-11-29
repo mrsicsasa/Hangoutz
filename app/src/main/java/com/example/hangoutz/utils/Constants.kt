@@ -127,11 +127,12 @@ object Constants {
 
     //FriendsViewModel
     const val MIN_SEARCH_LENGTH = 3
+    const val FRIENDS_PROFILE_PICTURE_DESCRIPTION = "Author's profile photo"
+    const val FRIENDS_SEARCH_BAR_CLEAR_DESCRIPTION = "Clear search bar icon"
 
     //Friends tags
     const val FRIENDS_BACKGROUND_BOX = "friendsBackgroundBox"
     const val FRIENDS_LIST_ELEMENT = "friendsListElement"
-    const val FRIENDS_PROFILE_PICTURE_DESCRIPTION = "Author's profile photo"
     const val FRIENDS_LIST_PHOTO = "friendsListPhoto"
     const val FRIENDS_LIST_NAME = "friendsListName"
     const val FRIENDS_ADD_BUTTON = "friendsAddButton"
