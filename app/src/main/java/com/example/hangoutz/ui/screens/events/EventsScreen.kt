@@ -121,7 +121,7 @@ fun MyEventsScreen(viewModel: EventScreenViewModel = hiltViewModel()) {
         FloatingPlusButton(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(bottom = Dimensions.FLOATING_BUTTON_PADDING, end = 10.dp)
+                .padding(bottom = Dimensions.FLOATING_BUTTON_PADDING, end = Dimensions.FLOATING_BUTTON_PADDING)
                 .semantics { contentDescription = Constants.CREATE_EVENT_BUTTON },
             onClickAction = {}
         )
