@@ -16,7 +16,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 data class FriendsUIState(
-    val searchQuery : String = "",
+    val searchQuery: String = "",
     val isActive: Boolean = false,
     val listOfFriends: List<ListOfFriends> = emptyList()
 )
@@ -29,15 +29,29 @@ class FriendsViewModel @Inject constructor(
     private var _uiState = MutableStateFlow(FriendsUIState())
     var uiState: StateFlow<FriendsUIState> = _uiState
 
-    init {
-        initUiState()
+    fun onSearchInput(newText: String) {
+        _uiState.value = _uiState.value.copy(searchQuery = newText)
+        if (_uiState.value.searchQuery.length > 2) {
+            fetchFriends(isSearching = true)
+        } else {
+            fetchFriends(isSearching = false)
+        }
     }
 
-    private fun initUiState() {
+    fun fetchFriends(isSearching: Boolean) {
         viewModelScope.launch {
             val response = withContext(Dispatchers.IO) {
                 SharedPreferencesManager.getUserId(context)?.let {
-                    MutableStateFlow(friendsRepository.getFriendsFromUserId(it))
+                    if (isSearching) {
+                        MutableStateFlow(
+                            friendsRepository.getFriendsFromUserId(
+                                it,
+                                _uiState.value.searchQuery
+                            )
+                        )
+                    } else {
+                        MutableStateFlow(friendsRepository.getFriendsFromUserId(it))
+                    }
                 }
             }
             response?.value?.let {
@@ -49,9 +63,5 @@ class FriendsViewModel @Inject constructor(
                 }
             }
         }
-    }
-
-    fun onSearchInput(newText: String) {
-        _uiState.value = _uiState.value.copy(searchQuery = newText)
     }
 }

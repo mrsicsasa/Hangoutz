@@ -7,8 +7,9 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface FriendsAPI {
-    @GET("${BuildConfig.REQUEST_URL}friends?select=users!friend_id(name,avatar)")
+    @GET("${BuildConfig.REQUEST_URL}friends?select=users!friend_id(name,avatar)&users=not.is.null")
     suspend fun getFriendsFromUserId(
-        @Query("user_id") id: String
+        @Query("user_id") id: String,
+        @Query("users.name") startingWith: String
     ): Response<List<ListOfFriends>>
 }

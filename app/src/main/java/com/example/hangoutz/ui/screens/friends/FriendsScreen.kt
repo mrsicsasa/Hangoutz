@@ -16,6 +16,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,9 +31,10 @@ import com.example.hangoutz.BuildConfig
 import com.example.hangoutz.ui.components.FloatingPlusButton
 import com.example.hangoutz.ui.components.SearchField
 import com.example.hangoutz.ui.theme.Charcoal
-import com.example.hangoutz.ui.theme.CoolGray
 import com.example.hangoutz.ui.theme.Ivory
 import com.example.hangoutz.ui.theme.Orange
+import com.example.hangoutz.ui.theme.PalePink
+import com.example.hangoutz.ui.theme.SpanishGray
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Dimensions
 
@@ -50,8 +52,8 @@ fun FriendsScreen(viewModel: FriendsViewModel = hiltViewModel()) {
         Column {
             SearchField(
                 searchQuery = data.value.searchQuery,
-                textColor = Ivory,
-                backgroundColor = CoolGray,
+                textColor = SpanishGray,
+                backgroundColor = PalePink,
                 modifier = Modifier
                     .padding(
                         start = Dimensions.FRIENDS_HORIZONTAL_PADDING,
@@ -133,5 +135,8 @@ fun FriendsScreen(viewModel: FriendsViewModel = hiltViewModel()) {
             .semantics {
                 contentDescription = Constants.FRIENDS_ADD_BUTTON
             }) {}
+    }
+    LaunchedEffect(key1 = true) {
+        viewModel.fetchFriends(false)
     }
 }
