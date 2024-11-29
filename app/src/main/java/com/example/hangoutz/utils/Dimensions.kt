@@ -97,7 +97,6 @@ object Dimensions {
     val INPUT_FIELD_PADDING_SMALL = 10.dp
 
     // Filter bar
-
     val TAB_TEXT_TOP_PADDING = 4.dp
     val TAB_TEXT_FONT_SIZE_MEDIUM_SCREEN = 12.sp
     val TAB_TEXT_FONT_SIZE_SMALL_SCREEN = 10.sp
