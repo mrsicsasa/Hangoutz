@@ -1,6 +1,7 @@
 package com.example.hangoutz.data.remote
 
 import com.example.hangoutz.BuildConfig
+import com.example.hangoutz.data.models.EventCardAvatar
 import com.example.hangoutz.data.models.User
 import com.example.hangoutz.data.models.UserRequest
 import retrofit2.Response
@@ -24,4 +25,9 @@ interface UserAPI {
 
     @POST("${BuildConfig.REQUEST_URL}users")
     suspend fun insertUser(@Body user: UserRequest) : Response<Unit>
+
+    @GET("${BuildConfig.REQUEST_URL}users?select=avatar")
+    suspend fun getUserAvatar(
+        @Query("id") id: String
+    ): Response<List<EventCardAvatar>>
 }
