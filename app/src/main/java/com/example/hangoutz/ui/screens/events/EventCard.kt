@@ -22,7 +22,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import com.example.hangoutz.R
 import com.example.hangoutz.ui.components.ProfileScreen
 import com.example.hangoutz.ui.theme.Blue
@@ -40,7 +39,9 @@ fun EventCard(
     date: String,
     countOfPeople: Int,
     isInvited: Boolean = false,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onAccepted: () -> Unit = {},
+    onRejected: () -> Unit = {}
 ) {
     Card(
         colors = CardColors(
@@ -72,7 +73,7 @@ fun EventCard(
                     style = MaterialTheme.typography.displayLarge,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.semantics { Constants.EVENT_TITLE }
+                    modifier = Modifier.semantics { contentDescription = Constants.EVENT_TITLE }
                 )
                 Text(
                     text = "@ $place",
@@ -107,28 +108,34 @@ fun EventCard(
                         backgroundColor = Blue,
                         fontColor = Color.White,
                         title = stringResource(R.string.decline_button_text),
-                        onClick = {},
-                        modifier = Modifier.semantics { contentDescription = Constants.DECLINE_INVITATION_BUTTON }
+                        onClick = { onRejected() },
+                        modifier = Modifier.semantics {
+                            contentDescription = Constants.DECLINE_INVITATION_BUTTON
+                        }
                     )
-                    Spacer(modifier = Modifier.width(10.dp))
+                    Spacer(modifier = Modifier.width(Dimensions.INVITATION_BUTTONS_SEPARATION_WIDTH))
                     InviteRespondButton(
                         backgroundColor = GreenMinty,
                         fontColor = Color.Black,
                         title = stringResource(R.string.accept_button_text),
-                        onClick = {},
-                        modifier = Modifier.semantics { contentDescription = Constants.ACCEPT_INVITATION_BUTTON }
+                        onClick = { onAccepted() },
+                        modifier = Modifier.semantics {
+                            contentDescription = Constants.ACCEPT_INVITATION_BUTTON
+                        }
                     )
                 }
             } else {
                 Text(
-                    text = if (countOfPeople > 0) stringResource(
+                    text = if (countOfPeople > Constants.NUMBER_OF_PEOPLE_THRESHOLD) stringResource(
                         R.string.people_going,
-                        countOfPeople+1
+                        countOfPeople + Constants.NUMBER_OF_PEOPLE_ADD_OWNER
                     ) else stringResource(R.string.one_person_is_going),
                     style = MaterialTheme.typography.displaySmall.copy(
                         color = TextBodyGrayColor,
                     ),
-                    modifier = Modifier.semantics { contentDescription = Constants.NUMBER_OF_PEOPLE }
+                    modifier = Modifier.semantics {
+                        contentDescription = Constants.NUMBER_OF_PEOPLE
+                    }
                 )
             }
         }

@@ -2,18 +2,19 @@ package com.example.hangoutz.utils
 
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 object Dimensions {
     //Events
-    val SCREEN_PADDING: Dp = 10.dp
-    val CONTENT_TOP_PADDING: Dp = 90.dp
-    val CONTENT_HORIZONTAL_PADDING: Dp = 5.dp
-    val LAZY_COLUMN_BOTTOM_PADDING: Dp = 20.dp
+    val CONTENT_TOP_PADDING: Dp = 40.dp
+    val CONTENT_START_PADDING: Dp = 15.dp
+    val CONTENT_END_PADDING: Dp = 5.dp
     val SPACE_HEIGHT_BETWEEN_CARDS: Dp = 20.dp
 
     //Floating Button
-    val FLOATING_BUTTON_PADDING: Dp = 20.dp
+    val FLOATING_BUTTON_PADDING = 10.dp
     val FLOATING_ICON_SIZE: Dp = 40.dp
+    val FILTER_BAR_TOP_PADDING = 10.dp
     val FLOATING_BUTTON_BORDER = 2.dp
 
 
@@ -21,6 +22,8 @@ object Dimensions {
     val INVITE_RESPOND_BUTTON_ROUNDED_RADIUS: Dp = 20.dp
     val INVITE_RESPOND_BUTTON_WIDTH: Dp = 105.dp
     val INVITE_RESPOND_BUTTON_HEIGHT: Dp = 30.dp
+    val INVITE_RESPOND_BUTTON_FONT_SIZE = 12.sp
+
 
     //EventCard
     val CARD_ROUNDED_CORNER_RADIUS: Dp = 16.dp
@@ -32,6 +35,7 @@ object Dimensions {
     val SPACE_BETWEEN_PLACE_AND_DATE: Dp = 5.dp
     val INVITATION_BOX_END_PADDING: Dp = 20.dp
     val INVITATION_BOX_BOTTOM_PADDING: Dp = 10.dp
+    val INVITATION_BUTTONS_SEPARATION_WIDTH = 10.dp
 
     //Profile image
     val PROFILE_IMAGE_SIZE: Dp = 74.dp
@@ -91,6 +95,22 @@ object Dimensions {
     //Input Field
     val INPUT_FIELD_ROUNDED_CORNERS = 20.dp
     val INPUT_FIELD_PADDING_SMALL = 10.dp
+
+    // Filter bar
+
+    val TAB_TEXT_TOP_PADDING = 4.dp
+    val TAB_TEXT_FONT_SIZE_MEDIUM_SCREEN = 12.sp
+    val TAB_TEXT_FONT_SIZE_SMALL_SCREEN = 10.sp
+    const val FILTER_BAR_ALPHA = 0.46f
+    val INDICATOR_TAB_TOP_PADDING_MEDIUM_SCREEN = 5.dp
+    val INDICATOR_TAB_TOP_PADDING_SMALL_SCREEN = 0.dp
+    val INDICATOR_PADDING_START = 2.dp
+    const val BAR_WIDTH_SCREEN_PERCENT = 0.9f
+    const val BAR_HEIGHT_SCREEN_PERCENT = 0.05f
+    val TAB_SPACE_FROM_BAR = 10.dp
+    val BADGE_START_PADDING = 5.dp
+    val BADGE_SIZE = 18.dp
+    val BADGE_FONT_SIZE = 14.sp
 
     //Friends Screen
     val FRIENDS_OUTER_PADDING = 10.dp
