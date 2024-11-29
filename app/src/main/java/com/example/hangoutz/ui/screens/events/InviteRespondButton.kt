@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.unit.sp
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Dimensions
 
@@ -40,7 +39,7 @@ fun InviteRespondButton(
         Text(
             text = title,
             style = MaterialTheme.typography.displaySmall.copy(
-                fontSize = 12.sp,
+                fontSize = Dimensions.INVITE_RESPOND_BUTTON_FONT_SIZE,
                 color = Color.White
             ),
             modifier = Modifier.semantics {
