@@ -27,11 +27,7 @@ class FriendsViewModel @Inject constructor(
     private var _uiState = MutableStateFlow(FriendsUIState())
     var uiState: StateFlow<FriendsUIState> = _uiState
 
-    init {
-        initUiState()
-    }
-
-    private fun initUiState() {
+    fun initUiState() {
         viewModelScope.launch {
             val response = withContext(Dispatchers.IO) {
                 SharedPreferencesManager.getUserId(context)?.let {

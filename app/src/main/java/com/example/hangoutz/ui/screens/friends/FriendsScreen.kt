@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -110,5 +111,8 @@ fun FriendsScreen(viewModel: FriendsViewModel = hiltViewModel()) {
             .semantics {
                 contentDescription = Constants.FRIENDS_ADD_BUTTON
             }) {}
+    }
+    LaunchedEffect(key1 = true) {
+        viewModel.initUiState()
     }
 }
