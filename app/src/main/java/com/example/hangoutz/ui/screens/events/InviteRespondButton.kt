@@ -39,6 +39,7 @@ fun InviteRespondButton(
         Text(
             text = title,
             style = MaterialTheme.typography.displaySmall.copy(
+                fontSize = Dimensions.INVITE_RESPOND_BUTTON_FONT_SIZE,
                 color = Color.White
             ),
             modifier = Modifier.semantics {

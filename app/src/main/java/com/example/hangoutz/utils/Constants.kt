@@ -42,7 +42,9 @@ object Constants {
     const val FILTER_BAR_ITEM_COUNT: Int = 3
     const val INVITE_STATUS_ACCEPTED = "accepted"
     const val INVITE_STATUS_INVITED = "invited"
-    const val HORIZONTAL_PAGER = "horizontalPager"
+    const val HORIZONTAL_PAGER= "horizontalPager"
+    const val NO_EVENTS_AVAILABLE_MESSAGE = "noEventsAvailableMessage"
+    const val EVENTS_LOADING_SPINNER = "eventsLoadingSpinner"
 
     //EventCard
     const val EVENT_CARD = "eventCard"
@@ -102,8 +104,7 @@ object Constants {
     const val NAME_ERROR_MESSAGE = "Name must be 3–25 characters"
     const val EMAIL_FORMAT_ERROR_MESSAGE = "Email must be in correct format"
     const val EMAIL_DUPLICATE_ERROR_MESSAGE = "Email already in use"
-    const val PASSWORD_ERROR_MESSAGE =
-        "Password must contain at least one number and be minimum 8 characters long"
+    const val PASSWORD_ERROR_MESSAGE = "Password must contain at least one number and be minimum 8 characters long"
     const val CONFIRM_PASSWORD_ERROR_MESSAGE = "Passwords must match"
     const val GENERIC_ERROR_MESSAGE = "An error has occurred"
 
