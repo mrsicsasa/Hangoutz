@@ -10,8 +10,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import com.example.hangoutz.R
 import com.example.hangoutz.ui.theme.Error
 import com.example.hangoutz.ui.theme.Ivory
 import com.example.hangoutz.utils.Dimensions
@@ -45,6 +47,49 @@ fun InputField(
             errorBorderColor = Error,
             errorTextColor = Ivory
         ),
+        textStyle = MaterialTheme.typography.bodySmall.copy(color = Color.White),
+        modifier = modifier
+            .padding(
+                bottom = Dimensions.INPUT_FIELD_PADDING_SMALL,
+                top = Dimensions.INPUT_FIELD_PADDING_SMALL
+            )
+            .fillMaxWidth()
+    )
+}
+
+@Override
+@Composable
+fun InputField(
+    label: String,
+    value: String,
+    onValueChange: (String) -> (Unit),
+    modifier: Modifier = Modifier,
+    painterResource: Int,
+) {
+    OutlinedTextField(
+        value = value,
+        label = { Text(text = label, style = MaterialTheme.typography.bodySmall) },
+        onValueChange = { onValueChange(it) },
+        singleLine = true,
+        shape = RoundedCornerShape(Dimensions.INPUT_FIELD_ROUNDED_CORNERS),
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedTextColor = Ivory,
+            unfocusedTextColor = Ivory,
+            cursorColor = Ivory,
+            focusedLabelColor = Ivory,
+            unfocusedLabelColor = Ivory,
+            focusedBorderColor = Ivory,
+            unfocusedBorderColor = Ivory,
+            errorLabelColor = Ivory,
+            errorBorderColor = Error,
+            errorTextColor = Ivory
+        ),
+        trailingIcon = {
+            androidx.compose.material3.Icon(
+                painter = painterResource(id = painterResource), // Replace with your icon resource
+                contentDescription = "Icon",
+                tint = Color.Gray // Adjust color as needed
+            )},
         textStyle = MaterialTheme.typography.bodySmall.copy(color = Color.White),
         modifier = modifier
             .padding(
