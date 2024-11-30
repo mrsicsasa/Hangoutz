@@ -15,7 +15,6 @@ import com.example.hangoutz.domain.repository.UserRepository
 import com.example.hangoutz.ui.components.getRandomString
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Constants.DEFAULT_USER_PHOTO
-import com.example.hangoutz.utils.getTempUri
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -50,18 +49,17 @@ class SettingsViewModel @Inject constructor(
 
     init {
         getUser()
-        getTempUri(context)
     }
 
     fun onNameChanged(newText: TextFieldValue) {
         _uiState.value = _uiState.value.copy(name = newText)
     }
 
-    fun setUri(uri : Uri){
+    fun setUri(uri: Uri) {
         _uiState.value = _uiState.value.copy(tempUri = uri)
     }
 
-    fun setShowBottomSheet(showBottomSheet: Boolean){
+    fun setShowBottomSheet(showBottomSheet: Boolean) {
         _uiState.value = _uiState.value.copy(showBottomSheet = showBottomSheet)
     }
 
@@ -72,7 +70,7 @@ class SettingsViewModel @Inject constructor(
                 text = currentText.trimEnd().trimStart(), selection = TextRange(currentText.length)
             )
         )
-        if (_uiState.value.name.text.length >= Constants.MIN_NAME_LENGTH && _uiState.value.name.text.length <=  Constants.MAX_NAME_LENGTH) {
+        if (_uiState.value.name.text.length >= Constants.MIN_NAME_LENGTH && _uiState.value.name.text.length <= Constants.MAX_NAME_LENGTH) {
             val isReadOnlyState = !_uiState.value.isReadOnly
             val currentText = _uiState.value.name.text
             _uiState.value = _uiState.value.copy(
@@ -159,23 +157,32 @@ class SettingsViewModel @Inject constructor(
                     val body = MultipartBody.Part.createFormData(
                         "file", "image_${System.currentTimeMillis()}.jpg", requestFile
                     )
-                    val avatarNameGenerator = Constants.TEMPIMAGE + System.currentTimeMillis().toString() + getRandomString(Constants.RANDOM_STRING_LENGTH) + Constants.JPG
-                    if (_uiState.value.avatar !=  Constants.DEFAULT_USER_PHOTO) {
+                    val avatarNameGenerator = Constants.TEMPIMAGE + System.currentTimeMillis()
+                        .toString() + getRandomString(Constants.RANDOM_STRING_LENGTH) + Constants.JPG
+
+                    if (_uiState.value.avatar != Constants.DEFAULT_USER_PHOTO) {
                         val oldAvatar = _uiState.value.avatar ?: _uiState.value.avatarUri
                         if (!oldAvatar.isNullOrEmpty()) {
-                            val deleteAvatarResponse =  userRepository.deleteUserAvatarByName(oldAvatar)
+                            _uiState.value = _uiState.value.copy(avatar = avatarNameGenerator)
+                            Log.d("Debug", "Attempting to delete avatar: $oldAvatar")
+                            _uiState.value = _uiState.value.copy(avatar = avatarNameGenerator)
+                            val deleteAvatarResponse =
+                                userRepository.deleteUserAvatarByName(oldAvatar)
                             if (deleteAvatarResponse.isSuccessful) {
-                                Log.i("Info", "sucessfuly deleted old avatar - " + deleteAvatarResponse.code())
+                                Log.i(
+                                    "Info",
+                                    "sucessfuly deleted old avatar - " + deleteAvatarResponse.code()
+                                )
+
                             } else {
                                 Log.e("Error", "An error has occured" + deleteAvatarResponse.code())
                             }
                         }
-
-
                     }
                     val postAvatarResponse = userRepository.postAvatar(body, avatarNameGenerator)
                     if (postAvatarResponse != null) {
                         if (postAvatarResponse.isSuccessful) {
+                            _uiState.value = _uiState.value.copy(avatar = avatarNameGenerator)
                             val patchAvatarResponse = userRepository.patchUserAvatarById(
                                 userID ?: "", avatarNameGenerator
                             )
