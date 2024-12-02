@@ -33,7 +33,7 @@ fun ParticipantUI(name: String, userAvatar: String) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 15.dp)
+            .padding(vertical = 10.dp)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,

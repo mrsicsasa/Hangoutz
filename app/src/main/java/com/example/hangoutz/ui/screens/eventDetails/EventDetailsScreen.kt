@@ -97,48 +97,58 @@ fun EventDetailsScreen(
                 .verticalScroll(rememberScrollState())
 
         ) {
-            InputField(
-                "title",
-                "title",
-                { },
-                modifier = Modifier.semantics {
-                    contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
-                }
-            )
-            InputField(
-                "description",
-                "description",
-                { },
-                modifier = Modifier.semantics {
-                    contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
-                }
-            )
-            InputField(
-                "city",
-                "city",
-                { },
-                modifier = Modifier.semantics {
-                    contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
-                }
-            )
-            InputField(
-                "street",
-                "street",
-                { },
-                modifier = Modifier.semantics {
-                    contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
-                }
-            )
-            InputField(
-                "place",
-                "place",
-                { },
-                modifier = Modifier.semantics {
-                    contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
-                }
+            data.value.title?.let {
+                InputField(
+                    "Title",
+                    it,
+                    { },
+                    modifier = Modifier.semantics {
+                        contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
+                    }
+                )
+            }
+            data.value.description?.let {
+                InputField(
+                    "description",
+                    it,
+                    { },
+                    modifier = Modifier.semantics {
+                        contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
+                    }
+                )
+            }
+            data.value.city?.let {
+                InputField(
+                    "city",
+                    it,
+                    { },
+                    modifier = Modifier.semantics {
+                        contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
+                    }
+                )
+            }
+            data.value.street?.let {
+                InputField(
+                    "street",
+                    it,
+                    { },
+                    modifier = Modifier.semantics {
+                        contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
+                    }
+                )
+            }
+            data.value.place?.let {
+                InputField(
+                    "place",
+                    it,
+                    { },
+                    modifier = Modifier.semantics {
+                        contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
+                    }
 
 
-            )
+                )
+            }
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -146,33 +156,37 @@ fun EventDetailsScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(35.dp)
             ) {
-                InputFieldWithIcon(
-                    "date",
-                    "date",
-                    { },
-                    modifier = Modifier
-                        .weight(1f)
-                        .semantics {
-                            contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
-                        },
-                    R.drawable.calendaricon,
-                    false,
-                    { }
+                data.value.date?.let {
+                    InputFieldWithIcon(
+                        "date",
+                        it,
+                        { },
+                        modifier = Modifier
+                            .weight(1f)
+                            .semantics {
+                                contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
+                            },
+                        R.drawable.calendaricon,
+                        false,
+                        { }
 
-                )
-                InputFieldWithIcon(
-                    "time",
-                    "time",
-                    { },
-                    modifier = Modifier
-                        .weight(1f)
-                        .semantics {
-                            contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
-                        },
-                    R.drawable.clockicon,
-                    false,
-                    {}
-                )
+                    )
+                }
+                data.value.time?.let {
+                    InputFieldWithIcon(
+                        "time",
+                        it,
+                        { },
+                        modifier = Modifier
+                            .weight(1f)
+                            .semantics {
+                                contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
+                            },
+                        R.drawable.clockicon,
+                        false,
+                        {}
+                    )
+                }
 
             }
 
@@ -200,8 +214,6 @@ fun EventDetailsScreen(
                     userAvatar = participant.avatar  ?: DEFAULT_USER_PHOTO // Provide default avatar if null
                 )
             }
-
-
             ActionButton(
                 "Leave Event",
                 modifier = Modifier.align(Alignment.CenterHorizontally),
