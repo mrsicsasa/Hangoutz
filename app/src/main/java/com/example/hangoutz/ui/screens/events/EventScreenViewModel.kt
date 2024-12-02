@@ -160,6 +160,7 @@ class EventScreenViewModel @Inject constructor(
                     }
                     it.forEach { event ->
                         getAvatars(event.events.owner)
+                        getCountOfAcceptedInvitesForEvent(event.events.id)
                     }
                 }
 
