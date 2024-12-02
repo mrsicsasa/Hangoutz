@@ -2,6 +2,7 @@ package com.example.hangoutz.ui.screens.eventDetails
 
 import android.graphics.RenderEffect
 import android.graphics.Shader
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -35,6 +36,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.hangoutz.R
 import com.example.hangoutz.ui.components.InputField
+import com.example.hangoutz.ui.components.InputFieldWithIcon
+import com.example.hangoutz.ui.navigation.ParticipantsList
 import com.example.hangoutz.ui.screens.login.LoginViewModel
 import com.example.hangoutz.ui.theme.Ivory
 import com.example.hangoutz.ui.theme.TopBarBackgroundColor
@@ -62,7 +65,8 @@ fun EventDetailsScreen(navController: NavController, viewmodel: EventDetailsView
                     style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.semantics {
                         contentDescription = Constants.TOP_BAR_TITLE
-                    }
+                    },
+
                 )
 
             },
@@ -92,7 +96,6 @@ fun EventDetailsScreen(navController: NavController, viewmodel: EventDetailsView
             "title",
             "title",
             {  },
-          false,
             modifier = Modifier.semantics {
                 contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
             }
@@ -101,7 +104,6 @@ fun EventDetailsScreen(navController: NavController, viewmodel: EventDetailsView
             "description",
             "description",
             {  },
-            false,
             modifier = Modifier.semantics {
                 contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
             }
@@ -110,7 +112,6 @@ fun EventDetailsScreen(navController: NavController, viewmodel: EventDetailsView
             "city",
             "city",
             {  },
-            false,
             modifier = Modifier.semantics {
                 contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
             }
@@ -119,7 +120,6 @@ fun EventDetailsScreen(navController: NavController, viewmodel: EventDetailsView
             "street",
             "street",
             {  },
-            false,
             modifier = Modifier.semantics {
                 contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
             }
@@ -128,55 +128,61 @@ fun EventDetailsScreen(navController: NavController, viewmodel: EventDetailsView
             "place",
             "place",
             {  },
-            false,
             modifier = Modifier.semantics {
                 contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
             }
+
+
+
         )
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 2.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(35.dp)
         ) {
-            InputField(
+            InputFieldWithIcon(
                 "date",
                 "date",
                 { },
                 modifier = Modifier
                     .weight(1f)
-                    .padding(end = 8.dp)
                     .semantics {
                         contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
                     },
-                R.drawable.calendar_ic,
+                R.drawable.calendaricon,
+                false,
+                { }
 
             )
-            InputField(
+            InputFieldWithIcon(
                 "time",
                 "time",
                 { },
                 modifier = Modifier
                     .weight(1f)
-                    .padding(end = 8.dp)
                     .semantics {
                         contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
                     },
-                R.drawable.timeicon
+                R.drawable.clockicon,
+                false,
+                {}
             )
 
 }
 
         Text(
-            "participants",
+            "Participants",
             color = Ivory,
-            modifier = Modifier.padding(top = 5.dp)
+            modifier = Modifier.padding(top = 15.dp, bottom = 15.dp),
+            style = MaterialTheme.typography.bodyMedium
         )
 
-        HorizontalDivider(thickness = 2.dp)
+        HorizontalDivider(thickness = 2.dp, color = Ivory)
 
 
-
+ParticipantsList("Sava", R.drawable.img)
 
 
 
