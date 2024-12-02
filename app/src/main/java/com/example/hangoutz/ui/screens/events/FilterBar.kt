@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.PagerState
@@ -34,7 +33,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.hangoutz.ui.theme.Charcoal
 import com.example.hangoutz.ui.theme.FilteBarBackground
 import com.example.hangoutz.ui.theme.Orange
@@ -91,7 +89,7 @@ private fun MyTabItem(
         } else {
             Orange
         },
-        animationSpec = tween(easing = LinearEasing),
+        animationSpec = tween(easing = LinearEasing), label = Constants.ANIMATION_TAB_TEXT_COLOR,
     )
 
     Box(
@@ -107,34 +105,26 @@ private fun MyTabItem(
             .fillMaxHeight()
     ) {
         if (text == EventsFilterOptions.INVITED.name.uppercase() && numberOfInvites > 0) {
-            Row(
-               // modifier = Modifier.align(Alignment.Center)
-            ) {
+            Row {
                 Text(
                     text = text,
                     color = tabTextColor,
                     textAlign = TextAlign.Center,
-                    fontSize = 12.sp,
+                    fontSize = Dimensions.TAB_ITEM_FONT_SIZE,
                 )
                 Box(contentAlignment = Alignment.Center) {
                     Badge(
                         modifier = Modifier
-                            .size(Dimensions.BADGE_SIZE)
-                            .padding(bottom = 2.dp),
+                            .size(Dimensions.BADGE_SIZE),
                         containerColor = OrangeDark
                     ) {
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                        //    contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = numberOfInvites.toString(),
-                                fontSize = Dimensions.BADGE_FONT_SIZE,
-                                color = Charcoal,
-                             //   textAlign = TextAlign.Center,
-                                modifier = Modifier.align(Alignment.Center)
-                            )
-                        }
+                        Text(
+                            text = numberOfInvites.toString(),
+                            fontSize = Dimensions.BADGE_FONT_SIZE,
+                            color = Charcoal,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.fillMaxSize()
+                        )
                     }
                 }
             }
@@ -144,7 +134,7 @@ private fun MyTabItem(
                 text = text,
                 color = tabTextColor,
                 textAlign = TextAlign.Center,
-                fontSize = 12.sp,
+                fontSize = Dimensions.TAB_ITEM_FONT_SIZE,
                 modifier = Modifier
                     .align(Alignment.Center)
             )
@@ -161,27 +151,25 @@ fun FilterBar(
     modifier: Modifier = Modifier,
     scope: CoroutineScope,
     pagerState: PagerState,
-    numberOfInvites: Int = 0
+    numberOfInvites: Int = Constants.NUMBER_OF_INVITES_DEFAULT_VALUE
 ) {
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
     val screenHeight = configuration.screenHeightDp.dp
     val barWidth = screenWidth * Dimensions.BAR_WIDTH_SCREEN_PERCENT
     val barHeight = screenHeight * Dimensions.BAR_HEIGHT_SCREEN_PERCENT
-    val tabWidth = (barWidth / items.size)
-    val tabHeight = barHeight * 0.7f
+    val tabWidth = barWidth / items.size
+    val tabHeight = barHeight * Dimensions.TAB_HEIGHT_PERCENT
     val indicatorOffset: Dp by animateDpAsState(
-        targetValue = if (tabWidth * selectedItemIndex == 0.dp) {
-            (tabWidth * selectedItemIndex + tabWidth * 0.1f)
-        } else if (tabWidth * selectedItemIndex == tabWidth * items.size) {
-            (tabWidth * selectedItemIndex + tabWidth * 0.1f)
+        targetValue = if (selectedItemIndex == Constants.INVITED_TAB_INDEX) {
+            tabWidth * selectedItemIndex + tabWidth * Dimensions.INDICATOR_POSITION_INVITED
         } else {
-            tabWidth * selectedItemIndex + tabWidth * 0.07f
+            (tabWidth * selectedItemIndex + tabWidth * Dimensions.INDICATOR_POSITION_OFFSET)
         },
 
-        animationSpec = tween(easing = LinearEasing),
+        animationSpec = tween(easing = LinearEasing), label = Constants.ANIMATION_INDICATOR_OFFSET,
     )
-    val indicatorYOffset = barHeight * 0.16f
+    val indicatorYOffset = barHeight * Dimensions.INDICATOR_Y_OFFSET
 
 
     Box(
@@ -198,7 +186,7 @@ fun FilterBar(
         MyTabIndicator(
             indicatorOffset = indicatorOffset,
             indicatorColor = Orange,
-            indicatorWidth = tabWidth * 0.8f,
+            indicatorWidth = if (selectedItemIndex == Constants.INVITED_TAB_INDEX) tabWidth * Dimensions.INDICATOR_INVITED_WIDTH_PERCENT else tabWidth * Dimensions.INDICATOR_WIDTH_PERCENT,
             indicatorHeight = tabHeight,
             indicatorYOffset = indicatorYOffset
         )
@@ -208,7 +196,7 @@ fun FilterBar(
             modifier = Modifier.clip(CircleShape),
         ) {
             items.mapIndexed { index, text ->
-                var isSelected = index == selectedItemIndex
+                val isSelected = index == selectedItemIndex
                 MyTabItem(
                     isSelected = isSelected,
                     onClick = {
@@ -216,7 +204,7 @@ fun FilterBar(
                             scope.launch {
                                 pagerState.animateScrollToPage(
                                     index, animationSpec = tween(
-                                        1000
+                                        Dimensions.SLIDE_ANIMATION_DURATION
                                     )
                                 )
                             }

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.EaseInOut
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -90,7 +89,7 @@ fun MyEventsScreen(viewModel: EventScreenViewModel = hiltViewModel()) {
 
                     1 -> EventsList(
                         page = EventsFilterOptions.INVITED.name,
-                        events = data.value.eventsInveted,
+                        events = data.value.eventsInvited,
                         isLoading = data.value.isLoading,
                         counts = data.value.counts,
                         avatars = data.value.avatars,
@@ -190,9 +189,11 @@ fun EventsList(
                             place = event.place ?: "",
                             date = event.date.toDate().toEventDateDPO(),
                             countOfPeople = (countOfPeoplePair?.second ?: 0),
-                            modifier = Modifier.semantics {
-                                contentDescription = Constants.EVENT_CARD
-                            }.animateItem(),
+                            modifier = Modifier
+                                .semantics {
+                                    contentDescription = Constants.EVENT_CARD
+                                }
+                                .animateItem(),
                             isInvited = page == EventsFilterOptions.INVITED.name,
                             onAccepted = { onAccepted(event.id) },
                             onRejected = { onRejected(event.id) }
