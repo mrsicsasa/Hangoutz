@@ -4,6 +4,9 @@ import android.annotation.SuppressLint
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.Animatable
+import androidx.compose.animation.core.EaseInOut
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -144,6 +148,9 @@ fun EventsList(
     onRejected: (id: UUID) -> Unit = {},
     onAccepted: (id: UUID) -> Unit = {}
 ) {
+    val angle = remember {
+        androidx.compose.animation.core.Animatable(0f)
+    }
     Box(contentAlignment = Alignment.Center) {
         if (isLoading) {
             CircularProgressIndicator(modifier = Modifier.semantics { Constants.EVENTS_LOADING_SPINNER })
@@ -185,7 +192,7 @@ fun EventsList(
                             countOfPeople = (countOfPeoplePair?.second ?: 0),
                             modifier = Modifier.semantics {
                                 contentDescription = Constants.EVENT_CARD
-                            },
+                            }.animateItem(),
                             isInvited = page == EventsFilterOptions.INVITED.name,
                             onAccepted = { onAccepted(event.id) },
                             onRejected = { onRejected(event.id) }
@@ -199,5 +206,12 @@ fun EventsList(
     }
     LaunchedEffect(key1 = true) {
         getEvents(page)
+        angle.animateTo(
+            360f,
+            animationSpec = tween(
+                3000,
+                easing = EaseInOut
+            )
+        )
     }
 }

@@ -110,7 +110,7 @@ object Dimensions {
     val TAB_SPACE_FROM_BAR = 10.dp
     val BADGE_START_PADDING = 5.dp
     val BADGE_SIZE = 18.dp
-    val BADGE_FONT_SIZE = 14.sp
+    val BADGE_FONT_SIZE = 10.sp
 
     //Friends Screen
     val FRIENDS_OUTER_PADDING = 10.dp

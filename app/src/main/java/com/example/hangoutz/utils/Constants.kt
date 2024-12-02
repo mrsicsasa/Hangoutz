@@ -47,6 +47,7 @@ object Constants {
     const val EVENT_STATUS_DECLINED = "declined"
     const val NO_EVENTS_AVAILABLE_MESSAGE = "noEventsAvailableMessage"
     const val EVENTS_LOADING_SPINNER = "eventsLoadingSpinner"
+    const val FILTER_BAR_ITEM = "filterBarItem"
 
     //EventCard
     const val EVENT_CARD = "eventCard"
