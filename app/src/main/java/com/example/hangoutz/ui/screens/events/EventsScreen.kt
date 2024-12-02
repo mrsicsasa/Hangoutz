@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.core.EaseInOut
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -22,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -91,7 +94,7 @@ fun MyEventsScreen(navController: NavController, viewModel: EventScreenViewModel
                     1 -> EventsList(
                         navController,
                         page = EventsFilterOptions.INVITED.name,
-                        events = data.value.eventsInveted,
+                        events = data.value.eventsInvited,
                         isLoading = data.value.isLoading,
                         counts = data.value.counts,
                         avatars = data.value.avatars,
@@ -151,7 +154,9 @@ fun EventsList(
     onRejected: (id: UUID) -> Unit = {},
     onAccepted: (id: UUID) -> Unit = {}
 ) {
-
+    val angle = remember {
+        androidx.compose.animation.core.Animatable(0f)
+    }
     Box(contentAlignment = Alignment.Center) {
         if (isLoading) {
             CircularProgressIndicator(modifier = Modifier.semantics { Constants.EVENTS_LOADING_SPINNER })
@@ -208,5 +213,12 @@ fun EventsList(
     }
     LaunchedEffect(key1 = true) {
         getEvents(page)
+        angle.animateTo(
+            360f,
+            animationSpec = tween(
+                3000,
+                easing = EaseInOut
+            )
+        )
     }
 }
