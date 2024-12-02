@@ -130,7 +130,7 @@ class EventScreenViewModel @Inject constructor(
             )
         } else {
             _uiState.value = _uiState.value.copy(
-                eventsInveted = emptyList(),
+                eventsInvited = emptyList(),
                 isLoading = true
             )
         }
@@ -153,7 +153,7 @@ class EventScreenViewModel @Inject constructor(
                         )
                     } else {
                         _uiState.value = _uiState.value.copy(
-                            eventsInveted = _uiState.value.eventsInveted + it.map { event ->
+                            eventsInvited = _uiState.value.eventsInvited + it.map { event ->
                                 event.toEventCardDPO()
                             },
                         )
