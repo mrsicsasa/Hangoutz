@@ -135,7 +135,7 @@ fun MyEventsScreen(navController: NavController, viewModel: EventScreenViewModel
                     end = Dimensions.FLOATING_BUTTON_PADDING
                 )
                 .semantics { contentDescription = Constants.CREATE_EVENT_BUTTON },
-            onClickAction = {}
+            onClickAction = { navController.navigate(NavigationItem.CreateEvent.route)}
         )
     }
 }
