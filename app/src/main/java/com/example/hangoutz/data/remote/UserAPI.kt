@@ -30,4 +30,7 @@ interface UserAPI {
     suspend fun getUserAvatar(
         @Query("id") id: String
     ): Response<List<EventCardAvatar>>
+
+    @GET("${BuildConfig.REQUEST_URL}users")
+    suspend fun getAllUsers(): Response<List<User>>
 }

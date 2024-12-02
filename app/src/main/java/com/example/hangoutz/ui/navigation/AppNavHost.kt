@@ -49,9 +49,15 @@ fun AppNavHost(
         composable(NavigationItem.EventDetailsOwner.route) {
             EventOwnerDetailsScreen(navController)
         }
-        composable(NavigationItem.EventDetails.route) {
-            EventDetailsScreen(navController)
+        composable(NavigationItem.EventDetails.route) { backStackEntry ->
+            val eventId = backStackEntry.arguments?.getString("eventId")
+            if (eventId != null) {
+                EventDetailsScreen(navController, eventId)
+            } else {
+                // Handle the error case where eventId is null
+            }
+        }
         }
     }
-}
+
 

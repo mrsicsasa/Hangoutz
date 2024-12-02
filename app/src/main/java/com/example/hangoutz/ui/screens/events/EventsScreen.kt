@@ -191,7 +191,7 @@ fun EventsList(
                             place = event.place ?: "",
                             date = event.date.toDate().toEventDateDPO(),
                             countOfPeople = (countOfPeoplePair?.second ?: 0),
-                            modifier = Modifier.clickable { navController.navigate(NavigationItem.EventDetails.route)  }
+                            modifier = Modifier.clickable { navController.navigate("EVENT_DETAILS/${event.id}")}
                                 .semantics {
                                 contentDescription = Constants.EVENT_CARD
                             },

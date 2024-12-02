@@ -1,17 +1,13 @@
-package com.example.hangoutz.ui.navigation
+package com.example.hangoutz.ui.screens.eventDetails
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Divider
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -19,26 +15,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
-import com.example.hangoutz.BuildConfig
-import com.example.hangoutz.R
 import com.example.hangoutz.ui.theme.Ivory
 import com.example.hangoutz.ui.theme.Orange
 import com.example.hangoutz.utils.Constants.PROFILE_PHOTO
 import com.example.hangoutz.utils.Constants.SETTINGS_USER_PHOTO_TAG
-import com.example.hangoutz.utils.Dimensions
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun ParticipantsList(name: String, userAvatar: Int) {
+fun ParticipantUI(name: String, userAvatar: String) {
     Column(
         modifier = Modifier
             .fillMaxWidth()

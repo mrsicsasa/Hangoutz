@@ -32,4 +32,9 @@ class UserRepositoryImpl @Inject constructor(userAPI: UserAPI) : UserRepository 
     override suspend fun insertUser(userRequest: UserRequest): Response<Unit> {
         return api.insertUser(userRequest)
     }
+
+    override suspend fun getAllUsers(): Response<List<User>>  {
+        return api.getAllUsers()
+    }
+
 }

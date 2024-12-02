@@ -11,4 +11,5 @@ interface UserRepository {
     suspend fun insertUser(userRequest: UserRequest): Response<Unit>
     suspend fun getUserById(id: String):Response<List<User>>
     suspend fun getUserAvatar(id: String): Response<List<EventCardAvatar>>
+    suspend fun getAllUsers(): Response<List<User>>
 }
