@@ -108,7 +108,7 @@ private fun MyTabItem(
     ) {
         if (text == EventsFilterOptions.INVITED.name.uppercase() && numberOfInvites > 0) {
             Row(
-                modifier = Modifier.align(Alignment.Center)
+               // modifier = Modifier.align(Alignment.Center)
             ) {
                 Text(
                     text = text,
@@ -125,7 +125,7 @@ private fun MyTabItem(
                     ) {
                         Box(
                             modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center
+                        //    contentAlignment = Alignment.Center
                         ) {
                             Text(
                                 text = numberOfInvites.toString(),
@@ -176,7 +176,7 @@ fun FilterBar(
         } else if (tabWidth * selectedItemIndex == tabWidth * items.size) {
             (tabWidth * selectedItemIndex + tabWidth * 0.1f)
         } else {
-            tabWidth * selectedItemIndex + tabWidth * 0.05f
+            tabWidth * selectedItemIndex + tabWidth * 0.07f
         },
 
         animationSpec = tween(easing = LinearEasing),
