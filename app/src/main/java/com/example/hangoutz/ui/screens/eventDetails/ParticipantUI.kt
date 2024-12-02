@@ -21,6 +21,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
+import com.example.hangoutz.BuildConfig
 import com.example.hangoutz.ui.theme.Ivory
 import com.example.hangoutz.ui.theme.Orange
 import com.example.hangoutz.utils.Constants.PROFILE_PHOTO
@@ -39,7 +40,7 @@ fun ParticipantUI(name: String, userAvatar: String) {
             modifier = Modifier.fillMaxWidth()
         ) {
             GlideImage(
-                model = userAvatar,
+                model = "${BuildConfig.BASE_URL_AVATAR}${userAvatar}",
                 contentDescription = PROFILE_PHOTO,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier

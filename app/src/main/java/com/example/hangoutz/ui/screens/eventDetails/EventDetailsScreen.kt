@@ -197,7 +197,7 @@ fun EventDetailsScreen(
             participants.forEach { participant ->
                 ParticipantUI(
                     name = participant.name,
-                    userAvatar = participant.avatar ?: DEFAULT_USER_PHOTO // Provide default avatar if null
+                    userAvatar = participant.avatar  ?: DEFAULT_USER_PHOTO // Provide default avatar if null
                 )
             }
 
