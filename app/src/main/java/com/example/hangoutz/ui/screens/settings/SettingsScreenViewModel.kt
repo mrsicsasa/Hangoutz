@@ -180,16 +180,14 @@ class SettingsViewModel @Inject constructor(
                         }
                     }
                     val postAvatarResponse = userRepository.postAvatar(body, avatarNameGenerator)
-                    if (postAvatarResponse != null) {
-                        if (postAvatarResponse.isSuccessful) {
-                            _uiState.value = _uiState.value.copy(avatar = avatarNameGenerator)
-                            val patchAvatarResponse = userRepository.patchUserAvatarById(
-                                userID ?: "", avatarNameGenerator
-                            )
-                            Log.e("Successfully edited", " ${postAvatarResponse.code()}")
-                        } else {
-                            Log.e("An error has ocurred ", " ${postAvatarResponse.code()}")
-                        }
+                    if (postAvatarResponse.isSuccessful) {
+                        _uiState.value = _uiState.value.copy(avatar = avatarNameGenerator)
+                        val patchAvatarResponse = userRepository.patchUserAvatarById(
+                            userID ?: "", avatarNameGenerator
+                        )
+                        Log.e("Successfully edited", " ${postAvatarResponse.code()}")
+                    } else {
+                        Log.e("An error has ocurred ", " ${postAvatarResponse.code()}")
                     }
                 }
             }

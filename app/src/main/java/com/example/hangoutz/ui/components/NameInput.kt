@@ -19,8 +19,6 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.constraintlayout.compose.ConstraintLayout
-import com.example.hangoutz.ui.components.nameField
-import com.example.hangoutz.R
 import com.example.hangoutz.ui.theme.Ivory
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Constants.SETTINGS_NAME_ICON_TAG
@@ -29,7 +27,11 @@ import com.example.hangoutz.utils.Dimensions
 
 @Composable
 fun NameInput(
-   icon: Int, name: TextFieldValue, isReadOnly: Boolean, onNameChanged: (TextFieldValue) -> Unit, onPencilClick: () -> Unit
+    icon: Int,
+    name: TextFieldValue,
+    isReadOnly: Boolean,
+    onNameChanged: (TextFieldValue) -> Unit,
+    onPencilClick: () -> Unit
 ) {
     val focusRequester = remember { FocusRequester() }
     ConstraintLayout(
@@ -47,8 +49,8 @@ fun NameInput(
             top.linkTo(parent.top)
             bottom.linkTo(parent.bottom)
         }) {
-            nameField(
-               name,
+            NameField(
+                name,
                 { onNameChanged(it) },
                 isReadOnly,
                 focusRequester,
