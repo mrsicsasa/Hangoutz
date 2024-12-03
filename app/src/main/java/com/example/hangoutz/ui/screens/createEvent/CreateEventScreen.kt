@@ -212,10 +212,12 @@ fun CreateEventScreen(
         ActionButton(stringResource(R.string.event_create),
             modifier = Modifier.align(Alignment.CenterHorizontally)
                 .padding(top = 15.dp, bottom = 15.dp)
-                .semantics { contentDescription= Constants.CREATE_EVENT_ADD_CREATE_BUTTON}
+                .semantics { contentDescription= Constants.CREATE_EVENT_ADD_CREATE_BUTTON},
             onClick = {
                 viewmodel.createEvent()
-            })
+            }
+        )
+
 
 
             if(data.value.showDatePicker){
