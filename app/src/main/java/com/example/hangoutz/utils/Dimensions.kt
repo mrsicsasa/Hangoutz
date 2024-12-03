@@ -85,10 +85,11 @@ object Dimensions {
     val ACTION_BUTTON_SMALL2 = 5.dp
 
     //Medium range 20-99.dp
+
     val ACTION_BUTTON_MEDIUM1 = 50.dp
     val ACTION_BUTTON_MEDIUM2 = 30.dp
     val ACTION_BUTTON_MEDIUM3 = 20.dp
-
+    val ACTION_BUTTON_MEDIUM4 = 80.dp
     //Error message
     val ERROR_MESSAGE_PADDING_SMALL = 10.dp
 
@@ -127,6 +128,13 @@ object Dimensions {
     val EVENTDETAILS_TOP_PADDING = 35.dp
 
     //CREATE EVENT
+    val CREATE_EVENT_HORIZONTAL_SPACING = 35.dp
+    val CREATE_EVENT_VERTICAL_PADDING = 2.dp
+    val CREATE_EVENT_TEXT_PADDING = 15.dp
+    val CREATE_EVENT_LINE_THICKNESS = 2.dp
+
+
+
 }
 
 

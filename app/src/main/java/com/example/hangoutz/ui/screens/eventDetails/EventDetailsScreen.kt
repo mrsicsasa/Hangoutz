@@ -1,6 +1,7 @@
 package com.example.hangoutz.ui.screens.eventDetails
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,7 +26,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
@@ -52,6 +55,9 @@ fun EventDetailsScreen(
     val data = viewmodel.uiState.collectAsState()
     viewmodel.getEventIdFromController(navController)
 
+    val scrollableField =
+        LocalConfiguration.current.screenHeightDp.dp - (LocalConfiguration.current.screenHeightDp.dp - Dimensions.ACTION_BUTTON_MEDIUM4)
+
     Scaffold(topBar = {
         TopAppBar(
             modifier = Modifier
@@ -68,165 +74,176 @@ fun EventDetailsScreen(
                     modifier = Modifier.semantics {
                         contentDescription = Constants.TOP_BAR_TITLE
                     },
-
-                    )
-
+                )
             },
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = TopBarBackgroundColor
             )
         )
     }) { innerPadding ->
-
-
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .paint(
                     painterResource(R.drawable.blurred_background),
                     contentScale = ContentScale.FillBounds
-
                 )
-                .padding(
-                    top = innerPadding.calculateTopPadding() + Dimensions.EVENTDETAILS_TOP_PADDING,
-                    start = Dimensions.ACTION_BUTTON_MEDIUM2,
-                    end = Dimensions.ACTION_BUTTON_MEDIUM2
-                )
-                .verticalScroll(rememberScrollState())
-
         ) {
-            data.value.title?.let {
-                InputField(
-                    "Title",
-                    it,
-                    { },
-                    modifier = Modifier.semantics {
-                        contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
-                    }
-                )
-            }
-            data.value.description?.let {
-                InputField(
-                    "description",
-                    it,
-                    { },
-                    modifier = Modifier.semantics {
-                        contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
-                    }
-                )
-            }
-            data.value.city?.let {
-                InputField(
-                    "city",
-                    it,
-                    { },
-                    modifier = Modifier.semantics {
-                        contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
-                    }
-                )
-            }
-            data.value.street?.let {
-                InputField(
-                    "street",
-                    it,
-                    { },
-                    modifier = Modifier.semantics {
-                        contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
-                    }
-                )
-            }
-            data.value.place?.let {
-                InputField(
-                    "place",
-                    it,
-                    { },
-                    modifier = Modifier.semantics {
-                        contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
-                    }
-
-
-                )
-            }
-            Row(
+            Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 2.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(35.dp)
+                    .padding(
+                        top = innerPadding.calculateTopPadding() + Dimensions.EVENTDETAILS_TOP_PADDING,
+                        start = Dimensions.ACTION_BUTTON_MEDIUM2,
+                        end = Dimensions.ACTION_BUTTON_MEDIUM2,
+                        bottom = scrollableField
+                    )
             ) {
-                data.value.date?.let {
-                    InputFieldWithIcon(
-                        "date",
-                        it,
-                        { },
-                        modifier = Modifier
-                            .weight(1f)
-                            .semantics {
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .verticalScroll(rememberScrollState())
+
+                ) {
+
+                    data.value.title?.let {
+                        InputField(
+                            stringResource(R.string.event_title),
+                            it,
+                            { },
+                            modifier = Modifier.semantics {
                                 contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
-                            },
-                        R.drawable.calendaricon,
-                        false,
-                        true,
-                        { }
+                            }
+                        )
+                    }
 
-                    )
-                }
-                data.value.time?.let {
-                    InputFieldWithIcon(
-                        "time",
-                        it,
-                        { },
-                        modifier = Modifier
-                            .weight(1f)
-                            .semantics {
+
+                    data.value.description?.let {
+                        InputField(
+                            stringResource(R.string.event_desc),
+                            it,
+                            { },
+                            modifier = Modifier.semantics {
                                 contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
-                            },
-                        R.drawable.clockicon,
-                        false,
-                        true,
-                        {}
+                            }
+                        )
+                    }
+
+                    data.value.city?.let {
+                        InputField(
+                            stringResource(R.string.event_city),
+                            it,
+                            { },
+                            modifier = Modifier.semantics {
+                                contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
+                            }
+                        )
+                    }
+
+
+                    data.value.street?.let {
+                        InputField(
+                            stringResource(R.string.event_street),
+                            it,
+                            { },
+                            modifier = Modifier.semantics {
+                                contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
+                            }
+                        )
+                    }
+
+
+                    data.value.place?.let {
+                        InputField(
+                            stringResource(R.string.event_place),
+                            it,
+                            { },
+                            modifier = Modifier.semantics {
+                                contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
+                            }
+                        )
+                    }
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 2.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(35.dp)
+                    ) {
+                        data.value.date?.let {
+                            InputFieldWithIcon(
+                                stringResource(R.string.event_date),
+                                it,
+                                { },
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .semantics {
+                                        contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
+                                    },
+                                R.drawable.calendaricon,
+                                false,
+                                true,
+                                { }
+                            )
+                        }
+                        data.value.time?.let {
+                            InputFieldWithIcon(
+                                stringResource(R.string.event_time),
+                                it,
+                                { },
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .semantics {
+                                        contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
+                                    },
+                                R.drawable.clockicon,
+                                false,
+                                true,
+                                {}
+                            )
+                        }
+                    }
+
+                    Text(
+                        "Participants",
+                        color = Ivory,
+                        modifier = Modifier.padding(top = 15.dp, bottom = 15.dp),
+                        style = MaterialTheme.typography.bodyMedium
                     )
+                    HorizontalDivider(thickness = 2.dp, color = Ivory)
+                    LaunchedEffect(data.value.eventId) {
+                        data.value.eventId?.let {
+                            viewmodel.getParticipants()
+                        }
+                    }
+                    val participants = data.value.participants
+                    participants.forEach { participant ->
+                        ParticipantUI(
+                            name = participant.name,
+                            userAvatar = participant.avatar
+                                ?: DEFAULT_USER_PHOTO
+                        )
+                    }
                 }
-
-            }
-
-            Text(
-                "Participants",
-                color = Ivory,
-                modifier = Modifier.padding(top = 15.dp, bottom = 15.dp),
-                style = MaterialTheme.typography.bodyMedium
-            )
-
-            HorizontalDivider(thickness = 2.dp, color = Ivory)
-
-            LaunchedEffect(data.value.eventId) {
-                data.value.eventId?.let {
-                    viewmodel.getParticipants()
-                }
-            }
-
-            val participants = data.value.participants
-
-
-            participants.forEach { participant ->
-                ParticipantUI(
-                    name = participant.name,
-                    userAvatar = participant.avatar  ?: DEFAULT_USER_PHOTO // Provide default avatar if null
-                )
             }
             ActionButton(
                 "Leave Event",
-                modifier = Modifier.align(Alignment.CenterHorizontally),
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = Dimensions.ACTION_BUTTON_MEDIUM3),
                 onClick = {
                     viewmodel.leaveEvent {
-
                     }
                 }
+
             )
+
         }
     }
-}
 
+
+}
 
 
 
