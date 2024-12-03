@@ -13,7 +13,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -21,7 +20,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.hangoutz.ui.theme.Ivory
 import com.example.hangoutz.utils.Constants
-import com.example.hangoutz.utils.Constants.SETTINGS_NAME_ICON_TAG
 import com.example.hangoutz.utils.Dimensions
 
 
@@ -69,7 +67,6 @@ fun NameInput(
                 modifier = Modifier
                     .size(Dimensions.SETTINGS_SCREEN_MEDIUM4)
                     .align(Alignment.Center)
-                    .testTag(SETTINGS_NAME_ICON_TAG)
                     .semantics {
                         contentDescription = Constants.SETTINGS_NAME_VALIDATOR_ICON_TAG
                     }

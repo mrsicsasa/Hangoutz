@@ -29,6 +29,8 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
@@ -149,7 +151,9 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .testTag(SETTINGS_BACKGROUND_LINES_TAG),
+                    .semantics {
+                        contentDescription = SETTINGS_BACKGROUND_LINES_TAG
+                    },
                 colorFilter = ColorFilter.tint(Ivory)
             )
         }
