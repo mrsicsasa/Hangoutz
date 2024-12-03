@@ -1,24 +1,25 @@
 package com.example.hangoutz.ui.screens.events
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Badge
-import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -27,6 +28,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -36,23 +39,29 @@ import com.example.hangoutz.ui.theme.Orange
 import com.example.hangoutz.ui.theme.OrangeDark
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Dimensions
+import com.example.hangoutz.utils.firstLetterUppercase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
 private fun MyTabIndicator(
     indicatorWidth: Dp,
+    indicatorHeight: Dp,
     indicatorOffset: Dp,
     indicatorColor: Color,
+    indicatorYOffset: Dp
 ) {
     Box(
         modifier = Modifier
-            .fillMaxHeight()
             .width(
                 width = indicatorWidth,
             )
+            .height(
+                height = indicatorHeight
+            )
             .offset(
                 x = indicatorOffset,
+                y = indicatorYOffset
             )
             .clip(
                 shape = CircleShape,
@@ -60,17 +69,19 @@ private fun MyTabIndicator(
             .background(
                 color = indicatorColor,
             )
+
     )
 }
 
+@SuppressLint("UnrememberedMutableInteractionSource")
 @Composable
 private fun MyTabItem(
     isSelected: Boolean,
     onClick: () -> Unit,
     tabWidth: Dp,
-    tabHeight: Dp,
     text: String,
-    numberOfInvites: Int
+    numberOfInvites: Int,
+    modifier: Modifier
 ) {
     val tabTextColor: Color by animateColorAsState(
         targetValue = if (isSelected) {
@@ -78,52 +89,52 @@ private fun MyTabItem(
         } else {
             Orange
         },
-        animationSpec = tween(easing = LinearEasing),
+        animationSpec = tween(easing = LinearEasing), label = Constants.ANIMATION_TAB_TEXT_COLOR,
     )
 
     Box(
-        modifier = Modifier
+        contentAlignment = Alignment.Center,
+        modifier = modifier
             .clip(CircleShape)
-            .clickable {
-                onClick()
-            }
+            .clickable(
+                interactionSource = MutableInteractionSource(),
+                indication = null,
+                onClick = { onClick() }
+            )
             .width(tabWidth)
-            .height(tabHeight)
-            .padding(top = Dimensions.TAB_TEXT_TOP_PADDING)
+            .fillMaxHeight()
     ) {
         if (text == EventsFilterOptions.INVITED.name.uppercase() && numberOfInvites > 0) {
-            BadgedBox(
-                badge = {
+            Row {
+                Text(
+                    text = text,
+                    color = tabTextColor,
+                    textAlign = TextAlign.Center,
+                    fontSize = Dimensions.TAB_ITEM_FONT_SIZE,
+                )
+                Box(contentAlignment = Alignment.Center) {
                     Badge(
                         modifier = Modifier
-                            .padding(start = Dimensions.BADGE_START_PADDING)
                             .size(Dimensions.BADGE_SIZE),
                         containerColor = OrangeDark
                     ) {
                         Text(
                             text = numberOfInvites.toString(),
                             fontSize = Dimensions.BADGE_FONT_SIZE,
-                            color = Charcoal
+                            color = Charcoal,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.fillMaxSize()
                         )
                     }
-                },
-                modifier = Modifier.align(Alignment.Center)
-            ) {
-                Text(
-                    text = text,
-                    color = tabTextColor,
-                    textAlign = TextAlign.Center,
-                    fontSize = if (LocalConfiguration.current.screenWidthDp > Constants.SCREEN_SIZE_THRESHOLD) Dimensions.TAB_TEXT_FONT_SIZE_MEDIUM_SCREEN else Dimensions.TAB_TEXT_FONT_SIZE_SMALL_SCREEN,
-                    modifier = Modifier
-                        .align(Alignment.Center)
-                )
+                }
             }
+
         } else {
             Text(
                 text = text,
                 color = tabTextColor,
                 textAlign = TextAlign.Center,
-                fontSize = if (LocalConfiguration.current.screenWidthDp > Constants.SCREEN_SIZE_THRESHOLD) Dimensions.TAB_TEXT_FONT_SIZE_MEDIUM_SCREEN else Dimensions.TAB_TEXT_FONT_SIZE_SMALL_SCREEN,
+                fontSize = Dimensions.TAB_ITEM_FONT_SIZE,
                 modifier = Modifier
                     .align(Alignment.Center)
             )
@@ -132,6 +143,7 @@ private fun MyTabItem(
     }
 }
 
+
 @Composable
 fun FilterBar(
     selectedItemIndex: Int,
@@ -139,19 +151,25 @@ fun FilterBar(
     modifier: Modifier = Modifier,
     scope: CoroutineScope,
     pagerState: PagerState,
-    numberOfInvites: Int = 0
+    numberOfInvites: Int = Constants.NUMBER_OF_INVITES_DEFAULT_VALUE
 ) {
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
     val screenHeight = configuration.screenHeightDp.dp
     val barWidth = screenWidth * Dimensions.BAR_WIDTH_SCREEN_PERCENT
     val barHeight = screenHeight * Dimensions.BAR_HEIGHT_SCREEN_PERCENT
-    val tabWidth = (barWidth - Dimensions.TAB_SPACE_FROM_BAR) / items.size
-    val tabHeight = barHeight - Dimensions.TAB_SPACE_FROM_BAR
+    val tabWidth = barWidth / items.size
+    val tabHeight = barHeight * Dimensions.TAB_HEIGHT_PERCENT
     val indicatorOffset: Dp by animateDpAsState(
-        targetValue = tabWidth * selectedItemIndex,
-        animationSpec = tween(easing = LinearEasing),
+        targetValue = if (selectedItemIndex == Constants.INVITED_TAB_INDEX && numberOfInvites != Constants.NUMBER_OF_INVITES_DEFAULT_VALUE) {
+            tabWidth * selectedItemIndex + tabWidth * Dimensions.INDICATOR_POSITION_INVITED
+        } else {
+            (tabWidth * selectedItemIndex + tabWidth * Dimensions.INDICATOR_POSITION_OFFSET)
+        },
+
+        animationSpec = tween(easing = LinearEasing), label = Constants.ANIMATION_INDICATOR_OFFSET,
     )
+    val indicatorYOffset = barHeight * Dimensions.INDICATOR_Y_OFFSET
 
 
     Box(
@@ -164,17 +182,17 @@ fun FilterBar(
                     alpha = Dimensions.FILTER_BAR_ALPHA
                 )
             )
-            .height(tabHeight)
-            .padding(if (LocalConfiguration.current.screenWidthDp > Constants.SCREEN_SIZE_THRESHOLD) Dimensions.INDICATOR_TAB_TOP_PADDING_MEDIUM_SCREEN else Dimensions.INDICATOR_TAB_TOP_PADDING_SMALL_SCREEN)
-            .padding(start = Dimensions.INDICATOR_PADDING_START)
     ) {
         MyTabIndicator(
             indicatorOffset = indicatorOffset,
             indicatorColor = Orange,
-            indicatorWidth = tabWidth
+            indicatorWidth = if (selectedItemIndex == Constants.INVITED_TAB_INDEX && numberOfInvites != Constants.NUMBER_OF_INVITES_DEFAULT_VALUE) tabWidth * Dimensions.INDICATOR_INVITED_WIDTH_PERCENT else tabWidth * Dimensions.INDICATOR_WIDTH_PERCENT,
+            indicatorHeight = tabHeight,
+            indicatorYOffset = indicatorYOffset
         )
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.clip(CircleShape),
         ) {
             items.mapIndexed { index, text ->
@@ -182,14 +200,26 @@ fun FilterBar(
                 MyTabItem(
                     isSelected = isSelected,
                     onClick = {
-                        scope.launch { pagerState.animateScrollToPage(index) }
+                        if (!isSelected) {
+                            scope.launch {
+                                pagerState.animateScrollToPage(
+                                    index, animationSpec = tween(
+                                        Dimensions.SLIDE_ANIMATION_DURATION
+                                    )
+                                )
+                            }
+                        }
                     },
                     tabWidth = tabWidth,
-                    tabHeight = tabHeight,
                     text = text,
-                    numberOfInvites = numberOfInvites
+                    numberOfInvites = numberOfInvites,
+                    modifier = Modifier.semantics {
+                        contentDescription =
+                            "${Constants.FILTER_BAR_ITEM}${text.firstLetterUppercase()}"
+                    }
                 )
             }
         }
     }
 }
+

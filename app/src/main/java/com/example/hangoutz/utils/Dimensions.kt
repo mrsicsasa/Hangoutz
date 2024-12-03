@@ -34,7 +34,6 @@ object Dimensions {
     //InviteRespondButton
     val INVITE_RESPOND_BUTTON_ROUNDED_RADIUS: Dp = 20.dp
     val INVITE_RESPOND_BUTTON_WIDTH: Dp = 105.dp
-    val INVITE_RESPOND_BUTTON_HEIGHT: Dp = 30.dp
     val INVITE_RESPOND_BUTTON_FONT_SIZE = 12.sp
 
 
@@ -49,6 +48,7 @@ object Dimensions {
     val INVITATION_BOX_END_PADDING: Dp = 20.dp
     val INVITATION_BOX_BOTTOM_PADDING: Dp = 10.dp
     val INVITATION_BUTTONS_SEPARATION_WIDTH = 10.dp
+    val INVITE_RESPOND_BUTTON_INNER_PADDING = 2.dp
 
     //Profile image
     val PROFILE_IMAGE_SIZE: Dp = 74.dp
@@ -115,19 +115,19 @@ object Dimensions {
 
     // Filter bar
 
-    val TAB_TEXT_TOP_PADDING = 4.dp
-    val TAB_TEXT_FONT_SIZE_MEDIUM_SCREEN = 12.sp
-    val TAB_TEXT_FONT_SIZE_SMALL_SCREEN = 10.sp
     const val FILTER_BAR_ALPHA = 0.46f
-    val INDICATOR_TAB_TOP_PADDING_MEDIUM_SCREEN = 5.dp
-    val INDICATOR_TAB_TOP_PADDING_SMALL_SCREEN = 0.dp
-    val INDICATOR_PADDING_START = 2.dp
     const val BAR_WIDTH_SCREEN_PERCENT = 0.9f
     const val BAR_HEIGHT_SCREEN_PERCENT = 0.05f
-    val TAB_SPACE_FROM_BAR = 10.dp
-    val BADGE_START_PADDING = 5.dp
     val BADGE_SIZE = 18.dp
-    val BADGE_FONT_SIZE = 14.sp
+    val BADGE_FONT_SIZE = 10.sp
+    val TAB_ITEM_FONT_SIZE = 12.sp
+    const val TAB_HEIGHT_PERCENT = 0.7f
+    const val INDICATOR_POSITION_OFFSET = 0.1f
+    const val INDICATOR_POSITION_INVITED = 0.07f
+    const val INDICATOR_Y_OFFSET = 0.16f
+    const val INDICATOR_WIDTH_PERCENT = 0.8f
+    const val INDICATOR_INVITED_WIDTH_PERCENT = 0.7f
+    const val SLIDE_ANIMATION_DURATION = 1000
 
     //Friends Screen
     val FRIENDS_OUTER_PADDING = 10.dp

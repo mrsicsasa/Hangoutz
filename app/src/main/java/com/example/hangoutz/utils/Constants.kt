@@ -47,6 +47,11 @@ object Constants {
     const val EVENT_STATUS_DECLINED = "declined"
     const val NO_EVENTS_AVAILABLE_MESSAGE = "noEventsAvailableMessage"
     const val EVENTS_LOADING_SPINNER = "eventsLoadingSpinner"
+    const val FILTER_BAR_ITEM = "filterBarItem"
+    const val ANIMATION_TAB_TEXT_COLOR = "animationTabTextColor"
+    const val ANIMATION_INDICATOR_OFFSET = "animationIndicatorOffset"
+    const val INVITED_TAB_INDEX = 1
+    const val NUMBER_OF_INVITES_DEFAULT_VALUE = 0
 
     //EventCard
     const val EVENT_CARD = "eventCard"
@@ -58,10 +63,7 @@ object Constants {
     const val EVENT_PLACE = "eventPlace"
     const val EVENT_DATE = "eventDate"
     const val NUMBER_OF_PEOPLE = "numberOfPeople"
-    const val NUMBER_OF_PEOPLE_THRESHOLD = 0
-    const val NUMBER_OF_PEOPLE_ADD_OWNER = 1
-
-    const val SCREEN_SIZE_THRESHOLD = 400
+    const val NUMBER_OF_PEOPLE_THRESHOLD = 1
 
     //Extension
     const val DAY_THRESHOLD = 7
