@@ -161,7 +161,7 @@ fun FilterBar(
     val tabWidth = barWidth / items.size
     val tabHeight = barHeight * Dimensions.TAB_HEIGHT_PERCENT
     val indicatorOffset: Dp by animateDpAsState(
-        targetValue = if (selectedItemIndex == Constants.INVITED_TAB_INDEX) {
+        targetValue = if (selectedItemIndex == Constants.INVITED_TAB_INDEX && numberOfInvites != Constants.NUMBER_OF_INVITES_DEFAULT_VALUE) {
             tabWidth * selectedItemIndex + tabWidth * Dimensions.INDICATOR_POSITION_INVITED
         } else {
             (tabWidth * selectedItemIndex + tabWidth * Dimensions.INDICATOR_POSITION_OFFSET)
@@ -186,7 +186,7 @@ fun FilterBar(
         MyTabIndicator(
             indicatorOffset = indicatorOffset,
             indicatorColor = Orange,
-            indicatorWidth = if (selectedItemIndex == Constants.INVITED_TAB_INDEX) tabWidth * Dimensions.INDICATOR_INVITED_WIDTH_PERCENT else tabWidth * Dimensions.INDICATOR_WIDTH_PERCENT,
+            indicatorWidth = if (selectedItemIndex == Constants.INVITED_TAB_INDEX && numberOfInvites != Constants.NUMBER_OF_INVITES_DEFAULT_VALUE) tabWidth * Dimensions.INDICATOR_INVITED_WIDTH_PERCENT else tabWidth * Dimensions.INDICATOR_WIDTH_PERCENT,
             indicatorHeight = tabHeight,
             indicatorYOffset = indicatorYOffset
         )

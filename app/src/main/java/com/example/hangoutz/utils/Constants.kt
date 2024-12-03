@@ -63,8 +63,7 @@ object Constants {
     const val EVENT_PLACE = "eventPlace"
     const val EVENT_DATE = "eventDate"
     const val NUMBER_OF_PEOPLE = "numberOfPeople"
-    const val NUMBER_OF_PEOPLE_THRESHOLD = 0
-    const val NUMBER_OF_PEOPLE_ADD_OWNER = 1
+    const val NUMBER_OF_PEOPLE_THRESHOLD = 1
 
     //Extension
     const val DAY_THRESHOLD = 7

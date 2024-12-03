@@ -57,12 +57,24 @@ class EventScreenViewModel @Inject constructor(
         val response = inviteRepository.getCountOfAcceptedInvitesByEvent(id = id)
         if (response.isSuccessful) {
             val count = response.body()
-            _uiState.value = _uiState.value.copy(
-                counts = _uiState.value.counts + Pair(
-                    id,
-                    count?.first()?.count ?: 0
+            if (_uiState.value.counts.find { it.first == id } == null) {
+                _uiState.value = _uiState.value.copy(
+                    counts = _uiState.value.counts + Pair(
+                        id,
+                        (count?.first()?.count?.plus(1)) ?: 1
+                    )
                 )
-            )
+            } else {
+                _uiState.value = _uiState.value.copy(
+                    counts = _uiState.value.counts.map { pair ->
+                        if (pair.first == id) {
+                            pair.copy(second = count?.first()?.count?.plus(1) ?: 1)
+                        } else {
+                            pair
+                        }
+                    }
+                )
+            }
         } else {
             Log.d("Error", response.message())
         }
@@ -96,7 +108,6 @@ class EventScreenViewModel @Inject constructor(
     private suspend fun getMineEvents() {
         _uiState.value = _uiState.value.copy(
             eventsMine = emptyList(),
-            counts = emptyList(),
             isLoading = true
         )
         val response =
@@ -160,7 +171,9 @@ class EventScreenViewModel @Inject constructor(
                     }
                     it.forEach { event ->
                         getAvatars(event.events.owner)
-                        getCountOfAcceptedInvitesForEvent(event.events.id)
+                        if (page == EventsFilterOptions.GOING.name) {
+                            getCountOfAcceptedInvitesForEvent(event.events.id)
+                        }
                     }
                 }
 
