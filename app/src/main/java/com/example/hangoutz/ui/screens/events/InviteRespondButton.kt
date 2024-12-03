@@ -1,6 +1,6 @@
 package com.example.hangoutz.ui.screens.events
 
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -34,7 +34,7 @@ fun InviteRespondButton(
         ),
         modifier = modifier
             .width(Dimensions.INVITE_RESPOND_BUTTON_WIDTH)
-            .height(Dimensions.INVITE_RESPOND_BUTTON_HEIGHT)
+            .padding(Dimensions.INVITE_RESPOND_BUTTON_INNER_PADDING)
     ) {
         Text(
             text = title,
