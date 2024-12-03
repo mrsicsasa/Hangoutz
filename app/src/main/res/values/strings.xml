@@ -22,4 +22,5 @@
     <string name="no_events_available">No events available</string>
     <string name="searchbar_placeholder">Search…</string>
     <string name="no_friends_found">No friends found</string>
+    <string name="add_friend_button">Add friend button</string>
 </resources>

@@ -142,7 +142,7 @@ fun FriendsScreen(viewModel: FriendsViewModel = hiltViewModel()) {
                                 ) {
                                     // Avatar
                                     GlideImage(
-                                        model = "${BuildConfig.BASE_URL_AVATAR}${listOfFriends.avatar ?: Constants.DEFAULT_USER_PHOTO}",
+                                        model = "${BuildConfig.BASE_URL_AVATAR}${listOfFriends.users.avatar ?: Constants.DEFAULT_USER_PHOTO}",
                                         contentDescription = Constants.FRIENDS_PROFILE_PICTURE_DESCRIPTION,
                                         contentScale = ContentScale.Crop,
                                         modifier = Modifier
@@ -156,7 +156,7 @@ fun FriendsScreen(viewModel: FriendsViewModel = hiltViewModel()) {
                                 }
                                 // Name
                                 Text(
-                                    text = listOfFriends.name,
+                                    text = listOfFriends.users.name,
                                     style = MaterialTheme.typography.titleMedium.copy(color = Charcoal),
                                     modifier = Modifier
                                         .padding(start = Dimensions.FRIENDS_TEXT_START_PADDING)
@@ -183,6 +183,7 @@ fun FriendsScreen(viewModel: FriendsViewModel = hiltViewModel()) {
 
         if (sheetState.isVisible) {
             FriendsPopup(
+                userList = data.value.addFriendList,
                 searchQuery = data.value.popupSearch,
                 clearText = {
                     viewModel.clearSearchInputPopupScreen()

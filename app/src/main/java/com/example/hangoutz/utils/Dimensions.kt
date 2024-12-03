@@ -17,6 +17,19 @@ object Dimensions {
     val FILTER_BAR_TOP_PADDING = 10.dp
     val FLOATING_BUTTON_BORDER = 2.dp
 
+    //Search bar
+    val SEARCH_BAR_HEIGHT = 50.dp
+    val SEARCH_BAR_CLEAR_ICON_SIZE = 20.dp
+    val SEARCH_BAR_BORDER = 1.5.dp
+    val SEARCH_BAR_HORIZONTAL_PADDING = 20.dp
+
+    //Bottom popup sheet
+    val BOTTOM_SHEET_HORIZONTAL_PADDING = 30.dp
+    val BOTTOM_SHEET_VERTICAL_PADDING = 40.dp
+    val BOTTOM_SHEET_USER_PADDING = 10.dp
+    val BOTTOM_SHEET_DIVIDER_WIDTH = 2.dp
+    val BOTTOM_SHEET_NAME_PADING = 12.dp
+    val ADD_ICON_SIZE = 30.dp
 
     //InviteRespondButton
     val INVITE_RESPOND_BUTTON_ROUNDED_RADIUS: Dp = 20.dp
@@ -98,7 +111,7 @@ object Dimensions {
 
     //Friends Popup
     val POPUP_HEIGHT = 690.dp
-    val POPUP_WIDTH = 380.dp
+    val POPUP_WIDTH = 350.dp
 
     // Filter bar
 
@@ -126,8 +139,6 @@ object Dimensions {
     val FRIENDS_AVATAR_BORDER = 3.dp
     val FRIENDS_TEXT_START_PADDING = 10.dp
     val FRIENDS_FLOATING_BUTTON_PADDING = 20.dp
-    val FRIENDS_SEARCH_BAR_HEIGHT = 50.dp
-    val FRIENDS_SEARCH_BAR_CLEAR_ICON_SIZE = 20.dp
     val FRIENDS_LOADING_SPINNER_SIZE = 40.dp
 }
 
