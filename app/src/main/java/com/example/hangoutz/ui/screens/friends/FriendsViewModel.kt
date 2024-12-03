@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hangoutz.data.local.SharedPreferencesManager
-import com.example.hangoutz.data.models.ListOfFriends
+import com.example.hangoutz.data.models.Friend
 import com.example.hangoutz.domain.repository.FriendsRepository
 import com.example.hangoutz.utils.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +20,10 @@ data class FriendsUIState(
     val searchQuery: String = "",
     val isActive: Boolean = false,
     val isLoading: Boolean = true,
-    val listOfFriends: List<ListOfFriends> = emptyList()
+    val listOfFriends: List<Friend> = emptyList(),
+    val showBottomSheet: Boolean = false,
+    val popupSearch: String = "",
+    val addFriendList: List<Friend> = emptyList()
 )
 
 @HiltViewModel
@@ -59,8 +62,8 @@ class FriendsViewModel @Inject constructor(
             response?.value?.let {
                 if (it.isSuccessful) {
                     response.value.body()?.let {
-                        _uiState.value =
-                            _uiState.value.copy(listOfFriends = it.sortedBy { it.users.name.uppercase() })
+                        //_uiState.value =
+                        //    _uiState.value.copy(listOfFriends = it.sortedBy { it.users.name.uppercase() })
                     }
                 }
             }
@@ -69,10 +72,49 @@ class FriendsViewModel @Inject constructor(
 
     fun clearSearchInput() {
         _uiState.value = _uiState.value.copy(searchQuery = "")
-        fetchFriends(false)
+        fetchNonFriends(false)
     }
 
     fun loadFriends(isLoading: Boolean) {
         _uiState.value = _uiState.value.copy(isLoading = isLoading)
+    }
+
+    fun clearSearchInputPopupScreen() {
+        _uiState.value = _uiState.value.copy(popupSearch = "", addFriendList = emptyList())
+    }
+
+    fun showSheetState(isShown: Boolean) {
+        _uiState.value = _uiState.value.copy(showBottomSheet = isShown)
+    }
+
+    fun onPopupSearchInput(newText: String) {
+        _uiState.value = _uiState.value.copy(popupSearch = newText)
+    }
+
+    fun fetchNonFriends(isSearching: Boolean) {
+        viewModelScope.launch{
+            val response = withContext(Dispatchers.IO) {
+                SharedPreferencesManager.getUserId(context)?.let {
+                    if (isSearching) {
+                        MutableStateFlow(
+                            friendsRepository.getNonFriendsFromUserId(
+                                it,
+                                _uiState.value.popupSearch
+                            )
+                        )
+                    } else {
+                        MutableStateFlow(friendsRepository.getNonFriendsFromUserId(it))
+                    }
+                }
+            }
+            response?.value?.let {
+                if (it.isSuccessful) {
+                    response.value.body()?.let {
+                        _uiState.value =
+                            _uiState.value.copy(listOfFriends = it.sortedBy { it.name.uppercase() })
+                    }
+                }
+            }
+        }
     }
 }

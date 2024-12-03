@@ -16,9 +16,11 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,11 +42,14 @@ import com.example.hangoutz.ui.theme.Ivory
 import com.example.hangoutz.ui.theme.Orange
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Dimensions
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalGlideComposeApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun FriendsScreen(viewModel: FriendsViewModel = hiltViewModel()) {
     val data = viewModel.uiState.collectAsState()
+    val sheetState = rememberModalBottomSheetState()
+    val coroutineScope = rememberCoroutineScope()
     if (data.value.isLoading) {
         Box(
             contentAlignment = Alignment.Center,
@@ -53,6 +58,7 @@ fun FriendsScreen(viewModel: FriendsViewModel = hiltViewModel()) {
             CircularProgressIndicator(modifier = Modifier.semantics { Constants.FRIENDS_LOADING_SPINNER })
         }
     } else if (data.value.listOfFriends.isEmpty()) {
+        viewModel.loadFriends(true)
         Box(
             contentAlignment = Alignment.Center
         ) {
@@ -63,6 +69,7 @@ fun FriendsScreen(viewModel: FriendsViewModel = hiltViewModel()) {
                     contentDescription = Constants.NO_FRIENDS_AVAILABLE_MESSAGE
                 })
         }
+        viewModel.loadFriends(false)
     }
     Box(
         modifier = Modifier
@@ -135,7 +142,7 @@ fun FriendsScreen(viewModel: FriendsViewModel = hiltViewModel()) {
                                 ) {
                                     // Avatar
                                     GlideImage(
-                                        model = "${BuildConfig.BASE_URL_AVATAR}${listOfFriends.users.avatar ?: Constants.DEFAULT_USER_PHOTO}",
+                                        model = "${BuildConfig.BASE_URL_AVATAR}${listOfFriends.avatar ?: Constants.DEFAULT_USER_PHOTO}",
                                         contentDescription = Constants.FRIENDS_PROFILE_PICTURE_DESCRIPTION,
                                         contentScale = ContentScale.Crop,
                                         modifier = Modifier
@@ -149,7 +156,7 @@ fun FriendsScreen(viewModel: FriendsViewModel = hiltViewModel()) {
                                 }
                                 // Name
                                 Text(
-                                    text = listOfFriends.users.name,
+                                    text = listOfFriends.name,
                                     style = MaterialTheme.typography.titleMedium.copy(color = Charcoal),
                                     modifier = Modifier
                                         .padding(start = Dimensions.FRIENDS_TEXT_START_PADDING)
@@ -164,14 +171,33 @@ fun FriendsScreen(viewModel: FriendsViewModel = hiltViewModel()) {
                 }
             }
         }
-        FloatingPlusButton(modifier = Modifier
-            .align(Alignment.BottomEnd)
-            .semantics {
-                contentDescription = Constants.FRIENDS_ADD_BUTTON
-            }) {}
-    }
+        FloatingPlusButton(
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .semantics {
+                    contentDescription = Constants.FRIENDS_ADD_BUTTON
+                }
+        ) {
+            coroutineScope.launch { sheetState.show() }
+        }
 
-    LaunchedEffect(key1 = true) {
-        viewModel.clearSearchInput()
+        if (sheetState.isVisible) {
+            FriendsPopup(
+                searchQuery = data.value.popupSearch,
+                clearText = {
+                    viewModel.clearSearchInputPopupScreen()
+                },
+                sheetState = sheetState,
+                showBottomSheet = {
+                    viewModel.showSheetState(data.value.showBottomSheet)
+                }) { searchQuery ->
+                viewModel.showSheetState(true)
+                viewModel.onPopupSearchInput(searchQuery)
+            }
+        }
+
+        LaunchedEffect(key1 = true) {
+            viewModel.clearSearchInput()
+        }
     }
 }

@@ -96,6 +96,10 @@ object Dimensions {
     val INPUT_FIELD_ROUNDED_CORNERS = 20.dp
     val INPUT_FIELD_PADDING_SMALL = 10.dp
 
+    //Friends Popup
+    val POPUP_HEIGHT = 690.dp
+    val POPUP_WIDTH = 380.dp
+
     // Filter bar
 
     val TAB_TEXT_TOP_PADDING = 4.dp
