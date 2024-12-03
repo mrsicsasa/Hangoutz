@@ -1,9 +1,6 @@
 package com.example.hangoutz.ui.screens.settings
 
 
-import android.Manifest
-import android.content.pm.PackageManager
-import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -25,19 +22,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
-import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
@@ -55,15 +46,11 @@ import com.example.hangoutz.utils.Constants.SETTINGS_EMAIL_FIELD_TAG
 import com.example.hangoutz.utils.Constants.SETTINGS_LOGOUT_BUTTON
 import com.example.hangoutz.utils.Constants.SETTINGS_USER_PHOTO_TAG
 import com.example.hangoutz.utils.Dimensions
-import com.example.hangoutz.utils.getTempUri
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = hiltViewModel()) {
     val data = viewmodel.uiState.collectAsState()
-    val context = LocalContext.current
-    var tempUri by remember { mutableStateOf<Uri?>(null) }
-
     val imagePicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
         onResult = {
@@ -76,7 +63,7 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
         contract = ActivityResultContracts.TakePicture(),
         onResult = { isSaved ->
             if (isSaved) {
-                tempUri?.let {
+                viewmodel.tempUri.let {
                     viewmodel.updateAvatarUri(it)
                 }
             } else {
@@ -87,33 +74,32 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
     val cameraPermissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
     ) { isGranted: Boolean ->
-        if (isGranted) {
-            val tmpUri = getTempUri(context)
-            tempUri = tmpUri
-            tempUri?.let { takePhotoLauncher.launch(it) }
-        } else {
-            viewmodel.setAvatarUri()
-        }
+        viewmodel.onPermissionResponse(
+            isGranted,
+            onPermissionGranted = { uri ->
+                takePhotoLauncher.launch(uri)
+            },
+            onPermissionDenied = {
+                viewmodel.setAvatarUri()
+            }
+        )
     }
 
     if (data.value.showBottomSheet) {
         ImageHandleDialog(
-            onDismiss = {viewmodel.setShowBottomSheet(false)},
+            onDismiss = { viewmodel.setShowBottomSheet(false) },
             onCaptureFromCamera = {
                 viewmodel.setShowBottomSheet(false)
-                val permission = Manifest.permission.CAMERA
-                if (ContextCompat.checkSelfPermission(
-                        context,
-                        permission
-                    ) == PackageManager.PERMISSION_GRANTED
-                ) {
-                    val tmpUri = getTempUri(context)
-                    tempUri = tmpUri
-                    tempUri?.let { takePhotoLauncher.launch(it) }
-                } else {
-
-                    cameraPermissionLauncher.launch(permission)
-                }
+                viewmodel.requestCameraPermission(
+                    onPermissionGranted = {
+                        viewmodel.captureImage { uri ->
+                            takePhotoLauncher.launch(uri)
+                        }
+                    },
+                    onPermissionDenied = { permission ->
+                        cameraPermissionLauncher.launch(permission)
+                    }
+                )
             },
             onPickFromGallery = {
                 viewmodel.setShowBottomSheet(false)

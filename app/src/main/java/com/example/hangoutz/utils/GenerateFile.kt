@@ -7,12 +7,12 @@ import android.util.Log
 import androidx.core.content.FileProvider
 import java.io.File
 
-fun getTempUri(context: Context): Uri? {
+fun getTempUri(context: Context): Uri {
     val directory = File(
         Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
         "MyAppImages"
     )
-    directory?.let {
+    directory.let {
         it.mkdirs()
         val file = try {
             Log.e("SettingsScreen", "File created")
@@ -23,7 +23,7 @@ fun getTempUri(context: Context): Uri? {
             )
         } catch (e: Exception) {
             Log.e("SettingsScreen", "Failed to create temp file: ${e.message}")
-            return null
+            return Uri.EMPTY
         }
         return FileProvider.getUriForFile(
             context,
@@ -31,5 +31,4 @@ fun getTempUri(context: Context): Uri? {
             file
         )
     }
-    return null
 }
