@@ -125,6 +125,8 @@ object Dimensions {
 
     //EVENT DETAILS SCREEN
     val EVENTDETAILS_TOP_PADDING = 35.dp
+
+    //CREATE EVENT
 }
 
 

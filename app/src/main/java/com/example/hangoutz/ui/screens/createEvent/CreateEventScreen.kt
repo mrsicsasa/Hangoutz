@@ -96,7 +96,7 @@ fun CreateEventScreen(
                 data.value.title,
                 { viewmodel.onTitleChange(it) },
                 modifier = Modifier.semantics {
-                    contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
+                    contentDescription = Constants.CREATE_EVENT_TITLE_FIELD
                 },
                 true
             )
@@ -105,7 +105,7 @@ fun CreateEventScreen(
                 data.value.description,
                 { viewmodel.onDescriptionChange(it) },
                 modifier = Modifier.semantics {
-                    contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
+                    contentDescription = Constants.CREATE_EVENT_DESC_FIELD
                 },
                 true
             )
@@ -115,7 +115,7 @@ fun CreateEventScreen(
                 data.value.city,
                 { viewmodel.onCityChange(it) },
                 modifier = Modifier.semantics {
-                    contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
+                    contentDescription = Constants.CREATE_EVENT_CITY_FIELD
                 },
                 true
             )
@@ -125,7 +125,7 @@ fun CreateEventScreen(
                 data.value.street,
                 { viewmodel.onStreetChange(it) },
                 modifier = Modifier.semantics {
-                    contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
+                    contentDescription = Constants.CREATE_EVENT_STREET_FIELD
                 },
                 true
             )
@@ -135,7 +135,7 @@ fun CreateEventScreen(
                 data.value.place,
                 { viewmodel.onPlaceChange(it) },
                 modifier = Modifier.semantics {
-                    contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
+                    contentDescription = Constants.CREATE_EVENT_PLACE_FIELD
                 },
                 true
             )
@@ -154,7 +154,7 @@ fun CreateEventScreen(
                 modifier = Modifier
                     .weight(1f)
                     .semantics {
-                        contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
+                        contentDescription = Constants.CREATE_EVENT_DATE_FIELD
                     },
                 R.drawable.calendaricon,
                 true,
@@ -169,7 +169,7 @@ fun CreateEventScreen(
                 modifier = Modifier
                     .weight(1f)
                     .semantics {
-                        contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
+                        contentDescription = Constants.CREATE_EVENT_TIME_FIELD
                     },
                 R.drawable.clockicon,
                 true,
@@ -195,6 +195,8 @@ fun CreateEventScreen(
             Image(painter = painterResource(id = R.drawable.addevent),
                 contentDescription = "",
                 modifier = Modifier.clickable { }
+                    .semantics { contentDescription = Constants.CREATE_EVENT_ADD_PARTICIPANTS_BUTTON }
+
 
             )
         }
@@ -209,7 +211,8 @@ fun CreateEventScreen(
 
         ActionButton(stringResource(R.string.event_create),
             modifier = Modifier.align(Alignment.CenterHorizontally)
-                .padding(top = 15.dp, bottom = 15.dp),
+                .padding(top = 15.dp, bottom = 15.dp)
+                .semantics { contentDescription= Constants.CREATE_EVENT_ADD_CREATE_BUTTON}
             onClick = {
                 viewmodel.createEvent()
             })

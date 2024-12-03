@@ -136,5 +136,15 @@ object Constants {
     const val FRIENDS_LIST_NAME = "friendsListName"
     const val FRIENDS_ADD_BUTTON = "friendsAddButton"
 
+    //TEST TAGS - CREATE EVENT
+    const val CREATE_EVENT_TITLE_FIELD = "createEventTitleField"
+    const val CREATE_EVENT_DESC_FIELD = "createEventDescriptionField"
+    const val CREATE_EVENT_CITY_FIELD = "createEventCityField"
+    const val CREATE_EVENT_STREET_FIELD = "createEventStreetField"
+    const val CREATE_EVENT_PLACE_FIELD = "createEventPlaceField"
+    const val CREATE_EVENT_DATE_FIELD = "createEventDateField"
+    const val CREATE_EVENT_TIME_FIELD = "createEventTimeField"
+    const val CREATE_EVENT_ADD_PARTICIPANTS_BUTTON = "createEventAddParticipantsButton"
+    const val CREATE_EVENT_ADD_CREATE_BUTTON = "createEventCreateButton"
 
 }
