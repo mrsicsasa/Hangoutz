@@ -65,7 +65,8 @@ fun InputField(
     value: String,
     onValueChange: (String) -> (Unit),
     modifier: Modifier = Modifier,
-    isEnabled: Boolean = false
+    isEnabled: Boolean = false,
+    isReadOnly: Boolean = false
 ) {
     OutlinedTextField(
         value = value,
@@ -73,6 +74,7 @@ fun InputField(
         onValueChange = { onValueChange(it) },
         singleLine = true,
        enabled = isEnabled,
+
         shape = RoundedCornerShape(Dimensions.INPUT_FIELD_ROUNDED_CORNERS),
         colors = OutlinedTextFieldDefaults.colors(
             disabledBorderColor = Ivory,

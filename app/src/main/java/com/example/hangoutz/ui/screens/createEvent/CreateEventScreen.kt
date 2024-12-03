@@ -1,6 +1,7 @@
 package com.example.hangoutz.ui.screens.createEvent
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,10 +17,10 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TimePicker
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,27 +32,23 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.example.hangoutz.R
 import com.example.hangoutz.ui.components.ActionButton
+import com.example.hangoutz.ui.components.DatePickerModal
 import com.example.hangoutz.ui.components.InputField
 import com.example.hangoutz.ui.components.InputFieldWithIcon
-import com.example.hangoutz.ui.screens.eventDetails.EventDetailsViewModel
-import com.example.hangoutz.ui.screens.eventDetails.ParticipantUI
+import com.example.hangoutz.ui.components.TimePickerModal
 import com.example.hangoutz.ui.theme.Ivory
 import com.example.hangoutz.ui.theme.TopBarBackgroundColor
 import com.example.hangoutz.utils.Constants
-import com.example.hangoutz.utils.Constants.DEFAULT_USER_PHOTO
 import com.example.hangoutz.utils.Dimensions
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateEventScreen(
-    navController: NavController,
-    viewmodel: EventDetailsViewModel = hiltViewModel()
+    viewmodel: CreateEventViewModel = hiltViewModel()
 ) {
     val data = viewmodel.uiState.collectAsState()
-    viewmodel.getEventIdFromController(navController)
 
     Scaffold(topBar = {
         TopAppBar(modifier = Modifier
@@ -93,70 +90,99 @@ fun CreateEventScreen(
                 .verticalScroll(rememberScrollState())
 
         ) {
-            data.value.title?.let {
-                InputField("Title", it, { }, modifier = Modifier.semantics {
+            InputField("Title",
+                data.value.title,
+                { viewmodel.onTitleChange(it) },
+                modifier = Modifier.semantics {
                     contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
-                })
-            }
-            data.value.description?.let {
-                InputField("description", it, { }, modifier = Modifier.semantics {
+                },
+                true
+            )
+
+            InputField("description",
+                data.value.description,
+                { viewmodel.onDescriptionChange(it) },
+                modifier = Modifier.semantics {
                     contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
-                })
-            }
-            data.value.city?.let {
-                InputField("city", it, { }, modifier = Modifier.semantics {
-                    contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
-                })
-            }
-            data.value.street?.let {
-                InputField("street", it, { }, modifier = Modifier.semantics {
-                    contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
-                })
-            }
-            data.value.place?.let {
-                InputField("place", it, { }, modifier = Modifier.semantics {
-                    contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
-                }
+                },
+                true
+            )
 
 
-                )
-            }
-            Row(
+            InputField("city",
+                data.value.city,
+                { viewmodel.onCityChange(it) },
+                modifier = Modifier.semantics {
+                    contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
+                },
+                true
+            )
+
+
+            InputField("street",
+                data.value.street,
+                { viewmodel.onStreetChange(it) },
+                modifier = Modifier.semantics {
+                    contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
+                },
+                true
+            )
+
+
+            InputField("place",
+                data.value.place,
+                { viewmodel.onPlaceChange(it) },
+                modifier = Modifier.semantics {
+                    contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
+                },
+                true
+            )
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 2.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(35.dp)
+        ) {
+
+            InputFieldWithIcon("date",
+                data.value.date,
+                { viewmodel.onDateChange(it) },
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 2.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(35.dp)
-            ) {
-                data.value.date?.let {
-                    InputFieldWithIcon("date", it, { }, modifier = Modifier
-                        .weight(1f)
-                        .semantics {
-                            contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
-                        }, R.drawable.calendaricon, false, { }
+                    .weight(1f)
+                    .semantics {
+                        contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
+                    },
+                R.drawable.calendaricon,
+                true,
+                true,
+                {viewmodel.setShowDatePicker()}
 
-                    )
-                }
-                data.value.time?.let {
-                    InputFieldWithIcon("time", it, { }, modifier = Modifier
-                        .weight(1f)
-                        .semantics {
-                            contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
-                        }, R.drawable.clockicon, false, {})
-                }
-                Row(
-                    horizontalArrangement = Arrangement.End
-                ) {
+            )
 
-                    Image(
-                        painter = painterResource(id = R.drawable.addevent),
-                        contentDescription = "",
+            InputFieldWithIcon("time",
+                data.value.time,
+                { viewmodel.onTimeChange(it) },
+                modifier = Modifier
+                    .weight(1f)
+                    .semantics {
+                        contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
+                    },
+                R.drawable.clockicon,
+                true,
+                true,
+                {viewmodel.setShowTimePicker()})
 
-                    )
+        }
 
-                }
-
-            }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 2.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
 
             Text(
                 "Participants",
@@ -164,30 +190,49 @@ fun CreateEventScreen(
                 modifier = Modifier.padding(top = 15.dp, bottom = 15.dp),
                 style = MaterialTheme.typography.bodyMedium
             )
+            Image(painter = painterResource(id = R.drawable.addevent),
+                contentDescription = "",
+                modifier = Modifier.clickable { }
 
-            HorizontalDivider(thickness = 2.dp, color = Ivory)
+            )
+        }
 
-            LaunchedEffect(data.value.eventId) {
-                data.value.eventId?.let {
-                    viewmodel.getParticipants()
-                }
+
+
+        HorizontalDivider(thickness = 2.dp, color = Ivory)
+
+
+        //TODO put participants here, use participantUI component
+
+
+        ActionButton("Create",
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+                .padding(top = 15.dp, bottom = 15.dp),
+            onClick = {
+                viewmodel.createEvent()
+            })
+
+
+            if(data.value.showDatePicker){
+                DatePickerModal(
+                    onDateSelected = { date ->
+                        date?.let {
+                            viewmodel.onDatePicked(date)
+                        }
+                    },
+                    onDismiss = { viewmodel.setShowDatePicker() })
+
             }
 
-            val participants = data.value.participants
-
-
-            participants.forEach { participant ->
-                ParticipantUI(
-                    name = participant.name, userAvatar = participant.avatar ?: DEFAULT_USER_PHOTO
+            if (data.value.showTimePicker) {
+                TimePickerModal(
+                    onConfirm = { time ->
+                        viewmodel.onTimePicked(time)
+                                viewmodel.setShowTimePicker()// Pass the selected time to your ViewModel
+                    },
+                    onDismiss = { viewmodel.setShowTimePicker() }
                 )
             }
-            ActionButton("Leave Event",
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-                onClick = {
-                    viewmodel.leaveEvent {
-
-                    }
-                })
-        }
     }
+}
 }

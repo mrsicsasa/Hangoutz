@@ -44,7 +44,7 @@ fun AppNavHost(
             InvitedScreen(navController)
         }
         composable(NavigationItem.CreateEvent.route) {
-                CreateEventScreen(navController)
+                CreateEventScreen()
         }
         composable(NavigationItem.EventDetailsOwner.route) {
             EventOwnerDetailsScreen(navController)

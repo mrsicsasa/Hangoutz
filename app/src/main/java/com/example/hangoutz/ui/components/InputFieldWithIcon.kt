@@ -24,6 +24,7 @@ fun InputFieldWithIcon(
     modifier: Modifier = Modifier,
     painterResource: Int,
     isEnabled: Boolean = false,
+    isReadOnly : Boolean = false,
     onClick: () -> (Unit)
 ) {
     OutlinedTextField(
@@ -32,6 +33,7 @@ fun InputFieldWithIcon(
         onValueChange = { onValueChange(it) },
         singleLine = true,
         enabled = isEnabled,
+        readOnly = isReadOnly,
         shape = RoundedCornerShape(Dimensions.INPUT_FIELD_ROUNDED_CORNERS),
         colors = OutlinedTextFieldDefaults.colors(
             disabledBorderColor = Ivory,
@@ -53,7 +55,7 @@ fun InputFieldWithIcon(
                 painter = painterResource(id = painterResource),
                 contentDescription = "Icon",
                 tint = Color.White,
-                modifier = Modifier.clickable { onClick }
+                modifier = Modifier.clickable { onClick() }
             )},
         textStyle = MaterialTheme.typography.bodySmall.copy(color = Color.White),
         modifier = modifier

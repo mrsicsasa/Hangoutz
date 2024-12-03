@@ -1,4 +1,4 @@
-package com.example.hangoutz.ui.screens.eventDetails
+package com.example.hangoutz.ui.components
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column

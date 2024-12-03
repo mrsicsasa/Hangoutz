@@ -1,6 +1,5 @@
 package com.example.hangoutz.ui.screens.eventDetails
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,8 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -38,6 +35,7 @@ import com.example.hangoutz.R
 import com.example.hangoutz.ui.components.ActionButton
 import com.example.hangoutz.ui.components.InputField
 import com.example.hangoutz.ui.components.InputFieldWithIcon
+import com.example.hangoutz.ui.components.ParticipantUI
 import com.example.hangoutz.ui.theme.Ivory
 import com.example.hangoutz.ui.theme.TopBarBackgroundColor
 import com.example.hangoutz.utils.Constants
@@ -168,6 +166,7 @@ fun EventDetailsScreen(
                             },
                         R.drawable.calendaricon,
                         false,
+                        true,
                         { }
 
                     )
@@ -184,6 +183,7 @@ fun EventDetailsScreen(
                             },
                         R.drawable.clockicon,
                         false,
+                        true,
                         {}
                     )
                 }
