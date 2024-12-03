@@ -128,7 +128,7 @@ fun EventCard(
                 Text(
                     text = if (countOfPeople > Constants.NUMBER_OF_PEOPLE_THRESHOLD) stringResource(
                         R.string.people_going,
-                        countOfPeople + Constants.NUMBER_OF_PEOPLE_ADD_OWNER
+                        countOfPeople
                     ) else stringResource(R.string.one_person_is_going),
                     style = MaterialTheme.typography.displaySmall.copy(
                         color = TextBodyGrayColor,
