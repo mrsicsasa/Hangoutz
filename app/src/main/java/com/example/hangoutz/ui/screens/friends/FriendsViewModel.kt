@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.UUID
 import javax.inject.Inject
 
 data class FriendsUIState(
@@ -28,6 +29,9 @@ class FriendsViewModel @Inject constructor(
     var uiState: StateFlow<FriendsUIState> = _uiState
 
     fun initUiState() {
+        _uiState.value = _uiState.value.copy(
+            listOfFriends = emptyList()
+        )
         viewModelScope.launch {
             val response = withContext(Dispatchers.IO) {
                 SharedPreferencesManager.getUserId(context)?.let {
@@ -42,6 +46,20 @@ class FriendsViewModel @Inject constructor(
                     }
                 }
             }
+        }
+    }
+
+    fun removeFriend(friendId: UUID) {
+        viewModelScope.launch {
+            val response = withContext(Dispatchers.IO) {
+                SharedPreferencesManager.getUserId(context)?.let {
+                    (friendsRepository.removeFriend(userId = it, friendId = friendId.toString()))
+                }
+            }
+            if (response?.isSuccessful == true) {
+                initUiState()
+            }
+
         }
     }
 }
