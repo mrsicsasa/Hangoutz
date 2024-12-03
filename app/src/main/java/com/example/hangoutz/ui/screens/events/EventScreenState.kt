@@ -7,7 +7,7 @@ import java.util.UUID
 
 data class EventScreenState(
     var eventsGoing: List<EventCardDPO> = emptyList(),
-    var eventsInveted: List<EventCardDPO> = emptyList(),
+    var eventsInvited: List<EventCardDPO> = emptyList(),
     var eventsMine: List<EventCardDPO> = emptyList(),
     var counts: List<Pair<UUID, Int>> = emptyList(),
     var isLoading: Boolean = true,
