@@ -99,7 +99,6 @@ fun FriendsScreen(viewModel: FriendsViewModel = hiltViewModel()) {
                             bottom = Dimensions.FRIENDS_FIELD_VERTICAL_PADDING
                         )
                 ) {
-                    viewModel.loadFriends(true)
                     items(data.value.listOfFriends) { listOfFriends ->
                         Box(
                             Modifier.padding(
@@ -160,7 +159,6 @@ fun FriendsScreen(viewModel: FriendsViewModel = hiltViewModel()) {
                             }
                         }
                     }
-                    viewModel.loadFriends(false)
                 }
             }
         }

@@ -32,7 +32,7 @@ class FriendsViewModel @Inject constructor(
     var uiState: StateFlow<FriendsUIState> = _uiState
 
     fun onSearchInput(newText: String) {
-        _uiState.value = _uiState.value.copy(searchQuery = newText)
+        _uiState.value = _uiState.value.copy(searchQuery = newText, isLoading = true)
         if (_uiState.value.searchQuery.length >= Constants.MIN_SEARCH_LENGTH) {
             fetchFriends(isSearching = true)
         } else {
@@ -41,28 +41,31 @@ class FriendsViewModel @Inject constructor(
     }
 
     fun fetchFriends(isSearching: Boolean) {
-        viewModelScope.launch {
-            val response = withContext(Dispatchers.IO) {
-                SharedPreferencesManager.getUserId(context)?.let {
-                    if (isSearching) {
-                        MutableStateFlow(
-                            friendsRepository.getFriendsFromUserId(
-                                it,
-                                _uiState.value.searchQuery
+        if (_uiState.value.isLoading) {
+            viewModelScope.launch {
+                val response = withContext(Dispatchers.IO) {
+                    SharedPreferencesManager.getUserId(context)?.let {
+                        if (isSearching) {
+                            MutableStateFlow(
+                                friendsRepository.getFriendsFromUserId(
+                                    it,
+                                    _uiState.value.searchQuery
+                                )
                             )
-                        )
-                    } else {
-                        MutableStateFlow(friendsRepository.getFriendsFromUserId(it))
+                        } else {
+                            MutableStateFlow(friendsRepository.getFriendsFromUserId(it))
+                        }
                     }
                 }
-            }
-            response?.value?.let {
-                if (it.isSuccessful) {
-                    response.value.body()?.let {
-                        _uiState.value =
-                            _uiState.value.copy(listOfFriends = it.sortedBy { it.users.name.uppercase() })
+                response?.value?.let {
+                    if (it.isSuccessful) {
+                        response.value.body()?.let {
+                            _uiState.value =
+                                _uiState.value.copy(listOfFriends = it.sortedBy { it.users.name.uppercase() })
+                        }
                     }
                 }
+                _uiState.value = _uiState.value.copy(isLoading = false)
             }
         }
     }
@@ -70,9 +73,5 @@ class FriendsViewModel @Inject constructor(
     fun clearSearchInput() {
         _uiState.value = _uiState.value.copy(searchQuery = "")
         fetchFriends(false)
-    }
-
-    fun loadFriends(isLoading: Boolean) {
-        _uiState.value = _uiState.value.copy(isLoading = isLoading)
     }
 }
