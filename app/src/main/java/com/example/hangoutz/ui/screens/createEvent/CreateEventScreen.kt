@@ -28,6 +28,7 @@ import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
@@ -90,7 +91,8 @@ fun CreateEventScreen(
                 .verticalScroll(rememberScrollState())
 
         ) {
-            InputField("Title",
+            InputField(
+                stringResource(R.string.event_title),
                 data.value.title,
                 { viewmodel.onTitleChange(it) },
                 modifier = Modifier.semantics {
@@ -99,7 +101,7 @@ fun CreateEventScreen(
                 true
             )
 
-            InputField("description",
+            InputField( stringResource(R.string.event_desc),
                 data.value.description,
                 { viewmodel.onDescriptionChange(it) },
                 modifier = Modifier.semantics {
@@ -109,7 +111,7 @@ fun CreateEventScreen(
             )
 
 
-            InputField("city",
+            InputField( stringResource(R.string.event_city),
                 data.value.city,
                 { viewmodel.onCityChange(it) },
                 modifier = Modifier.semantics {
@@ -119,7 +121,7 @@ fun CreateEventScreen(
             )
 
 
-            InputField("street",
+            InputField( stringResource(R.string.event_street),
                 data.value.street,
                 { viewmodel.onStreetChange(it) },
                 modifier = Modifier.semantics {
@@ -129,7 +131,7 @@ fun CreateEventScreen(
             )
 
 
-            InputField("place",
+            InputField( stringResource(R.string.event_place),
                 data.value.place,
                 { viewmodel.onPlaceChange(it) },
                 modifier = Modifier.semantics {
@@ -146,7 +148,7 @@ fun CreateEventScreen(
             horizontalArrangement = Arrangement.spacedBy(35.dp)
         ) {
 
-            InputFieldWithIcon("date",
+            InputFieldWithIcon( stringResource(R.string.event_date),
                 data.value.date,
                 { viewmodel.onDateChange(it) },
                 modifier = Modifier
@@ -161,7 +163,7 @@ fun CreateEventScreen(
 
             )
 
-            InputFieldWithIcon("time",
+            InputFieldWithIcon( stringResource(R.string.event_time),
                 data.value.time,
                 { viewmodel.onTimeChange(it) },
                 modifier = Modifier
@@ -185,7 +187,7 @@ fun CreateEventScreen(
         ) {
 
             Text(
-                "Participants",
+                stringResource(R.string.event_participants),
                 color = Ivory,
                 modifier = Modifier.padding(top = 15.dp, bottom = 15.dp),
                 style = MaterialTheme.typography.bodyMedium
@@ -205,7 +207,7 @@ fun CreateEventScreen(
         //TODO put participants here, use participantUI component
 
 
-        ActionButton("Create",
+        ActionButton(stringResource(R.string.event_create),
             modifier = Modifier.align(Alignment.CenterHorizontally)
                 .padding(top = 15.dp, bottom = 15.dp),
             onClick = {
@@ -228,7 +230,7 @@ fun CreateEventScreen(
                 TimePickerModal(
                     onConfirm = { time ->
                         viewmodel.onTimePicked(time)
-                                viewmodel.setShowTimePicker()// Pass the selected time to your ViewModel
+                                viewmodel.setShowTimePicker()
                     },
                     onDismiss = { viewmodel.setShowTimePicker() }
                 )

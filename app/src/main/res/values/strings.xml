@@ -20,4 +20,14 @@
     <string name="create_account_text">Create Account</string>
     <string name="bottom_navigation_item_icon">bottom navigation item icon</string>
     <string name="no_events_available">No events available</string>
+
+    <string name="event_title">Title</string>
+    <string name="event_desc">Description</string>
+    <string name="event_city">City</string>
+    <string name="event_street">Street</string>
+    <string name="event_place">Place</string>
+    <string name="event_date">Date</string>
+    <string name="event_time">Time</string>
+    <string name="event_participants">Participant</string>
+    <string name="event_create">Create</string>
 </resources>
