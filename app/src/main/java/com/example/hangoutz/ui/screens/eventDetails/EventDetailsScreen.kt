@@ -103,9 +103,7 @@ fun EventDetailsScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .verticalScroll(rememberScrollState())
-
                 ) {
-
                     data.value.title?.let {
                         InputField(
                             stringResource(R.string.event_title),
@@ -172,7 +170,7 @@ fun EventDetailsScreen(
                         horizontalArrangement = Arrangement.spacedBy(35.dp)
                     ) {
                         data.value.date?.let {
-                            InputFieldWithIcon(
+                            InputField(
                                 stringResource(R.string.event_date),
                                 it,
                                 { },
@@ -181,14 +179,12 @@ fun EventDetailsScreen(
                                     .semantics {
                                         contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
                                     },
-                                R.drawable.calendaricon,
                                 false,
                                 true,
-                                { }
                             )
                         }
                         data.value.time?.let {
-                            InputFieldWithIcon(
+                            InputField(
                                 stringResource(R.string.event_time),
                                 it,
                                 { },
@@ -197,10 +193,8 @@ fun EventDetailsScreen(
                                     .semantics {
                                         contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
                                     },
-                                R.drawable.clockicon,
                                 false,
                                 true,
-                                {}
                             )
                         }
                     }
