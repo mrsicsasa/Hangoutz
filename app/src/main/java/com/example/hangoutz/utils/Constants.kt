@@ -105,7 +105,7 @@ object Constants {
 
     //Validator strings
     const val AT_SIGN = "@"
-    const val VALID_EMAIL = "@gmail.com"
+    const val VALID_EMAIL = "^[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.com$"
     const val CONTAINS_DIGIT = ".*\\d.*"
 
     //RegisterViewModel
