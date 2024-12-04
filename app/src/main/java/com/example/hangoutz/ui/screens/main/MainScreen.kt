@@ -61,6 +61,7 @@ fun MainScreen(navController: NavController) {
             )
         )
     },
+
         bottomBar = {
             TabView(
                 tabBarItems = listOf(
@@ -71,6 +72,7 @@ fun MainScreen(navController: NavController) {
                 navController = bottomNavController
             )
         }
+
 
     ) { innerPadding ->
         NavHost(
@@ -85,7 +87,7 @@ fun MainScreen(navController: NavController) {
                 .padding(innerPadding)
         ) {
             composable(route = BottomNavigationDestination.EVENTS.name) {
-                MyEventsScreen()
+                MyEventsScreen(navController)
             }
             composable(route = BottomNavigationDestination.FRIENDS.name) {
                 FriendsScreen()
@@ -94,6 +96,5 @@ fun MainScreen(navController: NavController) {
                 SettingsScreen(navController)
             }
         }
-    }
-}
+}}
 

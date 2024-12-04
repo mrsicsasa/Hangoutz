@@ -20,6 +20,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.hangoutz.ui.theme.Ivory
 import com.example.hangoutz.utils.Constants
+import com.example.hangoutz.utils.Constants.SETTINGS_NAME_FIELD_TAG
 import com.example.hangoutz.utils.Dimensions
 
 
@@ -53,6 +54,7 @@ fun NameInput(
                 isReadOnly,
                 focusRequester,
                 modifier = Modifier.align(Alignment.Center)
+                    .semantics { contentDescription = SETTINGS_NAME_FIELD_TAG }
             )
         }
         Box(modifier = Modifier

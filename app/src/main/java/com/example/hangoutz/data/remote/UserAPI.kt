@@ -61,4 +61,7 @@ interface UserAPI {
     suspend fun postAvatar(
         @Part image: MultipartBody.Part, @Path("avatarName") avatarName: String
     ): Response<Unit>
+
+    @GET("${BuildConfig.REQUEST_URL}users")
+    suspend fun getAllUsers(): Response<List<User>>
 }
