@@ -14,4 +14,8 @@ class FriendsRepositoryImpl @Inject constructor(friendsAPI: FriendsAPI) : Friend
     ): Response<List<ListOfFriends>> {
         return api.getFriendsFromUserId(id = "eq.$id", startingWith = "ilike.$startingWith*")
     }
+
+    override suspend fun removeFriend(userId: String, friendId: String): Response<Unit> {
+        return api.removeFriend(userId = "eq.$userId", friendId = "eq.$friendId")
+    }
 }
