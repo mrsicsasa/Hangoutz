@@ -109,6 +109,8 @@ class EventDetailsViewModel @Inject constructor(
                     val event = eventResponse.body()?.first()
                     event?.let {
                         _uiState.value = _uiState.value.copy(
+                            title = it.title,
+                            description = it.description,
                             city = it.city,
                             street = it.street,
                             place = it.place,

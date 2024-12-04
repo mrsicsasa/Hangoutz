@@ -2,13 +2,17 @@ package com.example.hangoutz.ui.screens.eventDetailsOwner
 
 import android.content.Context
 import android.util.Log
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Constraints
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import com.example.hangoutz.R
 import com.example.hangoutz.data.models.User
 import com.example.hangoutz.domain.repository.EventRepository
 import com.example.hangoutz.domain.repository.InviteRepository
 import com.example.hangoutz.domain.repository.UserRepository
+import com.example.hangoutz.utils.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,7 +37,9 @@ data class EventDetailsData(
     var time: String? = "",
     var participants: List<User> = emptyList(),
     var showDatePicker: Boolean = false,
-    var showTimePicker: Boolean = false
+    var showTimePicker: Boolean = false,
+    var isError: Boolean = false,
+    var errorMessage : String ? = null
 )
 
 @HiltViewModel
@@ -64,6 +70,7 @@ class EventDetailsOwnerViewModel @Inject constructor(
 
             onSuccess()
         } else {
+            _uiState.value = _uiState.value.copy(errorMessage =  Constants.ERROR_EMPTY_FIELD)
             Log.e("Error", "")
         }
     }
@@ -97,6 +104,8 @@ class EventDetailsOwnerViewModel @Inject constructor(
                 val event = eventResponse.body()?.first()
                 event?.let {
                     _uiState.value = _uiState.value.copy(
+                        title = it.title,
+                        description = it.description,
                         city = it.city,
                         street = it.street,
                         place = it.place,
@@ -171,6 +180,7 @@ class EventDetailsOwnerViewModel @Inject constructor(
     }
 
     fun onTitleChange(title: String) {
+
         _uiState.value = _uiState.value.copy(title = title)
     }
 
@@ -187,14 +197,24 @@ class EventDetailsOwnerViewModel @Inject constructor(
     }
 
     fun onPlaceChange(place: String) {
+
+        if(place.trim().isEmpty()){
+            _uiState.value = _uiState.value.copy(errorMessage =  Constants.ERROR_EMPTY_FIELD)
+        }else
         _uiState.value = _uiState.value.copy(place = place)
     }
 
     fun onDateChange(date: String) { //TODO Configure datepicker validation
+        if(date.trim().isEmpty()){
+            _uiState.value = _uiState.value.copy(errorMessage =  Constants.ERROR_EMPTY_FIELD)
+        }else
         _uiState.value = _uiState.value.copy(date = date)
     }
 
     fun onTimeChange(time: String) { //TODO Configure timepicker validation
+        if(time.trim().isEmpty()){
+            _uiState.value = _uiState.value.copy(errorMessage =  Constants.ERROR_EMPTY_FIELD)
+        }else
         _uiState.value = _uiState.value.copy(time = time)
     }
 }

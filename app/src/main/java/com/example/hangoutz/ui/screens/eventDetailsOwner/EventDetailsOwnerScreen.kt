@@ -40,6 +40,7 @@ import androidx.navigation.NavController
 import com.example.hangoutz.R
 import com.example.hangoutz.ui.components.ActionButton
 import com.example.hangoutz.ui.components.DatePickerModal
+import com.example.hangoutz.ui.components.ErrorMessage
 import com.example.hangoutz.ui.components.InputField
 import com.example.hangoutz.ui.components.InputFieldWithIcon
 import com.example.hangoutz.ui.components.ParticipantUI
@@ -125,10 +126,9 @@ fun EventOwnerDetailsScreen(
                             modifier = Modifier.semantics {
                                 contentDescription = Constants.EVENT_OWNER_TITLE_FIELD
                             },
-                            true
+                            true, false, data.value.isError
                         )
                     }
-
                     data.value.description?.let {
                         InputField(
                             stringResource(R.string.event_desc),
@@ -172,7 +172,7 @@ fun EventOwnerDetailsScreen(
                             modifier = Modifier.semantics {
                                 contentDescription = Constants.EVENT_OWNER_PLACE_FIELD
                             },
-                            true
+                            true,false, data.value.isError
                         )
                     }
 
@@ -197,8 +197,9 @@ fun EventOwnerDetailsScreen(
                                 R.drawable.calendaricon,
                                 true,
                                 true,
-                                { viewmodel.setShowDatePicker() })
+                                { viewmodel.setShowDatePicker() }, data.value.isError)
                         }
+
 
                         data.value.time?.let {
                             InputFieldWithIcon(
@@ -213,8 +214,10 @@ fun EventOwnerDetailsScreen(
                                 R.drawable.clockicon,
                                 true,
                                 true,
-                                { viewmodel.setShowTimePicker() })
+                                { viewmodel.setShowTimePicker() }, data.value.isError)
                         }
+
+                        data.value.errorMessage?.let { ErrorMessage(it) }
                     }
                     Row(
                         modifier = Modifier
@@ -271,7 +274,10 @@ fun EventOwnerDetailsScreen(
                     },
                 onClick = {
                     viewmodel.editEvent(
-                        onSuccess = { navController.popBackStack() },
+                        onSuccess = {
+
+                        }
+                            //navController.popBackStack() },
                     )
                 })
 
