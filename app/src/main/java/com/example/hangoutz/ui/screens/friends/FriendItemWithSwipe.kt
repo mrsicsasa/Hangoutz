@@ -23,13 +23,12 @@ fun FriendItemWithSwipe(
     onRemove: (ListOfFriends) -> Unit
 ) {
     val context = LocalContext.current
-    val currentItem by rememberUpdatedState(friend)
     val dismissState = rememberSwipeToDismissBoxState(
         confirmValueChange = {
             when (it) {
                 SwipeToDismissBoxValue.StartToEnd -> return@rememberSwipeToDismissBoxState false
                 SwipeToDismissBoxValue.EndToStart -> {
-                    onRemove(currentItem)
+                    onRemove(friend)
                     Toast.makeText(
                         context,
                         context.getString(
@@ -44,7 +43,7 @@ fun FriendItemWithSwipe(
             }
             return@rememberSwipeToDismissBoxState true
         },
-        positionalThreshold = { it * Dimensions.DISMISS_POSITIONAL_THRESHOLD }
+      //  positionalThreshold = { it * Dimensions.DISMISS_POSITIONAL_THRESHOLD }
     )
     SwipeToDismissBox(
         state = dismissState,
