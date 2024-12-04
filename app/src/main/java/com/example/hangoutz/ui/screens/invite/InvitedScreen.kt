@@ -21,7 +21,7 @@ fun InvitedScreen(navController: NavController) {
             Text(text = "Go to MainScreen")
         }
         Button(onClick = {
-            navController.navigate(NavigationItem.MyEvents.route)
+            navController.navigate(NavigationItem.Events.route)
         }) {
             Text(text = "Go to MyEvents")
         }

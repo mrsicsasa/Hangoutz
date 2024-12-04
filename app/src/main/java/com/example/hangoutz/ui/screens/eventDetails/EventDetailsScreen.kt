@@ -1,5 +1,6 @@
 package com.example.hangoutz.ui.screens.eventDetails
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -84,11 +85,11 @@ fun EventDetailsScreen(
         ) {
             Box(
                 modifier = Modifier.padding(
-                        top = innerPadding.calculateTopPadding() + Dimensions.EVENTDETAILS_TOP_PADDING,
-                        start = Dimensions.ACTION_BUTTON_MEDIUM2,
-                        end = Dimensions.ACTION_BUTTON_MEDIUM2,
-                        bottom = scrollableField
-                    )
+                    top = innerPadding.calculateTopPadding() + Dimensions.EVENTDETAILS_TOP_PADDING,
+                    start = Dimensions.ACTION_BUTTON_MEDIUM2,
+                    end = Dimensions.ACTION_BUTTON_MEDIUM2,
+                    bottom = scrollableField
+                )
             ) {
                 Column(
                     modifier = Modifier
@@ -181,10 +182,16 @@ fun EventDetailsScreen(
                     Text(
                         stringResource(R.string.participants),
                         color = Ivory,
-                        modifier = Modifier.padding(top = Dimensions.CREATE_EVENT_TEXT_PADDING, bottom = Dimensions.CREATE_EVENT_TEXT_PADDING),
+                        modifier = Modifier.padding(
+                            top = Dimensions.CREATE_EVENT_TEXT_PADDING,
+                            bottom = Dimensions.CREATE_EVENT_TEXT_PADDING
+                        ),
                         style = MaterialTheme.typography.bodyMedium
                     )
-                    HorizontalDivider(thickness = Dimensions.CREATE_EVENT_LINE_THICKNESS, color = Ivory)
+                    HorizontalDivider(
+                        thickness = Dimensions.CREATE_EVENT_LINE_THICKNESS,
+                        color = Ivory
+                    )
                     LaunchedEffect(data.value.eventId) {
                         data.value.eventId?.let {
                             viewmodel.getParticipants()
@@ -201,7 +208,12 @@ fun EventDetailsScreen(
                     .align(Alignment.BottomCenter)
                     .padding(bottom = Dimensions.ACTION_BUTTON_MEDIUM3),
                 onClick = {
-                    viewmodel.leaveEvent{}
+                    viewmodel.onLeave(
+                        onSuccess = { navController.popBackStack() },
+                        onFailure = { errorMessage ->
+                            Log.e("e", "an error has occurred")
+                        }
+                    )
                 }
             )
         }
