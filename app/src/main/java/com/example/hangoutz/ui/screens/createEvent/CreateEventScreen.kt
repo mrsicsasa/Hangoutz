@@ -20,8 +20,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
@@ -40,10 +46,13 @@ import com.example.hangoutz.ui.components.DatePickerModal
 import com.example.hangoutz.ui.components.InputField
 import com.example.hangoutz.ui.components.InputFieldWithIcon
 import com.example.hangoutz.ui.components.TimePickerModal
+import com.example.hangoutz.ui.screens.friends.FriendsPopup
 import com.example.hangoutz.ui.theme.Ivory
 import com.example.hangoutz.ui.theme.TopBarBackgroundColor
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Dimensions
+import kotlinx.coroutines.launch
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,6 +60,9 @@ fun CreateEventScreen(
     viewmodel: CreateEventViewModel = hiltViewModel()
 ) {
     val data = viewmodel.uiState.collectAsState()
+    val sheetState = rememberModalBottomSheetState()
+    val scope = rememberCoroutineScope()
+    var isBottomSheetVisible by remember { mutableStateOf(false) }
     val scrollableField = LocalConfiguration.current.screenHeightDp.dp - (LocalConfiguration.current.screenHeightDp.dp - Dimensions.ACTION_BUTTON_MEDIUM4)
 
     Scaffold(topBar = {
@@ -200,7 +212,7 @@ fun CreateEventScreen(
                         Image(painter = painterResource(id = R.drawable.addevent),
                             contentDescription = "",
                             modifier = Modifier
-                                .clickable { }
+                                .clickable {scope.launch { sheetState.show() }}
                                 .semantics {
                                     contentDescription =
                                         Constants.CREATE_EVENT_ADD_PARTICIPANTS_BUTTON
@@ -223,6 +235,22 @@ fun CreateEventScreen(
                 onClick = {
                     viewmodel.createEvent()
                 })
+            if (isBottomSheetVisible) {
+                FriendsPopup(
+                    userList = emptyList(),
+                    searchQuery = "",
+                    isLoading = false,
+                    clearText = {
+                      //  viewModel.clearSearchInputPopupScreen()
+                    },
+                    sheetState = sheetState,
+                    showBottomSheet = { isShow ->
+                        isBottomSheetVisible = isShow
+                    }) { searchQuery ->
+                 //   viewModel.showSheetState(true)
+                  //  viewModel.onPopupSearchInput(searchQuery)
+                }
+            }
         }
     }
 

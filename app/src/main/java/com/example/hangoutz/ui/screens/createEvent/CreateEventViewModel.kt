@@ -13,33 +13,23 @@ import java.util.Locale
 import javax.inject.Inject
 
 
-data class EventDetailsData(
 
-    var title: String = "",
-    var description: String = "",
-    var city: String = "",
-    var street: String = "",
-    var place: String = "",
-    var date: String = "",
-    var time: String = "",
-    var participants: List<User> = emptyList(),
-    var showDatePicker: Boolean = false,
-    var showTimePicker: Boolean = false,
-)
 
 @HiltViewModel
 class CreateEventViewModel @Inject constructor(
     @ApplicationContext private val context: Context
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(EventDetailsData())
-    val uiState: StateFlow<EventDetailsData> = _uiState
+    private val _uiState = MutableStateFlow(CreateEventState())
+    val uiState: StateFlow<CreateEventState> = _uiState
 
     fun createEvent() {
         //TODO
     }
 
     fun onTimePicked(date: Long) {
+        val formattedTime = formatTime(date)
+        onTimeChange(formattedTime)
     }
 
    private fun formatTime(timeMillis: Long): String {
@@ -49,8 +39,6 @@ class CreateEventViewModel @Inject constructor(
 
     fun onDatePicked(date: Long) {
         val formattedDate = formatDate(date)
-        val formattedTime = formatTime(date)
-        onTimeChange(formattedTime)
         onDateChange(formattedDate)
     }
 
