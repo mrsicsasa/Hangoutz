@@ -45,9 +45,6 @@ fun DisplayUser(name: String, userAvatar: String?, isCheckList: Boolean) {
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
                 .padding(vertical = Dimensions.BOTTOM_SHEET_USER_PADDING)
-                .semantics {
-                    contentDescription = Constants.BOTTOM_SHEET_SEARCH
-                }
         ) {
             // Left side items
             Row(verticalAlignment = Alignment.CenterVertically) {

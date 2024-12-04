@@ -148,4 +148,7 @@ object Constants {
     const val BOTTOM_SHEET_PROFILE_PICTURE = "bottomSheetProfilePicture"
     const val BOTTOM_SHEET_USERNAME = "bottomSheetUsername"
     const val BOTTOM_SHEET_ADD_ICON = "bottomSheetAddIcon"
+    const val BOTTOM_SHEET_LOADING_SPINNER = "bottomSheetLoadingSpinner"
+    const val NO_USERS_FOUND_MESSAGE = "noFriendsFoundMessage"
+    const val BOTTOM_SHEET_SEARCH_MESSAGE = "bottomSheetSearchMessage"
 }

@@ -60,6 +60,9 @@ fun FriendsPopup(
             onTextInput = onTextInput,
             modifier = Modifier
                 .padding(horizontal = Dimensions.SEARCH_BAR_HORIZONTAL_PADDING)
+                .semantics {
+                    contentDescription = Constants.BOTTOM_SHEET_SEARCH
+                }
         )
         if (isLoading) {
             Box(
@@ -70,7 +73,7 @@ fun FriendsPopup(
                     modifier = Modifier
                         .size(Dimensions.FRIENDS_LOADING_SPINNER_SIZE)
                         .semantics {
-                            contentDescription = Constants.FRIENDS_LOADING_SPINNER
+                            contentDescription = Constants.BOTTOM_SHEET_LOADING_SPINNER
                         })
             }
         } else if (userList.isEmpty()) {
@@ -83,14 +86,14 @@ fun FriendsPopup(
                         text = stringResource(R.string.no_friends_found),
                         color = Color.Black,
                         modifier = Modifier.semantics {
-                            contentDescription = Constants.NO_FRIENDS_AVAILABLE_MESSAGE
+                            contentDescription = Constants.NO_USERS_FOUND_MESSAGE
                         })
                 } else {
                     Text(
                         text = stringResource(R.string.search_for_new_friends),
                         color = Color.Black,
                         modifier = Modifier.semantics {
-                            contentDescription = Constants.NO_FRIENDS_AVAILABLE_MESSAGE
+                            contentDescription = Constants.BOTTOM_SHEET_SEARCH_MESSAGE
                         })
                 }
             }

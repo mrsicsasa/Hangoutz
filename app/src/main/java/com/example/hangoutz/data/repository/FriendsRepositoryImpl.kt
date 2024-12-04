@@ -28,14 +28,14 @@ class FriendsRepositoryImpl @Inject constructor(friendsAPI: FriendsAPI) : Friend
     ): Response<List<Friend>> {
         val friendsResponse = api.getFriendIdsFromUserId(id = "eq.$id")
 
-        var string = ""
+        var stringBuilder = StringBuilder(id).append(",")
         friendsResponse.body()?.forEach { friend ->
-            string += friend.friend_id + ","
+            stringBuilder.append(friend.friend_id).append(",")
         }
         try {
             if (friendsResponse.isSuccessful) {
                 return api.getNonFriendsFromUserId(
-                    id = "not.in.(${string.trim(',')})",
+                    id = "not.in.(${stringBuilder.trim(',')})",
                     startingWith = "ilike.$startingWith*"
                 )
             }
