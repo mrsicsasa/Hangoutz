@@ -23,6 +23,8 @@ android {
         properties.load(keystoreFile.newInputStream())
         def apiKey = properties.getProperty("API_KEY") ?: ""
         buildConfigField("String", "API_KEY", apiKey)
+        def bearerToken = properties.getProperty("BEARER_TOKEN") ?: ""
+        buildConfigField("String", "BEARER_TOKEN", bearerToken)
     }
 
     buildTypes {
@@ -30,6 +32,7 @@ android {
             buildConfigField("String", "BASE_URL", "\"https://zsjxwfjutstrybvltjov.supabase.co/\"")
             buildConfigField("String", "BASE_URL_AVATAR", "\"https://zsjxwfjutstrybvltjov.supabase.co/storage/v1/object/public/avatar/\"")
             buildConfigField("String", "REQUEST_URL", "\"rest/v1/\"")
+            buildConfigField("String", "AVATAR_URL", "\"https://zsjxwfjutstrybvltjov.supabase.co/storage/v1/object/avatar/\"")
         }
         release {
             minifyEnabled false

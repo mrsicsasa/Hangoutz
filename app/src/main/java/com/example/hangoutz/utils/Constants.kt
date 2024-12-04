@@ -63,8 +63,7 @@ object Constants {
     const val EVENT_PLACE = "eventPlace"
     const val EVENT_DATE = "eventDate"
     const val NUMBER_OF_PEOPLE = "numberOfPeople"
-    const val NUMBER_OF_PEOPLE_THRESHOLD = 0
-    const val NUMBER_OF_PEOPLE_ADD_OWNER = 1
+    const val NUMBER_OF_PEOPLE_THRESHOLD = 1
 
     //Extension
     const val DAY_THRESHOLD = 7
@@ -77,6 +76,7 @@ object Constants {
     //Test tags settings screen
     const val SETTINGS_NAME_FIELD_TAG = "settingsNameField"
     const val SETTINGS_NAME_ICON_TAG = "settingsNameIcon"
+    const val SETTINGS_NAME_VALIDATOR_ICON_TAG = "settingsNameValidatorIcon"
     const val SETTINGS_USER_PHOTO_TAG = "settingsUserPhoto"
     const val SETTINGS_BACKGROUND_LINES_TAG = "settingsBackgroundLines"
     const val SETTINGS_EMAIL_FIELD_TAG = "settingsEmailField"
@@ -85,6 +85,13 @@ object Constants {
 
     //Settings page
     const val PROFILE_PHOTO = "Profile Photo"
+    const val SETTINGS_CAMERA = "Capture from Camera"
+    const val SETTINGS_GALLERY = "Pick from gallery"
+    const val SETTINGS_ACTION = "Choose Action"
+    const val RANDOM_STRING_LENGTH = 3
+    const val JPG = ".jpg"
+    const val TEMPIMAGE = "_image"
+    const val IMAGEDIRECTORY = "MyAppImages"
 
     //BottomNavigation bar
     const val BOTTOM_NAVIGATION_BAR = "bottomNavigationBar"
@@ -128,6 +135,9 @@ object Constants {
     const val REGISTER_INCOMPLETE_FORM_ERROR = "registerIncompleteFormError"
     const val REGISTER_CREATE_ACCOUNT_BUTTON = "registerCreateAccountButton"
 
+    //FriendsViewModel
+    const val MIN_SEARCH_LENGTH = 3
+
     //Friends tags
     const val FRIENDS_BACKGROUND_BOX = "friendsBackgroundBox"
     const val FRIENDS_LIST_ELEMENT = "friendsListElement"
@@ -148,4 +158,13 @@ object Constants {
     const val CREATE_EVENT_CREATE_BUTTON = "createEventCreateButton"
     const val CREATE_EVENT_EDIT_BUTTON = "createEventCreateButton"
 
+    //Bottom sheet
+    const val BOTTOM_SHEET_TAG = "bottomSheet"
+    const val BOTTOM_SHEET_SEARCH = "bottomSheetSearch"
+    const val BOTTOM_SHEET_PROFILE_PICTURE = "bottomSheetProfilePicture"
+    const val BOTTOM_SHEET_USERNAME = "bottomSheetUsername"
+    const val BOTTOM_SHEET_ADD_ICON = "bottomSheetAddIcon"
+    const val BOTTOM_SHEET_LOADING_SPINNER = "bottomSheetLoadingSpinner"
+    const val NO_USERS_FOUND_MESSAGE = "noFriendsFoundMessage"
+    const val BOTTOM_SHEET_SEARCH_MESSAGE = "bottomSheetSearchMessage"
 }

@@ -1,7 +1,12 @@
 package com.example.hangoutz.ui.screens.settings
 
+
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,6 +29,8 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
@@ -46,7 +53,66 @@ import com.example.hangoutz.utils.Dimensions
 @Composable
 fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = hiltViewModel()) {
     val data = viewmodel.uiState.collectAsState()
+    val imagePicker = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia(),
+        onResult = {
+            it?.let {
+                viewmodel.updateAvatarUri(it)
+            }
+        }
+    )
+    val takePhotoLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.TakePicture(),
+        onResult = { isSaved ->
+            if (isSaved) {
+                viewmodel.tempUri.let {
+                    viewmodel.updateAvatarUri(it)
+                }
+            } else {
+                viewmodel.setAvatarUri()
+            }
+        }
+    )
+    val cameraPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        viewmodel.onPermissionResponse(
+            isGranted,
+            onPermissionGranted = { uri ->
+                takePhotoLauncher.launch(uri)
+            },
+            onPermissionDenied = {
+                viewmodel.setAvatarUri()
+            }
+        )
+    }
 
+    if (data.value.showBottomSheet) {
+        ImageHandleDialog(
+            onDismiss = { viewmodel.setShowBottomSheet(false) },
+            onCaptureFromCamera = {
+                viewmodel.setShowBottomSheet(false)
+                viewmodel.requestCameraPermission(
+                    onPermissionGranted = {
+                        viewmodel.captureImage { uri ->
+                            takePhotoLauncher.launch(uri)
+                        }
+                    },
+                    onPermissionDenied = { permission ->
+                        cameraPermissionLauncher.launch(permission)
+                    }
+                )
+            },
+            onPickFromGallery = {
+                viewmodel.setShowBottomSheet(false)
+                imagePicker.launch(
+                    PickVisualMediaRequest(
+                        ActivityResultContracts.PickVisualMedia.ImageOnly
+                    )
+                )
+            }
+        )
+    }
     Column(
         modifier = Modifier
             .padding(top = Dimensions.SETTINGS_SCREEN_MEDIUM2)
@@ -65,7 +131,8 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
                     .border(Dimensions.SETTINGS_SCREEN_SMALL3, Ivory, CircleShape)
             ) {}
             GlideImage(
-                model = "${BuildConfig.BASE_URL_AVATAR}${data.value.avatar}",
+                model = data.value.avatarUri
+                    ?: "${BuildConfig.BASE_URL_AVATAR}${data.value.avatar}",
                 contentDescription = PROFILE_PHOTO,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -74,6 +141,9 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
                     .clip(CircleShape)
                     .align(Alignment.Center)
                     .testTag(SETTINGS_USER_PHOTO_TAG)
+                    .clickable {
+                        viewmodel.setShowBottomSheet(true)
+                    }
             )
             Image(
                 painter = painterResource(R.drawable.profilelines),
@@ -81,7 +151,9 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .testTag(SETTINGS_BACKGROUND_LINES_TAG),
+                    .semantics {
+                        contentDescription = SETTINGS_BACKGROUND_LINES_TAG
+                    },
                 colorFilter = ColorFilter.tint(Ivory)
             )
         }
@@ -100,6 +172,7 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 NameInput(
+                    data.value.textIcon,
                     data.value.name,
                     data.value.isReadOnly,
                     { viewmodel.onNameChanged(it) },
@@ -127,7 +200,6 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
                     navController.navigate(NavigationItem.Login.route) {
                         popUpTo(0)
                     }
-
                 }
             }, modifier = Modifier.testTag(SETTINGS_LOGOUT_BUTTON))
         }
