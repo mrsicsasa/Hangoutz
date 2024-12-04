@@ -23,6 +23,7 @@ data class FriendsUIState(
     val isLoading: Boolean = true,
     val listOfFriends: List<ListOfFriends> = emptyList(),
     val showBottomSheet: Boolean = false,
+    val isPopupLoading: Boolean = false,
     val popupSearch: String = "",
     val addFriendList: List<Friend> = emptyList()
 )
@@ -79,12 +80,9 @@ class FriendsViewModel @Inject constructor(
         fetchFriends(false)
     }
 
-    fun loadFriends(isLoading: Boolean) {
-        _uiState.value = _uiState.value.copy(isLoading = isLoading)
-    }
-
     fun clearSearchInputPopupScreen() {
         _uiState.value = _uiState.value.copy(popupSearch = "", addFriendList = emptyList())
+        fetchNonFriends(false)
     }
 
     fun showSheetState(isShown: Boolean) {
@@ -92,32 +90,40 @@ class FriendsViewModel @Inject constructor(
     }
 
     fun onPopupSearchInput(newText: String) {
-        _uiState.value = _uiState.value.copy(popupSearch = newText)
+        _uiState.value = _uiState.value.copy(popupSearch = newText, isPopupLoading = true)
+        if (_uiState.value.popupSearch.length >= Constants.MIN_SEARCH_LENGTH) {
+            fetchNonFriends(isSearching = true)
+        } else {
+            _uiState.value = _uiState.value.copy(addFriendList = emptyList(), isPopupLoading = false)
+        }
     }
 
     fun fetchNonFriends(isSearching: Boolean) {
-        viewModelScope.launch{
-            val response = withContext(Dispatchers.IO) {
-                SharedPreferencesManager.getUserId(context)?.let {
-                    if (isSearching) {
-                        MutableStateFlow(
-                            friendsRepository.getNonFriendsFromUserId(
-                                it,
-                                _uiState.value.popupSearch
+        if (_uiState.value.isPopupLoading) {
+            viewModelScope.launch {
+                val response = withContext(Dispatchers.IO) {
+                    SharedPreferencesManager.getUserId(context)?.let {
+                        if (isSearching) {
+                            MutableStateFlow(
+                                friendsRepository.getNonFriendsFromUserId(
+                                    it,
+                                    _uiState.value.popupSearch
+                                )
                             )
-                        )
-                    } else {
-                        MutableStateFlow(friendsRepository.getNonFriendsFromUserId(it))
+                        } else {
+                            MutableStateFlow(friendsRepository.getNonFriendsFromUserId(it))
+                        }
                     }
                 }
-            }
-            response?.value?.let {
-                if (it.isSuccessful) {
-                    response.value.body()?.let {
-                        _uiState.value =
-                            _uiState.value.copy(addFriendList = it.sortedBy { it.name.uppercase() })
+                response?.value?.let {
+                    if (it.isSuccessful) {
+                        response.value.body()?.let {
+                            _uiState.value =
+                                _uiState.value.copy(addFriendList = it.sortedBy { it.name.uppercase() })
+                        }
                     }
                 }
+                _uiState.value = _uiState.value.copy(isPopupLoading = false)
             }
         }
     }

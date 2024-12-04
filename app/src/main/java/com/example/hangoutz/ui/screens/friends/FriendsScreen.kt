@@ -55,10 +55,11 @@ fun FriendsScreen(viewModel: FriendsViewModel = hiltViewModel()) {
             contentAlignment = Alignment.Center,
             modifier = Modifier.size(Dimensions.FRIENDS_LOADING_SPINNER_SIZE)
         ) {
-            CircularProgressIndicator(modifier = Modifier.semantics { Constants.FRIENDS_LOADING_SPINNER })
+            CircularProgressIndicator(modifier = Modifier.semantics {
+                contentDescription = Constants.FRIENDS_LOADING_SPINNER
+            })
         }
     } else if (data.value.listOfFriends.isEmpty()) {
-        viewModel.loadFriends(true)
         Box(
             contentAlignment = Alignment.Center
         ) {
@@ -69,7 +70,6 @@ fun FriendsScreen(viewModel: FriendsViewModel = hiltViewModel()) {
                     contentDescription = Constants.NO_FRIENDS_AVAILABLE_MESSAGE
                 })
         }
-        viewModel.loadFriends(false)
     }
     Box(
         modifier = Modifier
@@ -183,6 +183,7 @@ fun FriendsScreen(viewModel: FriendsViewModel = hiltViewModel()) {
             FriendsPopup(
                 userList = data.value.addFriendList,
                 searchQuery = data.value.popupSearch,
+                isLoading = data.value.isPopupLoading,
                 clearText = {
                     viewModel.clearSearchInputPopupScreen()
                 },
