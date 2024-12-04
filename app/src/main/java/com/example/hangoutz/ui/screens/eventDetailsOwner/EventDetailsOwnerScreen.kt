@@ -123,7 +123,7 @@ fun EventOwnerDetailsScreen(
                             it,
                             { viewmodel.onTitleChange(it) },
                             modifier = Modifier.semantics {
-                                contentDescription = Constants.CREATE_EVENT_TITLE_FIELD
+                                contentDescription = Constants.EVENT_OWNER_TITLE_FIELD
                             },
                             true
                         )
@@ -135,7 +135,7 @@ fun EventOwnerDetailsScreen(
                             it,
                             { viewmodel.onDescriptionChange(it) },
                             modifier = Modifier.semantics {
-                                contentDescription = Constants.CREATE_EVENT_DESC_FIELD
+                                contentDescription = Constants.EVENT_OWNER_DESC_FIELD
                             },
                             true
                         )
@@ -147,7 +147,7 @@ fun EventOwnerDetailsScreen(
                             it,
                             { viewmodel.onCityChange(it) },
                             modifier = Modifier.semantics {
-                                contentDescription = Constants.CREATE_EVENT_CITY_FIELD
+                                contentDescription = Constants.EVENT_OWNER_CITY_FIELD
                             },
                             true
                         )
@@ -158,7 +158,7 @@ fun EventOwnerDetailsScreen(
                             it,
                             { viewmodel.onStreetChange(it) },
                             modifier = Modifier.semantics {
-                                contentDescription = Constants.CREATE_EVENT_STREET_FIELD
+                                contentDescription = Constants.EVENT_OWNER_STREET_FIELD
                             },
                             true
                         )
@@ -170,7 +170,7 @@ fun EventOwnerDetailsScreen(
                             it,
                             { viewmodel.onPlaceChange(it) },
                             modifier = Modifier.semantics {
-                                contentDescription = Constants.CREATE_EVENT_PLACE_FIELD
+                                contentDescription = Constants.EVENT_OWNER_PLACE_FIELD
                             },
                             true
                         )
@@ -192,7 +192,7 @@ fun EventOwnerDetailsScreen(
                                 modifier = Modifier
                                     .weight(1f)
                                     .semantics {
-                                        contentDescription = Constants.CREATE_EVENT_DATE_FIELD
+                                        contentDescription = Constants.EVENT_OWNER_DATE_FIELD
                                     },
                                 R.drawable.calendaricon,
                                 true,
@@ -208,7 +208,7 @@ fun EventOwnerDetailsScreen(
                                 modifier = Modifier
                                     .weight(1f)
                                     .semantics {
-                                        contentDescription = Constants.CREATE_EVENT_TIME_FIELD
+                                        contentDescription = Constants.EVENT_OWNER_TIME_FIELD
                                     },
                                 R.drawable.clockicon,
                                 true,
@@ -238,7 +238,7 @@ fun EventOwnerDetailsScreen(
                                 .clickable { }
                                 .semantics {
                                     contentDescription =
-                                        Constants.CREATE_EVENT_ADD_PARTICIPANTS_BUTTON
+                                        Constants.EVENT_OWNER_ADD_PARTICIPANTS_BUTTON
                                 })
                     }
                     HorizontalDivider(
@@ -267,7 +267,7 @@ fun EventOwnerDetailsScreen(
                     .align(Alignment.BottomCenter)
                     .padding(bottom = Dimensions.ACTION_BUTTON_MEDIUM3)
                     .semantics {
-                        contentDescription = Constants.CREATE_EVENT_EDIT_BUTTON
+                        contentDescription = Constants.EVENT_OWNER_EDIT_BUTTON
                     },
                 onClick = {
                     viewmodel.editEvent()

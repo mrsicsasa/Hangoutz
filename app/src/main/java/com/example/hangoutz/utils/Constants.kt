@@ -175,4 +175,30 @@ object Constants {
     const val BOTTOM_SHEET_LOADING_SPINNER = "bottomSheetLoadingSpinner"
     const val NO_USERS_FOUND_MESSAGE = "noFriendsFoundMessage"
     const val BOTTOM_SHEET_SEARCH_MESSAGE = "bottomSheetSearchMessage"
+
+    //Event details test tags
+    const val PARTICIPANT_ICON_TAG = "participantIconTag"
+    const val PARTICIPANT_IMAGE = "participantImage"
+    const val PARTICIPANT_DIVIDER = "participantDivider"
+
+    const val EVENT_DETAILS_TITLE  = "eventDetailsTitle"
+    const val EVENT_DETAILS_DESC  = "eventDetailsDescription"
+    const val EVENT_DETAILS_PLACE  = "eventDetailsPlace"
+    const val EVENT_DETAILS_STREET  = "eventDetailsStreet"
+    const val EVENT_DETAILS_CITY  = "eventDetailsCity"
+    const val EVENT_DETAILS_DATE = "eventDetailsDate"
+    const val EVENT_DETAILS_TIME  = "eventDetailsTime"
+    const val EVENT_DETAILS_LEAVE_EVENT_BUTTON  = "eventDetailsLeaveEventButton"
+
+    const val EVENT_OWNER_TITLE_FIELD = "eventOwnerTitleField"
+    const val EVENT_OWNER_DESC_FIELD = "eventOwnerDescriptionField"
+    const val EVENT_OWNER_CITY_FIELD = "eventOwnerCityField"
+    const val EVENT_OWNER_STREET_FIELD = "eventOwnerStreetField"
+    const val EVENT_OWNER_PLACE_FIELD = "eventOwnerPlaceField"
+    const val EVENT_OWNER_DATE_FIELD = "eventOwnerDateField"
+    const val EVENT_OWNER_TIME_FIELD = "eventOwnerTimeField"
+    const val EVENT_OWNER_ADD_PARTICIPANTS_BUTTON = "eventOwnerAddParticipantsButton"
+    const val EVENT_OWNER_CREATE_BUTTON = "eventOwnerCreateButton"
+    const val EVENT_OWNER_EDIT_BUTTON = "eventOwnerCreateButton"
+
 }

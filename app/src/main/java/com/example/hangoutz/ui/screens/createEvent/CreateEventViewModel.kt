@@ -1,12 +1,9 @@
 package com.example.hangoutz.ui.screens.createEvent
 
 import android.content.Context
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import com.example.hangoutz.data.models.User
 import com.example.hangoutz.domain.repository.UserRepository
-import com.example.hangoutz.utils.Dimensions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,7 +11,6 @@ import kotlinx.coroutines.flow.StateFlow
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import java.util.UUID
 import javax.inject.Inject
 
 
@@ -34,8 +30,6 @@ data class EventDetailsData(
 
 @HiltViewModel
 class CreateEventViewModel @Inject constructor(
-    private val userRepository: UserRepository,
-
     @ApplicationContext private val context: Context
 ) : ViewModel() {
 
@@ -49,7 +43,7 @@ class CreateEventViewModel @Inject constructor(
     fun onTimePicked(date: Long) {
     }
 
-    fun formatTime(timeMillis: Long): String {
+   private fun formatTime(timeMillis: Long): String {
         val timeFormat = SimpleDateFormat("HH.mm", Locale.getDefault())
         return timeFormat.format(Date(timeMillis))
     }
@@ -61,7 +55,7 @@ class CreateEventViewModel @Inject constructor(
         onDateChange(formattedDate)
     }
 
-    fun formatDate(dateMillis: Long): String {
+    private fun formatDate(dateMillis: Long): String {
         val dateFormat = SimpleDateFormat("dd.MM.yyyy.", Locale.getDefault())
         return dateFormat.format(Date(dateMillis))
     }

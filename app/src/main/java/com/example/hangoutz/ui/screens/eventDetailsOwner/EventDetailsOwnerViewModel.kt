@@ -65,7 +65,7 @@ class EventDetailsOwnerViewModel @Inject constructor(
         //TODO
     }
 
-    fun formatDateTime(dateTimeString: String): Pair<String, String> {
+    private fun formatDateTime(dateTimeString: String): Pair<String, String> {
 
         val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
         val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
@@ -114,9 +114,7 @@ class EventDetailsOwnerViewModel @Inject constructor(
                             val acceptedUsers: List<User> = allUsers.filter { user ->
                                 user.id in acceptedUserIds
                             }
-//                            Log.e("prihv ", acceptedUsers[1].avatar + "")
                             _uiState.value = _uiState.value.copy(participants = acceptedUsers)
-
                         }
                     }
                 }
@@ -129,7 +127,7 @@ class EventDetailsOwnerViewModel @Inject constructor(
         onTimeChange(formattedTime)
     }
 
-    fun formatTime(timeMillis: Long): String {
+    private fun formatTime(timeMillis: Long): String {
         val timeFormat = SimpleDateFormat("HH.mm", Locale.getDefault())
         return timeFormat.format(Date(timeMillis))
     }
@@ -139,7 +137,7 @@ class EventDetailsOwnerViewModel @Inject constructor(
         onDateChange(formattedDate)
     }
 
-    fun formatDate(dateMillis: Long): String {
+   private  fun formatDate(dateMillis: Long): String {
         val dateFormat = SimpleDateFormat("dd.MM.yyyy.", Locale.getDefault())
         return dateFormat.format(Date(dateMillis))
     }

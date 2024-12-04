@@ -9,7 +9,9 @@ import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.window.Dialog
+import com.example.hangoutz.R
 import java.util.Calendar
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -46,10 +48,10 @@ fun TimePickerModal(
                    val selectedTimeInMillis = selectedCalendar.timeInMillis
                    onConfirm(selectedTimeInMillis)
                }) {
-                   Text("Confirm selection")
+                   Text(stringResource(R.string.confirm_time_picker))
                }
                Button(onClick = onDismiss) {
-                   Text("Dismiss picker")
+                   Text(stringResource(R.string.dismiss_time_picker))
                }
            }
         }

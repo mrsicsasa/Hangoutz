@@ -100,7 +100,7 @@ fun EventDetailsScreen(
                             it,
                             { },
                             modifier = Modifier.semantics {
-                                contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
+                                contentDescription = Constants.EVENT_DETAILS_TITLE
                             })
                     }
 
@@ -109,7 +109,7 @@ fun EventDetailsScreen(
                             it,
                             { },
                             modifier = Modifier.semantics {
-                                contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
+                                contentDescription = Constants.EVENT_DETAILS_DESC
                             })
                     }
 
@@ -118,7 +118,7 @@ fun EventDetailsScreen(
                             it,
                             { },
                             modifier = Modifier.semantics {
-                                contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
+                                contentDescription = Constants.EVENT_DETAILS_CITY
                             })
                     }
 
@@ -128,7 +128,7 @@ fun EventDetailsScreen(
                             it,
                             { },
                             modifier = Modifier.semantics {
-                                contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
+                                contentDescription = Constants.EVENT_DETAILS_STREET
                             })
                     }
 
@@ -137,16 +137,16 @@ fun EventDetailsScreen(
                             it,
                             { },
                             modifier = Modifier.semantics {
-                                contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
+                                contentDescription = Constants.EVENT_DETAILS_PLACE
                             })
                     }
 
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 2.dp),
+                            .padding(vertical = Dimensions.CREATE_EVENT_VERTICAL_PADDING),
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(35.dp)
+                        horizontalArrangement = Arrangement.spacedBy(Dimensions.CREATE_EVENT_HORIZONTAL_SPACING)
                     ) {
                         data.value.date?.let {
                             InputField(
@@ -156,7 +156,7 @@ fun EventDetailsScreen(
                                 modifier = Modifier
                                     .weight(1f)
                                     .semantics {
-                                        contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
+                                        contentDescription = Constants.EVENT_DETAILS_DATE
                                     },
                                 false,
                                 true,
@@ -170,7 +170,7 @@ fun EventDetailsScreen(
                                 modifier = Modifier
                                     .weight(1f)
                                     .semantics {
-                                        contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
+                                        contentDescription = Constants.EVENT_DETAILS_TIME
                                     },
                                 false,
                                 true,
@@ -179,12 +179,12 @@ fun EventDetailsScreen(
                     }
 
                     Text(
-                        "Participants",
+                        stringResource(R.string.participants),
                         color = Ivory,
-                        modifier = Modifier.padding(top = 15.dp, bottom = 15.dp),
+                        modifier = Modifier.padding(top = Dimensions.CREATE_EVENT_TEXT_PADDING, bottom = Dimensions.CREATE_EVENT_TEXT_PADDING),
                         style = MaterialTheme.typography.bodyMedium
                     )
-                    HorizontalDivider(thickness = 2.dp, color = Ivory)
+                    HorizontalDivider(thickness = Dimensions.CREATE_EVENT_LINE_THICKNESS, color = Ivory)
                     LaunchedEffect(data.value.eventId) {
                         data.value.eventId?.let {
                             viewmodel.getParticipants()
@@ -196,26 +196,14 @@ fun EventDetailsScreen(
                     }
                 }
             }
-            ActionButton("Leave Event",
+            ActionButton(stringResource(R.string.leave_event),
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .padding(bottom = Dimensions.ACTION_BUTTON_MEDIUM3),
                 onClick = {
-                    viewmodel.leaveEvent {}
+                    viewmodel.leaveEvent{}
                 }
-
             )
-
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
