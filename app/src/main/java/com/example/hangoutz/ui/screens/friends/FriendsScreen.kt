@@ -9,10 +9,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,16 +30,22 @@ import com.example.hangoutz.ui.theme.CoolGray
 import com.example.hangoutz.ui.theme.Ivory
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Dimensions
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FriendsScreen(viewModel: FriendsViewModel = hiltViewModel()) {
     val data = viewModel.uiState.collectAsState()
+    val sheetState = rememberModalBottomSheetState()
+    val coroutineScope = rememberCoroutineScope()
     if (data.value.isLoading) {
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier.size(Dimensions.FRIENDS_LOADING_SPINNER_SIZE)
         ) {
-            CircularProgressIndicator(modifier = Modifier.semantics { Constants.FRIENDS_LOADING_SPINNER })
+            CircularProgressIndicator(modifier = Modifier.semantics {
+                contentDescription = Constants.FRIENDS_LOADING_SPINNER
+            })
         }
     } else if (data.value.listOfFriends.isEmpty()) {
         Box(
@@ -96,14 +105,35 @@ fun FriendsScreen(viewModel: FriendsViewModel = hiltViewModel()) {
                 }
             }
         }
-        FloatingPlusButton(modifier = Modifier
-            .align(Alignment.BottomEnd)
-            .semantics {
-                contentDescription = Constants.FRIENDS_ADD_BUTTON
-            }) {}
-    }
+        FloatingPlusButton(
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .semantics {
+                    contentDescription = Constants.FRIENDS_ADD_BUTTON
+                }
+        ) {
+            coroutineScope.launch { sheetState.show() }
+        }
 
-    LaunchedEffect(key1 = true) {
-        viewModel.clearSearchInput()
+        if (sheetState.isVisible) {
+            FriendsPopup(
+                userList = data.value.addFriendList,
+                searchQuery = data.value.popupSearch,
+                isLoading = data.value.isPopupLoading,
+                clearText = {
+                    viewModel.clearSearchInputPopupScreen()
+                },
+                sheetState = sheetState,
+                showBottomSheet = {
+                    viewModel.showSheetState(data.value.showBottomSheet)
+                }) { searchQuery ->
+                viewModel.showSheetState(true)
+                viewModel.onPopupSearchInput(searchQuery)
+            }
+        }
+
+        LaunchedEffect(key1 = true) {
+            viewModel.clearSearchInput()
+        }
     }
 }
