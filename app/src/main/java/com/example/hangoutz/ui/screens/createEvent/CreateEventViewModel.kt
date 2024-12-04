@@ -3,7 +3,6 @@ package com.example.hangoutz.ui.screens.createEvent
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.example.hangoutz.data.models.User
-import com.example.hangoutz.domain.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
