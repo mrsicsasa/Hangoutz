@@ -46,16 +46,7 @@ class CreateEventViewModel @Inject constructor(
         //TODO
     }
 
-    fun deleteEvent(eventID : UUID) {
-        //TODO
-    }
-    fun removeUser(userID : UUID) {
-        //TODO
-    }
-
     fun onTimePicked(date: Long) {
-        val formattedTime = formatTime(date)
-        onTimeChange(formattedTime)
     }
 
     fun formatTime(timeMillis: Long): String {
@@ -65,6 +56,8 @@ class CreateEventViewModel @Inject constructor(
 
     fun onDatePicked(date: Long) {
         val formattedDate = formatDate(date)
+        val formattedTime = formatTime(date)
+        onTimeChange(formattedTime)
         onDateChange(formattedDate)
     }
 

@@ -1,4 +1,4 @@
-package com.example.hangoutz.ui.screens.eventDetails
+package com.example.hangoutz.ui.screens.eventDetailsOwner
 
 import android.content.Context
 import android.util.Log
@@ -15,9 +15,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 import java.util.UUID
 import javax.inject.Inject
+
 
 data class EventDetailsData(
     var eventId: UUID? = null,
@@ -28,11 +30,13 @@ data class EventDetailsData(
     var place: String? = "",
     var date: String? = "",
     var time: String? = "",
-    var participants: List<User> = emptyList()
+    var participants: List<User> = emptyList(),
+    var showDatePicker: Boolean = false,
+    var showTimePicker: Boolean = false
 )
 
 @HiltViewModel
-class EventDetailsViewModel @Inject constructor(
+class EventDetailsOwnerViewModel @Inject constructor(
     private val inviteRepository: InviteRepository,
     private val userRepository: UserRepository,
     private val eventRepository: EventRepository,
@@ -49,9 +53,18 @@ class EventDetailsViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(eventId = eventId)
     }
 
-    fun leaveEvent(onLeave: () -> Unit) {
-        onLeave()
+    fun editEvent() {
+        //TODO
     }
+
+    fun deleteEvent() {
+        //TODO
+    }
+
+    fun removeUser(userID: UUID) {
+        //TODO
+    }
+
     fun formatDateTime(dateTimeString: String): Pair<String, String> {
 
         val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
@@ -64,6 +77,7 @@ class EventDetailsViewModel @Inject constructor(
 
         return Pair(formattedDate, formattedTime)
     }
+
     fun getParticipants() {
         viewModelScope.launch {
 
@@ -77,12 +91,10 @@ class EventDetailsViewModel @Inject constructor(
                         place = it.place,
                         date = it.date,
                     )
-
                     val dateTemp = _uiState.value.date ?: ""
-                    val (formattedDate, formattedTime) = formatDateTime(  dateTemp )
+                    val (formattedDate, formattedTime) = formatDateTime(dateTemp)
 
-                    _uiState.value=_uiState.value.copy(date = formattedDate, time = formattedTime)
-
+                    _uiState.value = _uiState.value.copy(date = formattedDate, time = formattedTime)
                     Log.d(
                         "EventDetailsViewModel",
                         "Fetching event details for eventId: ${_uiState.value.eventId}"
@@ -102,9 +114,7 @@ class EventDetailsViewModel @Inject constructor(
                             val acceptedUsers: List<User> = allUsers.filter { user ->
                                 user.id in acceptedUserIds
                             }
-
-
-                            Log.e("prihv ", acceptedUsers[1].avatar + "")
+//                            Log.e("prihv ", acceptedUsers[1].avatar + "")
                             _uiState.value = _uiState.value.copy(participants = acceptedUsers)
 
                         }
@@ -112,6 +122,64 @@ class EventDetailsViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun onTimePicked(date: Long) {
+        val formattedTime = formatTime(date)
+        onTimeChange(formattedTime)
+    }
+
+    fun formatTime(timeMillis: Long): String {
+        val timeFormat = SimpleDateFormat("HH.mm", Locale.getDefault())
+        return timeFormat.format(Date(timeMillis))
+    }
+
+    fun onDatePicked(date: Long) {
+        val formattedDate = formatDate(date)
+        onDateChange(formattedDate)
+    }
+
+    fun formatDate(dateMillis: Long): String {
+        val dateFormat = SimpleDateFormat("dd.MM.yyyy.", Locale.getDefault())
+        return dateFormat.format(Date(dateMillis))
+    }
+
+    fun setShowDatePicker() {
+        val showDatePicker = !_uiState.value.showDatePicker
+        _uiState.value = _uiState.value.copy(showDatePicker = showDatePicker)
+    }
+
+    fun setShowTimePicker() {
+        val showTimePicker = !_uiState.value.showTimePicker
+        _uiState.value = _uiState.value.copy(showTimePicker = showTimePicker)
+    }
+
+    fun onTitleChange(title: String) {
+        _uiState.value = _uiState.value.copy(title = title)
+    }
+
+    fun onDescriptionChange(description: String) {
+        _uiState.value = _uiState.value.copy(description = description)
+    }
+
+    fun onCityChange(city: String) {
+        _uiState.value = _uiState.value.copy(city = city)
+    }
+
+    fun onStreetChange(street: String) {
+        _uiState.value = _uiState.value.copy(street = street)
+    }
+
+    fun onPlaceChange(place: String) {
+        _uiState.value = _uiState.value.copy(place = place)
+    }
+
+    fun onDateChange(date: String) { //TODO Configure datepicker validation
+        _uiState.value = _uiState.value.copy(date = date)
+    }
+
+    fun onTimeChange(time: String) { //TODO Configure timepicker validation
+        _uiState.value = _uiState.value.copy(time = time)
     }
 }
 

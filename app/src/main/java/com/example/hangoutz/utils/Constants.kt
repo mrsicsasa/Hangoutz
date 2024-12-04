@@ -145,6 +145,7 @@ object Constants {
     const val CREATE_EVENT_DATE_FIELD = "createEventDateField"
     const val CREATE_EVENT_TIME_FIELD = "createEventTimeField"
     const val CREATE_EVENT_ADD_PARTICIPANTS_BUTTON = "createEventAddParticipantsButton"
-    const val CREATE_EVENT_ADD_CREATE_BUTTON = "createEventCreateButton"
+    const val CREATE_EVENT_CREATE_BUTTON = "createEventCreateButton"
+    const val CREATE_EVENT_EDIT_BUTTON = "createEventCreateButton"
 
 }

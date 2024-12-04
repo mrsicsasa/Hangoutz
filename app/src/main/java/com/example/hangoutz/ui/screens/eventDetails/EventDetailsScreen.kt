@@ -37,20 +37,16 @@ import androidx.navigation.NavController
 import com.example.hangoutz.R
 import com.example.hangoutz.ui.components.ActionButton
 import com.example.hangoutz.ui.components.InputField
-import com.example.hangoutz.ui.components.InputFieldWithIcon
 import com.example.hangoutz.ui.components.ParticipantUI
 import com.example.hangoutz.ui.theme.Ivory
 import com.example.hangoutz.ui.theme.TopBarBackgroundColor
 import com.example.hangoutz.utils.Constants
-import com.example.hangoutz.utils.Constants.DEFAULT_USER_PHOTO
 import com.example.hangoutz.utils.Dimensions
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EventDetailsScreen(
-    navController: NavController,
-    eventId: String?,
-    viewmodel: EventDetailsViewModel = hiltViewModel()
+    navController: NavController, viewmodel: EventDetailsViewModel = hiltViewModel()
 ) {
     val data = viewmodel.uiState.collectAsState()
     viewmodel.getEventIdFromController(navController)
@@ -59,26 +55,23 @@ fun EventDetailsScreen(
         LocalConfiguration.current.screenHeightDp.dp - (LocalConfiguration.current.screenHeightDp.dp - Dimensions.ACTION_BUTTON_MEDIUM4)
 
     Scaffold(topBar = {
-        TopAppBar(
-            modifier = Modifier
-                .height(Dimensions.TOP_BAR_HEIGHT)
-                .wrapContentHeight(align = Alignment.CenterVertically)
-                .semantics {
-                    contentDescription = Constants.TOP_BAR
+        TopAppBar(modifier = Modifier
+            .height(Dimensions.TOP_BAR_HEIGHT)
+            .wrapContentHeight(align = Alignment.CenterVertically)
+            .semantics {
+                contentDescription = Constants.TOP_BAR
+            }, title = {
+            Text(
+                text = Constants.TOP_BAR_TITLE,
+                color = Color.White,
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.semantics {
+                    contentDescription = Constants.TOP_BAR_TITLE
                 },
-            title = {
-                Text(
-                    text = Constants.TOP_BAR_TITLE,
-                    color = Color.White,
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.semantics {
-                        contentDescription = Constants.TOP_BAR_TITLE
-                    },
-                )
-            },
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = TopBarBackgroundColor
             )
+        }, colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = TopBarBackgroundColor
+        )
         )
     }) { innerPadding ->
         Box(
@@ -90,76 +83,62 @@ fun EventDetailsScreen(
                 )
         ) {
             Box(
-                modifier = Modifier
-                    .padding(
+                modifier = Modifier.padding(
                         top = innerPadding.calculateTopPadding() + Dimensions.EVENTDETAILS_TOP_PADDING,
                         start = Dimensions.ACTION_BUTTON_MEDIUM2,
                         end = Dimensions.ACTION_BUTTON_MEDIUM2,
                         bottom = scrollableField
                     )
             ) {
-
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .verticalScroll(rememberScrollState())
                 ) {
                     data.value.title?.let {
-                        InputField(
-                            stringResource(R.string.event_title),
+                        InputField(stringResource(R.string.event_title),
                             it,
                             { },
                             modifier = Modifier.semantics {
                                 contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
-                            }
-                        )
+                            })
                     }
 
-
                     data.value.description?.let {
-                        InputField(
-                            stringResource(R.string.event_desc),
+                        InputField(stringResource(R.string.event_desc),
                             it,
                             { },
                             modifier = Modifier.semantics {
                                 contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
-                            }
-                        )
+                            })
                     }
 
                     data.value.city?.let {
-                        InputField(
-                            stringResource(R.string.event_city),
+                        InputField(stringResource(R.string.event_city),
                             it,
                             { },
                             modifier = Modifier.semantics {
                                 contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
-                            }
-                        )
+                            })
                     }
 
 
                     data.value.street?.let {
-                        InputField(
-                            stringResource(R.string.event_street),
+                        InputField(stringResource(R.string.event_street),
                             it,
                             { },
                             modifier = Modifier.semantics {
                                 contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
-                            }
-                        )
+                            })
                     }
 
-
                     data.value.place?.let {
-                        InputField(
-                            stringResource(R.string.event_place),
+                        InputField(stringResource(R.string.event_place),
                             it,
                             { },
                             modifier = Modifier.semantics {
                                 contentDescription = Constants.LOGIN_EMAIL_INPUT_FIELD
-                            }
-                        )
+                            })
                     }
 
                     Row(
@@ -213,31 +192,22 @@ fun EventDetailsScreen(
                     }
                     val participants = data.value.participants
                     participants.forEach { participant ->
-                        ParticipantUI(
-                            participant = participant,
-                            false,
-                            {}
-                        )
-
+                        ParticipantUI(participant = participant, false, {})
                     }
                 }
             }
-            ActionButton(
-                "Leave Event",
+            ActionButton("Leave Event",
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .padding(bottom = Dimensions.ACTION_BUTTON_MEDIUM3),
                 onClick = {
-                    viewmodel.leaveEvent {
-                    }
+                    viewmodel.leaveEvent {}
                 }
 
             )
 
         }
     }
-
-
 }
 
 

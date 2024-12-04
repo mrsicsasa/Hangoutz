@@ -15,7 +15,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -71,23 +70,10 @@ fun CreateEventScreen(
                         contentDescription = Constants.TOP_BAR_TITLE
                     },
                 )
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(end = Dimensions.CREATE_EVENT_ICON_PADDING),
-                    horizontalArrangement = Arrangement.End
-
-                ) {
-                    Icon(painter = painterResource(id = R.drawable.trashicon),
-                        contentDescription = "Image",
-                        tint = Ivory,
-                        modifier = Modifier.clickable { viewmodel.deleteEvent(data.value.) })
-                }
             },
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = TopBarBackgroundColor
             ),
-
             )
     }) { innerPadding ->
 
@@ -232,7 +218,7 @@ fun CreateEventScreen(
                     .align(Alignment.BottomCenter)
                     .padding(bottom = Dimensions.ACTION_BUTTON_MEDIUM3)
                     .semantics {
-                        contentDescription = Constants.CREATE_EVENT_ADD_CREATE_BUTTON
+                        contentDescription = Constants.CREATE_EVENT_CREATE_BUTTON
                     },
                 onClick = {
                     viewmodel.createEvent()
