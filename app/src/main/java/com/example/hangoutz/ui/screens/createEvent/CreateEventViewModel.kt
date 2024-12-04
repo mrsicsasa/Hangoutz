@@ -40,6 +40,8 @@ class CreateEventViewModel @Inject constructor(
     }
 
     fun onTimePicked(date: Long) {
+        val formattedTime = formatTime(date)
+        onTimeChange(formattedTime)
     }
 
    private fun formatTime(timeMillis: Long): String {
@@ -49,8 +51,6 @@ class CreateEventViewModel @Inject constructor(
 
     fun onDatePicked(date: Long) {
         val formattedDate = formatDate(date)
-        val formattedTime = formatTime(date)
-        onTimeChange(formattedTime)
         onDateChange(formattedDate)
     }
 

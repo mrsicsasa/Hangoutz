@@ -20,12 +20,9 @@ fun TimePickerModal(
     onConfirm: (Long) -> Unit,
     onDismiss: () -> Unit,
 ) {
-    val currentTime = Calendar.getInstance()
 
     val timePickerState = rememberTimePickerState(
-        initialHour = currentTime.get(Calendar.HOUR_OF_DAY),
-        initialMinute = currentTime.get(Calendar.MINUTE),
-        is24Hour = true,
+
     )
     Dialog(onDismissRequest = onDismiss) {
         Column (

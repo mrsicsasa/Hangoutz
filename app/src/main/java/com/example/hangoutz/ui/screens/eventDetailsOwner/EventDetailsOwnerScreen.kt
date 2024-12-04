@@ -270,23 +270,27 @@ fun EventOwnerDetailsScreen(
                         contentDescription = Constants.EVENT_OWNER_EDIT_BUTTON
                     },
                 onClick = {
-                    viewmodel.editEvent()
+                    viewmodel.editEvent(
+                        onSuccess = { navController.popBackStack() },
+                    )
                 })
+
+
         }
-    }
 
-    if (data.value.showDatePicker) {
-        DatePickerModal(onDateSelected = { date ->
-            date?.let {
-                viewmodel.onDatePicked(date)
-            }
-        }, onDismiss = { viewmodel.setShowDatePicker() })
-    }
+        if (data.value.showDatePicker) {
+            DatePickerModal(onDateSelected = { date ->
+                date?.let {
+                    viewmodel.onDatePicked(date)
+                }
+            }, onDismiss = { viewmodel.setShowDatePicker() })
+        }
 
-    if (data.value.showTimePicker) {
-        TimePickerModal(onConfirm = { time ->
-            viewmodel.onTimePicked(time)
-            viewmodel.setShowTimePicker()
-        }, onDismiss = { viewmodel.setShowTimePicker() })
+        if (data.value.showTimePicker) {
+            TimePickerModal(onConfirm = { time ->
+                viewmodel.onTimePicked(time)
+                viewmodel.setShowTimePicker()
+            }, onDismiss = { viewmodel.setShowTimePicker() })
+        }
     }
 }

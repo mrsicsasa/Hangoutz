@@ -1,6 +1,7 @@
 package com.example.hangoutz.ui.screens.events
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -29,12 +30,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.hangoutz.R
+import com.example.hangoutz.data.local.SharedPreferencesManager
 import com.example.hangoutz.data.models.EventCardDPO
 import com.example.hangoutz.ui.components.FloatingPlusButton
 import com.example.hangoutz.ui.navigation.NavigationItem
@@ -157,6 +160,7 @@ fun EventsList(
     val angle = remember {
         androidx.compose.animation.core.Animatable(0f)
     }
+val context = LocalContext.current
     Box(contentAlignment = Alignment.Center) {
         if (isLoading) {
             CircularProgressIndicator(modifier = Modifier.semantics { Constants.EVENTS_LOADING_SPINNER })
@@ -196,7 +200,14 @@ fun EventsList(
                             place = event.place ?: "",
                             date = event.date.toDate().toEventDateDPO(),
                             countOfPeople = (countOfPeoplePair?.second ?: 0),
-                            modifier = Modifier.clickable { navController.navigate("EVENT_DETAILS/${event.id}")}
+                            modifier = Modifier.clickable {
+                                val destination = if (isCurrentUserOwner(context, event)) {
+                                    "EVENT_OWNER/${event.id}"
+                                } else {
+                                    "EVENT_DETAILS/${event.id}"
+                                }
+Log.e("dest", destination+"")
+                                navController.navigate(destination)}
                                 .semantics {
                                 contentDescription = Constants.EVENT_CARD
                             },
@@ -221,4 +232,15 @@ fun EventsList(
             )
         )
     }
+}
+
+fun isCurrentUserOwner(context : Context, event:  EventCardDPO) : Boolean{
+var isOwner : Boolean = false
+   val userId = SharedPreferencesManager.getUserId(context)
+    Log.e("comparing", userId + " and " + event.owner.toString())
+    if(userId == event.owner.toString()){
+        isOwner=true
+    }
+    return isOwner
+
 }

@@ -22,6 +22,7 @@ import javax.inject.Inject
 
 
 data class EventDetailsData(
+    var isMine : Boolean = true,
     var eventId: UUID? = null,
     var title: String? = "",
     var description: String? = "",
@@ -53,8 +54,18 @@ class EventDetailsOwnerViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(eventId = eventId)
     }
 
-    fun editEvent() {
-        //TODO
+    fun editEvent(onSuccess: () -> Unit) {
+        if (validateInputs()) {
+
+
+
+
+
+
+            onSuccess()
+        } else {
+            Log.e("Error", "")
+        }
     }
 
     fun deleteEvent() {
@@ -120,6 +131,13 @@ class EventDetailsOwnerViewModel @Inject constructor(
                 }
             }
         }
+    }
+    fun validateInputs(): Boolean {
+        val descriptionValid = _uiState.value.description?.isNotBlank() == true
+        val cityValid = _uiState.value.city?.isNotBlank() != false
+        val streetValid = _uiState.value.street?.isNotBlank() != false
+
+        return descriptionValid && cityValid && streetValid
     }
 
     fun onTimePicked(date: Long) {
