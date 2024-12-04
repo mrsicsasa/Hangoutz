@@ -28,4 +28,8 @@
     <string name="input_email">Email*</string>
     <string name="input_password">Password*</string>
     <string name="input_confirm_password">Confirm password*</string>
+    <string name="delete">delete</string>
+    <string name="is_removed_from_the_friend_list">%1$s is removed from the friend list</string>
+    <string name="searchbar_placeholder">Search…</string>
+    <string name="no_friends_found">No friends found</string>
 </resources>
