@@ -25,5 +25,5 @@ sealed class NavigationItem(val route: String) {
     object Settings : NavigationItem(Screen.SETTINGS.name)
     object EventDetails : NavigationItem(Screen.EVENT_DETAILS.name)
     object EventDetailsOwner : NavigationItem(Screen.EVENT_OWNER.name)
-    object Splash: NavigationItem(Screen.SPLASH.name)
+    object Splash : NavigationItem(Screen.SPLASH.name)
 }

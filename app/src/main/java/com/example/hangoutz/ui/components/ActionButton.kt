@@ -100,6 +100,7 @@ fun ActionButton(
                     contentDescription = "Icon",
                     modifier = Modifier
                         .size(Dimensions.ACTION_BUTTON_MEDIUM3)
+                        .align(Alignment.CenterVertically)
                         .semantics {
                             contentDescription =
                                 Constants.ACTION_BUTTON_ICON
