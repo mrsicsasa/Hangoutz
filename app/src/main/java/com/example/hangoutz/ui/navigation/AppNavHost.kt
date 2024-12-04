@@ -13,6 +13,7 @@ import com.example.hangoutz.ui.screens.eventDetails.EventDetailsScreen
 import com.example.hangoutz.ui.screens.invite.InvitedScreen
 import com.example.hangoutz.ui.screens.login.LoginScreen
 import com.example.hangoutz.ui.screens.main.MainScreen
+import com.example.hangoutz.ui.screens.noInternet.NoInternetScreen
 import com.example.hangoutz.ui.screens.register.RegisterScreen
 import com.example.hangoutz.ui.screens.splash.SplashScreen
 
@@ -51,6 +52,9 @@ fun AppNavHost(
         }
         composable(NavigationItem.EventDetailsOwner.route) {
             EventOwnerDetailsScreen(navController)
+        }
+        composable(NavigationItem.NoInternet.route) {
+            NoInternetScreen(navController)
         }
     }
 }

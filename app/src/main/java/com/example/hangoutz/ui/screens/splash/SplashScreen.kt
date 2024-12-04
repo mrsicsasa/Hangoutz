@@ -14,11 +14,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.hangoutz.R
 import com.example.hangoutz.ui.components.Logo
@@ -32,6 +32,7 @@ fun SplashScreen(navController: NavController) {
     val viewmodel: SplashScreenViewModel = hiltViewModel()
     val alpha = remember { Animatable(Dimensions.SPLASH_SCREEN_STARTING_ALPHA) }
     val context = LocalContext.current
+    val isConnected = viewmodel.isConnected.collectAsStateWithLifecycle()
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -57,7 +58,7 @@ fun SplashScreen(navController: NavController) {
             animationDelay = Constants.LOGO_ANIMATION_DELAY_SPLASH
         )
     }
-    LaunchedEffect(key1 = true) {
+    LaunchedEffect(key1 = isConnected.value) {
         alpha.animateTo(Dimensions.SPLASH_SCREEN_TARGETED_ALPHA, animationSpec = tween(Constants.BACKGROUND_ANIMATION_DURATION))
         viewmodel.deleteEventsFromPast()
         if (viewmodel.isUserLoggedIn(context)) {
@@ -71,6 +72,13 @@ fun SplashScreen(navController: NavController) {
                 popUpTo(NavigationItem.Splash.route) {
                     inclusive = true
                 }
+            }
+        }
+    }
+    LaunchedEffect(!isConnected.value) {
+        navController.navigate(NavigationItem.NoInternet.route) {
+            popUpTo(NavigationItem.Splash.route) {
+                inclusive = true
             }
         }
     }
