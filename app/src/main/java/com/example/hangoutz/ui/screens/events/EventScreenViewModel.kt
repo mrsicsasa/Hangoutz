@@ -23,6 +23,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.net.UnknownHostException
 import java.util.UUID
 import javax.inject.Inject
 
@@ -44,6 +45,12 @@ class EventScreenViewModel @Inject constructor(
         )
 
     fun getEvents(page: String = EventsFilterOptions.GOING.name) {
+        if (!isConnected.value) {
+            // Skip network operations if no internet
+            Log.d("ERROR", "No internet connection, skipping fetching events")
+            return
+        }
+
         try {
             viewModelScope.launch {
                 getCountOfInvites()
@@ -67,6 +74,12 @@ class EventScreenViewModel @Inject constructor(
     }
 
     private suspend fun getCountOfAcceptedInvitesForEvent(id: UUID) {
+        if (!isConnected.value) {
+            // Handle the case when there is no internet connection
+            Log.d("ERROR", "No internet connection, skipping network request for invites count")
+            return
+        }
+
         try {
             val response = inviteRepository.getCountOfAcceptedInvitesByEvent(id = id)
             if (response.isSuccessful) {
@@ -90,14 +103,23 @@ class EventScreenViewModel @Inject constructor(
                     )
                 }
             } else {
-                Log.d("Error", response.message())
+                Log.d("ERROR", "Failed to get invites count: ${response.message()}")
             }
-        } catch (e: Exception){
-            Log.d("ERROR", e.message.toString())
+        } catch (e: UnknownHostException) {
+            // Handle DNS resolution failure
+            Log.d("ERROR", "Unknown host exception: ${e.message}")
+        } catch (e: Exception) {
+            Log.d("ERROR", "Error while fetching invites count: ${e.message}")
         }
     }
 
     private suspend fun getAvatars(id: UUID) {
+        if (!isConnected.value) {
+            // Handle the case when there is no internet connection
+            Log.d("ERROR", "No internet connection, skipping avatar fetch")
+            return
+        }
+
         try {
             val response = userRepository.getUserAvatar(id.toString())
             if (response.isSuccessful) {
@@ -110,10 +132,12 @@ class EventScreenViewModel @Inject constructor(
                     )
                 }
             } else {
-                Log.d("Error", response.message())
+                Log.d("ERROR", "Failed to fetch avatar: ${response.message()}")
             }
+        } catch (e: UnknownHostException) {
+            Log.d("ERROR", "Unknown host exception: ${e.message}")
         } catch (e: Exception) {
-            Log.d("ERROR", e.message.toString())
+            Log.d("ERROR", "Error while fetching avatar: ${e.message}")
         }
     }
 
@@ -127,6 +151,12 @@ class EventScreenViewModel @Inject constructor(
     }
 
     private suspend fun getMineEvents() {
+        if (!isConnected.value) {
+            // Skip network operations if no internet
+            Log.d("ERROR", "No internet connection, skipping mine events fetch")
+            return
+        }
+
         try {
             _uiState.value = _uiState.value.copy(
                 eventsMine = emptyList(),
@@ -145,9 +175,8 @@ class EventScreenViewModel @Inject constructor(
                             getCountOfAcceptedInvitesForEvent(id = event.id)
                         }
                     }
-
                 } else {
-                    Log.d("Events", Constants.GET_EVENTS_ERRORS)
+                    Log.d("ERROR", Constants.GET_EVENTS_ERRORS)
                 }
             }
             _uiState.value = _uiState.value.copy(
@@ -159,6 +188,12 @@ class EventScreenViewModel @Inject constructor(
     }
 
     private suspend fun getEventsFromInvites(page: String) {
+        if (!isConnected.value) {
+            // Skip network operations if no internet
+            Log.d("ERROR", "No internet connection, skipping events from invites fetch")
+            return
+        }
+
         try {
             if (page == EventsFilterOptions.GOING.name) {
                 _uiState.value = _uiState.value.copy(
@@ -202,15 +237,14 @@ class EventScreenViewModel @Inject constructor(
                             }
                         }
                     }
-
                 } else {
-                    Log.d("Events", Constants.GET_EVENTS_ERRORS)
+                    Log.d("ERROR", Constants.GET_EVENTS_ERRORS)
                 }
             }
             _uiState.value = _uiState.value.copy(
                 isLoading = false
             )
-        } catch (e: Exception){
+        } catch (e: Exception) {
             Log.d("ERROR", e.message.toString())
         }
     }
