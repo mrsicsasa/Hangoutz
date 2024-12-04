@@ -9,6 +9,7 @@ interface FriendsRepository {
         id: String,
         startingWith: String = ""
     ): Response<List<ListOfFriends>>
+    suspend fun removeFriend(userId: String, friendId: String): Response<Unit>
     suspend fun getNonFriendsFromUserId(
         id: String,
         startingWith: String = ""
