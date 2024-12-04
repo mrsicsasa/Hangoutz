@@ -26,7 +26,8 @@ data class FriendsUIState(
     val showBottomSheet: Boolean = false,
     val isPopupLoading: Boolean = false,
     val popupSearch: String = "",
-    val addFriendList: List<Friend> = emptyList()
+    val addFriendList: List<Friend> = emptyList(),
+    val addedFriendId: UUID = UUID.randomUUID()
 )
 
 @HiltViewModel
@@ -84,24 +85,22 @@ class FriendsViewModel @Inject constructor(
                 }
             }
             if (response?.isSuccessful == true) {
-                if(_uiState.value.searchQuery.length < 3) {
+                if (_uiState.value.searchQuery.length < 3) {
                     fetchFriends(isSearching = false)
                 } else {
                     fetchFriends(isSearching = true)
                 }
             }
-
         }
     }
 
     fun clearSearchInput() {
-        _uiState.value = _uiState.value.copy(searchQuery = "")
+        _uiState.value = _uiState.value.copy(searchQuery = "", isLoading = true)
         fetchFriends(false)
     }
 
     fun clearSearchInputPopupScreen() {
         _uiState.value = _uiState.value.copy(popupSearch = "", addFriendList = emptyList())
-        fetchNonFriends(false)
     }
 
     fun showSheetState(isShown: Boolean) {
@@ -113,7 +112,8 @@ class FriendsViewModel @Inject constructor(
         if (_uiState.value.popupSearch.length >= Constants.MIN_SEARCH_LENGTH) {
             fetchNonFriends(isSearching = true)
         } else {
-            _uiState.value = _uiState.value.copy(addFriendList = emptyList(), isPopupLoading = false)
+            _uiState.value =
+                _uiState.value.copy(addFriendList = emptyList(), isPopupLoading = false)
         }
     }
 
@@ -145,5 +145,22 @@ class FriendsViewModel @Inject constructor(
                 _uiState.value = _uiState.value.copy(isPopupLoading = false)
             }
         }
+    }
+
+    fun addFriend(id: UUID) {
+        _uiState.value =
+            _uiState.value.copy(addedFriendId = id)
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                MutableStateFlow(
+                    friendsRepository.addFriend(
+                        UUID.fromString(SharedPreferencesManager.getUserId(context)),
+                        id
+                    )
+                )
+            }
+        }
+        onPopupSearchInput(_uiState.value.popupSearch)
+        onSearchInput(_uiState.value.searchQuery)
     }
 }
