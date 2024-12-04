@@ -9,19 +9,20 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.input.TextFieldValue
 import com.example.hangoutz.utils.Constants.SETTINGS_NAME_FIELD_TAG
 
 @Composable
-fun nameField(
-    text: String,
-    onTextChange: (String) -> Unit,
+fun NameField(
+    name: TextFieldValue,
+    onTextChange: (TextFieldValue) -> Unit,
     isReadOnly: Boolean,
     focusRequester: FocusRequester,
     modifier: Modifier
 
 ) {
     BasicTextField(
-        value = text,
+        value = name,
         onValueChange = onTextChange,
         textStyle = MaterialTheme.typography.headlineLarge,
         readOnly = isReadOnly,

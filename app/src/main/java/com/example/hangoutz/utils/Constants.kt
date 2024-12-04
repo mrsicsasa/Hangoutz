@@ -76,6 +76,7 @@ object Constants {
     //Test tags settings screen
     const val SETTINGS_NAME_FIELD_TAG = "settingsNameField"
     const val SETTINGS_NAME_ICON_TAG = "settingsNameIcon"
+    const val SETTINGS_NAME_VALIDATOR_ICON_TAG = "settingsNameValidatorIcon"
     const val SETTINGS_USER_PHOTO_TAG = "settingsUserPhoto"
     const val SETTINGS_BACKGROUND_LINES_TAG = "settingsBackgroundLines"
     const val SETTINGS_EMAIL_FIELD_TAG = "settingsEmailField"
@@ -84,6 +85,13 @@ object Constants {
 
     //Settings page
     const val PROFILE_PHOTO = "Profile Photo"
+    const val SETTINGS_CAMERA = "Capture from Camera"
+    const val SETTINGS_GALLERY = "Pick from gallery"
+    const val SETTINGS_ACTION = "Choose Action"
+    const val RANDOM_STRING_LENGTH = 3
+    const val JPG = ".jpg"
+    const val TEMPIMAGE = "_image"
+    const val IMAGEDIRECTORY = "MyAppImages"
 
     //BottomNavigation bar
     const val BOTTOM_NAVIGATION_BAR = "bottomNavigationBar"
