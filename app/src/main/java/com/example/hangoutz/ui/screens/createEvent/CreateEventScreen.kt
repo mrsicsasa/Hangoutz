@@ -15,6 +15,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -51,28 +52,43 @@ fun CreateEventScreen(
     viewmodel: CreateEventViewModel = hiltViewModel()
 ) {
     val data = viewmodel.uiState.collectAsState()
-    val scrollableField =
-        LocalConfiguration.current.screenHeightDp.dp - (LocalConfiguration.current.screenHeightDp.dp - Dimensions.ACTION_BUTTON_MEDIUM4)
+    val scrollableField = LocalConfiguration.current.screenHeightDp.dp - (LocalConfiguration.current.screenHeightDp.dp - Dimensions.ACTION_BUTTON_MEDIUM4)
 
     Scaffold(topBar = {
-        TopAppBar(modifier = Modifier
-            .height(Dimensions.TOP_BAR_HEIGHT)
-            .wrapContentHeight(align = Alignment.CenterVertically)
-            .semantics {
-                contentDescription = Constants.TOP_BAR
-            }, title = {
-            Text(
-                text = Constants.TOP_BAR_TITLE,
-                color = Color.White,
-                style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.semantics {
-                    contentDescription = Constants.TOP_BAR_TITLE
+        TopAppBar(
+            modifier = Modifier
+                .height(Dimensions.TOP_BAR_HEIGHT)
+                .wrapContentHeight(align = Alignment.CenterVertically)
+                .semantics {
+                    contentDescription = Constants.TOP_BAR
                 },
+            title = {
+                Text(
+                    text = Constants.TOP_BAR_TITLE,
+                    color = Color.White,
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.semantics {
+                        contentDescription = Constants.TOP_BAR_TITLE
+                    },
+                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(end = Dimensions.CREATE_EVENT_ICON_PADDING),
+                    horizontalArrangement = Arrangement.End
+
+                ) {
+                    Icon(painter = painterResource(id = R.drawable.trashicon),
+                        contentDescription = "Image",
+                        tint = Ivory,
+                        modifier = Modifier.clickable { viewmodel.deleteEvent(data.value.) })
+                }
+            },
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = TopBarBackgroundColor
+            ),
+
             )
-        }, colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = TopBarBackgroundColor
-        )
-        )
     }) { innerPadding ->
 
         Box(
@@ -84,19 +100,17 @@ fun CreateEventScreen(
                 )
         ) {
             Box(
-                modifier = Modifier
-                    .padding(
-                        top = innerPadding.calculateTopPadding() + Dimensions.EVENTDETAILS_TOP_PADDING,
-                        start = Dimensions.ACTION_BUTTON_MEDIUM2,
-                        end = Dimensions.ACTION_BUTTON_MEDIUM2,
-                        bottom = scrollableField
-                    )
+                modifier = Modifier.padding(
+                    top = innerPadding.calculateTopPadding() + Dimensions.EVENTDETAILS_TOP_PADDING,
+                    start = Dimensions.ACTION_BUTTON_MEDIUM2,
+                    end = Dimensions.ACTION_BUTTON_MEDIUM2,
+                    bottom = scrollableField
+                )
             ) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .verticalScroll(rememberScrollState())
-
                 ) {
                     InputField(
                         stringResource(R.string.event_title),
@@ -155,8 +169,7 @@ fun CreateEventScreen(
                         horizontalArrangement = Arrangement.spacedBy(Dimensions.CREATE_EVENT_HORIZONTAL_SPACING)
                     ) {
 
-                        InputFieldWithIcon(
-                            stringResource(R.string.event_date),
+                        InputFieldWithIcon(stringResource(R.string.event_date),
                             data.value.date,
                             { viewmodel.onDateChange(it) },
                             modifier = Modifier
@@ -167,11 +180,9 @@ fun CreateEventScreen(
                             R.drawable.calendaricon,
                             true,
                             true,
-                            { viewmodel.setShowDatePicker() }
-                        )
+                            { viewmodel.setShowDatePicker() })
 
-                        InputFieldWithIcon(
-                            stringResource(R.string.event_time),
+                        InputFieldWithIcon(stringResource(R.string.event_time),
                             data.value.time,
                             { viewmodel.onTimeChange(it) },
                             modifier = Modifier
@@ -207,29 +218,25 @@ fun CreateEventScreen(
                                 .semantics {
                                     contentDescription =
                                         Constants.CREATE_EVENT_ADD_PARTICIPANTS_BUTTON
-                                }
-                        )
+                                })
                     }
 
                     HorizontalDivider(
-                        thickness = Dimensions.CREATE_EVENT_LINE_THICKNESS,
-                        color = Ivory
+                        thickness = Dimensions.CREATE_EVENT_LINE_THICKNESS, color = Ivory
                     )
-                    //TODO put participants here, use participantUI component
+                    //TODO put participants here, use participantUI component (check event details screen)
                 }
             }
-                    ActionButton(stringResource(R.string.event_create),
-                        modifier = Modifier
-                            .align(Alignment.BottomCenter)
-                            .padding(bottom = Dimensions.ACTION_BUTTON_MEDIUM3)
-                            .semantics {
-                                contentDescription = Constants.CREATE_EVENT_ADD_CREATE_BUTTON
-                            },
-                        onClick = {
-                            viewmodel.createEvent()
-                        }
-                    )
-
+            ActionButton(stringResource(R.string.event_create),
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = Dimensions.ACTION_BUTTON_MEDIUM3)
+                    .semantics {
+                        contentDescription = Constants.CREATE_EVENT_ADD_CREATE_BUTTON
+                    },
+                onClick = {
+                    viewmodel.createEvent()
+                })
         }
     }
 

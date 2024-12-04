@@ -1,9 +1,12 @@
 package com.example.hangoutz.ui.screens.createEvent
 
 import android.content.Context
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import com.example.hangoutz.data.models.User
 import com.example.hangoutz.domain.repository.UserRepository
+import com.example.hangoutz.utils.Dimensions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,10 +14,12 @@ import kotlinx.coroutines.flow.StateFlow
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.util.UUID
 import javax.inject.Inject
 
 
 data class EventDetailsData(
+
     var title: String = "",
     var description: String = "",
     var city: String = "",
@@ -24,7 +29,7 @@ data class EventDetailsData(
     var time: String = "",
     var participants: List<User> = emptyList(),
     var showDatePicker: Boolean = false,
-    var showTimePicker: Boolean = false
+    var showTimePicker: Boolean = false,
 )
 
 @HiltViewModel
@@ -38,6 +43,13 @@ class CreateEventViewModel @Inject constructor(
     val uiState: StateFlow<EventDetailsData> = _uiState
 
     fun createEvent() {
+        //TODO
+    }
+
+    fun deleteEvent(eventID : UUID) {
+        //TODO
+    }
+    fun removeUser(userID : UUID) {
         //TODO
     }
 

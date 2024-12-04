@@ -132,6 +132,7 @@ object Dimensions {
     val CREATE_EVENT_VERTICAL_PADDING = 2.dp
     val CREATE_EVENT_TEXT_PADDING = 15.dp
     val CREATE_EVENT_LINE_THICKNESS = 2.dp
+    val CREATE_EVENT_ICON_PADDING= 2.dp
 
 
 

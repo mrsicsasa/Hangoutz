@@ -214,10 +214,11 @@ fun EventDetailsScreen(
                     val participants = data.value.participants
                     participants.forEach { participant ->
                         ParticipantUI(
-                            name = participant.name,
-                            userAvatar = participant.avatar
-                                ?: DEFAULT_USER_PHOTO
+                            participant = participant,
+                            false,
+                            {}
                         )
+
                     }
                 }
             }

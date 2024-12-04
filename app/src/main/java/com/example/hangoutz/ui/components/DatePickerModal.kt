@@ -16,8 +16,6 @@ fun DatePickerModal(
     onDateSelected: (Long?) -> Unit,
     onDismiss: () -> Unit
 ) {
-
-
     val datePickerState = rememberDatePickerState()
 
     DatePickerDialog(
