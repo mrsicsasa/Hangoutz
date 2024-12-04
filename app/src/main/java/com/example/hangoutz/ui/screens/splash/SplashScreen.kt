@@ -23,8 +23,10 @@ import androidx.navigation.NavController
 import com.example.hangoutz.R
 import com.example.hangoutz.ui.components.Logo
 import com.example.hangoutz.ui.navigation.NavigationItem
+import com.example.hangoutz.ui.screens.noInternet.NoInternetScreen
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Dimensions
+import kotlinx.coroutines.delay
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -33,52 +35,49 @@ fun SplashScreen(navController: NavController) {
     val alpha = remember { Animatable(Dimensions.SPLASH_SCREEN_STARTING_ALPHA) }
     val context = LocalContext.current
     val isConnected = viewmodel.isConnected.collectAsStateWithLifecycle()
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .paint(
-                painterResource(id = R.drawable.main_background),
-                contentScale = ContentScale.FillBounds,
-                alpha = alpha.value
-            )
-            .semantics {
-                contentDescription = Constants.SPLASH_SCREEN_BACKGROUND
-            },
-        contentAlignment = Alignment.Center
-    ) {
-        Logo(
-            painterResource(id = R.drawable.logo),
-            initialValue = Dimensions.SPLASH_SCREEN_LOGO_INITIAL_ALPHA,
-            targetValue = Dimensions.SPLASH_SCREEN_LOGO_TARGETED_ALPHA,
+    if (isConnected.value) {
+        Box(
             modifier = Modifier
-                .align(Alignment.Center)
+                .fillMaxSize()
+                .paint(
+                    painterResource(id = R.drawable.main_background),
+                    contentScale = ContentScale.FillBounds,
+                    alpha = alpha.value
+                )
                 .semantics {
-                    contentDescription = Constants.SPLASH_SCREEN_LOGO
+                    contentDescription = Constants.SPLASH_SCREEN_BACKGROUND
                 },
-            animationDelay = Constants.LOGO_ANIMATION_DELAY_SPLASH
-        )
+            contentAlignment = Alignment.Center
+        ) {
+            Logo(
+                painterResource(id = R.drawable.logo),
+                initialValue = Dimensions.SPLASH_SCREEN_LOGO_INITIAL_ALPHA,
+                targetValue = Dimensions.SPLASH_SCREEN_LOGO_TARGETED_ALPHA,
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .semantics {
+                        contentDescription = Constants.SPLASH_SCREEN_LOGO
+                    },
+                animationDelay = Constants.LOGO_ANIMATION_DELAY_SPLASH
+            )
+        }
+    } else {
+        NoInternetScreen(navController)
     }
-    LaunchedEffect(key1 = isConnected.value) {
+    LaunchedEffect(isConnected.value == true) {
         alpha.animateTo(Dimensions.SPLASH_SCREEN_TARGETED_ALPHA, animationSpec = tween(Constants.BACKGROUND_ANIMATION_DURATION))
         viewmodel.deleteEventsFromPast()
-        if (viewmodel.isUserLoggedIn(context)) {
+        if (isConnected.value && viewmodel.isUserLoggedIn(context)) {
             navController.navigate(route = NavigationItem.MainScreen.route) {
                 popUpTo(NavigationItem.Splash.route) {
                     inclusive = true
                 }
             }
-        } else {
+        } else if (isConnected.value){
             navController.navigate(route = NavigationItem.Login.route) {
                 popUpTo(NavigationItem.Splash.route) {
                     inclusive = true
                 }
-            }
-        }
-    }
-    LaunchedEffect(!isConnected.value) {
-        navController.navigate(NavigationItem.NoInternet.route) {
-            popUpTo(NavigationItem.Splash.route) {
-                inclusive = true
             }
         }
     }

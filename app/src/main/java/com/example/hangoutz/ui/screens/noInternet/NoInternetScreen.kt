@@ -17,21 +17,11 @@ import com.example.hangoutz.ui.navigation.NavigationItem
 fun NoInternetScreen(
     navController: NavController
 ) {
-    val viewmodel: NoInternetScreenViewModel = hiltViewModel()
-    val isConnected = viewmodel.isConnected.collectAsStateWithLifecycle()
-
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxSize()
     ) {
         Text("No internet connection")
-    }
-    LaunchedEffect(isConnected) {
-        navController.navigate(NavigationItem.Splash.route){
-            popUpTo(NavigationItem.NoInternet.route) {
-                inclusive = true
-            }
-        }
     }
 }

@@ -39,23 +39,25 @@ class SplashScreenViewModel @Inject constructor(
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun deleteEventsFromPast() {
-        viewModelScope.launch {
-            try {
-                val events = getEvents()
-                events?.filter { it.date.toDate() < LocalDateTime.now() }?.forEach { it ->
-                    val invitesForEvent = getInvites(it.id)
-                    invitesForEvent?.forEach {
-                        inviteRepository.deleteInvite(it.id)
+        if(isConnected.value) {
+            viewModelScope.launch {
+                try {
+                    val events = getEvents()
+                    events?.filter { it.date.toDate() < LocalDateTime.now() }?.forEach { it ->
+                        val invitesForEvent = getInvites(it.id)
+                        invitesForEvent?.forEach {
+                            inviteRepository.deleteInvite(it.id)
+                        }
                     }
+                } catch (e: Exception) {
+                    Log.d("ERROR", e.message.toString())
                 }
-            } catch (e: Exception) {
-                Log.d("ERROR", e.message.toString())
             }
         }
     }
 
     fun isUserLoggedIn(context: Context): Boolean {
-        return SharedPreferencesManager.getUserId(context = context) != null
+        return if(isConnected.value) SharedPreferencesManager.getUserId(context = context) != null else false
     }
 
     private suspend fun getEvents(): List<Event>? {
