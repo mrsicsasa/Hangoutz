@@ -103,10 +103,7 @@ class EventDetailsViewModel @Inject constructor(
                                 user.id in acceptedUserIds
                             }
 
-
-                            Log.e("prihv ", acceptedUsers[1].avatar + "")
                             _uiState.value = _uiState.value.copy(participants = acceptedUsers)
-
                         }
                     }
                 }

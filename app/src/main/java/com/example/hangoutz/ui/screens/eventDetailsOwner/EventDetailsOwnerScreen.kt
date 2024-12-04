@@ -51,7 +51,10 @@ import com.example.hangoutz.utils.Dimensions
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EventOwnerDetailsScreen(navController: NavController, viewmodel: EventDetailsOwnerViewModel = hiltViewModel()) {
+fun EventOwnerDetailsScreen(
+    navController: NavController,
+    viewmodel: EventDetailsOwnerViewModel = hiltViewModel()
+) {
     val data = viewmodel.uiState.collectAsState()
     viewmodel.getEventIdFromController(navController)
     val scrollableField =
@@ -84,7 +87,7 @@ fun EventOwnerDetailsScreen(navController: NavController, viewmodel: EventDetail
                     Icon(painter = painterResource(id = R.drawable.trashicon),
                         contentDescription = "Image",
                         tint = Ivory,
-                        modifier = Modifier.clickable { viewmodel.deleteEvent()})
+                        modifier = Modifier.clickable { viewmodel.deleteEvent() })
                 }
             },
             colors = TopAppBarDefaults.topAppBarColors(
@@ -238,7 +241,10 @@ fun EventOwnerDetailsScreen(navController: NavController, viewmodel: EventDetail
                                         Constants.CREATE_EVENT_ADD_PARTICIPANTS_BUTTON
                                 })
                     }
-                    HorizontalDivider(thickness = Dimensions.CREATE_EVENT_LINE_THICKNESS, color = Ivory)
+                    HorizontalDivider(
+                        thickness = Dimensions.CREATE_EVENT_LINE_THICKNESS,
+                        color = Ivory
+                    )
                     LaunchedEffect(data.value.eventId) {
                         data.value.eventId?.let {
                             viewmodel.getParticipants()

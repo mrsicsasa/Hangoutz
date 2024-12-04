@@ -158,6 +158,14 @@ object Constants {
     const val CREATE_EVENT_CREATE_BUTTON = "createEventCreateButton"
     const val CREATE_EVENT_EDIT_BUTTON = "createEventCreateButton"
 
+    //FriendsViewModel
+    const val FRIENDS_SEARCH_BAR_CLEAR_DESCRIPTION = "Clear search bar icon"
+
+    //Friends tags
+    const val FRIENDS_SEARCH_BAR = "friendsSearchBar"
+    const val FRIENDS_LOADING_SPINNER = "friendsLoadingSpinner"
+    const val NO_FRIENDS_AVAILABLE_MESSAGE = "noFriendsAvailableMessage"
+
     //Bottom sheet
     const val BOTTOM_SHEET_TAG = "bottomSheet"
     const val BOTTOM_SHEET_SEARCH = "bottomSheetSearch"
