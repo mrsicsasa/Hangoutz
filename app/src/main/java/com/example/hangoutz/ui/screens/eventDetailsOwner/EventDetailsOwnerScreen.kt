@@ -213,9 +213,8 @@ fun EventOwnerDetailsScreen(
                             data.value.isError
                         )
                     }
-
-                    data.value.errorMessage?.let { ErrorMessage(it) }
                 }
+                data.value.errorMessage?.let { ErrorMessage(it) }
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
