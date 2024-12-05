@@ -212,7 +212,7 @@ fun EventDetailsScreen(
                         viewmodel.onLeave(
                             onSuccess = { navController.popBackStack() },
                             onFailure = { errorMessage ->
-                                Log.e("e", "an error has occurred")
+                                Log.e("Error", "An error has occurred")
                             }
                         )
                     })
