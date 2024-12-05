@@ -49,17 +49,18 @@ import java.util.UUID
 
 @SuppressLint("StateFlowValueCalledInComposition", "NewApi")
 @Composable
-fun MyEventsScreen(navController: NavController, viewModel: EventScreenViewModel = hiltViewModel()) {
+fun MyEventsScreen(
+    navController: NavController, viewModel: EventScreenViewModel = hiltViewModel()
+) {
     val data = viewModel.uiState.collectAsState()
     val scope = rememberCoroutineScope()
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
-            modifier = Modifier
-                .padding(
-                    top = Dimensions.FILTER_BAR_TOP_PADDING,
-                    start = Dimensions.CONTENT_START_PADDING,
-                    end = Dimensions.CONTENT_END_PADDING
-                )
+            modifier = Modifier.padding(
+                top = Dimensions.FILTER_BAR_TOP_PADDING,
+                start = Dimensions.CONTENT_START_PADDING,
+                end = Dimensions.CONTENT_END_PADDING
+            )
         ) {
             FilterBar(
                 items = listOf(
@@ -72,30 +73,25 @@ fun MyEventsScreen(navController: NavController, viewModel: EventScreenViewModel
                 pagerState = data.value.pagerState,
                 numberOfInvites = data.value.countOfInvites
             )
-            HorizontalPager(
-                state = data.value.pagerState,
+            HorizontalPager(state = data.value.pagerState,
                 pageSize = PageSize.Fill,
                 beyondViewportPageCount = PagerDefaults.BeyondViewportPageCount,
-                modifier = Modifier
-                    .semantics {
-                        contentDescription = Constants.HORIZONTAL_PAGER
-                    }
+                modifier = Modifier.semantics {
+                    contentDescription = Constants.HORIZONTAL_PAGER
+                }
 
             ) { page ->
                 when (page) {
-                    0 -> EventsList(
-                        navController,
+                    0 -> EventsList(navController,
                         page = EventsFilterOptions.GOING.name,
                         events = data.value.eventsGoing,
                         isLoading = data.value.isLoading,
                         counts = data.value.counts,
                         avatars = data.value.avatars,
                         getBackgroundColor = { viewModel.getCardColor(it) },
-                        getEvents = { viewModel.getEvents(it) }
-                    )
+                        getEvents = { viewModel.getEvents(it) })
 
-                    1 -> EventsList(
-                        navController,
+                    1 -> EventsList(navController,
                         page = EventsFilterOptions.INVITED.name,
                         events = data.value.eventsInvited,
                         isLoading = data.value.isLoading,
@@ -105,41 +101,34 @@ fun MyEventsScreen(navController: NavController, viewModel: EventScreenViewModel
                         getEvents = { viewModel.getEvents(it) },
                         onRejected = {
                             viewModel.updateInvitesStatus(
-                                status = Constants.EVENT_STATUS_DECLINED,
-                                eventId = it
+                                status = Constants.EVENT_STATUS_DECLINED, eventId = it
                             )
                         },
                         onAccepted = {
                             viewModel.updateInvitesStatus(
-                                status = Constants.EVENT_STATUS_ACCEPTED,
-                                eventId = it
+                                status = Constants.EVENT_STATUS_ACCEPTED, eventId = it
                             )
-                        }
-                    )
+                        })
 
-                    2 -> EventsList(
-                        navController,
+                    2 -> EventsList(navController,
                         page = EventsFilterOptions.MINE.name,
                         events = data.value.eventsMine,
                         isLoading = data.value.isLoading,
                         counts = data.value.counts,
                         avatars = data.value.avatars,
                         getBackgroundColor = { viewModel.getCardColor(it) },
-                        getEvents = { viewModel.getEvents(it) }
-                    )
+                        getEvents = { viewModel.getEvents(it) })
                 }
             }
         }
-        FloatingPlusButton(
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(
-                    bottom = Dimensions.FLOATING_BUTTON_PADDING,
-                    end = Dimensions.FLOATING_BUTTON_PADDING
-                )
-                .semantics { contentDescription = Constants.CREATE_EVENT_BUTTON },
-            onClickAction = { navController.navigate(NavigationItem.CreateEvent.route)}
-        )
+        FloatingPlusButton(modifier = Modifier
+            .align(Alignment.BottomEnd)
+            .padding(
+                bottom = Dimensions.FLOATING_BUTTON_PADDING,
+                end = Dimensions.FLOATING_BUTTON_PADDING
+            )
+            .semantics { contentDescription = Constants.CREATE_EVENT_BUTTON },
+            onClickAction = { navController.navigate(NavigationItem.CreateEvent.route) })
     }
 }
 
@@ -160,13 +149,12 @@ fun EventsList(
     val angle = remember {
         androidx.compose.animation.core.Animatable(0f)
     }
-val context = LocalContext.current
+    val context = LocalContext.current
     Box(contentAlignment = Alignment.Center) {
         if (isLoading) {
             CircularProgressIndicator(modifier = Modifier.semantics { Constants.EVENTS_LOADING_SPINNER })
         } else if (events.isEmpty()) {
-            Text(
-                stringResource(R.string.no_events_available),
+            Text(stringResource(R.string.no_events_available),
                 color = Color.LightGray,
                 modifier = Modifier.semantics {
                     contentDescription = Constants.NO_EVENTS_AVAILABLE_MESSAGE
@@ -179,42 +167,38 @@ val context = LocalContext.current
                 .fillMaxSize()
         ) {
             LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
+                modifier = Modifier.fillMaxSize()
             ) {
                 items(events) { event ->
-                    val countOfPeoplePair: Pair<UUID, Int>? =
-                        counts.find { it.first == event.id }
-                    val userAvatar: Pair<UUID, String?>? =
-                        avatars.find { it.first == event.owner }
+                    val countOfPeoplePair: Pair<UUID, Int>? = counts.find { it.first == event.id }
+                    val userAvatar: Pair<UUID, String?>? = avatars.find { it.first == event.owner }
                     (if (page == EventsFilterOptions.MINE.name) {
-                        event.users.avatar
-                            ?: stringResource(R.string.default_user_image)
+                        event.users.avatar ?: stringResource(R.string.default_user_image)
                     } else {
                         userAvatar?.second ?: stringResource(R.string.default_user_image)
                     }).let {
-                        EventCard(
-                            backgroundColor = getBackgroundColor(events.indexOf(event)),
+                        EventCard(backgroundColor = getBackgroundColor(events.indexOf(event)),
                             imageUrl = it,
                             title = event.title,
                             place = event.place ?: "",
                             date = event.date.toDate().toEventDateDPO(),
                             countOfPeople = (countOfPeoplePair?.second ?: 0),
-                            modifier = Modifier.clickable {
-                                val destination = if (isCurrentUserOwner(context, event)) {
-                                    "EVENT_OWNER/${event.id}"
-                                } else {
-                                    "EVENT_DETAILS/${event.id}"
+                            modifier = Modifier
+                                .clickable {
+                                    val destination = if (isCurrentUserOwner(context, event)) {
+                                        "EVENT_OWNER/${event.id}"
+                                    } else {
+                                        "EVENT_DETAILS/${event.id}"
+                                    }
+                                    Log.e("Destination", destination)
+                                    navController.navigate(destination)
                                 }
-Log.e("dest", destination+"")
-                                navController.navigate(destination)}
                                 .semantics {
-                                contentDescription = Constants.EVENT_CARD
-                            },
+                                    contentDescription = Constants.EVENT_CARD
+                                },
                             isInvited = page == EventsFilterOptions.INVITED.name,
                             onAccepted = { onAccepted(event.id) },
-                            onRejected = { onRejected(event.id) }
-                        )
+                            onRejected = { onRejected(event.id) })
                     }
                     Spacer(modifier = Modifier.height(Dimensions.SPACE_HEIGHT_BETWEEN_CARDS))
                     Log.d("Events", event.toString())
@@ -225,22 +209,19 @@ Log.e("dest", destination+"")
     LaunchedEffect(key1 = true) {
         getEvents(page)
         angle.animateTo(
-            360f,
-            animationSpec = tween(
-                3000,
-                easing = EaseInOut
+            360f, animationSpec = tween(
+                3000, easing = EaseInOut
             )
         )
     }
 }
 
-fun isCurrentUserOwner(context : Context, event:  EventCardDPO) : Boolean{
-var isOwner : Boolean = false
-   val userId = SharedPreferencesManager.getUserId(context)
+fun isCurrentUserOwner(context: Context, event: EventCardDPO): Boolean {
+    var isOwner: Boolean = false
+    val userId = SharedPreferencesManager.getUserId(context)
     Log.e("comparing", userId + " and " + event.owner.toString())
-    if(userId == event.owner.toString()){
-        isOwner=true
+    if (userId == event.owner.toString()) {
+        isOwner = true
     }
     return isOwner
-
 }

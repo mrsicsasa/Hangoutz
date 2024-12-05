@@ -50,8 +50,7 @@ import com.example.hangoutz.utils.Dimensions
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EventOwnerDetailsScreen(
-    navController: NavController,
-    viewmodel: EventDetailsOwnerViewModel = hiltViewModel()
+    navController: NavController, viewmodel: EventDetailsOwnerViewModel = hiltViewModel()
 ) {
     val data = viewmodel.uiState.collectAsState()
     viewmodel.getEventIdFromController(navController)
@@ -114,14 +113,15 @@ fun EventOwnerDetailsScreen(
                     .weight(1f)
             ) {
                 data.value.title?.let {
-                    InputField(
-                        stringResource(R.string.event_title),
+                    InputField(stringResource(R.string.event_title),
                         it,
                         { viewmodel.onTitleChange(it) },
                         modifier = Modifier.semantics {
                             contentDescription = Constants.EVENT_OWNER_TITLE_FIELD
                         },
-                        true, false, data.value.isError
+                        true,
+                        false,
+                        data.value.isError
                     )
                 }
                 data.value.description?.let {
@@ -137,8 +137,7 @@ fun EventOwnerDetailsScreen(
                 }
 
                 data.value.city?.let {
-                    InputField(
-                        stringResource(R.string.event_city),
+                    InputField(stringResource(R.string.event_city),
                         it,
                         { viewmodel.onCityChange(it) },
                         modifier = Modifier.semantics {
@@ -148,8 +147,7 @@ fun EventOwnerDetailsScreen(
                     )
                 }
                 data.value.street?.let {
-                    InputField(
-                        stringResource(R.string.event_street),
+                    InputField(stringResource(R.string.event_street),
                         it,
                         { viewmodel.onStreetChange(it) },
                         modifier = Modifier.semantics {
@@ -160,14 +158,15 @@ fun EventOwnerDetailsScreen(
                 }
 
                 data.value.place?.let {
-                    InputField(
-                        stringResource(R.string.event_place),
+                    InputField(stringResource(R.string.event_place),
                         it,
                         { viewmodel.onPlaceChange(it) },
                         modifier = Modifier.semantics {
                             contentDescription = Constants.EVENT_OWNER_PLACE_FIELD
                         },
-                        true, false, data.value.isError
+                        true,
+                        false,
+                        data.value.isError
                     )
                 }
 
@@ -192,7 +191,8 @@ fun EventOwnerDetailsScreen(
                             R.drawable.calendaricon,
                             true,
                             true,
-                            { viewmodel.setShowDatePicker() }, data.value.isError
+                            { viewmodel.setShowDatePicker() },
+                            data.value.isError
                         )
                     }
 
@@ -209,7 +209,8 @@ fun EventOwnerDetailsScreen(
                             R.drawable.clockicon,
                             true,
                             true,
-                            { viewmodel.setShowTimePicker() }, data.value.isError
+                            { viewmodel.setShowTimePicker() },
+                            data.value.isError
                         )
                     }
 
@@ -237,13 +238,11 @@ fun EventOwnerDetailsScreen(
                         modifier = Modifier
                             .clickable { }
                             .semantics {
-                                contentDescription =
-                                    Constants.EVENT_OWNER_ADD_PARTICIPANTS_BUTTON
+                                contentDescription = Constants.EVENT_OWNER_ADD_PARTICIPANTS_BUTTON
                             })
                 }
                 HorizontalDivider(
-                    thickness = Dimensions.CREATE_EVENT_LINE_THICKNESS,
-                    color = Ivory
+                    thickness = Dimensions.CREATE_EVENT_LINE_THICKNESS, color = Ivory
                 )
                 LaunchedEffect(data.value.eventId) {
                     data.value.eventId?.let {
@@ -252,29 +251,21 @@ fun EventOwnerDetailsScreen(
                 }
                 val participants = data.value.participants
                 participants.forEach { participant ->
-                    ParticipantUI(
-                        participant = participant,
-                        false,
-                        {}
-                    )
+                    ParticipantUI(participant = participant, false, {})
                 }
                 //TODO put participants here, use participantUI component (check event details screen)
             }
             Column(
             ) {
-                ActionButton(
-                    stringResource(R.string.event_edit),
+                ActionButton(stringResource(R.string.event_edit),
                     modifier = Modifier
                         .padding(bottom = Dimensions.ACTION_BUTTON_MEDIUM3)
                         .semantics {
                             contentDescription = Constants.EVENT_OWNER_EDIT_BUTTON
                         },
                     onClick = {
-                        viewmodel.editEvent(
-                            onSuccess = {
-
-                            }
-                        )
+                        viewmodel.editEvent(onSuccess = {
+                        })
                     })
             }
 
