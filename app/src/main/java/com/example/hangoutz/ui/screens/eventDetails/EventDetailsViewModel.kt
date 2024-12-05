@@ -52,8 +52,6 @@ class EventDetailsViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(eventId = eventId)
     }
 
-
-
     fun formatDateTime(dateTimeString: String): Pair<String, String> {
 
         val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())

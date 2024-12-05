@@ -9,7 +9,7 @@ import retrofit2.Response
 import java.util.UUID
 import javax.inject.Inject
 
-class InviteRepositoryImpl @Inject constructor(invitesAPI: InviteAPI): InviteRepository {
+class InviteRepositoryImpl @Inject constructor(invitesAPI: InviteAPI) : InviteRepository {
     private val api = invitesAPI
     override suspend fun getInvites(): Response<List<Invite>> {
         return api.getInvites()
@@ -28,7 +28,7 @@ class InviteRepositoryImpl @Inject constructor(invitesAPI: InviteAPI): InviteRep
     }
 
     override suspend fun getCountOfAcceptedInvitesByEvent(id: UUID): Response<List<CountOfAcceptedInvitesForEvent>> {
-        return  api.getCountOfAcceptedInvitesByEvent(id="eq.${id}")
+        return api.getCountOfAcceptedInvitesByEvent(id = "eq.${id}")
     }
 
     override suspend fun updateInviteStatus(

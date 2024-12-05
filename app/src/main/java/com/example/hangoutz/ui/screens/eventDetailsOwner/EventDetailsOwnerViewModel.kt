@@ -116,9 +116,7 @@ class EventDetailsOwnerViewModel @Inject constructor(
             return
         }
         viewModelScope.launch {
-
             val deleteInvitesResponse = inviteRepository.deleteInvite(id = eventId)
-
             if (deleteInvitesResponse?.isSuccessful == true) {
                 Log.i("EventDetailsOwner", "Successfully deleted invites for event")
 
@@ -152,7 +150,6 @@ class EventDetailsOwnerViewModel @Inject constructor(
             }
         }
         getData()
-
     }
 
     private fun formatDateTime(dateTimeString: String): Pair<String, String> {
@@ -304,7 +301,6 @@ class EventDetailsOwnerViewModel @Inject constructor(
 
         return !(validateTitle || validatePlace || validateDate || validateTime || validateDesc || validateCity || validateStreet)
     }
-
 
     fun onTimePicked(date: Long) {
         val formattedTime = formatTime(date)

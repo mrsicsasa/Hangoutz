@@ -1,6 +1,5 @@
 package com.example.hangoutz.data.repository
 
-import com.example.hangoutz.data.models.AvatarRequest
 import com.example.hangoutz.data.models.Event
 import com.example.hangoutz.data.models.EventCardDPO
 import com.example.hangoutz.data.models.EventRequest
@@ -37,7 +36,13 @@ class EventRepositoryImpl @Inject constructor(
     ): Response<List<EventsFromInvites>> {
         return api.getEventsFromInvites(eventStatus = "eq.$eventStatus", id = "eq.$userID")
     }
-    override suspend fun patchEventById(id: String, newTitle: String, newPlace: String, newDate : String): Response<Unit> {
+
+    override suspend fun patchEventById(
+        id: String,
+        newTitle: String,
+        newPlace: String,
+        newDate: String
+    ): Response<Unit> {
         return api.patchEventById(
             id = "eq.${id}", EventRequest(title = newTitle, place = newPlace, date = newDate)
         )

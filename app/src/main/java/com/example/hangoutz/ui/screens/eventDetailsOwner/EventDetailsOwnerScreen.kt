@@ -85,15 +85,25 @@ fun EventOwnerDetailsScreen(
                     Icon(painter = painterResource(id = R.drawable.trashicon),
                         contentDescription = "Image",
                         tint = Ivory,
-                        modifier = Modifier.clickable { viewmodel.deleteEvent(
-                            onSuccess = {
-                                Toast.makeText(context, Constants.DELETE_SUCCESS, Toast.LENGTH_SHORT).show()
-                                navController.popBackStack()
-                            },
-                            onError = { errorMessage ->
-                                Toast.makeText(context, Constants.DELETE_ERROR, Toast.LENGTH_SHORT).show()
-                            }
-                        )})
+                        modifier = Modifier.clickable {
+                            viewmodel.deleteEvent(
+                                onSuccess = {
+                                    Toast.makeText(
+                                        context,
+                                        Constants.DELETE_SUCCESS,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    navController.popBackStack()
+                                },
+                                onError = { errorMessage ->
+                                    Toast.makeText(
+                                        context,
+                                        Constants.DELETE_ERROR,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            )
+                        })
                 }
             },
             colors = TopAppBarDefaults.topAppBarColors(
@@ -124,7 +134,8 @@ fun EventOwnerDetailsScreen(
                     .weight(1f)
             ) {
                 data.value.title?.let {
-                    InputField(stringResource(R.string.event_title),
+                    InputField(
+                        stringResource(R.string.event_title),
                         it,
                         { viewmodel.onTitleChange(it) },
                         modifier = Modifier.semantics {
@@ -144,23 +155,25 @@ fun EventOwnerDetailsScreen(
                         modifier = Modifier.semantics {
                             contentDescription = Constants.EVENT_OWNER_DESC_FIELD
                         },
-                        true,false, data.value.isDescError
+                        true, false, data.value.isDescError
                     )
                 }
                 data.value.errorDesc.takeIf { it.isNotBlank() }?.let { ErrorMessage(it) }
                 data.value.city?.let {
-                    InputField(stringResource(R.string.event_city),
+                    InputField(
+                        stringResource(R.string.event_city),
                         it,
                         { viewmodel.onCityChange(it) },
                         modifier = Modifier.semantics {
                             contentDescription = Constants.EVENT_OWNER_CITY_FIELD
                         },
-                        true,false, data.value.isCityError
+                        true, false, data.value.isCityError
                     )
                 }
                 data.value.errorCity.takeIf { it.isNotBlank() }?.let { ErrorMessage(it) }
                 data.value.street?.let {
-                    InputField(stringResource(R.string.event_street),
+                    InputField(
+                        stringResource(R.string.event_street),
                         it,
                         { viewmodel.onStreetChange(it) },
                         modifier = Modifier.semantics {
@@ -172,7 +185,8 @@ fun EventOwnerDetailsScreen(
                 data.value.errorStreet?.takeIf { it.isNotBlank() }?.let { ErrorMessage(it) }
 
                 data.value.place?.let {
-                    InputField(stringResource(R.string.event_place),
+                    InputField(
+                        stringResource(R.string.event_place),
                         it,
                         { viewmodel.onPlaceChange(it) },
                         modifier = Modifier.semantics {
@@ -265,7 +279,10 @@ fun EventOwnerDetailsScreen(
                 }
                 val participants = data.value.participants
                 participants.forEach { participant ->
-                    ParticipantUI(participant = participant, true, {viewmodel.removeUser(participant.id)})
+                    ParticipantUI(
+                        participant = participant,
+                        true,
+                        { viewmodel.removeUser(participant.id) })
                 }
 
             }
@@ -279,7 +296,11 @@ fun EventOwnerDetailsScreen(
                         },
                     onClick = {
                         viewmodel.editEvent(onSuccess = {
-                            Toast.makeText(context, Constants.EVENT_EDITED_SUCCESSFULLY, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                Constants.EVENT_EDITED_SUCCESSFULLY,
+                                Toast.LENGTH_SHORT
+                            ).show()
                             navController.popBackStack()
                         })
                     })
