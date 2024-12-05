@@ -216,7 +216,7 @@ fun CreateEventScreen(
                                         Constants.CREATE_EVENT_ADD_PARTICIPANTS_BUTTON
                                 })
                     }
-
+                }
                     HorizontalDivider(
                         thickness = Dimensions.CREATE_EVENT_LINE_THICKNESS, color = Ivory
                     )
@@ -228,7 +228,6 @@ fun CreateEventScreen(
                         }
                     }
                 }
-            }
             ActionButton(stringResource(R.string.event_create),
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
@@ -249,8 +248,8 @@ fun CreateEventScreen(
                     },
                     onTextInput = {
                     },
-                    isParticipant = true,
                     participantSelected = data.value.selectedParticipants,
+                    isCheckList = true,
                     onAdd = {
                         viewmodel.addSelectedParticipants()
                         scope.launch { sheetState.hide() }

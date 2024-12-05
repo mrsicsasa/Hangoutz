@@ -43,11 +43,11 @@ import com.example.hangoutz.utils.Dimensions
 fun DisplayUser(
     name: String,
     userAvatar: String?,
-    isCheckList: Boolean,
+    isCheckList: Boolean = false,
     isParticipant: Boolean = false,
     isCheckedInitial: Boolean = false,
     onChange: (Boolean) -> Unit = {},
-    addFriend: () -> Unit
+    addFriend: () -> Unit = {}
 ) {
     val isChecked = remember { mutableStateOf(isCheckedInitial) }
 
@@ -80,7 +80,7 @@ fun DisplayUser(
                 )
                 Text(
                     text = name,
-                    style = MaterialTheme.typography.bodyMedium.copy(color = if(isParticipant) Color.White else Color.Black),
+                    style = MaterialTheme.typography.bodyMedium.copy(color = if (isParticipant) Color.White else Color.Black),
                     modifier = Modifier
                         .padding(start = Dimensions.BOTTOM_SHEET_NAME_PADING)
                         .semantics {
@@ -92,57 +92,42 @@ fun DisplayUser(
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                if(!isParticipant) {
+                if (!isParticipant) {
                     if (isCheckList) {
                         Checkbox(
                             checked = isChecked.value,
                             onCheckedChange = { isChecked.value = !isChecked.value }
                         )
                     } else {
-                        Icon(
-                            imageVector = Icons.Filled.Add,
-                            contentDescription = stringResource(R.string.add_friend_button),
-                            tint = Color.White,
-                            modifier = Modifier
-                                .clip(CircleShape)
-                                .background(Orange)
-                                .size(Dimensions.ADD_ICON_SIZE)
-                                .semantics {
-                                    contentDescription = Constants.BOTTOM_SHEET_ADD_ICON
-                                }
-                        )
-                    }
-                if (isCheckList) {
-                    // TODO: MBLINTER-15
-                } else {
-                    IconButton(
-                        onClick = {
-                            addFriend()
+                        IconButton(
+                            onClick = {
+                                addFriend()
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Add,
+                                contentDescription = stringResource(R.string.add_friend_button),
+                                tint = Color.White,
+                                modifier = Modifier
+                                    .clip(CircleShape)
+                                    .background(Orange)
+                                    .size(Dimensions.ADD_ICON_SIZE)
+                                    .semantics {
+                                        contentDescription = Constants.BOTTOM_SHEET_ADD_ICON
+                                    }
+                            )
                         }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Add,
-                            contentDescription = stringResource(R.string.add_friend_button),
-                            tint = Color.White,
-                            modifier = Modifier
-                                .clip(CircleShape)
-                                .background(Orange)
-                                .size(Dimensions.ADD_ICON_SIZE)
-                                .semantics {
-                                    contentDescription = Constants.BOTTOM_SHEET_ADD_ICON
-                                }
-                        )
                     }
                 }
             }
         }
-        HorizontalDivider(
-            color = Color.Black,
-            thickness = Dimensions.BOTTOM_SHEET_DIVIDER_WIDTH
-        )
-    }
-    LaunchedEffect(isChecked.value) {
-        onChange(isChecked.value)
-    }
-}
-    }
+                HorizontalDivider(
+                    color = Color.Black,
+                    thickness = Dimensions.BOTTOM_SHEET_DIVIDER_WIDTH
+                )
+            }
+            LaunchedEffect(isChecked.value) {
+                onChange(isChecked.value)
+            }
+        }
+

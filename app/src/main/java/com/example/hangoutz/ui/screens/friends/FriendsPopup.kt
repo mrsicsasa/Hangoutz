@@ -47,9 +47,10 @@ fun FriendsPopup(
     sheetState: SheetState,
     showBottomSheet: (Boolean) -> Unit,
     clearText: () -> Unit,
-    addFriend: (UUID) -> Unit,
+    addFriend: (UUID) -> Unit = {},
     onChange: (isChecked: Boolean, user: Friend) -> Unit = { _: Boolean, _: Friend -> },
     isParticipant: Boolean = false,
+    isCheckList: Boolean = false,
     onAdd: () -> Unit = {},
     participantSelected: List<Friend> = emptyList(),
     onTextInput: (String) -> Unit,
@@ -122,18 +123,21 @@ fun FriendsPopup(
                     horizontal = Dimensions.BOTTOM_SHEET_HORIZONTAL_PADDING,
                     vertical = Dimensions.BOTTOM_SHEET_VERTICAL_PADDING
                 )
-                .fillMaxHeight(if (isParticipant) Dimensions.FRIENDS_POPUP_PARTICIPANT_COLUMN else Dimensions.FRIENDS_POPUP_COLUMN)
+                .fillMaxHeight(if (isCheckList) Dimensions.FRIENDS_POPUP_PARTICIPANT_COLUMN else Dimensions.FRIENDS_POPUP_COLUMN)
         ) {
             items(userList) { user ->
                 DisplayUser(
                     user.name,
                     user.avatar,
-                    isCheckList = true,
+                    isCheckList = isCheckList,
+                    isParticipant = isParticipant,
                     isCheckedInitial = participantSelected.any { it.id == user.id },
-                    onChange = { onChange(it, user) })
+                    onChange = { onChange(it, user) },
+                    addFriend = {addFriend(user.id)}
+                    )
             }
         }
-        if (isParticipant) {
+        if (true) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top,
