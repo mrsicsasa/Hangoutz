@@ -95,7 +95,7 @@ class FriendsViewModel @Inject constructor(
     }
 
     fun clearSearchInput() {
-        _uiState.value = _uiState.value.copy(searchQuery = "")
+        _uiState.value = _uiState.value.copy(searchQuery = "", isLoading = true)
         fetchFriends(false)
     }
 
