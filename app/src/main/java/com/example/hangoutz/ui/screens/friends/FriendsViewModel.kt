@@ -50,7 +50,8 @@ class FriendsViewModel @Inject constructor(
         } else {
             if (_uiState.value.isFiltered){
                 _uiState.value = _uiState.value.copy(
-                    isFiltered = false
+                    isFiltered = false,
+                    isLoading = true
                 )
                 fetchFriends(isSearching = false)
             }
@@ -58,6 +59,10 @@ class FriendsViewModel @Inject constructor(
     }
 
     fun fetchFriends(isSearching: Boolean) {
+        _uiState.value = _uiState.value.copy(
+            listOfFriends = emptyList(),
+            isLoading = true
+        )
         if (_uiState.value.isLoading) {
             viewModelScope.launch {
                 val response = withContext(Dispatchers.IO) {
@@ -86,28 +91,7 @@ class FriendsViewModel @Inject constructor(
             }
         }
     }
-    private fun getFriends() {
-        _uiState.value = _uiState.value.copy(
-            listOfFriends = emptyList(),
-            isLoading = true,
-            searchQuery = ""
-        )
-        viewModelScope.launch {
-            val response = withContext(Dispatchers.IO) {
-                SharedPreferencesManager.getUserId(context)?.let {
-                    MutableStateFlow(friendsRepository.getFriendsFromUserId(it))
-                }
-            }
-            response?.value?.let {
-                if (it.isSuccessful) {
-                    response.value.body()?.let {
-                        _uiState.value =
-                            _uiState.value.copy(listOfFriends = it.sortedBy { it.users.name.uppercase() }, isLoading = false)
-                    }
-                }
-            }
-        }
-    }
+
     fun removeFriend(friendId: UUID) {
         viewModelScope.launch {
             val response = withContext(Dispatchers.IO) {
@@ -116,8 +100,8 @@ class FriendsViewModel @Inject constructor(
                 }
             }
             if (response?.isSuccessful == true) {
-                if (_uiState.value.searchQuery == "") {
-                    getFriends()
+                if (_uiState.value.searchQuery.length < 3) {
+                    fetchFriends(false)
                 }
                 else {
                     _uiState.value = _uiState.value.copy(
