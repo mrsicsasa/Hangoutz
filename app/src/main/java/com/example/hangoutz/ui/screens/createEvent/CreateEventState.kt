@@ -15,4 +15,5 @@ data class CreateEventState(
     val listOfFriends: List<Friend> = emptyList(),
     val isLoading: Boolean = false,
     val participants: List<Friend> = emptyList(),
+    val selectedParticipants: List<Friend> = emptyList()
 )

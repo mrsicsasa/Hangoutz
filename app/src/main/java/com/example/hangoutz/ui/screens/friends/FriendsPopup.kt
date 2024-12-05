@@ -1,6 +1,5 @@
 package com.example.hangoutz.ui.screens.friends
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +16,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
@@ -27,11 +27,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.font.FontWeight
 import com.example.hangoutz.R
 import com.example.hangoutz.data.models.Friend
 import com.example.hangoutz.ui.components.DisplayUser
 import com.example.hangoutz.ui.components.SearchField
+import com.example.hangoutz.ui.theme.OrangeButton
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Dimensions
 
@@ -44,8 +45,10 @@ fun FriendsPopup(
     sheetState: SheetState,
     showBottomSheet: (Boolean) -> Unit,
     clearText: () -> Unit,
-    onChange: (isChecked: Boolean, user: Friend) -> Unit = { b: Boolean, friend: Friend -> },
+    onChange: (isChecked: Boolean, user: Friend) -> Unit = { _: Boolean, _: Friend -> },
     isParticipant: Boolean = false,
+    onAdd: () -> Unit = {},
+    participantSelected: List<Friend> = emptyList(),
     onTextInput: (String) -> Unit,
 ) {
     ModalBottomSheet(
@@ -115,41 +118,49 @@ fun FriendsPopup(
                     horizontal = Dimensions.BOTTOM_SHEET_HORIZONTAL_PADDING,
                     vertical = Dimensions.BOTTOM_SHEET_VERTICAL_PADDING
                 )
-                .fillMaxHeight(if(isParticipant) 0.85f else 1f)
+                .fillMaxHeight(if (isParticipant) Dimensions.FRIENDS_POPUP_PARTICIPANT_COLUMN else Dimensions.FRIENDS_POPUP_COLUMN)
         ) {
             items(userList) { user ->
                 DisplayUser(
                     user.name,
                     user.avatar,
                     isCheckList = true,
+                    isCheckedInitial = participantSelected.any { it.id == user.id },
                     onChange = { onChange(it, user) })
             }
         }
-        if(isParticipant) {
+        if (isParticipant) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top,
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight()
-                    .padding(bottom = 10.dp)
+                    .padding(bottom = Dimensions.BUTTON_COLUMN_BOTTOM_PADDING)
             ) {
                 Button(
-                    onClick = {},
+                    onClick = { onAdd() },
                     modifier = Modifier
-                        .padding(3.dp)
-                        .width(188.dp)
-                        .height(53.dp)
-                    ,
+                        .padding(Dimensions.BUTTON_INNER_PADDING)
+                        .width(Dimensions.BUTTON_WIDTH)
+                        .height(Dimensions.BUTTON_HEIGHT)
+                        .semantics {
+                            contentDescription =
+                                Constants.CREATE_EVENT_ADD_SELECTED_PARTICIPANTS_BUTTON
+                        },
                     colors = ButtonColors(
-                        containerColor = Color(0xFFDDAE74),
+                        containerColor = OrangeButton,
                         contentColor = Color.Black,
                         disabledContainerColor = Color.Gray,
                         disabledContentColor = Color.Gray
                     )
                 ) {
                     Text(
-                        "Add"
+                        stringResource(R.string.add),
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            fontWeight = FontWeight(Dimensions.ADD_FONT_WEIGHT),
+                            fontSize = Dimensions.ADD_FONT_SIZE,
+                        )
                     )
                 }
             }

@@ -1,5 +1,7 @@
 package com.example.hangoutz.ui.screens.createEvent
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -23,11 +24,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
@@ -63,7 +60,6 @@ fun CreateEventScreen(
     val data = viewmodel.uiState.collectAsState()
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
-    var isBottomSheetVisible by remember { mutableStateOf(false) }
     val scrollableField =
         LocalConfiguration.current.screenHeightDp.dp - (LocalConfiguration.current.screenHeightDp.dp - Dimensions.ACTION_BUTTON_MEDIUM4)
 
@@ -178,9 +174,9 @@ fun CreateEventScreen(
                                     contentDescription = Constants.CREATE_EVENT_DATE_FIELD
                                 },
                             R.drawable.calendaricon,
-                            true,
-                            true,
-                            { viewmodel.setShowDatePicker() })
+                            isEnabled = true,
+                            isReadOnly = true,
+                            onClick = { viewmodel.setShowDatePicker() })
 
                         InputFieldWithIcon(stringResource(R.string.event_time),
                             data.value.time,
@@ -191,9 +187,9 @@ fun CreateEventScreen(
                                     contentDescription = Constants.CREATE_EVENT_TIME_FIELD
                                 },
                             R.drawable.clockicon,
-                            true,
-                            true,
-                            { viewmodel.setShowTimePicker() })
+                            isEnabled = true,
+                            isReadOnly = true,
+                            onClick = { viewmodel.setShowTimePicker() })
                     }
                     Row(
                         modifier = Modifier
@@ -211,7 +207,14 @@ fun CreateEventScreen(
                             ),
                             style = MaterialTheme.typography.bodyMedium
                         )
-                        Button(onClick = { scope.launch { sheetState.show() } }) { Text("da") }
+                        Image(painter = painterResource(id = R.drawable.addevent),
+                            contentDescription = "",
+                            modifier = Modifier
+                                .clickable { scope.launch { sheetState.show() } }
+                                .semantics {
+                                    contentDescription =
+                                        Constants.CREATE_EVENT_ADD_PARTICIPANTS_BUTTON
+                                })
                     }
 
                     HorizontalDivider(
@@ -219,7 +222,9 @@ fun CreateEventScreen(
                     )
                     Column {
                         data.value.participants.forEach {
-                            DisplayUser(it.name, it.avatar, isCheckList = true, isParticipant = true)
+                            DisplayUser(
+                                it.name, it.avatar, isCheckList = true, isParticipant = true
+                            )
                         }
                     }
                 }
@@ -235,29 +240,28 @@ fun CreateEventScreen(
                     viewmodel.createEvent()
                 })
             if (sheetState.isVisible) {
-                FriendsPopup(
-                    userList = data.value.listOfFriends,
+                FriendsPopup(userList = data.value.listOfFriends,
                     searchQuery = "",
                     isLoading = data.value.isLoading,
-                    clearText = {
-                        //  viewModel.clearSearchInputPopupScreen()
-                    },
+                    clearText = {},
                     sheetState = sheetState,
-                    showBottomSheet = { isShow ->
+                    showBottomSheet = {
                     },
-                    onTextInput = { searchQuery ->
-                        //   viewModel.showSheetState(true)
-                        //  viewModel.onPopupSearchInput(searchQuery)}
+                    onTextInput = {
                     },
                     isParticipant = true,
+                    participantSelected = data.value.selectedParticipants,
+                    onAdd = {
+                        viewmodel.addSelectedParticipants()
+                        scope.launch { sheetState.hide() }
+                    },
                     onChange = { isChecked, user ->
                         if (isChecked) {
                             viewmodel.addParticipant(user)
                         } else {
                             viewmodel.removeParticipant(user)
                         }
-                    }
-                )
+                    })
             }
         }
     }

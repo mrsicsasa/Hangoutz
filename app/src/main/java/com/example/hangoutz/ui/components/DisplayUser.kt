@@ -45,9 +45,10 @@ fun DisplayUser(
     userAvatar: String?,
     isCheckList: Boolean,
     isParticipant: Boolean = false,
+    isCheckedInitial: Boolean = false,
     onChange: (Boolean) -> Unit = {}
 ) {
-    val isChecked = remember { mutableStateOf(false) }
+    val isChecked = remember { mutableStateOf(isCheckedInitial) }
 
     Column(
         modifier = Modifier
@@ -77,7 +78,7 @@ fun DisplayUser(
                 )
                 Text(
                     text = name,
-                    style = MaterialTheme.typography.bodyMedium.copy(color = Color.Black),
+                    style = MaterialTheme.typography.bodyMedium.copy(color = if(isParticipant) Color.White else Color.Black),
                     modifier = Modifier
                         .padding(start = Dimensions.BOTTOM_SHEET_NAME_PADING)
                         .semantics {
