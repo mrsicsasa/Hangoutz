@@ -36,6 +36,8 @@ object Constants {
     const val ERROR_EMPTY_FIELDS = "All fields must be filled!"
     const val ERROR_INVALID_INPUT = "Incorrect email or password"
     const val ERROR_EMPTY_FIELD = "Fields marked with * must be filled"
+    const val ERROR_TOO_LONG = "This field can have max 25 characters"
+    const val ERROR_TOO_LONG_DESC = "Description can have max 100 characters"
 
     //Events screen
     const val GET_EVENTS_ERRORS = "Loading events errors"

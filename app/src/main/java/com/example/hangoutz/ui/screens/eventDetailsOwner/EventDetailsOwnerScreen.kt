@@ -124,6 +124,7 @@ fun EventOwnerDetailsScreen(
                         data.value.isTitleError
                     )
                 }
+                data.value.errorTitle.takeIf { it.isNotBlank() }?.let { ErrorMessage(it) }
                 data.value.description?.let {
                     InputField(
                         stringResource(R.string.event_desc),
@@ -132,10 +133,10 @@ fun EventOwnerDetailsScreen(
                         modifier = Modifier.semantics {
                             contentDescription = Constants.EVENT_OWNER_DESC_FIELD
                         },
-                        true
+                        true,false, data.value.isDescError
                     )
                 }
-
+                data.value.errorDesc.takeIf { it.isNotBlank() }?.let { ErrorMessage(it) }
                 data.value.city?.let {
                     InputField(stringResource(R.string.event_city),
                         it,
@@ -143,9 +144,10 @@ fun EventOwnerDetailsScreen(
                         modifier = Modifier.semantics {
                             contentDescription = Constants.EVENT_OWNER_CITY_FIELD
                         },
-                        true
+                        true,false, data.value.isCityError
                     )
                 }
+                data.value.errorCity.takeIf { it.isNotBlank() }?.let { ErrorMessage(it) }
                 data.value.street?.let {
                     InputField(stringResource(R.string.event_street),
                         it,
@@ -153,9 +155,10 @@ fun EventOwnerDetailsScreen(
                         modifier = Modifier.semantics {
                             contentDescription = Constants.EVENT_OWNER_STREET_FIELD
                         },
-                        true
+                        true, false, data.value.isStreetError
                     )
                 }
+                data.value.errorStreet?.takeIf { it.isNotBlank() }?.let { ErrorMessage(it) }
 
                 data.value.place?.let {
                     InputField(stringResource(R.string.event_place),
@@ -169,6 +172,7 @@ fun EventOwnerDetailsScreen(
                         data.value.isPlaceError
                     )
                 }
+                data.value.errorPlace?.takeIf { it.isNotBlank() }?.let { ErrorMessage(it) }
 
                 Row(
                     modifier = Modifier
@@ -210,7 +214,7 @@ fun EventOwnerDetailsScreen(
                             true,
                             true,
                             { viewmodel.setShowTimePicker() },
-                            data.value.isTimeError
+                            data.value.isDateError
                         )
                     }
                 }
@@ -263,7 +267,9 @@ fun EventOwnerDetailsScreen(
                             contentDescription = Constants.EVENT_OWNER_EDIT_BUTTON
                         },
                     onClick = {
-                        viewmodel.updateEvent()
+                        viewmodel.editEvent(onSuccess = {
+                            navController.popBackStack()
+                        })
                     })
             }
 

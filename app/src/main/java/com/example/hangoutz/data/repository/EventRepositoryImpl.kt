@@ -37,9 +37,9 @@ class EventRepositoryImpl @Inject constructor(
     ): Response<List<EventsFromInvites>> {
         return api.getEventsFromInvites(eventStatus = "eq.$eventStatus", id = "eq.$userID")
     }
-    override suspend fun patchEventById(id: String, newTitle: String, newPlace: String, newDate : String,newTime : String ): Response<Unit> {
+    override suspend fun patchEventById(id: String, newTitle: String, newPlace: String, newDate : String): Response<Unit> {
         return api.patchEventById(
-            id = "eq.${id}", EventRequest(title = newTitle, place = newPlace, date = newDate, time = newTime)
+            id = "eq.${id}", EventRequest(title = newTitle, place = newPlace, date = newDate)
         )
     }
 
