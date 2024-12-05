@@ -24,6 +24,7 @@ import com.example.hangoutz.R
 import com.example.hangoutz.data.models.Friend
 import com.example.hangoutz.ui.components.DisplayUser
 import com.example.hangoutz.ui.components.SearchField
+import com.example.hangoutz.ui.theme.SilverCloud
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Dimensions
 import java.util.UUID
@@ -46,6 +47,7 @@ fun FriendsPopup(
             showBottomSheet(false)
             clearText()
         },
+        containerColor = SilverCloud,
         modifier = Modifier
             .height(Dimensions.POPUP_HEIGHT)
             .width(Dimensions.POPUP_WIDTH)
