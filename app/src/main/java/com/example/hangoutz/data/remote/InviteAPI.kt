@@ -42,4 +42,10 @@ interface InviteAPI {
         @Query("user_id") userID: String,
         @Body body: UpdateEventStatusDTO
     ): Response<Unit>
+
+    @DELETE("${BuildConfig.REQUEST_URL}invites")
+    suspend fun deleteInviteByEventId(
+        @Query("user_id") id: String,
+        @Query("event_id") eventId : String
+    ): Response<Unit>
 }

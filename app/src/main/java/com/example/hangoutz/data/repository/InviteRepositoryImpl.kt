@@ -38,4 +38,8 @@ class InviteRepositoryImpl @Inject constructor(invitesAPI: InviteAPI): InviteRep
     ): Response<Unit> {
         return api.updateInviteStatus(userID = "eq.$userId", eventID = "eq.$eventId", body = body)
     }
+
+    override suspend fun deleteInviteByEventId(id: UUID, eventId: UUID): Response<Unit> {
+        return api.deleteInviteByEventId(id = "eq.${id}", eventId = "eq.${eventId}")
+    }
 }

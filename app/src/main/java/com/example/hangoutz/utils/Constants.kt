@@ -205,4 +205,7 @@ object Constants {
     const val EVENT_OWNER_CREATE_BUTTON = "eventOwnerCreateButton"
     const val EVENT_OWNER_EDIT_BUTTON = "eventOwnerCreateButton"
 
+    const val DELETE_ERROR = "An error has ocurred while deleting"
+    const val DELETE_SUCCESS = "Successfully deleted the event"
+
 }

@@ -85,7 +85,15 @@ fun EventOwnerDetailsScreen(
                     Icon(painter = painterResource(id = R.drawable.trashicon),
                         contentDescription = "Image",
                         tint = Ivory,
-                        modifier = Modifier.clickable { viewmodel.deleteEvent() })
+                        modifier = Modifier.clickable { viewmodel.deleteEvent(
+                            onSuccess = {
+                                Toast.makeText(context, Constants.DELETE_SUCCESS, Toast.LENGTH_SHORT).show()
+                                navController.popBackStack()
+                            },
+                            onError = { errorMessage ->
+                                Toast.makeText(context, Constants.DELETE_ERROR, Toast.LENGTH_SHORT).show()
+                            }
+                        )})
                 }
             },
             colors = TopAppBarDefaults.topAppBarColors(
@@ -257,9 +265,9 @@ fun EventOwnerDetailsScreen(
                 }
                 val participants = data.value.participants
                 participants.forEach { participant ->
-                    ParticipantUI(participant = participant, false, {})
+                    ParticipantUI(participant = participant, true, {viewmodel.removeUser(participant.id)})
                 }
-                //TODO put participants here, use participantUI component (check event details screen)
+
             }
             Column(
             ) {

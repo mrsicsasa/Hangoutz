@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
-import com.bumptech.glide.integration.compose.RequestState
 import com.example.hangoutz.data.models.User
 import com.example.hangoutz.domain.repository.EventRepository
 import com.example.hangoutz.domain.repository.InviteRepository
@@ -43,12 +42,12 @@ data class EventDetailsData(
     var isCityError: Boolean = false,
     var isStreetError: Boolean = false,
     var formattedDateForDatabase: String = "",
-    val errorTitle : String = "",
-    val errorDesc : String = "",
-    val errorCity : String = "",
-    val errorStreet : String = "",
-    val errorPlace : String = "",
-    val errorDate : String = "",
+    val errorTitle: String = "",
+    val errorDesc: String = "",
+    val errorCity: String = "",
+    val errorStreet: String = "",
+    val errorPlace: String = "",
+    val errorDate: String = "",
     var errorMessage: String? = ""
 )
 
@@ -110,12 +109,50 @@ class EventDetailsOwnerViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(formattedDateForDatabase = formattedDateTime)
     }
 
-    fun deleteEvent() {
-        //TODO
+    fun deleteEvent(onSuccess: () -> Unit, onError: (String) -> Unit) {
+        val eventId = _uiState.value.eventId
+        if (eventId == null) {
+            onError("Event ID is missing.")
+            return
+        }
+        viewModelScope.launch {
+
+            val deleteInvitesResponse = inviteRepository.deleteInvite(id = eventId)
+
+            if (deleteInvitesResponse?.isSuccessful == true) {
+                Log.i("EventDetailsOwner", "Successfully deleted invites for event")
+
+                val deleteEventResponse = eventRepository.deleteEvent(id = eventId)
+                if (deleteEventResponse?.isSuccessful == true) {
+                    onSuccess()
+                    Log.i("EventDetailsOwner", "Successfully deleted the event")
+                } else {
+                    onError("Failed to delete the event.")
+                }
+            } else {
+                onError("Failed to delete invites.")
+            }
+        }
     }
 
     fun removeUser(userID: UUID) {
-        //TODO
+
+        viewModelScope.launch {
+
+            val updatedParticipants = _uiState.value.participants.filter { it.id != userID }
+            _uiState.value = _uiState.value.copy(participants = updatedParticipants)
+
+            val response =
+                _uiState.value.eventId?.let { inviteRepository.deleteInviteByEventId(userID, it) }
+
+            if (response?.isSuccessful == true) {
+                Log.i("RemoveUser", "User successfully removed from event")
+            } else {
+                Log.e("RemoveUser", "Failed to remove user from event")
+            }
+        }
+        getData()
+
     }
 
     private fun formatDateTime(dateTimeString: String): Pair<String, String> {
@@ -194,82 +231,82 @@ class EventDetailsOwnerViewModel @Inject constructor(
         } catch (e: Exception) {
             Log.e("Error", "Exception while parsing")
         }
-    return isValid
+        return isValid
     }
 
-        fun validateInputs(): Boolean {
+    fun validateInputs(): Boolean {
 
-            _uiState.value = _uiState.value.copy(
-                errorMessage = "",
-                errorTitle = "",
-                errorDesc = "",
-                errorCity = "",
-                errorStreet = "",
-                errorDate = "",
-                errorPlace = ""
-            )
-            var validateTitle = _uiState.value.title.trim().isEmpty()
-            var validatePlace = _uiState.value.place.trim().isEmpty()
-            var validateDate = _uiState.value.date.trim().isEmpty()
-            var validateTime = _uiState.value.time.trim().isEmpty()
-            var validateDesc = false
-            var validateCity = false
-            var validateStreet = false
+        _uiState.value = _uiState.value.copy(
+            errorMessage = "",
+            errorTitle = "",
+            errorDesc = "",
+            errorCity = "",
+            errorStreet = "",
+            errorDate = "",
+            errorPlace = ""
+        )
+        var validateTitle = _uiState.value.title.trim().isEmpty()
+        var validatePlace = _uiState.value.place.trim().isEmpty()
+        var validateDate = _uiState.value.date.trim().isEmpty()
+        var validateTime = _uiState.value.time.trim().isEmpty()
+        var validateDesc = false
+        var validateCity = false
+        var validateStreet = false
 
-            if (validateTitle || validatePlace || validateDate || validateTime) {
-                _uiState.value = _uiState.value.copy(errorMessage = Constants.ERROR_EMPTY_FIELD)
-            }
-
-            if (!validateTitle && !checkLength(_uiState.value.title, 25)) {
-                validateTitle = true
-                _uiState.value = _uiState.value.copy(errorTitle = Constants.ERROR_TOO_LONG)
-            }
-
-            if (!validatePlace && !checkLength(_uiState.value.place, 25)) {
-                validatePlace = true
-                _uiState.value = _uiState.value.copy(errorPlace = Constants.ERROR_TOO_LONG)
-            }
-
-            if (!validateDate && !validateTime) {
-                val combinedInput = "${_uiState.value.date} ${_uiState.value.time}"
-                if (checkIfInPast(combinedInput)) {
-                    validateDate = true
-                    validateTime = true
-                    _uiState.value =
-                        _uiState.value.copy(errorMessage = "Date and time cannot be in the past")
-                }
-            }
-
-            if (_uiState.value.description.length > 100) {
-                validateDesc = true
-                _uiState.value = _uiState.value.copy(errorDesc = Constants.ERROR_TOO_LONG_DESC)
-            }
-
-            if (_uiState.value.city.length > 25) {
-                validateCity = true
-                _uiState.value = _uiState.value.copy(errorCity = Constants.ERROR_TOO_LONG)
-            }
-
-            if (_uiState.value.street.length > 25) {
-                validateStreet = true
-                _uiState.value = _uiState.value.copy(errorStreet = Constants.ERROR_TOO_LONG)
-            }
-
-            _uiState.value = _uiState.value.copy(
-                isTitleError = validateTitle,
-                isPlaceError = validatePlace,
-                isDateError = validateDate,
-                isTimeError = validateTime,
-                isDescError = validateDesc,
-                isCityError = validateCity,
-                isStreetError = validateStreet
-            )
-
-            return !(validateTitle || validatePlace || validateDate || validateTime || validateDesc || validateCity || validateStreet)
+        if (validateTitle || validatePlace || validateDate || validateTime) {
+            _uiState.value = _uiState.value.copy(errorMessage = Constants.ERROR_EMPTY_FIELD)
         }
 
+        if (!validateTitle && !checkLength(_uiState.value.title, 25)) {
+            validateTitle = true
+            _uiState.value = _uiState.value.copy(errorTitle = Constants.ERROR_TOO_LONG)
+        }
 
-        fun onTimePicked(date: Long) {
+        if (!validatePlace && !checkLength(_uiState.value.place, 25)) {
+            validatePlace = true
+            _uiState.value = _uiState.value.copy(errorPlace = Constants.ERROR_TOO_LONG)
+        }
+
+        if (!validateDate && !validateTime) {
+            val combinedInput = "${_uiState.value.date} ${_uiState.value.time}"
+            if (checkIfInPast(combinedInput)) {
+                validateDate = true
+                validateTime = true
+                _uiState.value =
+                    _uiState.value.copy(errorMessage = "Date and time cannot be in the past")
+            }
+        }
+
+        if (_uiState.value.description.length > 100) {
+            validateDesc = true
+            _uiState.value = _uiState.value.copy(errorDesc = Constants.ERROR_TOO_LONG_DESC)
+        }
+
+        if (_uiState.value.city.length > 25) {
+            validateCity = true
+            _uiState.value = _uiState.value.copy(errorCity = Constants.ERROR_TOO_LONG)
+        }
+
+        if (_uiState.value.street.length > 25) {
+            validateStreet = true
+            _uiState.value = _uiState.value.copy(errorStreet = Constants.ERROR_TOO_LONG)
+        }
+
+        _uiState.value = _uiState.value.copy(
+            isTitleError = validateTitle,
+            isPlaceError = validatePlace,
+            isDateError = validateDate,
+            isTimeError = validateTime,
+            isDescError = validateDesc,
+            isCityError = validateCity,
+            isStreetError = validateStreet
+        )
+
+        return !(validateTitle || validatePlace || validateDate || validateTime || validateDesc || validateCity || validateStreet)
+    }
+
+
+    fun onTimePicked(date: Long) {
         val formattedTime = formatTime(date)
         onTimeChange(formattedTime)
     }
