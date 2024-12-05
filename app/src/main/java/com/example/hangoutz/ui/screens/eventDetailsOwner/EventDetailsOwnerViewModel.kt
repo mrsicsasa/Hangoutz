@@ -28,13 +28,13 @@ import javax.inject.Inject
 data class EventDetailsData(
     var isMine : Boolean = true,
     var eventId: UUID? = null,
-    var title: String? = "",
-    var description: String? = "",
-    var city: String? = "",
-    var street: String? = "",
-    var place: String? = "",
-    var date: String? = "",
-    var time: String? = "",
+    var title: String = "",
+    var description: String = "",
+    var city: String = "",
+    var street: String = "",
+    var place: String = "",
+    var date: String = "",
+    var time: String = "",
     var participants: List<User> = emptyList(),
     var showDatePicker: Boolean = false,
     var showTimePicker: Boolean = false,
@@ -105,10 +105,10 @@ class EventDetailsOwnerViewModel @Inject constructor(
                 event?.let {
                     _uiState.value = _uiState.value.copy(
                         title = it.title,
-                        description = it.description,
-                        city = it.city,
-                        street = it.street,
-                        place = it.place,
+                        description = it.description ?: "",
+                        city = it.city ?: "",
+                        street = it.street ?: "" ,
+                        place = it.place?: "",
                         date = it.date,
                     )
                     val dateTemp = _uiState.value.date ?: ""
