@@ -6,13 +6,10 @@ import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.example.hangoutz.R
 import com.example.hangoutz.data.models.ListOfFriends
-import com.example.hangoutz.utils.Dimensions
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -43,7 +40,6 @@ fun FriendItemWithSwipe(
             }
             return@rememberSwipeToDismissBoxState true
         },
-      //  positionalThreshold = { it * Dimensions.DISMISS_POSITIONAL_THRESHOLD }
     )
     SwipeToDismissBox(
         state = dismissState,
