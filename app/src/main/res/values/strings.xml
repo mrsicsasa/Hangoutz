@@ -44,8 +44,8 @@
     <string name="confirmPassword_error_message">Passwords must match</string>
     <string name="email_duplicate_error_message">Email already in use</string>
     <string name="generic_error_message">An error has occurred</string>
-    <string name="confirm_time_picker">Confirm selection</string>
-    <string name="dismiss_time_picker">Dismiss picker</string>
+    <string name="confirm_time_picker">OK</string>
+    <string name="dismiss_time_picker">Cancel</string>
     <string name="participants">Participants</string>
     <string name="leave_event">Leave Event</string>
 

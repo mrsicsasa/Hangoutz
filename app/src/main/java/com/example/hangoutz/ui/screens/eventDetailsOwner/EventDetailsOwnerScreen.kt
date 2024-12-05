@@ -3,7 +3,6 @@ package com.example.hangoutz.ui.screens.eventDetailsOwner
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -29,12 +28,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.hangoutz.R
@@ -58,8 +55,6 @@ fun EventOwnerDetailsScreen(
 ) {
     val data = viewmodel.uiState.collectAsState()
     viewmodel.getEventIdFromController(navController)
-    val scrollableField =
-        LocalConfiguration.current.screenHeightDp.dp - (LocalConfiguration.current.screenHeightDp.dp - Dimensions.ACTION_BUTTON_MEDIUM4)
 
     Scaffold(topBar = {
         TopAppBar(
@@ -97,7 +92,7 @@ fun EventOwnerDetailsScreen(
         )
     }) { innerPadding ->
 
-        Box(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .paint(
@@ -105,198 +100,197 @@ fun EventOwnerDetailsScreen(
                     contentScale = ContentScale.FillBounds
                 )
         ) {
-            Box(
-                modifier = Modifier.padding(
-                    top = innerPadding.calculateTopPadding() + Dimensions.EVENTDETAILS_TOP_PADDING,
-                    start = Dimensions.ACTION_BUTTON_MEDIUM2,
-                    end = Dimensions.ACTION_BUTTON_MEDIUM2,
-                    bottom = scrollableField
-                )
+
+            Column(
+                modifier = Modifier
+                    .padding(
+                        top = innerPadding.calculateTopPadding() + Dimensions.EVENTDETAILS_TOP_PADDING,
+                        start = Dimensions.ACTION_BUTTON_MEDIUM2,
+                        end = Dimensions.ACTION_BUTTON_MEDIUM2,
+                        bottom = Dimensions.ACTION_BUTTON_SMALL1
+                    )
+                    .verticalScroll(rememberScrollState())
+                    .fillMaxSize()
+                    .weight(1f)
             ) {
-                Column(
+                data.value.title?.let {
+                    InputField(
+                        stringResource(R.string.event_title),
+                        it,
+                        { viewmodel.onTitleChange(it) },
+                        modifier = Modifier.semantics {
+                            contentDescription = Constants.EVENT_OWNER_TITLE_FIELD
+                        },
+                        true, false, data.value.isError
+                    )
+                }
+                data.value.description?.let {
+                    InputField(
+                        stringResource(R.string.event_desc),
+                        it,
+                        { viewmodel.onDescriptionChange(it) },
+                        modifier = Modifier.semantics {
+                            contentDescription = Constants.EVENT_OWNER_DESC_FIELD
+                        },
+                        true
+                    )
+                }
+
+                data.value.city?.let {
+                    InputField(
+                        stringResource(R.string.event_city),
+                        it,
+                        { viewmodel.onCityChange(it) },
+                        modifier = Modifier.semantics {
+                            contentDescription = Constants.EVENT_OWNER_CITY_FIELD
+                        },
+                        true
+                    )
+                }
+                data.value.street?.let {
+                    InputField(
+                        stringResource(R.string.event_street),
+                        it,
+                        { viewmodel.onStreetChange(it) },
+                        modifier = Modifier.semantics {
+                            contentDescription = Constants.EVENT_OWNER_STREET_FIELD
+                        },
+                        true
+                    )
+                }
+
+                data.value.place?.let {
+                    InputField(
+                        stringResource(R.string.event_place),
+                        it,
+                        { viewmodel.onPlaceChange(it) },
+                        modifier = Modifier.semantics {
+                            contentDescription = Constants.EVENT_OWNER_PLACE_FIELD
+                        },
+                        true, false, data.value.isError
+                    )
+                }
+
+                Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .verticalScroll(rememberScrollState())
+                        .padding(vertical = Dimensions.CREATE_EVENT_VERTICAL_PADDING),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(Dimensions.CREATE_EVENT_HORIZONTAL_SPACING)
                 ) {
-                    data.value.title?.let {
-                        InputField(
-                            stringResource(R.string.event_title),
+
+                    data.value.date?.let {
+                        InputFieldWithIcon(
+                            stringResource(R.string.event_date),
                             it,
-                            { viewmodel.onTitleChange(it) },
-                            modifier = Modifier.semantics {
-                                contentDescription = Constants.EVENT_OWNER_TITLE_FIELD
-                            },
-                            true, false, data.value.isError
-                        )
-                    }
-                    data.value.description?.let {
-                        InputField(
-                            stringResource(R.string.event_desc),
-                            it,
-                            { viewmodel.onDescriptionChange(it) },
-                            modifier = Modifier.semantics {
-                                contentDescription = Constants.EVENT_OWNER_DESC_FIELD
-                            },
-                            true
-                        )
-                    }
-
-                    data.value.city?.let {
-                        InputField(
-                            stringResource(R.string.event_city),
-                            it,
-                            { viewmodel.onCityChange(it) },
-                            modifier = Modifier.semantics {
-                                contentDescription = Constants.EVENT_OWNER_CITY_FIELD
-                            },
-                            true
-                        )
-                    }
-                    data.value.street?.let {
-                        InputField(
-                            stringResource(R.string.event_street),
-                            it,
-                            { viewmodel.onStreetChange(it) },
-                            modifier = Modifier.semantics {
-                                contentDescription = Constants.EVENT_OWNER_STREET_FIELD
-                            },
-                            true
-                        )
-                    }
-
-                    data.value.place?.let {
-                        InputField(
-                            stringResource(R.string.event_place),
-                            it,
-                            { viewmodel.onPlaceChange(it) },
-                            modifier = Modifier.semantics {
-                                contentDescription = Constants.EVENT_OWNER_PLACE_FIELD
-                            },
-                            true,false, data.value.isError
-                        )
-                    }
-
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = Dimensions.CREATE_EVENT_VERTICAL_PADDING),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(Dimensions.CREATE_EVENT_HORIZONTAL_SPACING)
-                    ) {
-
-                        data.value.date?.let {
-                            InputFieldWithIcon(
-                                stringResource(R.string.event_date),
-                                it,
-                                { viewmodel.onDateChange(it) },
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .semantics {
-                                        contentDescription = Constants.EVENT_OWNER_DATE_FIELD
-                                    },
-                                R.drawable.calendaricon,
-                                true,
-                                true,
-                                { viewmodel.setShowDatePicker() }, data.value.isError)
-                        }
-
-
-                        data.value.time?.let {
-                            InputFieldWithIcon(
-                                stringResource(R.string.event_time),
-                                it,
-                                { viewmodel.onTimeChange(it) },
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .semantics {
-                                        contentDescription = Constants.EVENT_OWNER_TIME_FIELD
-                                    },
-                                R.drawable.clockicon,
-                                true,
-                                true,
-                                { viewmodel.setShowTimePicker() }, data.value.isError)
-                        }
-
-                        data.value.errorMessage?.let { ErrorMessage(it) }
-                    }
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = Dimensions.CREATE_EVENT_VERTICAL_PADDING),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(
-                            stringResource(R.string.event_participants),
-                            color = Ivory,
-                            modifier = Modifier.padding(
-                                top = Dimensions.CREATE_EVENT_TEXT_PADDING,
-                                bottom = Dimensions.CREATE_EVENT_TEXT_PADDING
-                            ),
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                        Image(painter = painterResource(id = R.drawable.addevent),
-                            contentDescription = "",
+                            { viewmodel.onDateChange(it) },
                             modifier = Modifier
-                                .clickable { }
+                                .weight(1f)
                                 .semantics {
-                                    contentDescription =
-                                        Constants.EVENT_OWNER_ADD_PARTICIPANTS_BUTTON
-                                })
-                    }
-                    HorizontalDivider(
-                        thickness = Dimensions.CREATE_EVENT_LINE_THICKNESS,
-                        color = Ivory
-                    )
-                    LaunchedEffect(data.value.eventId) {
-                        data.value.eventId?.let {
-                            viewmodel.getParticipants()
-                        }
-                    }
-                    val participants = data.value.participants
-                    participants.forEach { participant ->
-                        ParticipantUI(
-                            participant = participant,
-                            false,
-                            {}
+                                    contentDescription = Constants.EVENT_OWNER_DATE_FIELD
+                                },
+                            R.drawable.calendaricon,
+                            true,
+                            true,
+                            { viewmodel.setShowDatePicker() }, data.value.isError
                         )
                     }
-                    //TODO put participants here, use participantUI component (check event details screen)
-                }
-            }
-            ActionButton(
-                stringResource(R.string.event_edit),
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = Dimensions.ACTION_BUTTON_MEDIUM3)
-                    .semantics {
-                        contentDescription = Constants.EVENT_OWNER_EDIT_BUTTON
-                    },
-                onClick = {
-                    viewmodel.editEvent(
-                        onSuccess = {
 
-                        }
-                            //navController.popBackStack() },
+                    data.value.time?.let {
+                        InputFieldWithIcon(
+                            stringResource(R.string.event_time),
+                            it,
+                            { viewmodel.onTimeChange(it) },
+                            modifier = Modifier
+                                .weight(1f)
+                                .semantics {
+                                    contentDescription = Constants.EVENT_OWNER_TIME_FIELD
+                                },
+                            R.drawable.clockicon,
+                            true,
+                            true,
+                            { viewmodel.setShowTimePicker() }, data.value.isError
+                        )
+                    }
+
+                    data.value.errorMessage?.let { ErrorMessage(it) }
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = Dimensions.CREATE_EVENT_VERTICAL_PADDING),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        stringResource(R.string.event_participants),
+                        color = Ivory,
+                        modifier = Modifier.padding(
+                            top = Dimensions.CREATE_EVENT_TEXT_PADDING,
+                            bottom = Dimensions.CREATE_EVENT_TEXT_PADDING
+                        ),
+                        style = MaterialTheme.typography.bodyMedium
                     )
-                })
-
-
-        }
-
-        if (data.value.showDatePicker) {
-            DatePickerModal(onDateSelected = { date ->
-                date?.let {
-                    viewmodel.onDatePicked(date)
+                    Image(painter = painterResource(id = R.drawable.addevent),
+                        contentDescription = "",
+                        modifier = Modifier
+                            .clickable { }
+                            .semantics {
+                                contentDescription =
+                                    Constants.EVENT_OWNER_ADD_PARTICIPANTS_BUTTON
+                            })
                 }
-            }, onDismiss = { viewmodel.setShowDatePicker() })
-        }
+                HorizontalDivider(
+                    thickness = Dimensions.CREATE_EVENT_LINE_THICKNESS,
+                    color = Ivory
+                )
+                LaunchedEffect(data.value.eventId) {
+                    data.value.eventId?.let {
+                        viewmodel.getParticipants()
+                    }
+                }
+                val participants = data.value.participants
+                participants.forEach { participant ->
+                    ParticipantUI(
+                        participant = participant,
+                        false,
+                        {}
+                    )
+                }
+                //TODO put participants here, use participantUI component (check event details screen)
+            }
+            Column(
+            ) {
+                ActionButton(
+                    stringResource(R.string.event_edit),
+                    modifier = Modifier
+                        .padding(bottom = Dimensions.ACTION_BUTTON_MEDIUM3)
+                        .semantics {
+                            contentDescription = Constants.EVENT_OWNER_EDIT_BUTTON
+                        },
+                    onClick = {
+                        viewmodel.editEvent(
+                            onSuccess = {
 
-        if (data.value.showTimePicker) {
-            TimePickerModal(onConfirm = { time ->
-                viewmodel.onTimePicked(time)
-                viewmodel.setShowTimePicker()
-            }, onDismiss = { viewmodel.setShowTimePicker() })
+                            }
+                        )
+                    })
+            }
+
+            if (data.value.showDatePicker) {
+                DatePickerModal(onDateSelected = { date ->
+                    date?.let {
+                        viewmodel.onDatePicked(date)
+                    }
+                }, onDismiss = { viewmodel.setShowDatePicker() })
+            }
+
+            if (data.value.showTimePicker) {
+                TimePickerModal(onConfirm = { time ->
+                    viewmodel.onTimePicked(time)
+                    viewmodel.setShowTimePicker()
+                }, onDismiss = { viewmodel.setShowTimePicker() })
+            }
         }
     }
 }
