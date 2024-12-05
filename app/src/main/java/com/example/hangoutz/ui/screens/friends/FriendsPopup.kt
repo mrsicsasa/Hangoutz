@@ -32,8 +32,8 @@ import com.example.hangoutz.R
 import com.example.hangoutz.data.models.Friend
 import com.example.hangoutz.ui.components.DisplayUser
 import com.example.hangoutz.ui.components.SearchField
-import com.example.hangoutz.ui.theme.SilverCloud
 import com.example.hangoutz.ui.theme.OrangeButton
+import com.example.hangoutz.ui.theme.SilverCloud
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Dimensions
 import java.util.UUID
@@ -116,7 +116,6 @@ fun FriendsPopup(
                 }
             }
         }
-        // Lista
         LazyColumn(
             modifier = Modifier
                 .padding(
@@ -133,11 +132,11 @@ fun FriendsPopup(
                     isParticipant = isParticipant,
                     isCheckedInitial = participantSelected.any { it.id == user.id },
                     onChange = { onChange(it, user) },
-                    addFriend = {addFriend(user.id)}
-                    )
+                    addFriend = { addFriend(user.id) }
+                )
             }
         }
-        if (true) {
+        if (isCheckList) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top,

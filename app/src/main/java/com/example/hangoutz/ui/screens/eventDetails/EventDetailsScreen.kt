@@ -85,7 +85,7 @@ fun EventDetailsScreen(
         ) {
             Box(
                 modifier = Modifier.padding(
-                    top = innerPadding.calculateTopPadding() + Dimensions.EVENTDETAILS_TOP_PADDING,
+                    top = innerPadding.calculateTopPadding() + Dimensions.EVENT_DETAILS_TOP_PADDING,
                     start = Dimensions.ACTION_BUTTON_MEDIUM2,
                     end = Dimensions.ACTION_BUTTON_MEDIUM2,
                     bottom = scrollableField
