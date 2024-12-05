@@ -1,7 +1,6 @@
 package com.example.hangoutz.data.remote
 
 import com.example.hangoutz.BuildConfig
-import com.example.hangoutz.data.models.AvatarRequest
 import com.example.hangoutz.data.models.Event
 import com.example.hangoutz.data.models.EventCardDPO
 import com.example.hangoutz.data.models.EventRequest
@@ -12,7 +11,7 @@ import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.Query
-import java.util.UUID
+
 
 interface EventAPI {
     @GET("${BuildConfig.REQUEST_URL}events?select=*&order=date")

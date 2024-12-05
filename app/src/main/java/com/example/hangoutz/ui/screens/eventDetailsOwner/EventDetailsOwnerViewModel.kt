@@ -1,6 +1,5 @@
 package com.example.hangoutz.ui.screens.eventDetailsOwner
 
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,7 +10,6 @@ import com.example.hangoutz.domain.repository.InviteRepository
 import com.example.hangoutz.domain.repository.UserRepository
 import com.example.hangoutz.utils.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -56,7 +54,6 @@ class EventDetailsOwnerViewModel @Inject constructor(
     private val inviteRepository: InviteRepository,
     private val userRepository: UserRepository,
     private val eventRepository: EventRepository,
-    @ApplicationContext private val context: Context
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(EventDetailsData())
@@ -97,7 +94,7 @@ class EventDetailsOwnerViewModel @Inject constructor(
         }
     }
 
-    fun formatForDatabase() {
+  private fun formatForDatabase() {
         val inputDate = _uiState.value.date
         val inputTime = _uiState.value.time
 
@@ -231,7 +228,7 @@ class EventDetailsOwnerViewModel @Inject constructor(
         return isValid
     }
 
-    fun validateInputs(): Boolean {
+    private fun validateInputs(): Boolean {
 
         _uiState.value = _uiState.value.copy(
             errorMessage = "",
