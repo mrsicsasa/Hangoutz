@@ -62,10 +62,26 @@ class EventDetailsOwnerViewModel @Inject constructor(
     fun editEvent() {
         if (validateInputs()) {
             _uiState.value = _uiState.value.copy(errorMessage = "")
+    viewModelScope.launch {
+
+        val eventResponse =
+
+
+    }
+
+
+
+
+
         } else {
             _uiState.value = _uiState.value.copy(errorMessage = Constants.ERROR_EMPTY_FIELD)
             Log.e("Error", "Fields marked with * cant be empty")
         }
+
+
+
+
+
     }
     fun deleteEvent() {
         //TODO
