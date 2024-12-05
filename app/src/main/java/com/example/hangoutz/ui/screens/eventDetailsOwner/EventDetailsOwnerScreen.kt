@@ -214,6 +214,7 @@ fun EventOwnerDetailsScreen(
                     }
 
                     data.value.errorMessage?.let { ErrorMessage(it) }
+
                 }
                 Row(
                     modifier = Modifier
