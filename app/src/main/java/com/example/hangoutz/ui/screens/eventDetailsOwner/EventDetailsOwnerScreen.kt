@@ -121,7 +121,7 @@ fun EventOwnerDetailsScreen(
                         },
                         true,
                         false,
-                        data.value.isError
+                        data.value.isTitleError
                     )
                 }
                 data.value.description?.let {
@@ -166,7 +166,7 @@ fun EventOwnerDetailsScreen(
                         },
                         true,
                         false,
-                        data.value.isError
+                        data.value.isPlaceError
                     )
                 }
 
@@ -192,7 +192,7 @@ fun EventOwnerDetailsScreen(
                             true,
                             true,
                             { viewmodel.setShowDatePicker() },
-                            data.value.isError
+                            data.value.isDateError
                         )
                     }
 
@@ -210,13 +210,12 @@ fun EventOwnerDetailsScreen(
                             true,
                             true,
                             { viewmodel.setShowTimePicker() },
-                            data.value.isError
+                            data.value.isTimeError
                         )
                     }
-
-                    data.value.errorMessage?.let { ErrorMessage(it) }
-
                 }
+                data.value.errorMessage?.let { ErrorMessage(it) }
+
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -246,7 +245,7 @@ fun EventOwnerDetailsScreen(
                 )
                 LaunchedEffect(data.value.eventId) {
                     data.value.eventId?.let {
-                        viewmodel.getParticipants()
+                        viewmodel.getData()
                     }
                 }
                 val participants = data.value.participants
@@ -264,8 +263,7 @@ fun EventOwnerDetailsScreen(
                             contentDescription = Constants.EVENT_OWNER_EDIT_BUTTON
                         },
                     onClick = {
-                        viewmodel.editEvent(onSuccess = {
-                        })
+                        viewmodel.updateEvent()
                     })
             }
 

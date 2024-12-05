@@ -34,7 +34,10 @@ data class EventDetailsData(
     var participants: List<User> = emptyList(),
     var showDatePicker: Boolean = false,
     var showTimePicker: Boolean = false,
-    var isError: Boolean = false,
+    var isTitleError: Boolean = false,
+    var isPlaceError: Boolean = false,
+    var isDateError: Boolean = false,
+    var isTimeError: Boolean = false,
     var errorMessage: String? = null
 )
 
@@ -56,15 +59,14 @@ class EventDetailsOwnerViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(eventId = eventId)
     }
 
-    fun editEvent(onSuccess: () -> Unit) {
+    fun editEvent() {
         if (validateInputs()) {
-            onSuccess()
+            _uiState.value = _uiState.value.copy(errorMessage = "")
         } else {
             _uiState.value = _uiState.value.copy(errorMessage = Constants.ERROR_EMPTY_FIELD)
             Log.e("Error", "Fields marked with * cant be empty")
         }
     }
-
     fun deleteEvent() {
         //TODO
     }
@@ -75,7 +77,7 @@ class EventDetailsOwnerViewModel @Inject constructor(
 
     private fun formatDateTime(dateTimeString: String): Pair<String, String> {
 
-        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:ss", Locale.getDefault())
         val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
         val timeFormat = SimpleDateFormat("HH.mm", Locale.getDefault())
 
@@ -86,7 +88,11 @@ class EventDetailsOwnerViewModel @Inject constructor(
         return Pair(formattedDate, formattedTime)
     }
 
-    fun getParticipants() {
+    fun updateEvent() {
+        editEvent()
+    }
+
+    fun getData() {
         viewModelScope.launch {
 
             val eventResponse = _uiState.value.eventId?.let { eventRepository.getEvent(it) }
@@ -133,8 +139,18 @@ class EventDetailsOwnerViewModel @Inject constructor(
     }
 
     fun validateInputs(): Boolean {
-        //TODO - field validation
-        return false
+        var validateTitle: Boolean = _uiState.value.title.trimEnd().trimStart().isEmpty()
+        var validatePlace: Boolean = _uiState.value.place.trimEnd().trimStart().isEmpty()
+        var validateDate: Boolean = _uiState.value.date.trimEnd().trimStart().isEmpty()
+        var validateTime: Boolean = _uiState.value.time.trimEnd().trimStart().isEmpty()
+
+        _uiState.value = _uiState.value.copy(
+            isTitleError = validateTitle,
+            isPlaceError = validatePlace,
+            isDateError = validateDate,
+            isTimeError = validateTime
+        )
+        return !(validateTitle || validatePlace || validateDate || validateTime)
     }
 
     fun onTimePicked(date: Long) {
@@ -168,9 +184,7 @@ class EventDetailsOwnerViewModel @Inject constructor(
     }
 
     fun onTitleChange(title: String) {
-        if (title.trimEnd().trimStart().isEmpty()) {
-            _uiState.value = _uiState.value.copy(errorMessage = Constants.ERROR_EMPTY_FIELD)
-        } else _uiState.value = _uiState.value.copy(title = title)
+        _uiState.value = _uiState.value.copy(title = title, isTitleError = false)
     }
 
     fun onDescriptionChange(description: String) {
@@ -186,23 +200,14 @@ class EventDetailsOwnerViewModel @Inject constructor(
     }
 
     fun onPlaceChange(place: String) {
-        if (place.trimEnd().trimStart().isEmpty()) {
-            _uiState.value = _uiState.value.copy(errorMessage = Constants.ERROR_EMPTY_FIELD)
-        } else
-            _uiState.value = _uiState.value.copy(place = place)
+        _uiState.value = _uiState.value.copy(place = place, isPlaceError = false)
     }
 
     fun onDateChange(date: String) { //TODO Configure datepicker validation
-        if (date.trim().isEmpty()) {
-            _uiState.value = _uiState.value.copy(errorMessage = Constants.ERROR_EMPTY_FIELD)
-        } else
-            _uiState.value = _uiState.value.copy(date = date)
+        _uiState.value = _uiState.value.copy(date = date, isDateError = false)
     }
 
     fun onTimeChange(time: String) { //TODO Configure timepicker validation
-        if (time.trim().isEmpty()) {
-            _uiState.value = _uiState.value.copy(errorMessage = Constants.ERROR_EMPTY_FIELD)
-        } else
-            _uiState.value = _uiState.value.copy(time = time)
+        _uiState.value = _uiState.value.copy(time = time, isTimeError = false)
     }
 }
