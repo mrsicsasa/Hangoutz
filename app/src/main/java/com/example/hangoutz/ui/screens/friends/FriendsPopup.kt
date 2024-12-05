@@ -26,6 +26,7 @@ import com.example.hangoutz.ui.components.DisplayUser
 import com.example.hangoutz.ui.components.SearchField
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Dimensions
+import java.util.UUID
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,6 +37,7 @@ fun FriendsPopup(
     sheetState: SheetState,
     showBottomSheet: (Boolean) -> Unit,
     clearText: () -> Unit,
+    addFriend: (UUID) -> Unit,
     onTextInput: (String) -> Unit
 ) {
     ModalBottomSheet(
@@ -107,7 +109,9 @@ fun FriendsPopup(
                 )
         ) {
             items(userList) { user ->
-                DisplayUser(user.name, user.avatar, isCheckList = false)
+                DisplayUser(user.id, user.name, user.avatar, isCheckList = false) {
+                    addFriend(user.id)
+                }
             }
         }
     }

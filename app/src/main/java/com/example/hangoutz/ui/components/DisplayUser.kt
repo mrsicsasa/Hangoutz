@@ -13,6 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,10 +33,11 @@ import com.example.hangoutz.ui.theme.Orange
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Constants.PROFILE_PHOTO
 import com.example.hangoutz.utils.Dimensions
+import java.util.UUID
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun DisplayUser(name: String, userAvatar: String?, isCheckList: Boolean) {
+fun DisplayUser(id: UUID, name: String, userAvatar: String?, isCheckList: Boolean, addFriend: (UUID) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -78,18 +80,24 @@ fun DisplayUser(name: String, userAvatar: String?, isCheckList: Boolean) {
                 if (isCheckList) {
                     // TODO: MBLINTER-15
                 } else {
-                    Icon(
-                        imageVector = Icons.Filled.Add,
-                        contentDescription = stringResource(R.string.add_friend_button),
-                        tint = Color.White,
-                        modifier = Modifier
-                            .clip(CircleShape)
-                            .background(Orange)
-                            .size(Dimensions.ADD_ICON_SIZE)
-                            .semantics {
-                                contentDescription = Constants.BOTTOM_SHEET_ADD_ICON
-                            }
-                    )
+                    IconButton(
+                        onClick = {
+                            addFriend(id)
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Add,
+                            contentDescription = stringResource(R.string.add_friend_button),
+                            tint = Color.White,
+                            modifier = Modifier
+                                .clip(CircleShape)
+                                .background(Orange)
+                                .size(Dimensions.ADD_ICON_SIZE)
+                                .semantics {
+                                    contentDescription = Constants.BOTTOM_SHEET_ADD_ICON
+                                }
+                        )
+                    }
                 }
             }
         }
