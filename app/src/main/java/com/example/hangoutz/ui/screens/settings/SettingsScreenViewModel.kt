@@ -4,6 +4,8 @@ package com.example.hangoutz.ui.screens.settings
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Log
 import androidx.compose.ui.text.TextRange
@@ -27,6 +29,8 @@ import kotlinx.coroutines.launch
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import java.io.ByteArrayOutputStream
+import java.io.File
 import javax.inject.Inject
 
 
@@ -203,8 +207,18 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun updateAvatarUri(uri: Uri) {
-        _uiState.value = _uiState.value.copy(avatarUri = uri.toString())
-        handleImage(uri)
+
+        viewModelScope.launch {
+            val compressedUri = compressImage(context, uri)
+            if (compressedUri != null) {
+                _uiState.value = _uiState.value.copy(avatarUri = compressedUri.toString())
+                handleImage(compressedUri)
+            } else {
+                Log.e("updateAvatarUri", "Failed to compress image")
+            }
+        }
+
+
     }
 
     fun setAvatarUri() {
@@ -247,4 +261,45 @@ class SettingsViewModel @Inject constructor(
             onPermissionDenied()
         }
     }
+
+    fun compressImage(context: Context, imageUri: Uri): Uri? {
+        try {
+            val inputStream = context.contentResolver.openInputStream(imageUri)
+            val originalBitmap = BitmapFactory.decodeStream(inputStream)
+            inputStream?.close()
+
+            var quality = 100
+
+            var resizedBitmap = originalBitmap
+            do {
+                val byteArrayOutputStream = ByteArrayOutputStream()
+                resizedBitmap.compress(Bitmap.CompressFormat.JPEG, quality, byteArrayOutputStream)
+                val compressedSize = byteArrayOutputStream.size() / 1024
+
+                if (compressedSize > 50) {
+                    val scaleFactor = Math.sqrt(50.0 / compressedSize).toFloat()
+                    val newWidth = (resizedBitmap.width * scaleFactor).toInt()
+                    val newHeight = (resizedBitmap.height * scaleFactor).toInt()
+                    resizedBitmap =
+                        Bitmap.createScaledBitmap(resizedBitmap, newWidth, newHeight, true)
+                } else {
+                    break
+                }
+
+                quality -= 5
+            } while (quality > 0)
+
+            val tempFile =
+                File(context.cacheDir, "compressed_image_${System.currentTimeMillis()}.jpg")
+            val fileOutputStream = tempFile.outputStream()
+            resizedBitmap.compress(Bitmap.CompressFormat.JPEG, quality, fileOutputStream)
+            fileOutputStream.close()
+
+            return Uri.fromFile(tempFile)
+        } catch (e: Exception) {
+            Log.e("compressImageTo50Kb", "Error compressing image: ${e.message}")
+            return null
+        }
+    }
 }
+

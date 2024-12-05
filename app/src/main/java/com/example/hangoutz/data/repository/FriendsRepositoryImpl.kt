@@ -1,11 +1,13 @@
 package com.example.hangoutz.data.repository
 
 import com.example.hangoutz.data.models.Friend
+import com.example.hangoutz.data.models.FriendRequest
 import com.example.hangoutz.data.models.ListOfFriends
 import com.example.hangoutz.data.remote.FriendsAPI
 import com.example.hangoutz.domain.repository.FriendsRepository
 import com.example.hangoutz.utils.Constants
 import retrofit2.Response
+import java.util.UUID
 import javax.inject.Inject
 import kotlin.error
 
@@ -28,7 +30,7 @@ class FriendsRepositoryImpl @Inject constructor(friendsAPI: FriendsAPI) : Friend
     ): Response<List<Friend>> {
         val friendsResponse = api.getFriendIdsFromUserId(id = "eq.$id")
 
-        var stringBuilder = StringBuilder(id).append(",")
+        val stringBuilder = StringBuilder(id).append(",")
         friendsResponse.body()?.forEach { friend ->
             stringBuilder.append(friend.friend_id).append(",")
         }
@@ -38,6 +40,21 @@ class FriendsRepositoryImpl @Inject constructor(friendsAPI: FriendsAPI) : Friend
                     id = "not.in.(${stringBuilder.trim(',')})",
                     startingWith = "ilike.$startingWith*"
                 )
+            }
+        } catch (_: Exception) {
+            error(Constants.GENERIC_ERROR_MESSAGE)
+        }
+        return error(Constants.GENERIC_ERROR_MESSAGE)
+    }
+
+    override suspend fun addFriend(
+        userId: UUID,
+        friendId: UUID
+    ): Response<Unit> {
+        val firstRequest = api.addFriend(FriendRequest(userId, friendId))
+        try {
+            if (firstRequest.isSuccessful) {
+                return api.addFriend(FriendRequest(friendId, userId))
             }
         } catch (_: Exception) {
             error(Constants.GENERIC_ERROR_MESSAGE)

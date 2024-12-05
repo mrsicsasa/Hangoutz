@@ -124,6 +124,9 @@ fun FriendsScreen(viewModel: FriendsViewModel = hiltViewModel()) {
                     viewModel.clearSearchInputPopupScreen()
                 },
                 sheetState = sheetState,
+                addFriend = {
+                    viewModel.addFriend(it)
+                },
                 showBottomSheet = {
                     viewModel.showSheetState(data.value.showBottomSheet)
                 }) { searchQuery ->
