@@ -5,5 +5,4 @@ data class EventRequest (
     val place: String,
     val date: String,
     val time: String
-
     )
