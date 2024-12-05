@@ -39,7 +39,7 @@ fun TimePickerModal(
 
     BasicAlertDialog(
         onDismissRequest = onDismiss,
-        modifier = Modifier.clip(RoundedCornerShape(20.dp))
+        modifier = Modifier.clip(RoundedCornerShape(Dimensions.TIME_PICKER_CORNERS))
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
