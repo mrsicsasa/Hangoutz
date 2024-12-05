@@ -50,8 +50,6 @@ fun CreateEventScreen(
     viewmodel: CreateEventViewModel = hiltViewModel()
 ) {
     val data = viewmodel.uiState.collectAsState()
-    val scrollableField =
-        LocalConfiguration.current.screenHeightDp.dp - (LocalConfiguration.current.screenHeightDp.dp - Dimensions.ACTION_BUTTON_MEDIUM4)
 
     Scaffold(topBar = {
         TopAppBar(

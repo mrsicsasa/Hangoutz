@@ -219,7 +219,6 @@ fun EventsList(
 fun isCurrentUserOwner(context: Context, event: EventCardDPO): Boolean {
     var isOwner: Boolean = false
     val userId = SharedPreferencesManager.getUserId(context)
-    Log.e("comparing", userId + " and " + event.owner.toString())
     if (userId == event.owner.toString()) {
         isOwner = true
     }
