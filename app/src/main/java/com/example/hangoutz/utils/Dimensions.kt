@@ -17,6 +17,19 @@ object Dimensions {
     val FILTER_BAR_TOP_PADDING = 10.dp
     val FLOATING_BUTTON_BORDER = 2.dp
 
+    //Search bar
+    val SEARCH_BAR_HEIGHT = 50.dp
+    val SEARCH_BAR_CLEAR_ICON_SIZE = 20.dp
+    val SEARCH_BAR_BORDER = 1.5.dp
+    val SEARCH_BAR_HORIZONTAL_PADDING = 20.dp
+
+    //Bottom popup sheet
+    val BOTTOM_SHEET_HORIZONTAL_PADDING = 30.dp
+    val BOTTOM_SHEET_VERTICAL_PADDING = 40.dp
+    val BOTTOM_SHEET_USER_PADDING = 10.dp
+    val BOTTOM_SHEET_DIVIDER_WIDTH = 2.dp
+    val BOTTOM_SHEET_NAME_PADING = 12.dp
+    val ADD_ICON_SIZE = 30.dp
 
     //InviteRespondButton
     val INVITE_RESPOND_BUTTON_ROUNDED_RADIUS: Dp = 20.dp
@@ -85,16 +98,21 @@ object Dimensions {
     val ACTION_BUTTON_SMALL2 = 5.dp
 
     //Medium range 20-99.dp
+
     val ACTION_BUTTON_MEDIUM1 = 50.dp
     val ACTION_BUTTON_MEDIUM2 = 30.dp
     val ACTION_BUTTON_MEDIUM3 = 20.dp
-
+    val ACTION_BUTTON_MEDIUM4 = 80.dp
     //Error message
     val ERROR_MESSAGE_PADDING_SMALL = 10.dp
 
     //Input Field
     val INPUT_FIELD_ROUNDED_CORNERS = 20.dp
     val INPUT_FIELD_PADDING_SMALL = 10.dp
+
+    //Friends Popup
+    val POPUP_HEIGHT = 690.dp
+    val POPUP_WIDTH = 350.dp
 
     // Filter bar
 
@@ -122,13 +140,25 @@ object Dimensions {
     val FRIENDS_AVATAR_BORDER = 3.dp
     val FRIENDS_TEXT_START_PADDING = 10.dp
     val FRIENDS_FLOATING_BUTTON_PADDING = 20.dp
-    val FRIENDS_SEARCH_BAR_HEIGHT = 50.dp
-    val FRIENDS_SEARCH_BAR_CLEAR_ICON_SIZE = 20.dp
     val FRIENDS_LOADING_SPINNER_SIZE = 40.dp
     val DISMISS_ICON_END_PADDING = 8.dp
     const val DISMISS_POSITIONAL_THRESHOLD = .25f
     val SPACER_FROM_FRIEND_UP = 10.dp
     val SPACER_FROM_FRIEND_DOWN = 15.dp
+
+    //EVENT DETAILS SCREEN
+    val EVENTDETAILS_TOP_PADDING = 35.dp
+
+    //CREATE EVENT
+    val CREATE_EVENT_HORIZONTAL_SPACING = 35.dp
+    val CREATE_EVENT_VERTICAL_PADDING = 2.dp
+    val CREATE_EVENT_TEXT_PADDING = 15.dp
+    val CREATE_EVENT_LINE_THICKNESS = 2.dp
+    val CREATE_EVENT_ICON_PADDING= 2.dp
+    val CREATE_EVENT_PARTICIPANT = 10.dp
+    val CREATE_EVENT_PARTICIPANT_PHOTO = 40.dp
+    val CREATE_EVENT_TEXT_PADDING2 = 12.dp
+
 }
 
 

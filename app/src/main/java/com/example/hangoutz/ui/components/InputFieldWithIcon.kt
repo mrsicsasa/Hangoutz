@@ -1,5 +1,6 @@
 package com.example.hangoutz.ui.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -10,68 +11,29 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.res.painterResource
 import com.example.hangoutz.ui.theme.Error
 import com.example.hangoutz.ui.theme.Ivory
 import com.example.hangoutz.utils.Dimensions
 
 @Composable
-fun InputField(
-    label: String,
-    value: String,
-    onValueChange: (String) -> (Unit),
-    isError: Boolean,
-    isPassword: Boolean = false,
-    modifier: Modifier = Modifier
-) {
-    OutlinedTextField(
-        value = value,
-        label = { Text(text = label, style = MaterialTheme.typography.bodySmall) },
-        onValueChange = { onValueChange(it) },
-        isError = isError,
-        singleLine = true,
-        shape = RoundedCornerShape(Dimensions.INPUT_FIELD_ROUNDED_CORNERS),
-        visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
-        colors = OutlinedTextFieldDefaults.colors(
-            focusedTextColor = Ivory,
-            unfocusedTextColor = Ivory,
-            cursorColor = Ivory,
-            focusedLabelColor = Ivory,
-            unfocusedLabelColor = Ivory,
-            focusedBorderColor = Ivory,
-            unfocusedBorderColor = Ivory,
-            errorLabelColor = Ivory,
-            errorBorderColor = Error,
-            errorTextColor = Ivory
-        ),
-        textStyle = MaterialTheme.typography.bodySmall.copy(color = Color.White),
-        modifier = modifier
-            .padding(
-                bottom = Dimensions.INPUT_FIELD_PADDING_SMALL,
-                top = Dimensions.INPUT_FIELD_PADDING_SMALL
-            )
-            .fillMaxWidth()
-    )
-}
-
-@Override
-@Composable
-fun InputField(
+fun InputFieldWithIcon(
     label: String,
     value: String,
     onValueChange: (String) -> (Unit),
     modifier: Modifier = Modifier,
+    painterResource: Int,
     isEnabled: Boolean = false,
-    isReadOnly: Boolean = false
+    isReadOnly : Boolean = false,
+    onClick: () -> (Unit)
 ) {
     OutlinedTextField(
         value = value,
         label = { Text(text = label, style = MaterialTheme.typography.bodySmall) },
         onValueChange = { onValueChange(it) },
         singleLine = true,
-       enabled = isEnabled,
-
+        enabled = isEnabled,
+        readOnly = isReadOnly,
         shape = RoundedCornerShape(Dimensions.INPUT_FIELD_ROUNDED_CORNERS),
         colors = OutlinedTextFieldDefaults.colors(
             disabledBorderColor = Ivory,
@@ -88,6 +50,13 @@ fun InputField(
             errorBorderColor = Error,
             errorTextColor = Ivory
         ),
+        trailingIcon = {
+            androidx.compose.material3.Icon(
+                painter = painterResource(id = painterResource),
+                contentDescription = "Icon",
+                tint = Color.White,
+                modifier = Modifier.clickable { onClick() }
+            )},
         textStyle = MaterialTheme.typography.bodySmall.copy(color = Color.White),
         modifier = modifier
             .padding(

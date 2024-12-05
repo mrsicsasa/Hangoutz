@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import com.example.hangoutz.ui.screens.createEvent.CreateEventScreen
 import com.example.hangoutz.ui.screens.eventDetailsOwner.EventOwnerDetailsScreen
 import com.example.hangoutz.ui.screens.eventDetails.EventDetailsScreen
+import com.example.hangoutz.ui.screens.events.MyEventsScreen
 import com.example.hangoutz.ui.screens.invite.InvitedScreen
 import com.example.hangoutz.ui.screens.login.LoginScreen
 import com.example.hangoutz.ui.screens.main.MainScreen
@@ -34,6 +35,9 @@ fun AppNavHost(
         composable(NavigationItem.Login.route) {
             LoginScreen(navController)
         }
+        composable(NavigationItem.Events.route) {
+            MyEventsScreen(navController)
+        }
         composable(NavigationItem.Register.route) {
             RegisterScreen(navController)
         }
@@ -44,14 +48,21 @@ fun AppNavHost(
             InvitedScreen(navController)
         }
         composable(NavigationItem.CreateEvent.route) {
-            CreateEventScreen(navController)
+                CreateEventScreen()
         }
-        composable(NavigationItem.EventDetails.route) {
-            EventDetailsScreen(navController)
+        composable(NavigationItem.EventDetailsOwner.route) { backStackEntry ->
+            val eventId = backStackEntry.arguments?.getString("eventId")
+            if (eventId != null) {
+                EventOwnerDetailsScreen(navController)
+            }
         }
-        composable(NavigationItem.EventDetailsOwner.route) {
-            EventOwnerDetailsScreen(navController)
+        composable(NavigationItem.EventDetails.route) { backStackEntry ->
+            val eventId = backStackEntry.arguments?.getString("eventId")
+            if (eventId != null) {
+                EventDetailsScreen(navController)
+            }
+        }
         }
     }
-}
+
 

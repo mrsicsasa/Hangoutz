@@ -19,7 +19,7 @@ import com.example.hangoutz.utils.Dimensions
 @Composable
 fun FloatingPlusButton(modifier: Modifier, onClickAction: () -> (Unit)) {
     FloatingActionButton(
-        onClick = { onClickAction },
+        onClick =  onClickAction ,
         modifier = modifier
             .padding(Dimensions.FRIENDS_FLOATING_BUTTON_PADDING)
             .border(Dimensions.FLOATING_BUTTON_BORDER, PurpleDark, CircleShape)

@@ -76,6 +76,7 @@ object Constants {
     //Test tags settings screen
     const val SETTINGS_NAME_FIELD_TAG = "settingsNameField"
     const val SETTINGS_NAME_ICON_TAG = "settingsNameIcon"
+    const val SETTINGS_NAME_VALIDATOR_ICON_TAG = "settingsNameValidatorIcon"
     const val SETTINGS_USER_PHOTO_TAG = "settingsUserPhoto"
     const val SETTINGS_BACKGROUND_LINES_TAG = "settingsBackgroundLines"
     const val SETTINGS_EMAIL_FIELD_TAG = "settingsEmailField"
@@ -84,6 +85,13 @@ object Constants {
 
     //Settings page
     const val PROFILE_PHOTO = "Profile Photo"
+    const val SETTINGS_CAMERA = "Capture from Camera"
+    const val SETTINGS_GALLERY = "Pick from gallery"
+    const val SETTINGS_ACTION = "Choose Action"
+    const val RANDOM_STRING_LENGTH = 3
+    const val JPG = ".jpg"
+    const val TEMPIMAGE = "_image"
+    const val IMAGEDIRECTORY = "MyAppImages"
 
     //BottomNavigation bar
     const val BOTTOM_NAVIGATION_BAR = "bottomNavigationBar"
@@ -97,7 +105,7 @@ object Constants {
 
     //Validator strings
     const val AT_SIGN = "@"
-    const val VALID_EMAIL = "@gmail.com"
+    const val VALID_EMAIL = "^[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.com$"
     const val CONTAINS_DIGIT = ".*\\d.*"
 
     //RegisterViewModel
@@ -129,16 +137,68 @@ object Constants {
 
     //FriendsViewModel
     const val MIN_SEARCH_LENGTH = 3
-    const val FRIENDS_PROFILE_PICTURE_DESCRIPTION = "Author's profile photo"
-    const val FRIENDS_SEARCH_BAR_CLEAR_DESCRIPTION = "Clear search bar icon"
 
     //Friends tags
     const val FRIENDS_BACKGROUND_BOX = "friendsBackgroundBox"
     const val FRIENDS_LIST_ELEMENT = "friendsListElement"
+    const val FRIENDS_PROFILE_PICTURE_DESCRIPTION = "Author's profile photo"
     const val FRIENDS_LIST_PHOTO = "friendsListPhoto"
     const val FRIENDS_LIST_NAME = "friendsListName"
     const val FRIENDS_ADD_BUTTON = "friendsAddButton"
+
+    //TEST TAGS - CREATE EVENT
+    const val CREATE_EVENT_TITLE_FIELD = "createEventTitleField"
+    const val CREATE_EVENT_DESC_FIELD = "createEventDescriptionField"
+    const val CREATE_EVENT_CITY_FIELD = "createEventCityField"
+    const val CREATE_EVENT_STREET_FIELD = "createEventStreetField"
+    const val CREATE_EVENT_PLACE_FIELD = "createEventPlaceField"
+    const val CREATE_EVENT_DATE_FIELD = "createEventDateField"
+    const val CREATE_EVENT_TIME_FIELD = "createEventTimeField"
+    const val CREATE_EVENT_ADD_PARTICIPANTS_BUTTON = "createEventAddParticipantsButton"
+    const val CREATE_EVENT_CREATE_BUTTON = "createEventCreateButton"
+    const val CREATE_EVENT_EDIT_BUTTON = "createEventCreateButton"
+
+    //FriendsViewModel
+    const val FRIENDS_SEARCH_BAR_CLEAR_DESCRIPTION = "Clear search bar icon"
+
+    //Friends tags
     const val FRIENDS_SEARCH_BAR = "friendsSearchBar"
     const val FRIENDS_LOADING_SPINNER = "friendsLoadingSpinner"
     const val NO_FRIENDS_AVAILABLE_MESSAGE = "noFriendsAvailableMessage"
+
+    //Bottom sheet
+    const val BOTTOM_SHEET_TAG = "bottomSheet"
+    const val BOTTOM_SHEET_SEARCH = "bottomSheetSearch"
+    const val BOTTOM_SHEET_PROFILE_PICTURE = "bottomSheetProfilePicture"
+    const val BOTTOM_SHEET_USERNAME = "bottomSheetUsername"
+    const val BOTTOM_SHEET_ADD_ICON = "bottomSheetAddIcon"
+    const val BOTTOM_SHEET_LOADING_SPINNER = "bottomSheetLoadingSpinner"
+    const val NO_USERS_FOUND_MESSAGE = "noFriendsFoundMessage"
+    const val BOTTOM_SHEET_SEARCH_MESSAGE = "bottomSheetSearchMessage"
+
+    //Event details test tags
+    const val PARTICIPANT_ICON_TAG = "participantIconTag"
+    const val PARTICIPANT_IMAGE = "participantImage"
+    const val PARTICIPANT_DIVIDER = "participantDivider"
+
+    const val EVENT_DETAILS_TITLE  = "eventDetailsTitle"
+    const val EVENT_DETAILS_DESC  = "eventDetailsDescription"
+    const val EVENT_DETAILS_PLACE  = "eventDetailsPlace"
+    const val EVENT_DETAILS_STREET  = "eventDetailsStreet"
+    const val EVENT_DETAILS_CITY  = "eventDetailsCity"
+    const val EVENT_DETAILS_DATE = "eventDetailsDate"
+    const val EVENT_DETAILS_TIME  = "eventDetailsTime"
+    const val EVENT_DETAILS_LEAVE_EVENT_BUTTON  = "eventDetailsLeaveEventButton"
+
+    const val EVENT_OWNER_TITLE_FIELD = "eventOwnerTitleField"
+    const val EVENT_OWNER_DESC_FIELD = "eventOwnerDescriptionField"
+    const val EVENT_OWNER_CITY_FIELD = "eventOwnerCityField"
+    const val EVENT_OWNER_STREET_FIELD = "eventOwnerStreetField"
+    const val EVENT_OWNER_PLACE_FIELD = "eventOwnerPlaceField"
+    const val EVENT_OWNER_DATE_FIELD = "eventOwnerDateField"
+    const val EVENT_OWNER_TIME_FIELD = "eventOwnerTimeField"
+    const val EVENT_OWNER_ADD_PARTICIPANTS_BUTTON = "eventOwnerAddParticipantsButton"
+    const val EVENT_OWNER_CREATE_BUTTON = "eventOwnerCreateButton"
+    const val EVENT_OWNER_EDIT_BUTTON = "eventOwnerCreateButton"
+
 }

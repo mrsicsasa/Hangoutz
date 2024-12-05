@@ -1,6 +1,8 @@
 package com.example.hangoutz.data.remote
 
 import com.example.hangoutz.BuildConfig
+import com.example.hangoutz.data.models.Friend
+import com.example.hangoutz.data.models.FriendId
 import com.example.hangoutz.data.models.ListOfFriends
 import retrofit2.Response
 import retrofit2.http.DELETE
@@ -18,4 +20,15 @@ interface FriendsAPI {
         @Query("user_id") userId: String,
         @Query("friend_id") friendId: String
     ): Response<Unit>
+
+    @GET("${BuildConfig.REQUEST_URL}friends?select=friend_id")
+    suspend fun getFriendIdsFromUserId(
+        @Query("user_id") id: String,
+    ): Response<List<FriendId>>
+
+    @GET("${BuildConfig.REQUEST_URL}users?select=name,avatar")
+    suspend fun getNonFriendsFromUserId(
+        @Query("id") id: String,
+        @Query("name") startingWith: String
+    ): Response<List<Friend>>
 }
