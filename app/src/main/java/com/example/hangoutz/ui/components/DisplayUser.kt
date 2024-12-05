@@ -1,6 +1,5 @@
 package com.example.hangoutz.ui.components
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -15,6 +14,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -46,9 +46,11 @@ fun DisplayUser(
     isCheckList: Boolean,
     isParticipant: Boolean = false,
     isCheckedInitial: Boolean = false,
-    onChange: (Boolean) -> Unit = {}
+    onChange: (Boolean) -> Unit = {},
+    addFriend: () -> Unit
 ) {
     val isChecked = remember { mutableStateOf(isCheckedInitial) }
+
 
     Column(
         modifier = Modifier
@@ -110,6 +112,27 @@ fun DisplayUser(
                                 }
                         )
                     }
+                if (isCheckList) {
+                    // TODO: MBLINTER-15
+                } else {
+                    IconButton(
+                        onClick = {
+                            addFriend()
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Add,
+                            contentDescription = stringResource(R.string.add_friend_button),
+                            tint = Color.White,
+                            modifier = Modifier
+                                .clip(CircleShape)
+                                .background(Orange)
+                                .size(Dimensions.ADD_ICON_SIZE)
+                                .semantics {
+                                    contentDescription = Constants.BOTTOM_SHEET_ADD_ICON
+                                }
+                        )
+                    }
                 }
             }
         }
@@ -119,7 +142,7 @@ fun DisplayUser(
         )
     }
     LaunchedEffect(isChecked.value) {
-        Log.d("LAUNCH","-------------")
         onChange(isChecked.value)
     }
 }
+    }

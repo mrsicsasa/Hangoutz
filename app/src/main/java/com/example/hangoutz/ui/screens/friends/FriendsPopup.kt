@@ -32,9 +32,11 @@ import com.example.hangoutz.R
 import com.example.hangoutz.data.models.Friend
 import com.example.hangoutz.ui.components.DisplayUser
 import com.example.hangoutz.ui.components.SearchField
+import com.example.hangoutz.ui.theme.SilverCloud
 import com.example.hangoutz.ui.theme.OrangeButton
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Dimensions
+import java.util.UUID
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -45,6 +47,7 @@ fun FriendsPopup(
     sheetState: SheetState,
     showBottomSheet: (Boolean) -> Unit,
     clearText: () -> Unit,
+    addFriend: (UUID) -> Unit,
     onChange: (isChecked: Boolean, user: Friend) -> Unit = { _: Boolean, _: Friend -> },
     isParticipant: Boolean = false,
     onAdd: () -> Unit = {},
@@ -57,6 +60,7 @@ fun FriendsPopup(
             showBottomSheet(false)
             clearText()
         },
+        containerColor = SilverCloud,
         modifier = Modifier
             .height(Dimensions.POPUP_HEIGHT)
             .width(Dimensions.POPUP_WIDTH)
