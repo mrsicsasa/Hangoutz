@@ -55,6 +55,7 @@ object Constants {
     const val ANIMATION_INDICATOR_OFFSET = "animationIndicatorOffset"
     const val INVITED_TAB_INDEX = 1
     const val NUMBER_OF_INVITES_DEFAULT_VALUE = 0
+    const val EVENT_EDITED_SUCCESSFULLY = "Event Edited Successfully"
 
     //EventCard
     const val EVENT_CARD = "eventCard"

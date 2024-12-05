@@ -1,5 +1,6 @@
 package com.example.hangoutz.ui.screens.eventDetailsOwner
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -28,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -52,6 +54,7 @@ import com.example.hangoutz.utils.Dimensions
 fun EventOwnerDetailsScreen(
     navController: NavController, viewmodel: EventDetailsOwnerViewModel = hiltViewModel()
 ) {
+    val context = LocalContext.current
     val data = viewmodel.uiState.collectAsState()
     viewmodel.getEventIdFromController(navController)
 
@@ -268,6 +271,7 @@ fun EventOwnerDetailsScreen(
                         },
                     onClick = {
                         viewmodel.editEvent(onSuccess = {
+                            Toast.makeText(context, Constants.EVENT_EDITED_SUCCESSFULLY, Toast.LENGTH_SHORT).show()
                             navController.popBackStack()
                         })
                     })
