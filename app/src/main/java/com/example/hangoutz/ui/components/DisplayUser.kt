@@ -1,5 +1,6 @@
 package com.example.hangoutz.ui.components
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -11,11 +12,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,7 +40,15 @@ import com.example.hangoutz.utils.Dimensions
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun DisplayUser(name: String, userAvatar: String?, isCheckList: Boolean) {
+fun DisplayUser(
+    name: String,
+    userAvatar: String?,
+    isCheckList: Boolean,
+    isParticipant: Boolean = false,
+    onChange: (Boolean) -> Unit = {}
+) {
+    val isChecked = remember { mutableStateOf(false) }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -43,7 +56,8 @@ fun DisplayUser(name: String, userAvatar: String?, isCheckList: Boolean) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(vertical = Dimensions.BOTTOM_SHEET_USER_PADDING)
         ) {
             // Left side items
@@ -75,21 +89,26 @@ fun DisplayUser(name: String, userAvatar: String?, isCheckList: Boolean) {
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                if (isCheckList) {
-                    // TODO: MBLINTER-15
-                } else {
-                    Icon(
-                        imageVector = Icons.Filled.Add,
-                        contentDescription = stringResource(R.string.add_friend_button),
-                        tint = Color.White,
-                        modifier = Modifier
-                            .clip(CircleShape)
-                            .background(Orange)
-                            .size(Dimensions.ADD_ICON_SIZE)
-                            .semantics {
-                                contentDescription = Constants.BOTTOM_SHEET_ADD_ICON
-                            }
-                    )
+                if(!isParticipant) {
+                    if (isCheckList) {
+                        Checkbox(
+                            checked = isChecked.value,
+                            onCheckedChange = { isChecked.value = !isChecked.value }
+                        )
+                    } else {
+                        Icon(
+                            imageVector = Icons.Filled.Add,
+                            contentDescription = stringResource(R.string.add_friend_button),
+                            tint = Color.White,
+                            modifier = Modifier
+                                .clip(CircleShape)
+                                .background(Orange)
+                                .size(Dimensions.ADD_ICON_SIZE)
+                                .semantics {
+                                    contentDescription = Constants.BOTTOM_SHEET_ADD_ICON
+                                }
+                        )
+                    }
                 }
             }
         }
@@ -97,5 +116,9 @@ fun DisplayUser(name: String, userAvatar: String?, isCheckList: Boolean) {
             color = Color.Black,
             thickness = Dimensions.BOTTOM_SHEET_DIVIDER_WIDTH
         )
+    }
+    LaunchedEffect(isChecked.value) {
+        Log.d("LAUNCH","-------------")
+        onChange(isChecked.value)
     }
 }

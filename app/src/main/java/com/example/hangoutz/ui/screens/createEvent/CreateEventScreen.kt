@@ -1,7 +1,5 @@
 package com.example.hangoutz.ui.screens.createEvent
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -22,6 +21,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,6 +43,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.hangoutz.R
 import com.example.hangoutz.ui.components.ActionButton
 import com.example.hangoutz.ui.components.DatePickerModal
+import com.example.hangoutz.ui.components.DisplayUser
 import com.example.hangoutz.ui.components.InputField
 import com.example.hangoutz.ui.components.InputFieldWithIcon
 import com.example.hangoutz.ui.components.TimePickerModal
@@ -60,10 +61,11 @@ fun CreateEventScreen(
     viewmodel: CreateEventViewModel = hiltViewModel()
 ) {
     val data = viewmodel.uiState.collectAsState()
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
     var isBottomSheetVisible by remember { mutableStateOf(false) }
-    val scrollableField = LocalConfiguration.current.screenHeightDp.dp - (LocalConfiguration.current.screenHeightDp.dp - Dimensions.ACTION_BUTTON_MEDIUM4)
+    val scrollableField =
+        LocalConfiguration.current.screenHeightDp.dp - (LocalConfiguration.current.screenHeightDp.dp - Dimensions.ACTION_BUTTON_MEDIUM4)
 
     Scaffold(topBar = {
         TopAppBar(
@@ -86,7 +88,7 @@ fun CreateEventScreen(
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = TopBarBackgroundColor
             ),
-            )
+        )
     }) { innerPadding ->
 
         Box(
@@ -209,20 +211,17 @@ fun CreateEventScreen(
                             ),
                             style = MaterialTheme.typography.bodyMedium
                         )
-                        Image(painter = painterResource(id = R.drawable.addevent),
-                            contentDescription = "",
-                            modifier = Modifier
-                                .clickable {scope.launch { sheetState.show() }}
-                                .semantics {
-                                    contentDescription =
-                                        Constants.CREATE_EVENT_ADD_PARTICIPANTS_BUTTON
-                                })
+                        Button(onClick = { scope.launch { sheetState.show() } }) { Text("da") }
                     }
 
                     HorizontalDivider(
                         thickness = Dimensions.CREATE_EVENT_LINE_THICKNESS, color = Ivory
                     )
-                    //TODO put participants here, use participantUI component (check event details screen)
+                    Column {
+                        data.value.participants.forEach {
+                            DisplayUser(it.name, it.avatar, isCheckList = true, isParticipant = true)
+                        }
+                    }
                 }
             }
             ActionButton(stringResource(R.string.event_create),
@@ -235,21 +234,30 @@ fun CreateEventScreen(
                 onClick = {
                     viewmodel.createEvent()
                 })
-            if (isBottomSheetVisible) {
+            if (sheetState.isVisible) {
                 FriendsPopup(
-                    userList = emptyList(),
+                    userList = data.value.listOfFriends,
                     searchQuery = "",
-                    isLoading = false,
+                    isLoading = data.value.isLoading,
                     clearText = {
-                      //  viewModel.clearSearchInputPopupScreen()
+                        //  viewModel.clearSearchInputPopupScreen()
                     },
                     sheetState = sheetState,
                     showBottomSheet = { isShow ->
-                        isBottomSheetVisible = isShow
-                    }) { searchQuery ->
-                 //   viewModel.showSheetState(true)
-                  //  viewModel.onPopupSearchInput(searchQuery)
-                }
+                    },
+                    onTextInput = { searchQuery ->
+                        //   viewModel.showSheetState(true)
+                        //  viewModel.onPopupSearchInput(searchQuery)}
+                    },
+                    isParticipant = true,
+                    onChange = { isChecked, user ->
+                        if (isChecked) {
+                            viewmodel.addParticipant(user)
+                        } else {
+                            viewmodel.removeParticipant(user)
+                        }
+                    }
+                )
             }
         }
     }
@@ -267,5 +275,8 @@ fun CreateEventScreen(
             viewmodel.onTimePicked(time)
             viewmodel.setShowTimePicker()
         }, onDismiss = { viewmodel.setShowTimePicker() })
+    }
+    LaunchedEffect(sheetState.isVisible) {
+        viewmodel.getFriends()
     }
 }

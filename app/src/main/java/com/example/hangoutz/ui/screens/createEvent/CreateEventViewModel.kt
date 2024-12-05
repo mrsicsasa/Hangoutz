@@ -1,15 +1,24 @@
 package com.example.hangoutz.ui.screens.createEvent
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.hangoutz.data.local.SharedPreferencesManager
+import com.example.hangoutz.data.models.Friend
 import com.example.hangoutz.data.models.User
+import com.example.hangoutz.domain.repository.FriendsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.util.UUID
 import javax.inject.Inject
 
 
@@ -17,14 +26,49 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CreateEventViewModel @Inject constructor(
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    private val friendsRepository: FriendsRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(CreateEventState())
     val uiState: StateFlow<CreateEventState> = _uiState
-
+    init {
+        getFriends()
+    }
     fun createEvent() {
         //TODO
+    }
+    fun getFriends() {
+        _uiState.value = _uiState.value.copy(
+            listOfFriends = emptyList(),
+            isLoading = true
+        )
+        viewModelScope.launch {
+            val response = withContext(Dispatchers.IO) {
+                SharedPreferencesManager.getUserId(context)?.let {
+                    MutableStateFlow(friendsRepository.getFriendsFromUserId(it))
+                }
+            }
+            response?.value?.let {
+                if (it.isSuccessful) {
+                    response.value.body()?.let {
+                        _uiState.value =
+                            _uiState.value.copy(listOfFriends = it.sortedBy { it.users.name.uppercase() }.map { it.users }, isLoading = false)
+                    }
+                }
+            }
+        }
+    }
+    fun addParticipant(user: Friend) {
+        Log.d("DODAVANJE","------------------")
+        _uiState.value = _uiState.value.copy(
+            participants = _uiState.value.participants + user
+        )
+    }
+    fun removeParticipant(user: Friend){
+        _uiState.value = _uiState.value.copy(
+            participants =  _uiState.value.participants - user
+        )
     }
 
     fun onTimePicked(date: Long) {

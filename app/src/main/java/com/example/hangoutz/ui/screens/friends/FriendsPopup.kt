@@ -1,13 +1,20 @@
 package com.example.hangoutz.ui.screens.friends
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
@@ -20,6 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.unit.dp
 import com.example.hangoutz.R
 import com.example.hangoutz.data.models.Friend
 import com.example.hangoutz.ui.components.DisplayUser
@@ -36,7 +44,9 @@ fun FriendsPopup(
     sheetState: SheetState,
     showBottomSheet: (Boolean) -> Unit,
     clearText: () -> Unit,
-    onTextInput: (String) -> Unit
+    onChange: (isChecked: Boolean, user: Friend) -> Unit = { b: Boolean, friend: Friend -> },
+    isParticipant: Boolean = false,
+    onTextInput: (String) -> Unit,
 ) {
     ModalBottomSheet(
         sheetState = sheetState,
@@ -105,9 +115,43 @@ fun FriendsPopup(
                     horizontal = Dimensions.BOTTOM_SHEET_HORIZONTAL_PADDING,
                     vertical = Dimensions.BOTTOM_SHEET_VERTICAL_PADDING
                 )
+                .fillMaxHeight(if(isParticipant) 0.85f else 1f)
         ) {
             items(userList) { user ->
-                DisplayUser(user.name, user.avatar, isCheckList = false)
+                DisplayUser(
+                    user.name,
+                    user.avatar,
+                    isCheckList = true,
+                    onChange = { onChange(it, user) })
+            }
+        }
+        if(isParticipant) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Top,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+                    .padding(bottom = 10.dp)
+            ) {
+                Button(
+                    onClick = {},
+                    modifier = Modifier
+                        .padding(3.dp)
+                        .width(188.dp)
+                        .height(53.dp)
+                    ,
+                    colors = ButtonColors(
+                        containerColor = Color(0xFFDDAE74),
+                        contentColor = Color.Black,
+                        disabledContainerColor = Color.Gray,
+                        disabledContentColor = Color.Gray
+                    )
+                ) {
+                    Text(
+                        "Add"
+                    )
+                }
             }
         }
     }
