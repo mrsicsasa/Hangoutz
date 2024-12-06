@@ -42,7 +42,6 @@ import com.example.hangoutz.ui.components.InputFieldWithIcon
 import com.example.hangoutz.ui.components.TimePickerModal
 import com.example.hangoutz.ui.screens.friends.FriendsPopup
 import com.example.hangoutz.ui.theme.Ivory
-import com.example.hangoutz.ui.theme.OrangeButton
 import com.example.hangoutz.ui.theme.TopBarBackgroundColor
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Dimensions
@@ -95,7 +94,7 @@ fun CreateEventScreen(
             Column(
                 modifier = Modifier
                     .padding(
-                        top = innerPadding.calculateTopPadding() + Dimensions.EVENTDETAILS_TOP_PADDING,
+                        top = innerPadding.calculateTopPadding() + Dimensions.EVENT_DETAILS_TOP_PADDING,
                         start = Dimensions.ACTION_BUTTON_MEDIUM2,
                         end = Dimensions.ACTION_BUTTON_MEDIUM2,
                         bottom = Dimensions.ACTION_BUTTON_SMALL1
@@ -218,9 +217,9 @@ fun CreateEventScreen(
                 )
                 //TODO put participants here, use participantUI component (check event details screen)
             }
-        }
-        Column(
-        ) {
+
+            Column(
+            ) {
             ActionButton(stringResource(R.string.event_create),
                 modifier = Modifier
                     .padding(bottom = Dimensions.ACTION_BUTTON_MEDIUM3)
@@ -277,5 +276,5 @@ fun CreateEventScreen(
             viewmodel.getFriends()
 
         }
-    }
+}
 }
