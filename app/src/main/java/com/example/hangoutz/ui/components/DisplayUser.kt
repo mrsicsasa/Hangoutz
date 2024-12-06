@@ -3,6 +3,7 @@ package com.example.hangoutz.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,6 +12,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.outlined.Clear
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -30,7 +33,9 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.hangoutz.BuildConfig
 import com.example.hangoutz.R
+import com.example.hangoutz.ui.theme.DeleteColor
 import com.example.hangoutz.ui.theme.Orange
+import com.example.hangoutz.ui.theme.OrangeButton
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Constants.PROFILE_PHOTO
 import com.example.hangoutz.utils.Dimensions
@@ -44,7 +49,8 @@ fun DisplayUser(
     isParticipant: Boolean = false,
     isCheckedInitial: Boolean = false,
     onChange: (Boolean) -> Unit = {},
-    addFriend: () -> Unit = {}
+    addFriend: () -> Unit = {},
+    onRemove: () -> Unit = {}
 ) {
     Column(
         modifier = Modifier
@@ -81,40 +87,56 @@ fun DisplayUser(
                         }
                 )
             }
-            Row(
-                verticalAlignment = Alignment.CenterVertically
+            Box(
+                contentAlignment = Alignment.CenterVertically,
+                modifier = Modifier.background(Color.Green)
             ) {
-                if (!isParticipant) {
-                    if (isCheckList) {
-                        Checkbox(
-                            checked = isCheckedInitial,
-                            onCheckedChange = { onChange(!isCheckedInitial) }
-                        )
-                    } else {
-                        IconButton(
-                            onClick = {
-                                addFriend()
-                            }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.Add,
-                                contentDescription = stringResource(R.string.add_friend_button),
-                                tint = Color.White,
-                                modifier = Modifier
-                                    .clip(CircleShape)
-                                    .background(Orange)
-                                    .size(Dimensions.ADD_ICON_SIZE)
-                                    .semantics {
-                                        contentDescription = Constants.BOTTOM_SHEET_ADD_ICON
-                                    }
-                            )
+                if (isCheckList) {
+                    Checkbox(
+                        checked = isCheckedInitial,
+                        onCheckedChange = { onChange(!isCheckedInitial) }
+                    )
+
+                } else if (isParticipant) {
+                    IconButton(
+                        onClick = {
+                            onRemove()
                         }
+                    ) {
+                        Icon(
+                            Icons.Outlined.Clear,
+                            contentDescription = stringResource(R.string.remove_participant_icon),
+                            tint = DeleteColor,
+                            modifier = Modifier
+                                .align(Alignment.CenterEnd)
+                                .size(Dimensions.ADD_ICON_SIZE)
+                        )
+                    }
+
+                } else {
+                    IconButton(
+                        onClick = {
+                            addFriend()
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Add,
+                            contentDescription = stringResource(R.string.add_friend_button),
+                            tint = Color.White,
+                            modifier = Modifier
+                                .clip(CircleShape)
+                                .background(Orange)
+                                .size(Dimensions.ADD_ICON_SIZE)
+                                .semantics {
+                                    contentDescription = Constants.BOTTOM_SHEET_ADD_ICON
+                                }
+                        )
                     }
                 }
             }
         }
         HorizontalDivider(
-            color = Color.Black,
+            color = if (isParticipant) OrangeButton else Color.Black,
             thickness = Dimensions.BOTTOM_SHEET_DIVIDER_WIDTH
         )
     }

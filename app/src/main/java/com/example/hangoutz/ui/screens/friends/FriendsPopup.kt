@@ -25,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -56,6 +57,7 @@ fun FriendsPopup(
     isCheckList: Boolean = false,
     onAdd: () -> Unit = {},
     participantSelected: List<Friend> = emptyList(),
+    onRemove: (Friend) -> Unit = {},
     onTextInput: (String) -> Unit,
 ) {
     ModalBottomSheet(
@@ -97,7 +99,7 @@ fun FriendsPopup(
                             contentDescription = Constants.BOTTOM_SHEET_LOADING_SPINNER
                         })
             }
-        } else if (isCheckList && searchQuery.length < 3) {
+        } else if (isCheckList && searchQuery.length < Constants.MIN_SEARCH_LENGTH) {
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier.fillMaxSize()
@@ -106,8 +108,8 @@ fun FriendsPopup(
                     painter = painterResource(id = R.drawable.ic_search),
                     contentDescription = stringResource(R.string.search_icon),
                     modifier = Modifier
-                        .fillMaxSize(),
-                    contentScale =
+                        .size(40.dp),
+                    contentScale = ContentScale.Fit
                 )
             }
 
@@ -149,7 +151,8 @@ fun FriendsPopup(
                     isParticipant = isParticipant,
                     isCheckedInitial = participantSelected.any { it.id == user.id },
                     onChange = { onChange(it, user) },
-                    addFriend = { addFriend(user.id) }
+                    addFriend = { addFriend(user.id) },
+                    onRemove = {onRemove(user)}
                 )
             }
         }

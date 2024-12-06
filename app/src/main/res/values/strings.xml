@@ -50,4 +50,6 @@
     <string name="leave_event">Leave Event</string>
     <string name="add">Add</string>
     <string name="search_icon">search icon</string>
+    <string name="remove_participant_icon">remove participant icon</string>
+    <string name="has_been_removed">%1$s has been removed</string>
 </resources>

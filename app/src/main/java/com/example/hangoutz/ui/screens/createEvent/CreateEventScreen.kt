@@ -1,5 +1,6 @@
 package com.example.hangoutz.ui.screens.createEvent
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -22,7 +23,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -31,6 +31,7 @@ import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -46,6 +47,7 @@ import com.example.hangoutz.ui.components.InputFieldWithIcon
 import com.example.hangoutz.ui.components.TimePickerModal
 import com.example.hangoutz.ui.screens.friends.FriendsPopup
 import com.example.hangoutz.ui.theme.Ivory
+import com.example.hangoutz.ui.theme.OrangeButton
 import com.example.hangoutz.ui.theme.TopBarBackgroundColor
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Dimensions
@@ -60,6 +62,7 @@ fun CreateEventScreen(
     val data = viewmodel.uiState.collectAsState()
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
     val scrollableField =
         LocalConfiguration.current.screenHeightDp.dp - (LocalConfiguration.current.screenHeightDp.dp - Dimensions.ACTION_BUTTON_MEDIUM4)
 
@@ -219,12 +222,20 @@ fun CreateEventScreen(
                         }
                     }
                     HorizontalDivider(
-                        thickness = Dimensions.CREATE_EVENT_LINE_THICKNESS, color = Ivory
+                        thickness = Dimensions.CREATE_EVENT_LINE_THICKNESS, color = OrangeButton
                     )
-                    Column {
+                    Column(modifier = Modifier.fillMaxWidth()) {
                         data.value.participants.forEach {
                             DisplayUser(
-                                it.name, it.avatar, isCheckList = true, isParticipant = true
+                                it.name,
+                                it.avatar,
+                                isCheckList = false,
+                                isParticipant = true,
+                                onRemove = {
+                                    viewmodel.removeSelectedParticipant(friend = it)
+                                    Toast.makeText(context,
+                                        context.getString(R.string.has_been_removed, it.name),Toast.LENGTH_SHORT ).show()
+                                }
                             )
                         }
                     }
@@ -244,7 +255,7 @@ fun CreateEventScreen(
                 FriendsPopup(userList = data.value.listOfFriends,
                     searchQuery = data.value.searchQuery,
                     isLoading = data.value.isLoading,
-                    clearText = {viewmodel.clearSearchQuery()},
+                    clearText = { viewmodel.clearSearchQuery() },
                     sheetState = sheetState,
                     showBottomSheet = {
                     },

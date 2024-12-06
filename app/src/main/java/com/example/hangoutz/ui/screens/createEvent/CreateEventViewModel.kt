@@ -1,6 +1,7 @@
 package com.example.hangoutz.ui.screens.createEvent
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hangoutz.data.local.SharedPreferencesManager
@@ -94,8 +95,15 @@ class CreateEventViewModel @Inject constructor(
 
     fun addSelectedParticipants() {
         _uiState.value = _uiState.value.copy(
-            participants = _uiState.value.participants + _uiState.value.selectedParticipants
+            participants = _uiState.value.participants + _uiState.value.selectedParticipants,
+            selectedParticipants = emptyList()
         )
+    }
+    fun removeSelectedParticipant(friend: Friend){
+        _uiState.value = _uiState.value.copy(
+            participants = _uiState.value.participants - friend,
+        )
+        removeParticipant(friend)
     }
 
     fun onTimePicked(date: Long) {
