@@ -47,7 +47,6 @@ class CreateEventViewModel @Inject constructor(
             formatForDatabase()
             _uiState.value = _uiState.value.copy(errorMessage = "")
 
-
             viewModelScope.launch {
                 val insertEventResponse = eventsRepository.insertEvent(
                     EventRequest(
