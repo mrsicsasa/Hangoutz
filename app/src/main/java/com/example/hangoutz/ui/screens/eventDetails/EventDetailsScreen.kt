@@ -96,6 +96,19 @@ fun EventDetailsScreen(
                     .fillMaxSize()
                     .weight(1f)
             ) {
+
+            Column(
+                modifier = Modifier
+                    .padding(
+                        top = innerPadding.calculateTopPadding() + Dimensions.EVENTDETAILS_TOP_PADDING,
+                        start = Dimensions.ACTION_BUTTON_MEDIUM2,
+                        end = Dimensions.ACTION_BUTTON_MEDIUM2,
+                        bottom = Dimensions.ACTION_BUTTON_SMALL1
+                    )
+                    .verticalScroll(rememberScrollState())
+                    .fillMaxSize()
+                    .weight(1f)
+            ) {
                 data.value.title?.let {
                     InputField(stringResource(R.string.event_title),
                         it,
