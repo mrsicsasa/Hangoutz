@@ -1,21 +1,26 @@
 package com.example.hangoutz.ui.screens.register
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.hangoutz.R
@@ -31,45 +36,29 @@ import com.example.hangoutz.utils.Dimensions
 fun RegisterScreen(navController: NavController, viewModel: RegisterViewModel = hiltViewModel()) {
     // ViewModel data
     val data = viewModel.uiState.collectAsState()
-    Column(
+    var logoOffset = viewModel.calculateLogoOffset(LocalConfiguration.current.screenHeightDp.dp)
+    var buttonOffset = viewModel.calculateButtonOffset(LocalConfiguration.current.screenHeightDp.dp)
+    Box(
+        contentAlignment = Alignment.Center,
         modifier = Modifier
             .fillMaxSize()
             .paint(
                 painterResource(R.drawable.main_background),
-                contentScale = ContentScale.FillHeight
+                contentScale = ContentScale.FillBounds
             )
             .semantics { contentDescription = Constants.REGISTER_BACKGROUND_COLUMN }
     ) {
-        Column(
-            modifier = Modifier
-                .weight(1.5f)
-                .fillMaxWidth()
-        ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(1f),
-                contentAlignment = Alignment.Center
-            ) {
-                Logo(
-                    painterResource(id = R.drawable.logo),
-                    modifier = Modifier
-                        .align(Alignment.Center)
-                        .semantics { contentDescription = Constants.REGISTER_LOGO },
-                    animationDelay = Constants.LOGO_ANIMATION_DELAY
-                )
-            }
-        }
         // Form
         Column(
+            verticalArrangement = Arrangement.Center,
             modifier = Modifier
-                .align(Alignment.CenterHorizontally)
                 .padding(
                     start = Dimensions.REGISTER_FORM_SIDE_PADDING,
                     end = Dimensions.REGISTER_FORM_SIDE_PADDING,
+                    top = Dimensions.REGISTER_FORM_TOP_PADDING,
                     bottom = Dimensions.REGISTER_FORM_BOTTOM_PADDING
                 )
-                .fillMaxWidth()
+                .verticalScroll(rememberScrollState())
         ) {
             InputField(
                 label = stringResource(R.string.input_name),
@@ -120,7 +109,9 @@ fun RegisterScreen(navController: NavController, viewModel: RegisterViewModel = 
             if (data.value.passwordError.isNotEmpty() && data.value.incompleteFormError.isEmpty()) {
                 ErrorMessage(
                     data.value.passwordError,
-                    Modifier.semantics { contentDescription = Constants.REGISTER_PASSWORD_ERROR }
+                    Modifier.semantics {
+                        contentDescription = Constants.REGISTER_PASSWORD_ERROR
+                    }
                 )
             }
             InputField(
@@ -133,7 +124,9 @@ fun RegisterScreen(navController: NavController, viewModel: RegisterViewModel = 
                         || data.value.confirmPasswordError.isNotEmpty(),
                 isPassword = true,
                 modifier = Modifier
-                    .semantics { contentDescription = Constants.REGISTER_CONFIRM_PASSWORD_INPUT }
+                    .semantics {
+                        contentDescription = Constants.REGISTER_CONFIRM_PASSWORD_INPUT
+                    }
             )
             if (data.value.confirmPasswordError.isNotEmpty() && data.value.incompleteFormError.isEmpty()
             ) {
@@ -154,12 +147,21 @@ fun RegisterScreen(navController: NavController, viewModel: RegisterViewModel = 
                 )
             }
         }
+        Logo(
+            painterResource(id = R.drawable.logo),
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .offset(y = logoOffset)
+                .semantics { contentDescription = Constants.REGISTER_LOGO },
+            animationDelay = Constants.LOGO_ANIMATION_DELAY
+        )
         // Create account button
         ActionButton(
             buttonText = stringResource(R.string.create_account_text),
             modifier = Modifier
-                .padding(bottom = Dimensions.REGISTER_BOTTOM_PADDING)
                 .fillMaxWidth()
+                .align(Alignment.BottomCenter)
+                .offset(y = -buttonOffset)
                 .semantics {
                     contentDescription = Constants.REGISTER_CREATE_ACCOUNT_BUTTON
                 }
