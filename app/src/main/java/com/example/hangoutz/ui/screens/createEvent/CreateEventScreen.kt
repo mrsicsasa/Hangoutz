@@ -81,7 +81,6 @@ fun CreateEventScreen(
         )
     }) { innerPadding ->
 
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
