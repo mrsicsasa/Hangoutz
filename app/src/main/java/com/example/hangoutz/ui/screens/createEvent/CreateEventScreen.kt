@@ -84,8 +84,6 @@ fun CreateEventScreen(
             ),
         )
     }) { innerPadding ->
-
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -103,8 +101,8 @@ fun CreateEventScreen(
                         end = Dimensions.ACTION_BUTTON_MEDIUM2,
                         bottom = Dimensions.ACTION_BUTTON_SMALL1
                     )
-                    .verticalScroll(rememberScrollState())
                     .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
                     .weight(1f)
             ) {
                 InputField(
@@ -164,136 +162,132 @@ fun CreateEventScreen(
                     horizontalArrangement = Arrangement.spacedBy(Dimensions.CREATE_EVENT_HORIZONTAL_SPACING)
                 ) {
 
-                            InputFieldWithIcon(stringResource(R.string.event_date),
-                                data.value.date,
-                                { viewmodel.onDateChange(it) },
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .semantics {
-                                        contentDescription = Constants.CREATE_EVENT_DATE_FIELD
-                                    },
-                                R.drawable.calendaricon,
-                                isEnabled = true,
-                                isReadOnly = true,
-                                onClick = { viewmodel.setShowDatePicker() })
+                    InputFieldWithIcon(stringResource(R.string.event_date),
+                        data.value.date,
+                        { viewmodel.onDateChange(it) },
+                        modifier = Modifier
+                            .weight(1f)
+                            .semantics {
+                                contentDescription = Constants.CREATE_EVENT_DATE_FIELD
+                            },
+                        R.drawable.calendaricon,
+                        isEnabled = true,
+                        isReadOnly = true,
+                        onClick = { viewmodel.setShowDatePicker() })
 
-                            InputFieldWithIcon(stringResource(R.string.event_time),
-                                data.value.time,
-                                { viewmodel.onTimeChange(it) },
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .semantics {
-                                        contentDescription = Constants.CREATE_EVENT_TIME_FIELD
-                                    },
-                                R.drawable.clockicon,
-                                isEnabled = true,
-                                isReadOnly = true,
-                                onClick = { viewmodel.setShowTimePicker() })
-                        }
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = Dimensions.CREATE_EVENT_VERTICAL_PADDING),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(
-                                stringResource(R.string.event_participants),
-                                color = Ivory,
-                                modifier = Modifier.padding(
-                                    top = Dimensions.CREATE_EVENT_TEXT_PADDING,
-                                    bottom = Dimensions.CREATE_EVENT_TEXT_PADDING
-                                ),
-                                style = MaterialTheme.typography.bodyMedium
-                            )
-                            Image(painter = painterResource(id = R.drawable.addevent),
-                                contentDescription = stringResource(R.string.add_participate_button),
-                                modifier = Modifier
-                                    .clickable { scope.launch { sheetState.show() } }
-                                    .semantics {
-                                        contentDescription =
-                                            Constants.CREATE_EVENT_ADD_PARTICIPANTS_BUTTON
-                                    })
-                        }
-                    }
-                    HorizontalDivider(
-                        thickness = Dimensions.CREATE_EVENT_LINE_THICKNESS, color = OrangeButton
+                    InputFieldWithIcon(stringResource(R.string.event_time),
+                        data.value.time,
+                        { viewmodel.onTimeChange(it) },
+                        modifier = Modifier
+                            .weight(1f)
+                            .semantics {
+                                contentDescription = Constants.CREATE_EVENT_TIME_FIELD
+                            },
+                        R.drawable.clockicon,
+                        isEnabled = true,
+                        isReadOnly = true,
+                        onClick = { viewmodel.setShowTimePicker() })
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = Dimensions.CREATE_EVENT_VERTICAL_PADDING),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        stringResource(R.string.event_participants),
+                        color = Ivory,
+                        modifier = Modifier.padding(
+                            top = Dimensions.CREATE_EVENT_TEXT_PADDING,
+                            bottom = Dimensions.CREATE_EVENT_TEXT_PADDING
+                        ),
+                        style = MaterialTheme.typography.bodyMedium
                     )
-                    Column(modifier = Modifier.fillMaxWidth()) {
-                        data.value.participants.forEach {
-                            DisplayUser(
-                                it.name,
-                                it.avatar,
-                                isCheckList = false,
-                                isParticipant = true,
-                                onRemove = {
-                                    viewmodel.removeSelectedParticipant(friend = it)
-                                    Toast.makeText(
-                                        context,
-                                        context.getString(R.string.has_been_removed, it.name),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                            )
-                        }
+                    Image(painter = painterResource(id = R.drawable.addevent),
+                        contentDescription = stringResource(R.string.add_participate_button),
+                        modifier = Modifier
+                            .clickable { scope.launch { sheetState.show() } }
+                            .semantics {
+                                contentDescription =
+                                    Constants.CREATE_EVENT_ADD_PARTICIPANTS_BUTTON
+                            })
+                }
+
+                HorizontalDivider(
+                    thickness = Dimensions.CREATE_EVENT_LINE_THICKNESS, color = OrangeButton
+                )
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    data.value.participants.forEach {
+                        DisplayUser(
+                            it.name,
+                            it.avatar,
+                            isCheckList = false,
+                            isParticipant = true,
+                            onRemove = {
+                                viewmodel.removeSelectedParticipant(friend = it)
+                                Toast.makeText(
+                                    context,
+                                    context.getString(R.string.has_been_removed, it.name),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        )
                     }
                 }
             }
-
             Column(
             ) {
-            ActionButton(stringResource(R.string.event_create),
-                modifier = Modifier
-                    .padding(bottom = Dimensions.ACTION_BUTTON_MEDIUM3)
-                    .semantics {
-                        contentDescription = Constants.CREATE_EVENT_CREATE_BUTTON
-                    },
-                onClick = {
-                    viewmodel.createEvent()
-                })
-            if (sheetState.isVisible) {
-                FriendsPopup(userList = data.value.listOfFriends,
-                    searchQuery = data.value.searchQuery,
-                    isLoading = data.value.isLoading,
-                    clearText = { viewmodel.clearSearchQuery() },
-                    sheetState = sheetState,
-                    showBottomSheet = {
-                    },
-                    onTextInput = { searchQuery ->
-                        viewmodel.onSearchInput(searchQuery)
-                    },
-                    participantSelected = data.value.selectedParticipants,
-                    isCheckList = true,
-                    onAdd = {
-                        viewmodel.addSelectedParticipants()
-                        scope.launch { sheetState.hide() }
-                        viewmodel.clearSearchQuery()
-                    },
-                    onChange = { isChecked, user ->
-                        if (isChecked) {
-                            viewmodel.addParticipant(user)
-                        } else {
-                            viewmodel.removeParticipant(user)
-                        }
+                ActionButton(stringResource(R.string.event_create),
+                    modifier = Modifier
+                        .padding(bottom = Dimensions.ACTION_BUTTON_MEDIUM3)
+                        .semantics {
+                            contentDescription = Constants.CREATE_EVENT_CREATE_BUTTON
+                        },
+                    onClick = {
+                        viewmodel.createEvent()
                     })
+                if (sheetState.isVisible) {
+                    FriendsPopup(userList = data.value.listOfFriends,
+                        searchQuery = data.value.searchQuery,
+                        isLoading = data.value.isLoading,
+                        clearText = { viewmodel.clearSearchQuery() },
+                        sheetState = sheetState,
+                        showBottomSheet = {
+                        },
+                        onTextInput = { searchQuery ->
+                            viewmodel.onSearchInput(searchQuery)
+                        },
+                        participantSelected = data.value.selectedParticipants,
+                        isCheckList = true,
+                        onAdd = {
+                            viewmodel.addSelectedParticipants()
+                            scope.launch { sheetState.hide() }
+                            viewmodel.clearSearchQuery()
+                        },
+                        onChange = { isChecked, user ->
+                            if (isChecked) {
+                                viewmodel.addParticipant(user)
+                            } else {
+                                viewmodel.removeParticipant(user)
+                            }
+                        })
+                }
+            }
+            if (data.value.showDatePicker) {
+                DatePickerModal(onDateSelected = { date ->
+                    date?.let {
+                        viewmodel.onDatePicked(date)
+                    }
+                }, onDismiss = { viewmodel.setShowDatePicker() })
+            }
+
+            if (data.value.showTimePicker) {
+                TimePickerModal(onConfirm = { time ->
+                    viewmodel.onTimePicked(time)
+                    viewmodel.setShowTimePicker()
+                }, onDismiss = { viewmodel.setShowTimePicker() })
             }
         }
     }
-
-        if (data.value.showDatePicker) {
-            DatePickerModal(onDateSelected = { date ->
-                date?.let {
-                    viewmodel.onDatePicked(date)
-                }
-            }, onDismiss = { viewmodel.setShowDatePicker() })
-        }
-
-        if (data.value.showTimePicker) {
-            TimePickerModal(onConfirm = { time ->
-                viewmodel.onTimePicked(time)
-                viewmodel.setShowTimePicker()
-            }, onDismiss = { viewmodel.setShowTimePicker() })
-        }
-}
-
 }
