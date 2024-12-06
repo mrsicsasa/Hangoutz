@@ -171,6 +171,7 @@ object Constants {
     //Bottom sheet
     const val BOTTOM_SHEET_TAG = "bottomSheet"
     const val BOTTOM_SHEET_SEARCH = "bottomSheetSearch"
+    const val BOTTOM_SHEET_USER_ROW = "bottomSheetUserRow"
     const val BOTTOM_SHEET_PROFILE_PICTURE = "bottomSheetProfilePicture"
     const val BOTTOM_SHEET_USERNAME = "bottomSheetUsername"
     const val BOTTOM_SHEET_ADD_ICON = "bottomSheetAddIcon"
