@@ -154,7 +154,7 @@ class EventDetailsOwnerViewModel @Inject constructor(
 
     private fun formatDateTime(dateTimeString: String): Pair<String, String> {
 
-        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:ss", Locale.getDefault())
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm", Locale.getDefault())
         val dateFormat = SimpleDateFormat("dd.MM.yyyy.", Locale.getDefault())
         val timeFormat = SimpleDateFormat("HH.mm", Locale.getDefault())
 
@@ -183,7 +183,6 @@ class EventDetailsOwnerViewModel @Inject constructor(
                     )
                     val dateTemp = _uiState.value.date ?: ""
                     val (formattedDate, formattedTime) = formatDateTime(dateTemp)
-
                     _uiState.value = _uiState.value.copy(date = formattedDate, time = formattedTime)
 
                     val invitesResponse =
@@ -350,6 +349,6 @@ class EventDetailsOwnerViewModel @Inject constructor(
     }
 
     fun onTimeChange(time: String) { //TODO Configure timepicker validation
-        _uiState.value = _uiState.value.copy(time = time, isDateError = false)
+        _uiState.value = _uiState.value.copy(time = time, isTimeError = false)
     }
 }
