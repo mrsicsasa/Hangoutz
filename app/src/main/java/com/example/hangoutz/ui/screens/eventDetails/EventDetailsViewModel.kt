@@ -24,13 +24,13 @@ import javax.inject.Inject
 
 data class EventDetailsData(
     var eventId: UUID? = null,
-    var title: String? = "",
-    var description: String? = "",
-    var city: String? = "",
-    var street: String? = "",
-    var place: String? = "",
-    var date: String? = "",
-    var time: String? = "",
+    var title: String = "",
+    var description: String = "",
+    var city: String = "",
+    var street: String = "",
+    var place: String = "",
+    var date: String = "",
+    var time: String = "",
     var participants: List<User> = emptyList()
 )
 
@@ -74,7 +74,6 @@ class EventDetailsViewModel @Inject constructor(
                 val eventId = _uiState.value.eventId
 
                 if (userId != null && eventId != null) {
-                    // Remove the user's invite from the event
                     val response = inviteRepository.updateInviteStatus(
                         userId,
                         eventId,
@@ -82,7 +81,6 @@ class EventDetailsViewModel @Inject constructor(
                     )
 
                     if (response.isSuccessful) {
-                        // Refresh participants list
                         getParticipants()
 
                         Log.d("EventDetailsViewModel", "Successfully left event: $eventId")
@@ -109,9 +107,11 @@ class EventDetailsViewModel @Inject constructor(
                     val event = eventResponse.body()?.first()
                     event?.let {
                         _uiState.value = _uiState.value.copy(
-                            city = it.city,
-                            street = it.street,
-                            place = it.place,
+                            title = it.title,
+                            description = it.description ?: "",
+                            city = it.city ?: "",
+                            street = it.street ?: "",
+                            place = it.place ?: "" ,
                             date = it.date,
                         )
 

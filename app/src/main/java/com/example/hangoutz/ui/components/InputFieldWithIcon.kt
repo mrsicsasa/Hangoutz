@@ -25,45 +25,49 @@ fun InputFieldWithIcon(
     painterResource: Int,
     isEnabled: Boolean = false,
     isReadOnly : Boolean = false,
-    onClick: () -> (Unit)
+    onClick: () -> (Unit),
+    isError : Boolean?= false
 ) {
-    OutlinedTextField(
-        value = value,
-        label = { Text(text = label, style = MaterialTheme.typography.bodySmall) },
-        onValueChange = { onValueChange(it) },
-        singleLine = true,
-        enabled = isEnabled,
-        readOnly = isReadOnly,
-        shape = RoundedCornerShape(Dimensions.INPUT_FIELD_ROUNDED_CORNERS),
-        colors = OutlinedTextFieldDefaults.colors(
-            disabledBorderColor = Ivory,
-            disabledTextColor = Ivory,
-            disabledLabelColor = Ivory,
-            focusedTextColor = Ivory,
-            unfocusedTextColor = Ivory,
-            cursorColor = Ivory,
-            focusedLabelColor = Ivory,
-            unfocusedLabelColor = Ivory,
-            focusedBorderColor = Ivory,
-            unfocusedBorderColor = Ivory,
-            errorLabelColor = Ivory,
-            errorBorderColor = Error,
-            errorTextColor = Ivory
-        ),
-        trailingIcon = {
-            androidx.compose.material3.Icon(
-                painter = painterResource(id = painterResource),
-                contentDescription = "Icon",
-                tint = Color.White,
-                modifier = Modifier.clickable { onClick() }
-            )},
-        textStyle = MaterialTheme.typography.bodySmall.copy(color = Color.White),
-        modifier = modifier
-            .padding(
-                bottom = Dimensions.INPUT_FIELD_PADDING_SMALL,
-                top = Dimensions.INPUT_FIELD_PADDING_SMALL,
+    if (isError != null) {
+        OutlinedTextField(
+            value = value,
+            label = { Text(text = label, style = MaterialTheme.typography.bodySmall) },
+            onValueChange = { onValueChange(it) },
+            singleLine = true,
+            enabled = isEnabled,
+            isError = isError ,
+            readOnly = isReadOnly,
+            shape = RoundedCornerShape(Dimensions.INPUT_FIELD_ROUNDED_CORNERS),
+            colors = OutlinedTextFieldDefaults.colors(
+                disabledBorderColor = Ivory,
+                disabledTextColor = Ivory,
+                disabledLabelColor = Ivory,
+                focusedTextColor = Ivory,
+                unfocusedTextColor = Ivory,
+                cursorColor = Ivory,
+                focusedLabelColor = Ivory,
+                unfocusedLabelColor = Ivory,
+                focusedBorderColor = Ivory,
+                unfocusedBorderColor = Ivory,
+                errorLabelColor = Ivory,
+                errorBorderColor = Error,
+                errorTextColor = Ivory
+            ),
+            trailingIcon = {
+                androidx.compose.material3.Icon(
+                    painter = painterResource(id = painterResource),
+                    contentDescription = "Icon",
+                    tint = Color.White,
+                    modifier = Modifier.clickable { onClick() }
+                )},
+            textStyle = MaterialTheme.typography.bodySmall.copy(color = Color.White),
+            modifier = modifier
+                .padding(
+                    bottom = Dimensions.INPUT_FIELD_PADDING_SMALL,
+                    top = Dimensions.INPUT_FIELD_PADDING_SMALL,
 
-            )
-            .fillMaxWidth()
-    )
+                    )
+                .fillMaxWidth()
+        )
+    }
 }

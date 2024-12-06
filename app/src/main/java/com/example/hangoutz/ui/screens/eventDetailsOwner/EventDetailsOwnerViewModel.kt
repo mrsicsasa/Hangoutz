@@ -9,6 +9,7 @@ import com.example.hangoutz.data.models.User
 import com.example.hangoutz.domain.repository.EventRepository
 import com.example.hangoutz.domain.repository.InviteRepository
 import com.example.hangoutz.domain.repository.UserRepository
+import com.example.hangoutz.utils.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,19 +21,21 @@ import java.util.Locale
 import java.util.UUID
 import javax.inject.Inject
 
-
 data class EventDetailsData(
+    var isMine: Boolean = true,
     var eventId: UUID? = null,
-    var title: String? = "",
-    var description: String? = "",
-    var city: String? = "",
-    var street: String? = "",
-    var place: String? = "",
-    var date: String? = "",
-    var time: String? = "",
+    var title: String = "",
+    var description: String = "",
+    var city: String = "",
+    var street: String = "",
+    var place: String = "",
+    var date: String = "",
+    var time: String = "",
     var participants: List<User> = emptyList(),
     var showDatePicker: Boolean = false,
-    var showTimePicker: Boolean = false
+    var showTimePicker: Boolean = false,
+    var isError: Boolean = false,
+    var errorMessage: String? = null
 )
 
 @HiltViewModel
@@ -53,8 +56,13 @@ class EventDetailsOwnerViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(eventId = eventId)
     }
 
-    fun editEvent() {
-        //TODO
+    fun editEvent(onSuccess: () -> Unit) {
+        if (validateInputs()) {
+            onSuccess()
+        } else {
+            _uiState.value = _uiState.value.copy(errorMessage = Constants.ERROR_EMPTY_FIELD)
+            Log.e("Error", "Fields marked with * cant be empty")
+        }
     }
 
     fun deleteEvent() {
@@ -86,31 +94,26 @@ class EventDetailsOwnerViewModel @Inject constructor(
                 val event = eventResponse.body()?.first()
                 event?.let {
                     _uiState.value = _uiState.value.copy(
-                        city = it.city,
-                        street = it.street,
-                        place = it.place,
+                        title = it.title,
+                        description = it.description ?: "",
+                        city = it.city ?: "",
+                        street = it.street ?: "",
+                        place = it.place ?: "",
                         date = it.date,
                     )
                     val dateTemp = _uiState.value.date ?: ""
                     val (formattedDate, formattedTime) = formatDateTime(dateTemp)
 
                     _uiState.value = _uiState.value.copy(date = formattedDate, time = formattedTime)
-                    Log.d(
-                        "EventDetailsViewModel",
-                        "Fetching event details for eventId: ${_uiState.value.eventId}"
-                    )
 
                     val invitesResponse =
                         _uiState.value.eventId?.let { inviteRepository.getInvitesByEventId(it) }
                     if (invitesResponse?.isSuccessful == true && invitesResponse.body() != null) {
                         val acceptedUserIds: List<UUID> =
                             invitesResponse.body()!!.map { invite -> invite.userId }
-                        Log.d("EventDetailsViewModel", "Accepted user IDs: $acceptedUserIds")
-
                         val usersResponse = userRepository.getAllUsers()
                         if (usersResponse?.isSuccessful == true && usersResponse.body() != null) {
                             val allUsers: List<User> = usersResponse.body()!!
-
                             val acceptedUsers: List<User> = allUsers.filter { user ->
                                 user.id in acceptedUserIds
                             }
@@ -120,6 +123,11 @@ class EventDetailsOwnerViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun validateInputs(): Boolean {
+        //TODO - field validation
+        return false
     }
 
     fun onTimePicked(date: Long) {
@@ -137,7 +145,7 @@ class EventDetailsOwnerViewModel @Inject constructor(
         onDateChange(formattedDate)
     }
 
-   private  fun formatDate(dateMillis: Long): String {
+    private fun formatDate(dateMillis: Long): String {
         val dateFormat = SimpleDateFormat("dd.MM.yyyy.", Locale.getDefault())
         return dateFormat.format(Date(dateMillis))
     }
@@ -153,7 +161,9 @@ class EventDetailsOwnerViewModel @Inject constructor(
     }
 
     fun onTitleChange(title: String) {
-        _uiState.value = _uiState.value.copy(title = title)
+        if (title.trimEnd().trimStart().isEmpty()) {
+            _uiState.value = _uiState.value.copy(errorMessage = Constants.ERROR_EMPTY_FIELD)
+        } else _uiState.value = _uiState.value.copy(title = title)
     }
 
     fun onDescriptionChange(description: String) {
@@ -169,16 +179,23 @@ class EventDetailsOwnerViewModel @Inject constructor(
     }
 
     fun onPlaceChange(place: String) {
-        _uiState.value = _uiState.value.copy(place = place)
+        if (place.trimEnd().trimStart().isEmpty()) {
+            _uiState.value = _uiState.value.copy(errorMessage = Constants.ERROR_EMPTY_FIELD)
+        } else
+            _uiState.value = _uiState.value.copy(place = place)
     }
 
     fun onDateChange(date: String) { //TODO Configure datepicker validation
-        _uiState.value = _uiState.value.copy(date = date)
+        if (date.trim().isEmpty()) {
+            _uiState.value = _uiState.value.copy(errorMessage = Constants.ERROR_EMPTY_FIELD)
+        } else
+            _uiState.value = _uiState.value.copy(date = date)
     }
 
     fun onTimeChange(time: String) { //TODO Configure timepicker validation
-        _uiState.value = _uiState.value.copy(time = time)
+        if (time.trim().isEmpty()) {
+            _uiState.value = _uiState.value.copy(errorMessage = Constants.ERROR_EMPTY_FIELD)
+        } else
+            _uiState.value = _uiState.value.copy(time = time)
     }
 }
-
-

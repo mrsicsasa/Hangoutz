@@ -33,7 +33,8 @@ fun DatePickerModal(
             }
         }
     ) {
-        DatePicker(state = datePickerState
+        DatePicker(
+            state = datePickerState
         )
     }
 }

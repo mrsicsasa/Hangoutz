@@ -19,6 +19,7 @@ import java.util.Locale
 import javax.inject.Inject
 
 
+
 @HiltViewModel
 class CreateEventViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
