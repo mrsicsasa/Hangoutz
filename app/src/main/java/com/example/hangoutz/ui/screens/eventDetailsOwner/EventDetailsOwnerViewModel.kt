@@ -68,10 +68,7 @@ class EventDetailsOwnerViewModel @Inject constructor(
 
     fun editEvent(onSuccess: () -> Unit) {
         formatForDatabase()
-        Log.e(
-            "DATA",
-            "id=  ${_uiState.value.eventId.toString()}, newTitle =  ${_uiState.value.title}, newPlace = ${_uiState.value.place}, newDate =  ${_uiState.value.formattedDateForDatabase}"
-        )
+
         if (validateInputs()) {
             _uiState.value = _uiState.value.copy(errorMessage = "")
             viewModelScope.launch {

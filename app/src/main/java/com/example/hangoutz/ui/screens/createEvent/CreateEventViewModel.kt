@@ -1,6 +1,7 @@
 package com.example.hangoutz.ui.screens.createEvent
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hangoutz.data.local.SharedPreferencesManager
@@ -17,6 +18,7 @@ import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.util.UUID
 import javax.inject.Inject
 
 
@@ -77,6 +79,10 @@ class CreateEventViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(
             participants = _uiState.value.participants + _uiState.value.selectedParticipants
         )
+    }
+
+    fun removeUser(userID: UUID) {
+            //TODO remove participant from list
     }
 
     fun onTimePicked(date: Long) {

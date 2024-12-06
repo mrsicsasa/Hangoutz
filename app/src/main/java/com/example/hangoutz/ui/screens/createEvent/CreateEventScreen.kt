@@ -80,7 +80,7 @@ fun CreateEventScreen(
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = TopBarBackgroundColor
             ),
-            )
+        )
     }) { innerPadding ->
         Column(
             modifier = Modifier
@@ -103,121 +103,119 @@ fun CreateEventScreen(
                     .fillMaxSize()
                     .weight(1f)
             ) {
-                    InputField(
-                        stringResource(R.string.event_title),
-                        data.value.title,
-                        { viewmodel.onTitleChange(it) },
-                        modifier = Modifier.semantics {
-                            contentDescription = Constants.CREATE_EVENT_TITLE_FIELD
-                        },
-                        true
-                    )
+                InputField(
+                    stringResource(R.string.event_title),
+                    data.value.title,
+                    { viewmodel.onTitleChange(it) },
+                    modifier = Modifier.semantics {
+                        contentDescription = Constants.CREATE_EVENT_TITLE_FIELD
+                    },
+                    true
+                )
 
-                    InputField(
-                        stringResource(R.string.event_desc),
-                        data.value.description,
-                        { viewmodel.onDescriptionChange(it) },
-                        modifier = Modifier.semantics {
-                            contentDescription = Constants.CREATE_EVENT_DESC_FIELD
-                        },
-                        true
-                    )
+                InputField(
+                    stringResource(R.string.event_desc),
+                    data.value.description,
+                    { viewmodel.onDescriptionChange(it) },
+                    modifier = Modifier.semantics {
+                        contentDescription = Constants.CREATE_EVENT_DESC_FIELD
+                    },
+                    true
+                )
 
-                    InputField(
-                        stringResource(R.string.event_city),
-                        data.value.city,
-                        { viewmodel.onCityChange(it) },
-                        modifier = Modifier.semantics {
-                            contentDescription = Constants.CREATE_EVENT_CITY_FIELD
-                        },
-                        true
-                    )
-                    InputField(
-                        stringResource(R.string.event_street),
-                        data.value.street,
-                        { viewmodel.onStreetChange(it) },
-                        modifier = Modifier.semantics {
-                            contentDescription = Constants.CREATE_EVENT_STREET_FIELD
-                        },
-                        true
-                    )
+                InputField(
+                    stringResource(R.string.event_city),
+                    data.value.city,
+                    { viewmodel.onCityChange(it) },
+                    modifier = Modifier.semantics {
+                        contentDescription = Constants.CREATE_EVENT_CITY_FIELD
+                    },
+                    true
+                )
+                InputField(
+                    stringResource(R.string.event_street),
+                    data.value.street,
+                    { viewmodel.onStreetChange(it) },
+                    modifier = Modifier.semantics {
+                        contentDescription = Constants.CREATE_EVENT_STREET_FIELD
+                    },
+                    true
+                )
 
-                    InputField(
-                        stringResource(R.string.event_place),
-                        data.value.place,
-                        { viewmodel.onPlaceChange(it) },
-                        modifier = Modifier.semantics {
-                            contentDescription = Constants.CREATE_EVENT_PLACE_FIELD
-                        },
-                        true
-                    )
+                InputField(
+                    stringResource(R.string.event_place),
+                    data.value.place,
+                    { viewmodel.onPlaceChange(it) },
+                    modifier = Modifier.semantics {
+                        contentDescription = Constants.CREATE_EVENT_PLACE_FIELD
+                    },
+                    true
+                )
 
-                    Row(
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = Dimensions.CREATE_EVENT_VERTICAL_PADDING),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(Dimensions.CREATE_EVENT_HORIZONTAL_SPACING)
+                ) {
+
+                    InputFieldWithIcon(stringResource(R.string.event_date),
+                        data.value.date,
+                        { viewmodel.onDateChange(it) },
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = Dimensions.CREATE_EVENT_VERTICAL_PADDING),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(Dimensions.CREATE_EVENT_HORIZONTAL_SPACING)
-                    ) {
+                            .weight(1f)
+                            .semantics {
+                                contentDescription = Constants.CREATE_EVENT_DATE_FIELD
+                            },
+                        R.drawable.calendaricon,
+                        true,
+                        true,
+                        { viewmodel.setShowDatePicker() })
 
-                        InputFieldWithIcon(stringResource(R.string.event_date),
-                            data.value.date,
-                            { viewmodel.onDateChange(it) },
-                            modifier = Modifier
-                                .weight(1f)
-                                .semantics {
-                                    contentDescription = Constants.CREATE_EVENT_DATE_FIELD
-                                },
-                            R.drawable.calendaricon,
-                            true,
-                            true,
-                            { viewmodel.setShowDatePicker() })
-
-                        InputFieldWithIcon(stringResource(R.string.event_time),
-                            data.value.time,
-                            { viewmodel.onTimeChange(it) },
-                            modifier = Modifier
-                                .weight(1f)
-                                .semantics {
-                                    contentDescription = Constants.CREATE_EVENT_TIME_FIELD
-                                },
-                            R.drawable.clockicon,
-                            true,
-                            true,
-                            { viewmodel.setShowTimePicker() })
-                    }
-                    Row(
+                    InputFieldWithIcon(stringResource(R.string.event_time),
+                        data.value.time,
+                        { viewmodel.onTimeChange(it) },
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = Dimensions.CREATE_EVENT_VERTICAL_PADDING),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(
-                            stringResource(R.string.event_participants),
-                            color = Ivory,
-                            modifier = Modifier.padding(
-                                top = Dimensions.CREATE_EVENT_TEXT_PADDING,
-                                bottom = Dimensions.CREATE_EVENT_TEXT_PADDING
-                            ),
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                        Image(painter = painterResource(id = R.drawable.addevent),
-                            contentDescription = "",
-                            modifier = Modifier
-                                .clickable { }
-                                .semantics {
-                                    contentDescription =
-                                        Constants.CREATE_EVENT_ADD_PARTICIPANTS_BUTTON
-                                })
-                    }
-
-                    HorizontalDivider(
-                        thickness = Dimensions.CREATE_EVENT_LINE_THICKNESS, color = Ivory
-                    )
-                    //TODO put participants here, use participantUI component (check event details screen)
+                            .weight(1f)
+                            .semantics {
+                                contentDescription = Constants.CREATE_EVENT_TIME_FIELD
+                            },
+                        R.drawable.clockicon,
+                        true,
+                        true,
+                        { viewmodel.setShowTimePicker() })
                 }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = Dimensions.CREATE_EVENT_VERTICAL_PADDING),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        stringResource(R.string.event_participants),
+                        color = Ivory,
+                        modifier = Modifier.padding(
+                            top = Dimensions.CREATE_EVENT_TEXT_PADDING,
+                            bottom = Dimensions.CREATE_EVENT_TEXT_PADDING
+                        ),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                    Image(painter = painterResource(id = R.drawable.addevent),
+                        contentDescription = "",
+                        modifier = Modifier
+                            .clickable { }
+                            .semantics {
+                                contentDescription = Constants.EVENT_OWNER_ADD_PARTICIPANTS_BUTTON
+                            })
+                }
+                HorizontalDivider(
+                    thickness = Dimensions.CREATE_EVENT_LINE_THICKNESS, color = Ivory
+                )
+                //TODO put participants here, use participantUI component (check event details screen)
             }
+
         Column(
         ) {
             ActionButton(stringResource(R.string.event_create),
@@ -253,8 +251,8 @@ fun CreateEventScreen(
                             viewmodel.removeParticipant(user)
                         }
                     })
+            }
         }
-    }
 
         if (data.value.showDatePicker) {
             DatePickerModal(onDateSelected = { date ->
@@ -277,4 +275,5 @@ fun CreateEventScreen(
 
         }
     }
+}
 }
