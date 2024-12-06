@@ -5,11 +5,13 @@ import com.example.hangoutz.data.models.Event
 import com.example.hangoutz.data.models.EventCardDPO
 import com.example.hangoutz.data.models.EventRequest
 import com.example.hangoutz.data.models.EventsFromInvites
+import com.example.hangoutz.data.models.UserRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PATCH
+import retrofit2.http.POST
 import retrofit2.http.Query
 
 
@@ -43,4 +45,7 @@ interface EventAPI {
     suspend fun patchEventById(
         @Query("id") id: String, @Body newEventData: EventRequest
     ): Response<Unit>
+
+    @POST("${BuildConfig.REQUEST_URL}events")
+    suspend fun insertEvent(@Body event: EventRequest): Response<Unit>
 }

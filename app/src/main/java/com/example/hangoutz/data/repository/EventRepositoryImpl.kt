@@ -4,6 +4,7 @@ import com.example.hangoutz.data.models.Event
 import com.example.hangoutz.data.models.EventCardDPO
 import com.example.hangoutz.data.models.EventRequest
 import com.example.hangoutz.data.models.EventsFromInvites
+import com.example.hangoutz.data.models.UserRequest
 import com.example.hangoutz.data.remote.EventAPI
 import com.example.hangoutz.domain.repository.EventRepository
 import retrofit2.Response
@@ -40,12 +41,23 @@ class EventRepositoryImpl @Inject constructor(
     override suspend fun patchEventById(
         id: String,
         newTitle: String,
+        newDesc: String,
+        newCity : String,
+        newStreet : String,
         newPlace: String,
         newDate: String
     ): Response<Unit> {
         return api.patchEventById(
-            id = "eq.${id}", EventRequest(title = newTitle, place = newPlace, date = newDate)
+            id = "eq.${id}", EventRequest(
+                title = newTitle, place = newPlace, date = newDate,
+                description =  newDesc,
+                city = newCity,
+                street = newStreet
+            )
         )
+    }
+    override suspend fun insertEvent(eventRequest: EventRequest): Response<Unit> {
+        return api.insertEvent(eventRequest)
     }
 
 }

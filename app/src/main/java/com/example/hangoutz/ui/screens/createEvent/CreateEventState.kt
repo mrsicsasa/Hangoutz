@@ -1,7 +1,6 @@
 package com.example.hangoutz.ui.screens.createEvent
 
 import com.example.hangoutz.data.models.Friend
-import com.example.hangoutz.data.models.User
 
 data class CreateEventState(
     var title: String = "",

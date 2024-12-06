@@ -284,7 +284,6 @@ fun EventOwnerDetailsScreen(
                         true,
                         { viewmodel.removeUser(participant.id) })
                 }
-
             }
             Column(
             ) {

@@ -6,8 +6,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hangoutz.data.local.SharedPreferencesManager
 import com.example.hangoutz.data.models.EventCardDPO
+import com.example.hangoutz.data.models.EventRequest
 import com.example.hangoutz.data.models.Friend
+import com.example.hangoutz.domain.repository.EventRepository
 import com.example.hangoutz.domain.repository.FriendsRepository
+import com.example.hangoutz.utils.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -22,11 +25,11 @@ import java.util.UUID
 import javax.inject.Inject
 
 
-
 @HiltViewModel
 class CreateEventViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val friendsRepository: FriendsRepository
+    private val friendsRepository: FriendsRepository,
+    private val eventsRepository: EventRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(CreateEventState())
@@ -36,8 +39,37 @@ class CreateEventViewModel @Inject constructor(
         getFriends()
     }
 
-    fun createEvent() {
-        //TODO
+    fun createEvent(onSuccess: () -> Unit) {
+        Log.e("DATA",
+            "${_uiState.value.title},,, ${_uiState.value.errorTitle}, ${_uiState.value.errorMessage} ")
+
+        if (validateInputs()) {
+            formatForDatabase()
+            _uiState.value = _uiState.value.copy(errorMessage = "")
+
+
+            viewModelScope.launch {
+                val insertEventResponse = eventsRepository.insertEvent(
+                    EventRequest(
+                        title = _uiState.value.title,
+                        description = _uiState.value.description,
+                        city = _uiState.value.city,
+                        street = _uiState.value.street,
+                        place = _uiState.value.place,
+                        date = _uiState.value.date
+                    )
+                )
+                if ( insertEventResponse?.isSuccessful == true) {
+                onSuccess()
+                Log.i("Info", "Successfully patched event")
+            } else Log.e("Info", "${ insertEventResponse.code()}")
+            }
+
+        }
+    else {
+            Log.e("Error", "Fields marked with * cant be empty")
+        }
+
     }
 
     fun getFriends() {
@@ -82,7 +114,19 @@ class CreateEventViewModel @Inject constructor(
     }
 
     fun removeUser(userID: UUID) {
-            //TODO remove participant from list
+        //TODO remove participant from list
+    }
+
+    private fun formatForDatabase() {
+        val inputDate = _uiState.value.date
+        val inputTime = _uiState.value.time
+
+        val combined = "$inputDate $inputTime"
+
+        val inputFormat = SimpleDateFormat("dd.MM.yyyy. HH.mm", Locale.getDefault())
+        val outputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        val formattedDateTime = outputFormat.format(inputFormat.parse(combined)!!)
+        _uiState.value = _uiState.value.copy(formattedDateForDatabase = formattedDateTime)
     }
 
     fun onTimePicked(date: Long) {
@@ -142,4 +186,98 @@ class CreateEventViewModel @Inject constructor(
     fun onTimeChange(time: String) { //TODO Configure timepicker
         _uiState.value = _uiState.value.copy(time = time)
     }
+
+    fun checkLength(text: String, length: Int): Boolean {
+        if (text.length <= length) return true
+        else return false
+    }
+
+    fun checkIfInPast(date: String): Boolean {
+        var isValid: Boolean = false
+        val inputFormat = SimpleDateFormat("dd.MM.yyyy. HH.mm", Locale.getDefault())
+        try {
+            val inputDateTime = inputFormat.parse(date)
+            if (inputDateTime != null && inputDateTime.before(Date())) {
+                isValid = true
+            } else isValid = false
+        } catch (e: Exception) {
+            Log.e("Error", "Exception while parsing")
+        }
+        return isValid
+    }
+
+    private fun validateInputs(): Boolean {
+
+        _uiState.value = _uiState.value.copy(
+            errorMessage = "",
+            errorTitle = "",
+            errorDesc = "",
+            errorCity = "",
+            errorStreet = "",
+            errorDate = "",
+            errorPlace = ""
+        )
+        var validateTitle = _uiState.value.title.trim().isEmpty()
+        var validatePlace = _uiState.value.place.trim().isEmpty()
+        var validateDate = _uiState.value.date.trim().isEmpty()
+        var validateTime = _uiState.value.time.trim().isEmpty()
+        var validateDesc = false
+        var validateCity = false
+        var validateStreet = false
+
+        if (validateTitle || validatePlace || validateDate || validateTime) {
+            _uiState.value = _uiState.value.copy(errorMessage = Constants.ERROR_EMPTY_FIELD)
+
+            Log.e("e", "empty fields error ${_uiState.value.errorMessage}")
+        }
+
+        if (!validateTitle && !checkLength(_uiState.value.title, 25)) {
+            validateTitle = true
+            _uiState.value = _uiState.value.copy(errorTitle = Constants.ERROR_TOO_LONG)
+        }
+
+        if (!validatePlace && !checkLength(_uiState.value.place, 25)) {
+            validatePlace = true
+            _uiState.value = _uiState.value.copy(errorPlace = Constants.ERROR_TOO_LONG)
+        }
+
+        if (!validateDate && !validateTime) {
+            val combinedInput = "${_uiState.value.date} ${_uiState.value.time}"
+            if (checkIfInPast(combinedInput)) {
+                validateDate = true
+                validateTime = true
+                _uiState.value =
+                    _uiState.value.copy(errorMessage = "Date and time cannot be in the past")
+            }
+        }
+
+        if (_uiState.value.description.length > 100) {
+            validateDesc = true
+            _uiState.value = _uiState.value.copy(errorDesc = Constants.ERROR_TOO_LONG_DESC)
+        }
+
+        if (_uiState.value.city.length > 25) {
+            validateCity = true
+            _uiState.value = _uiState.value.copy(errorCity = Constants.ERROR_TOO_LONG)
+        }
+
+        if (_uiState.value.street.length > 25) {
+            validateStreet = true
+            _uiState.value = _uiState.value.copy(errorStreet = Constants.ERROR_TOO_LONG)
+        }
+
+
+        _uiState.value = _uiState.value.copy(
+            isTitleError = validateTitle,
+            isPlaceError = validatePlace,
+            isDateError = validateDate,
+            isTimeError = validateTime,
+            isDescError = validateDesc,
+            isCityError = validateCity,
+            isStreetError = validateStreet
+        )
+
+        return !(validateTitle || validatePlace || validateDate || validateTime || validateDesc || validateCity || validateStreet)
+    }
+
 }

@@ -76,9 +76,11 @@ class EventDetailsOwnerViewModel @Inject constructor(
                 val eventResponse = eventRepository.patchEventById(
                     id = _uiState.value.eventId.toString(),
                     newTitle = _uiState.value.title,
+                    newDesc = _uiState.value.description,
+                    newCity = _uiState.value.city,
+                    newStreet = _uiState.value.street,
                     newPlace = _uiState.value.place,
-                    newDate = _uiState.value.formattedDateForDatabase,
-
+                    newDate = _uiState.value.formattedDateForDatabase
                     )
                 if (eventResponse?.isSuccessful == true) {
                     onSuccess()
