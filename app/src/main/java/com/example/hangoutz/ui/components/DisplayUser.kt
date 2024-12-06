@@ -56,6 +56,9 @@ fun DisplayUser(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = Dimensions.BOTTOM_SHEET_USER_PADDING)
+                .semantics {
+                    contentDescription = Constants.BOTTOM_SHEET_USER_ROW
+                }
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 GlideImage(
