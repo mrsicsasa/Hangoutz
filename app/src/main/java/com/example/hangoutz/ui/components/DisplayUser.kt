@@ -31,6 +31,7 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.example.hangoutz.BuildConfig
 import com.example.hangoutz.R
 import com.example.hangoutz.ui.theme.Orange
+import com.example.hangoutz.ui.theme.OrangeButton
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Constants.PROFILE_PHOTO
 import com.example.hangoutz.utils.Dimensions
@@ -114,7 +115,7 @@ fun DisplayUser(
             }
         }
         HorizontalDivider(
-            color = Color.Black,
+            color = if(isParticipant) OrangeButton else Color.Black,
             thickness = Dimensions.BOTTOM_SHEET_DIVIDER_WIDTH
         )
     }

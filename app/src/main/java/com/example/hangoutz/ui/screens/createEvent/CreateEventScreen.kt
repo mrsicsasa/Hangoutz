@@ -46,6 +46,7 @@ import com.example.hangoutz.ui.components.InputFieldWithIcon
 import com.example.hangoutz.ui.components.TimePickerModal
 import com.example.hangoutz.ui.screens.friends.FriendsPopup
 import com.example.hangoutz.ui.theme.Ivory
+import com.example.hangoutz.ui.theme.OrangeButton
 import com.example.hangoutz.ui.theme.TopBarBackgroundColor
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Dimensions
@@ -103,11 +104,10 @@ fun CreateEventScreen(
                     bottom = scrollableField
                 )
             ) {
-                Column {
+                Column (modifier = Modifier.verticalScroll(rememberScrollState())) {
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .verticalScroll(rememberScrollState())
                     ) {
                         InputField(
                             stringResource(R.string.event_title),
@@ -219,9 +219,9 @@ fun CreateEventScreen(
                         }
                     }
                     HorizontalDivider(
-                        thickness = Dimensions.CREATE_EVENT_LINE_THICKNESS, color = Ivory
+                        thickness = Dimensions.CREATE_EVENT_LINE_THICKNESS, color = OrangeButton
                     )
-                    Column {
+                    Column{
                         data.value.participants.forEach {
                             DisplayUser(
                                 it.name, it.avatar, isCheckList = true, isParticipant = true
