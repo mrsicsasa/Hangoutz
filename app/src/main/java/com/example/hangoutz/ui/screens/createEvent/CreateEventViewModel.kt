@@ -33,6 +33,7 @@ data class ErrorState(
     var errorMessage: String? = ""
 )
 
+
 @HiltViewModel
 class CreateEventViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -118,7 +119,8 @@ class CreateEventViewModel @Inject constructor(
 
     fun addSelectedParticipants() {
         _uiState.value = _uiState.value.copy(
-            participants = _uiState.value.participants + _uiState.value.selectedParticipants
+            participants = _uiState.value.participants + _uiState.value.selectedParticipants,
+            selectedParticipants = emptyList()
         )
     }
 

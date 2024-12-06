@@ -92,8 +92,7 @@ fun MyEventsScreen(
                         getEvents = { viewModel.getEvents(it) },
                         isCurrentUserOwner = { viewModel.isCurrentUserOwner(it) })
 
-                    1 -> EventsList(
-                        navController,
+                    1 -> EventsList(navController,
                         page = EventsFilterOptions.INVITED.name,
                         events = data.value.eventsInvited,
                         isLoading = data.value.isLoading,
@@ -222,3 +221,4 @@ fun EventsList(
         )
     }
 }
+

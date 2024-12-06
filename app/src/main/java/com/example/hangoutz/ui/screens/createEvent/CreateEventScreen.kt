@@ -293,6 +293,7 @@ fun CreateEventScreen(
                         })
                 }
             }
+        }
 
             if (data.value.showDatePicker) {
                 DatePickerModal(onDateSelected = { date ->
