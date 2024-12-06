@@ -212,7 +212,7 @@ fun CreateEventScreen(
                                 style = MaterialTheme.typography.bodyMedium
                             )
                             Image(painter = painterResource(id = R.drawable.addevent),
-                                contentDescription = "",
+                                contentDescription = stringResource(R.string.add_participate_button),
                                 modifier = Modifier
                                     .clickable { scope.launch { sheetState.show() } }
                                     .semantics {
@@ -233,8 +233,11 @@ fun CreateEventScreen(
                                 isParticipant = true,
                                 onRemove = {
                                     viewmodel.removeSelectedParticipant(friend = it)
-                                    Toast.makeText(context,
-                                        context.getString(R.string.has_been_removed, it.name),Toast.LENGTH_SHORT ).show()
+                                    Toast.makeText(
+                                        context,
+                                        context.getString(R.string.has_been_removed, it.name),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                 }
                             )
                         }

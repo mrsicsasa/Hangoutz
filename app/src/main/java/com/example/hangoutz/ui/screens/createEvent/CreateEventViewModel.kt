@@ -1,7 +1,6 @@
 package com.example.hangoutz.ui.screens.createEvent
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hangoutz.data.local.SharedPreferencesManager
@@ -30,25 +29,22 @@ class CreateEventViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(CreateEventState())
     val uiState: StateFlow<CreateEventState> = _uiState
 
-    init {
-       // getFriends()
-    }
-
     fun createEvent() {
         //TODO
     }
+
     fun onSearchInput(newText: String) {
         _uiState.value = _uiState.value.copy(searchQuery = newText)
         if (_uiState.value.searchQuery.length >= Constants.MIN_SEARCH_LENGTH) {
             getFriends()
-        }
-        else {
+        } else {
             _uiState.value = _uiState.value.copy(
                 listOfFriends = emptyList()
             )
         }
     }
-    fun getFriends() {
+
+    private fun getFriends() {
         _uiState.value = _uiState.value.copy(
             listOfFriends = emptyList(),
             isLoading = true
@@ -75,12 +71,14 @@ class CreateEventViewModel @Inject constructor(
             }
         }
     }
-    fun clearSearchQuery(){
+
+    fun clearSearchQuery() {
         _uiState.value = _uiState.value.copy(
             searchQuery = "",
             listOfFriends = emptyList()
         )
     }
+
     fun addParticipant(user: Friend) {
         _uiState.value = _uiState.value.copy(
             selectedParticipants = _uiState.value.selectedParticipants + user
@@ -99,7 +97,8 @@ class CreateEventViewModel @Inject constructor(
             selectedParticipants = emptyList()
         )
     }
-    fun removeSelectedParticipant(friend: Friend){
+
+    fun removeSelectedParticipant(friend: Friend) {
         _uiState.value = _uiState.value.copy(
             participants = _uiState.value.participants - friend,
         )

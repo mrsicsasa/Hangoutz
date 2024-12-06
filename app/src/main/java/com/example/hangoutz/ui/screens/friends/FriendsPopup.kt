@@ -31,7 +31,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import com.example.hangoutz.R
 import com.example.hangoutz.data.models.Friend
 import com.example.hangoutz.ui.components.DisplayUser
@@ -108,7 +107,7 @@ fun FriendsPopup(
                     painter = painterResource(id = R.drawable.ic_search),
                     contentDescription = stringResource(R.string.search_icon),
                     modifier = Modifier
-                        .size(40.dp),
+                        .size(Dimensions.CREATE_EVENT_SEARCH_ICON_SIZE),
                     contentScale = ContentScale.Fit
                 )
             }
@@ -152,7 +151,7 @@ fun FriendsPopup(
                     isCheckedInitial = participantSelected.any { it.id == user.id },
                     onChange = { onChange(it, user) },
                     addFriend = { addFriend(user.id) },
-                    onRemove = {onRemove(user)}
+                    onRemove = { onRemove(user) }
                 )
             }
         }

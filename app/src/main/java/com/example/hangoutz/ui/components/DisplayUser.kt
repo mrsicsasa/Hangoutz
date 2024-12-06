@@ -13,7 +13,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.outlined.Clear
-import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -29,7 +28,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.hangoutz.BuildConfig
@@ -101,6 +99,9 @@ fun DisplayUser(
                     IconButton(
                         onClick = {
                             onRemove()
+                        },
+                        modifier = Modifier.semantics {
+                            contentDescription = Constants.CREATE_EVENT_REMOVE_BUTTON
                         }
                     ) {
                         Icon(
@@ -109,7 +110,7 @@ fun DisplayUser(
                             tint = DeleteColor,
                             modifier = Modifier
                                 .align(Alignment.CenterEnd)
-                                .size(25.dp)
+                                .size(Dimensions.CREATE_EVENT_REMOVE_PARTICIPANT_ICON_SIZE)
                         )
                     }
 
