@@ -19,19 +19,20 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.hangoutz.R
 import com.example.hangoutz.ui.components.ActionButton
@@ -39,10 +40,13 @@ import com.example.hangoutz.ui.components.DatePickerModal
 import com.example.hangoutz.ui.components.InputField
 import com.example.hangoutz.ui.components.InputFieldWithIcon
 import com.example.hangoutz.ui.components.TimePickerModal
+import com.example.hangoutz.ui.screens.friends.FriendsPopup
 import com.example.hangoutz.ui.theme.Ivory
 import com.example.hangoutz.ui.theme.TopBarBackgroundColor
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Dimensions
+import kotlinx.coroutines.launch
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -50,8 +54,8 @@ fun CreateEventScreen(
     viewmodel: CreateEventViewModel = hiltViewModel()
 ) {
     val data = viewmodel.uiState.collectAsState()
-    val scrollableField =
-        LocalConfiguration.current.screenHeightDp.dp - (LocalConfiguration.current.screenHeightDp.dp - Dimensions.ACTION_BUTTON_MEDIUM4)
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val scope = rememberCoroutineScope()
 
     Scaffold(topBar = {
         TopAppBar(
@@ -76,6 +80,7 @@ fun CreateEventScreen(
             ),
         )
     }) { innerPadding ->
+
 
         Column(
             modifier = Modifier
@@ -202,7 +207,8 @@ fun CreateEventScreen(
                         modifier = Modifier
                             .clickable { }
                             .semantics {
-                                contentDescription = Constants.CREATE_EVENT_ADD_PARTICIPANTS_BUTTON
+                                contentDescription =
+                                    Constants.CREATE_EVENT_ADD_PARTICIPANTS_BUTTON
                             })
                 }
 
@@ -211,34 +217,65 @@ fun CreateEventScreen(
                 )
                 //TODO put participants here, use participantUI component (check event details screen)
             }
-
-            Column(
-            ) {
-                ActionButton(stringResource(R.string.event_create),
-                    modifier = Modifier
-                        .padding(bottom = Dimensions.ACTION_BUTTON_MEDIUM3)
-                        .semantics {
-                            contentDescription = Constants.CREATE_EVENT_CREATE_BUTTON
-                        },
-                    onClick = {
-                        viewmodel.createEvent()
+        }
+        Column(
+        ) {
+            ActionButton(stringResource(R.string.event_create),
+                modifier = Modifier
+                    .padding(bottom = Dimensions.ACTION_BUTTON_MEDIUM3)
+                    .semantics {
+                        contentDescription = Constants.CREATE_EVENT_CREATE_BUTTON
+                    },
+                onClick = {
+                    viewmodel.createEvent()
+                })
+            if (sheetState.isVisible) {
+                FriendsPopup(userList = data.value.listOfFriends,
+                    searchQuery = "",
+                    isLoading = data.value.isLoading,
+                    clearText = {},
+                    sheetState = sheetState,
+                    showBottomSheet = {
+                    },
+                    onTextInput = {
+                    },
+                    participantSelected = data.value.selectedParticipants,
+                    isCheckList = true,
+                    onAdd = {
+                        viewmodel.addSelectedParticipants()
+                        scope.launch { sheetState.hide() }
+                    },
+                    onChange = { isChecked, user ->
+                        if (isChecked) {
+                            viewmodel.addParticipant(user)
+                        } else {
+                            viewmodel.removeParticipant(user)
+                        }
                     })
             }
+        }
 
-            if (data.value.showDatePicker) {
-                DatePickerModal(onDateSelected = { date ->
-                    date?.let {
-                        viewmodel.onDatePicked(date)
-                    }
-                }, onDismiss = { viewmodel.setShowDatePicker() })
-            }
 
-            if (data.value.showTimePicker) {
-                TimePickerModal(onConfirm = { time ->
-                    viewmodel.onTimePicked(time)
-                    viewmodel.setShowTimePicker()
-                }, onDismiss = { viewmodel.setShowTimePicker() })
-            }
+
+        if (data.value.showDatePicker) {
+            DatePickerModal(onDateSelected = { date ->
+                date?.let {
+                    viewmodel.onDatePicked(date)
+                }
+            }, onDismiss = { viewmodel.setShowDatePicker() })
+        }
+
+        if (data.value.showTimePicker) {
+            TimePickerModal(onConfirm = { time ->
+                viewmodel.onTimePicked(time)
+                viewmodel.setShowTimePicker()
+            }, onDismiss = { viewmodel.setShowTimePicker() })
+        }
+
+
+        LaunchedEffect(sheetState.isVisible) {
+            viewmodel.getFriends()
+
         }
     }
 }
