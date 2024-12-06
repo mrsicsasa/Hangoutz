@@ -114,7 +114,7 @@ fun CreateEventScreen(
                     data.value.title,
                     { viewmodel.onTitleChange(it) },
                     modifier = Modifier.semantics {
-                        contentDescription = Constants.EVENT_OWNER_TITLE_FIELD
+                        contentDescription = Constants.CREATE_EVENT_TITLE_FIELD
                     },
                     true,
                     false,
@@ -128,7 +128,7 @@ fun CreateEventScreen(
                     data.value.description,
                     { viewmodel.onDescriptionChange(it) },
                     modifier = Modifier.semantics {
-                        contentDescription = Constants.EVENT_OWNER_DESC_FIELD
+                        contentDescription = Constants.CREATE_EVENT_DESC_FIELD
                     },
                     true, false, data.value.isDescError
                 )
@@ -139,7 +139,7 @@ fun CreateEventScreen(
                     data.value.city,
                     { viewmodel.onCityChange(it) },
                     modifier = Modifier.semantics {
-                        contentDescription = Constants.EVENT_OWNER_CITY_FIELD
+                        contentDescription = Constants.CREATE_EVENT_CITY_FIELD
                     },
                     true, false, data.value.isCityError
                 )
@@ -150,7 +150,7 @@ fun CreateEventScreen(
                     data.value.street,
                     { viewmodel.onStreetChange(it) },
                     modifier = Modifier.semantics {
-                        contentDescription = Constants.EVENT_OWNER_STREET_FIELD
+                        contentDescription = Constants.CREATE_EVENT_STREET_FIELD
                     },
                     true, false, data.value.isStreetError
                 )
@@ -162,7 +162,7 @@ fun CreateEventScreen(
                     data.value.place,
                     { viewmodel.onPlaceChange(it) },
                     modifier = Modifier.semantics {
-                        contentDescription = Constants.EVENT_OWNER_PLACE_FIELD
+                        contentDescription = Constants.CREATE_EVENT_PLACE_FIELD
                     },
                     true,
                     false,
@@ -185,7 +185,7 @@ fun CreateEventScreen(
                         modifier = Modifier
                             .weight(1f)
                             .semantics {
-                                contentDescription = Constants.EVENT_OWNER_DATE_FIELD
+                                contentDescription = Constants.CREATE_EVENT_DATE_FIELD
                             },
                         R.drawable.calendaricon,
                         true,
@@ -201,7 +201,7 @@ fun CreateEventScreen(
                         modifier = Modifier
                             .weight(1f)
                             .semantics {
-                                contentDescription = Constants.EVENT_OWNER_TIME_FIELD
+                                contentDescription = Constants.CREATE_EVENT_TIME_FIELD
                             },
                         R.drawable.clockicon,
                         true,
@@ -233,7 +233,7 @@ fun CreateEventScreen(
                         modifier = Modifier
                             .clickable { }
                             .semantics {
-                                contentDescription = Constants.EVENT_OWNER_ADD_PARTICIPANTS_BUTTON
+                                contentDescription = Constants.CREATE_EVENT_ADD_PARTICIPANTS_BUTTON
                             })
                 }
                 HorizontalDivider(
