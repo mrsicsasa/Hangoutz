@@ -29,6 +29,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.hangoutz.BuildConfig
@@ -88,8 +89,7 @@ fun DisplayUser(
                 )
             }
             Box(
-                contentAlignment = Alignment.CenterVertically,
-                modifier = Modifier.background(Color.Green)
+                contentAlignment = Alignment.CenterEnd
             ) {
                 if (isCheckList) {
                     Checkbox(
@@ -109,7 +109,7 @@ fun DisplayUser(
                             tint = DeleteColor,
                             modifier = Modifier
                                 .align(Alignment.CenterEnd)
-                                .size(Dimensions.ADD_ICON_SIZE)
+                                .size(25.dp)
                         )
                     }
 
