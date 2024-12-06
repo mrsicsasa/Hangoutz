@@ -35,6 +35,7 @@ object Constants {
     //Errors
     const val ERROR_EMPTY_FIELDS = "All fields must be filled!"
     const val ERROR_INVALID_INPUT = "Incorrect email or password"
+    const val ERROR_EMPTY_FIELD = "Fields marked with * must be filled"
 
     //Events screen
     const val GET_EVENTS_ERRORS = "Loading events errors"

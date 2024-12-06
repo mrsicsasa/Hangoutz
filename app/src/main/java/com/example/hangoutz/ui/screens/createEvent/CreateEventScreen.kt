@@ -4,7 +4,6 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,13 +29,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.hangoutz.R
 import com.example.hangoutz.ui.components.ActionButton
@@ -63,8 +60,6 @@ fun CreateEventScreen(
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
-    val scrollableField =
-        LocalConfiguration.current.screenHeightDp.dp - (LocalConfiguration.current.screenHeightDp.dp - Dimensions.ACTION_BUTTON_MEDIUM4)
 
     Scaffold(topBar = {
         TopAppBar(
@@ -90,7 +85,8 @@ fun CreateEventScreen(
         )
     }) { innerPadding ->
 
-        Box(
+
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .paint(
@@ -98,76 +94,75 @@ fun CreateEventScreen(
                     contentScale = ContentScale.FillBounds
                 )
         ) {
-            Box(
-                modifier = Modifier.padding(
-                    top = innerPadding.calculateTopPadding() + Dimensions.EVENT_DETAILS_TOP_PADDING,
-                    start = Dimensions.ACTION_BUTTON_MEDIUM2,
-                    end = Dimensions.ACTION_BUTTON_MEDIUM2,
-                    bottom = scrollableField
-                )
+
+            Column(
+                modifier = Modifier
+                    .padding(
+                        top = innerPadding.calculateTopPadding() + Dimensions.EVENT_DETAILS_TOP_PADDING,
+                        start = Dimensions.ACTION_BUTTON_MEDIUM2,
+                        end = Dimensions.ACTION_BUTTON_MEDIUM2,
+                        bottom = Dimensions.ACTION_BUTTON_SMALL1
+                    )
+                    .verticalScroll(rememberScrollState())
+                    .fillMaxSize()
+                    .weight(1f)
             ) {
-                Column {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .verticalScroll(rememberScrollState())
-                    ) {
-                        InputField(
-                            stringResource(R.string.event_title),
-                            data.value.title,
-                            { viewmodel.onTitleChange(it) },
-                            modifier = Modifier.semantics {
-                                contentDescription = Constants.CREATE_EVENT_TITLE_FIELD
-                            },
-                            true
-                        )
+                InputField(
+                    stringResource(R.string.event_title),
+                    data.value.title,
+                    { viewmodel.onTitleChange(it) },
+                    modifier = Modifier.semantics {
+                        contentDescription = Constants.CREATE_EVENT_TITLE_FIELD
+                    },
+                    true
+                )
 
-                        InputField(
-                            stringResource(R.string.event_desc),
-                            data.value.description,
-                            { viewmodel.onDescriptionChange(it) },
-                            modifier = Modifier.semantics {
-                                contentDescription = Constants.CREATE_EVENT_DESC_FIELD
-                            },
-                            true
-                        )
+                InputField(
+                    stringResource(R.string.event_desc),
+                    data.value.description,
+                    { viewmodel.onDescriptionChange(it) },
+                    modifier = Modifier.semantics {
+                        contentDescription = Constants.CREATE_EVENT_DESC_FIELD
+                    },
+                    true
+                )
 
-                        InputField(
-                            stringResource(R.string.event_city),
-                            data.value.city,
-                            { viewmodel.onCityChange(it) },
-                            modifier = Modifier.semantics {
-                                contentDescription = Constants.CREATE_EVENT_CITY_FIELD
-                            },
-                            true
-                        )
-                        InputField(
-                            stringResource(R.string.event_street),
-                            data.value.street,
-                            { viewmodel.onStreetChange(it) },
-                            modifier = Modifier.semantics {
-                                contentDescription = Constants.CREATE_EVENT_STREET_FIELD
-                            },
-                            true
-                        )
+                InputField(
+                    stringResource(R.string.event_city),
+                    data.value.city,
+                    { viewmodel.onCityChange(it) },
+                    modifier = Modifier.semantics {
+                        contentDescription = Constants.CREATE_EVENT_CITY_FIELD
+                    },
+                    true
+                )
+                InputField(
+                    stringResource(R.string.event_street),
+                    data.value.street,
+                    { viewmodel.onStreetChange(it) },
+                    modifier = Modifier.semantics {
+                        contentDescription = Constants.CREATE_EVENT_STREET_FIELD
+                    },
+                    true
+                )
 
-                        InputField(
-                            stringResource(R.string.event_place),
-                            data.value.place,
-                            { viewmodel.onPlaceChange(it) },
-                            modifier = Modifier.semantics {
-                                contentDescription = Constants.CREATE_EVENT_PLACE_FIELD
-                            },
-                            true
-                        )
+                InputField(
+                    stringResource(R.string.event_place),
+                    data.value.place,
+                    { viewmodel.onPlaceChange(it) },
+                    modifier = Modifier.semantics {
+                        contentDescription = Constants.CREATE_EVENT_PLACE_FIELD
+                    },
+                    true
+                )
 
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = Dimensions.CREATE_EVENT_VERTICAL_PADDING),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(Dimensions.CREATE_EVENT_HORIZONTAL_SPACING)
-                        ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = Dimensions.CREATE_EVENT_VERTICAL_PADDING),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(Dimensions.CREATE_EVENT_HORIZONTAL_SPACING)
+                ) {
 
                             InputFieldWithIcon(stringResource(R.string.event_date),
                                 data.value.date,
@@ -244,9 +239,11 @@ fun CreateEventScreen(
                     }
                 }
             }
+
+            Column(
+            ) {
             ActionButton(stringResource(R.string.event_create),
                 modifier = Modifier
-                    .align(Alignment.BottomCenter)
                     .padding(bottom = Dimensions.ACTION_BUTTON_MEDIUM3)
                     .semantics {
                         contentDescription = Constants.CREATE_EVENT_CREATE_BUTTON
@@ -283,18 +280,20 @@ fun CreateEventScreen(
         }
     }
 
-    if (data.value.showDatePicker) {
-        DatePickerModal(onDateSelected = { date ->
-            date?.let {
-                viewmodel.onDatePicked(date)
-            }
-        }, onDismiss = { viewmodel.setShowDatePicker() })
-    }
+        if (data.value.showDatePicker) {
+            DatePickerModal(onDateSelected = { date ->
+                date?.let {
+                    viewmodel.onDatePicked(date)
+                }
+            }, onDismiss = { viewmodel.setShowDatePicker() })
+        }
 
-    if (data.value.showTimePicker) {
-        TimePickerModal(onConfirm = { time ->
-            viewmodel.onTimePicked(time)
-            viewmodel.setShowTimePicker()
-        }, onDismiss = { viewmodel.setShowTimePicker() })
-    }
+        if (data.value.showTimePicker) {
+            TimePickerModal(onConfirm = { time ->
+                viewmodel.onTimePicked(time)
+                viewmodel.setShowTimePicker()
+            }, onDismiss = { viewmodel.setShowTimePicker() })
+        }
+}
+
 }

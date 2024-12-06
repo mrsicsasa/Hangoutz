@@ -25,8 +25,7 @@ fun InputField(
     isPassword: Boolean = false,
     modifier: Modifier = Modifier
 ) {
-    OutlinedTextField(
-        value = value,
+    OutlinedTextField(value = value,
         label = { Text(text = label, style = MaterialTheme.typography.bodySmall) },
         onValueChange = { onValueChange(it) },
         isError = isError,
@@ -63,15 +62,17 @@ fun InputField(
     onValueChange: (String) -> (Unit),
     modifier: Modifier = Modifier,
     isEnabled: Boolean = false,
-    isReadOnly: Boolean = false
+    isReadOnly: Boolean = false,
+    isError: Boolean = false
 ) {
-    OutlinedTextField(
-        value = value,
+
+    OutlinedTextField(value = value,
         label = { Text(text = label, style = MaterialTheme.typography.bodySmall) },
         onValueChange = { onValueChange(it) },
         singleLine = true,
-       enabled = isEnabled,
-
+        isError = isError,
+        enabled = isEnabled,
+        readOnly = isReadOnly,
         shape = RoundedCornerShape(Dimensions.INPUT_FIELD_ROUNDED_CORNERS),
         colors = OutlinedTextFieldDefaults.colors(
             disabledBorderColor = Ivory,
@@ -94,7 +95,7 @@ fun InputField(
                 bottom = Dimensions.INPUT_FIELD_PADDING_SMALL,
                 top = Dimensions.INPUT_FIELD_PADDING_SMALL,
 
-                )
+            )
             .fillMaxWidth()
     )
 }

@@ -36,7 +36,6 @@ object Dimensions {
     val INVITE_RESPOND_BUTTON_WIDTH: Dp = 105.dp
     val INVITE_RESPOND_BUTTON_FONT_SIZE = 12.sp
 
-
     //EventCard
     val CARD_ROUNDED_CORNER_RADIUS: Dp = 16.dp
     val CARD_HEIGHT: Dp = 135.dp
@@ -49,6 +48,8 @@ object Dimensions {
     val INVITATION_BOX_BOTTOM_PADDING: Dp = 10.dp
     val INVITATION_BUTTONS_SEPARATION_WIDTH = 10.dp
     val INVITE_RESPOND_BUTTON_INNER_PADDING = 2.dp
+    val ANIMATION_TARGET_VALUE = 360f
+    val ANIMATION_DURATION = 3000
 
     //Profile image
     val PROFILE_IMAGE_SIZE: Dp = 74.dp
@@ -144,7 +145,7 @@ object Dimensions {
     val FRIENDS_LOADING_SPINNER_SIZE = 40.dp
     val DISMISS_ICON_END_PADDING = 8.dp
     val SPACER_FROM_FRIEND_UP = 10.dp
-    val SPACER_FROM_FRIEND_DOWN = 15.dp
+    val SPACER_FROM_FRIEND_DOWN = 5.dp
     val FRIENDS_POPUP_PARTICIPANT_COLUMN = 0.85f
     val FRIENDS_POPUP_COLUMN = 1f
     val BUTTON_COLUMN_BOTTOM_PADDING = 10.dp
@@ -153,9 +154,6 @@ object Dimensions {
     val BUTTON_HEIGHT = 53.dp
     val ADD_FONT_WEIGHT = 700
     val ADD_FONT_SIZE = 20.sp
-
-    //EVENT DETAILS SCREEN
-    val EVENT_DETAILS_TOP_PADDING = 35.dp
 
     //CREATE EVENT
     val CREATE_EVENT_HORIZONTAL_SPACING = 35.dp
@@ -168,6 +166,13 @@ object Dimensions {
     val CREATE_EVENT_TEXT_PADDING2 = 12.dp
     val CREATE_EVENT_REMOVE_PARTICIPANT_ICON_SIZE = 25.dp
     val CREATE_EVENT_SEARCH_ICON_SIZE = 40.dp
+
+    //TIME PICKER
+    val TIME_PICKER_CORNERS = 20.dp
+
+    //EVENT DETAILS SCREEN
+    val EVENT_DETAILS_TOP_PADDING = 35.dp
+
 }
 
 
