@@ -42,6 +42,7 @@ import com.example.hangoutz.ui.components.InputFieldWithIcon
 import com.example.hangoutz.ui.components.TimePickerModal
 import com.example.hangoutz.ui.screens.friends.FriendsPopup
 import com.example.hangoutz.ui.theme.Ivory
+import com.example.hangoutz.ui.theme.OrangeButton
 import com.example.hangoutz.ui.theme.TopBarBackgroundColor
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Dimensions
@@ -254,8 +255,7 @@ fun CreateEventScreen(
                     })
             }
         }
-
-
+    }
 
         if (data.value.showDatePicker) {
             DatePickerModal(onDateSelected = { date ->
@@ -279,4 +279,3 @@ fun CreateEventScreen(
         }
     }
 }
-
