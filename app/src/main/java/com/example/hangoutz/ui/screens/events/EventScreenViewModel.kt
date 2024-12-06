@@ -225,7 +225,4 @@ class EventScreenViewModel @Inject constructor(
             }
         }
     }
-
-
-
 }
