@@ -27,7 +27,8 @@ data class FriendsUIState(
     val isPopupLoading: Boolean = false,
     val popupSearch: String = "",
     val addFriendList: List<Friend> = emptyList(),
-    val addedFriendId: UUID = UUID.randomUUID()
+    val addedFriendId: UUID = UUID.randomUUID(),
+    val isFiltered: Boolean = false
 )
 
 @HiltViewModel
@@ -39,15 +40,29 @@ class FriendsViewModel @Inject constructor(
     var uiState: StateFlow<FriendsUIState> = _uiState
 
     fun onSearchInput(newText: String) {
-        _uiState.value = _uiState.value.copy(searchQuery = newText, isLoading = true)
+        _uiState.value = _uiState.value.copy(searchQuery = newText)
         if (_uiState.value.searchQuery.length >= Constants.MIN_SEARCH_LENGTH) {
+            _uiState.value = _uiState.value.copy(
+                isFiltered = true,
+                isLoading = true
+            )
             fetchFriends(isSearching = true)
         } else {
-            fetchFriends(isSearching = false)
+            if (_uiState.value.isFiltered){
+                _uiState.value = _uiState.value.copy(
+                    isFiltered = false,
+                    isLoading = true
+                )
+                fetchFriends(isSearching = false)
+            }
         }
     }
 
     fun fetchFriends(isSearching: Boolean) {
+        _uiState.value = _uiState.value.copy(
+            listOfFriends = emptyList(),
+            isLoading = true
+        )
         if (_uiState.value.isLoading) {
             viewModelScope.launch {
                 val response = withContext(Dispatchers.IO) {
@@ -76,27 +91,7 @@ class FriendsViewModel @Inject constructor(
             }
         }
     }
-    fun getFriends() {
-        _uiState.value = _uiState.value.copy(
-            listOfFriends = emptyList(),
-            isLoading = true
-        )
-        viewModelScope.launch {
-            val response = withContext(Dispatchers.IO) {
-                SharedPreferencesManager.getUserId(context)?.let {
-                    MutableStateFlow(friendsRepository.getFriendsFromUserId(it))
-                }
-            }
-            response?.value?.let {
-                if (it.isSuccessful) {
-                    response.value.body()?.let {
-                        _uiState.value =
-                            _uiState.value.copy(listOfFriends = it.sortedBy { it.users.name.uppercase() }, isLoading = false)
-                    }
-                }
-            }
-        }
-    }
+
     fun removeFriend(friendId: UUID) {
         viewModelScope.launch {
             val response = withContext(Dispatchers.IO) {
@@ -105,7 +100,15 @@ class FriendsViewModel @Inject constructor(
                 }
             }
             if (response?.isSuccessful == true) {
-                getFriends()
+                if (_uiState.value.searchQuery.length < Constants.MIN_SEARCH_LENGTH) {
+                    fetchFriends(false)
+                }
+                else {
+                    _uiState.value = _uiState.value.copy(
+                        isLoading = true
+                    )
+                    fetchFriends(true)
+                }
             }
         }
     }
