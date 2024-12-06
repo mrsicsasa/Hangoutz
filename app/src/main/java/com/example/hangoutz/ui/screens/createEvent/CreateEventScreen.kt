@@ -241,7 +241,6 @@ fun CreateEventScreen(
                 )
                 //TODO put participants here, use participantUI component (check event details screen)
             }
-
             Column(
             ) {
                 ActionButton(stringResource(R.string.event_create),
@@ -293,7 +292,6 @@ fun CreateEventScreen(
                         })
                 }
             }
-        }
 
             if (data.value.showDatePicker) {
                 DatePickerModal(onDateSelected = { date ->
