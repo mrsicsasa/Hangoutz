@@ -18,9 +18,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -49,9 +46,6 @@ fun DisplayUser(
     onChange: (Boolean) -> Unit = {},
     addFriend: () -> Unit = {}
 ) {
-    val isChecked = remember { mutableStateOf(isCheckedInitial) }
-
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -63,7 +57,6 @@ fun DisplayUser(
                 .fillMaxWidth()
                 .padding(vertical = Dimensions.BOTTOM_SHEET_USER_PADDING)
         ) {
-            // Left side items
             Row(verticalAlignment = Alignment.CenterVertically) {
                 GlideImage(
                     model = "${BuildConfig.BASE_URL_AVATAR}${userAvatar ?: Constants.DEFAULT_USER_PHOTO}",
@@ -88,15 +81,14 @@ fun DisplayUser(
                         }
                 )
             }
-            // Right side items
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 if (!isParticipant) {
                     if (isCheckList) {
                         Checkbox(
-                            checked = isChecked.value,
-                            onCheckedChange = { isChecked.value = !isChecked.value }
+                            checked = isCheckedInitial,
+                            onCheckedChange = { onChange(!isCheckedInitial) }
                         )
                     } else {
                         IconButton(
@@ -121,13 +113,10 @@ fun DisplayUser(
                 }
             }
         }
-                HorizontalDivider(
-                    color = Color.Black,
-                    thickness = Dimensions.BOTTOM_SHEET_DIVIDER_WIDTH
-                )
-            }
-            LaunchedEffect(isChecked.value) {
-                onChange(isChecked.value)
-            }
-        }
+        HorizontalDivider(
+            color = Color.Black,
+            thickness = Dimensions.BOTTOM_SHEET_DIVIDER_WIDTH
+        )
+    }
+}
 

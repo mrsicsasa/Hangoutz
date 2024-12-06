@@ -97,126 +97,127 @@ fun CreateEventScreen(
         ) {
             Box(
                 modifier = Modifier.padding(
-                    top = innerPadding.calculateTopPadding() + Dimensions.EVENTDETAILS_TOP_PADDING,
+                    top = innerPadding.calculateTopPadding() + Dimensions.EVENT_DETAILS_TOP_PADDING,
                     start = Dimensions.ACTION_BUTTON_MEDIUM2,
                     end = Dimensions.ACTION_BUTTON_MEDIUM2,
                     bottom = scrollableField
                 )
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .verticalScroll(rememberScrollState())
-                ) {
-                    InputField(
-                        stringResource(R.string.event_title),
-                        data.value.title,
-                        { viewmodel.onTitleChange(it) },
-                        modifier = Modifier.semantics {
-                            contentDescription = Constants.CREATE_EVENT_TITLE_FIELD
-                        },
-                        true
-                    )
-
-                    InputField(
-                        stringResource(R.string.event_desc),
-                        data.value.description,
-                        { viewmodel.onDescriptionChange(it) },
-                        modifier = Modifier.semantics {
-                            contentDescription = Constants.CREATE_EVENT_DESC_FIELD
-                        },
-                        true
-                    )
-
-                    InputField(
-                        stringResource(R.string.event_city),
-                        data.value.city,
-                        { viewmodel.onCityChange(it) },
-                        modifier = Modifier.semantics {
-                            contentDescription = Constants.CREATE_EVENT_CITY_FIELD
-                        },
-                        true
-                    )
-                    InputField(
-                        stringResource(R.string.event_street),
-                        data.value.street,
-                        { viewmodel.onStreetChange(it) },
-                        modifier = Modifier.semantics {
-                            contentDescription = Constants.CREATE_EVENT_STREET_FIELD
-                        },
-                        true
-                    )
-
-                    InputField(
-                        stringResource(R.string.event_place),
-                        data.value.place,
-                        { viewmodel.onPlaceChange(it) },
-                        modifier = Modifier.semantics {
-                            contentDescription = Constants.CREATE_EVENT_PLACE_FIELD
-                        },
-                        true
-                    )
-
-                    Row(
+                Column {
+                    Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = Dimensions.CREATE_EVENT_VERTICAL_PADDING),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(Dimensions.CREATE_EVENT_HORIZONTAL_SPACING)
+                            .verticalScroll(rememberScrollState())
                     ) {
-
-                        InputFieldWithIcon(stringResource(R.string.event_date),
-                            data.value.date,
-                            { viewmodel.onDateChange(it) },
-                            modifier = Modifier
-                                .weight(1f)
-                                .semantics {
-                                    contentDescription = Constants.CREATE_EVENT_DATE_FIELD
-                                },
-                            R.drawable.calendaricon,
-                            isEnabled = true,
-                            isReadOnly = true,
-                            onClick = { viewmodel.setShowDatePicker() })
-
-                        InputFieldWithIcon(stringResource(R.string.event_time),
-                            data.value.time,
-                            { viewmodel.onTimeChange(it) },
-                            modifier = Modifier
-                                .weight(1f)
-                                .semantics {
-                                    contentDescription = Constants.CREATE_EVENT_TIME_FIELD
-                                },
-                            R.drawable.clockicon,
-                            isEnabled = true,
-                            isReadOnly = true,
-                            onClick = { viewmodel.setShowTimePicker() })
-                    }
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = Dimensions.CREATE_EVENT_VERTICAL_PADDING),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(
-                            stringResource(R.string.event_participants),
-                            color = Ivory,
-                            modifier = Modifier.padding(
-                                top = Dimensions.CREATE_EVENT_TEXT_PADDING,
-                                bottom = Dimensions.CREATE_EVENT_TEXT_PADDING
-                            ),
-                            style = MaterialTheme.typography.bodyMedium
+                        InputField(
+                            stringResource(R.string.event_title),
+                            data.value.title,
+                            { viewmodel.onTitleChange(it) },
+                            modifier = Modifier.semantics {
+                                contentDescription = Constants.CREATE_EVENT_TITLE_FIELD
+                            },
+                            true
                         )
-                        Image(painter = painterResource(id = R.drawable.addevent),
-                            contentDescription = "",
+
+                        InputField(
+                            stringResource(R.string.event_desc),
+                            data.value.description,
+                            { viewmodel.onDescriptionChange(it) },
+                            modifier = Modifier.semantics {
+                                contentDescription = Constants.CREATE_EVENT_DESC_FIELD
+                            },
+                            true
+                        )
+
+                        InputField(
+                            stringResource(R.string.event_city),
+                            data.value.city,
+                            { viewmodel.onCityChange(it) },
+                            modifier = Modifier.semantics {
+                                contentDescription = Constants.CREATE_EVENT_CITY_FIELD
+                            },
+                            true
+                        )
+                        InputField(
+                            stringResource(R.string.event_street),
+                            data.value.street,
+                            { viewmodel.onStreetChange(it) },
+                            modifier = Modifier.semantics {
+                                contentDescription = Constants.CREATE_EVENT_STREET_FIELD
+                            },
+                            true
+                        )
+
+                        InputField(
+                            stringResource(R.string.event_place),
+                            data.value.place,
+                            { viewmodel.onPlaceChange(it) },
+                            modifier = Modifier.semantics {
+                                contentDescription = Constants.CREATE_EVENT_PLACE_FIELD
+                            },
+                            true
+                        )
+
+                        Row(
                             modifier = Modifier
-                                .clickable { scope.launch { sheetState.show() } }
-                                .semantics {
-                                    contentDescription =
-                                        Constants.CREATE_EVENT_ADD_PARTICIPANTS_BUTTON
-                                })
+                                .fillMaxWidth()
+                                .padding(vertical = Dimensions.CREATE_EVENT_VERTICAL_PADDING),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(Dimensions.CREATE_EVENT_HORIZONTAL_SPACING)
+                        ) {
+
+                            InputFieldWithIcon(stringResource(R.string.event_date),
+                                data.value.date,
+                                { viewmodel.onDateChange(it) },
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .semantics {
+                                        contentDescription = Constants.CREATE_EVENT_DATE_FIELD
+                                    },
+                                R.drawable.calendaricon,
+                                isEnabled = true,
+                                isReadOnly = true,
+                                onClick = { viewmodel.setShowDatePicker() })
+
+                            InputFieldWithIcon(stringResource(R.string.event_time),
+                                data.value.time,
+                                { viewmodel.onTimeChange(it) },
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .semantics {
+                                        contentDescription = Constants.CREATE_EVENT_TIME_FIELD
+                                    },
+                                R.drawable.clockicon,
+                                isEnabled = true,
+                                isReadOnly = true,
+                                onClick = { viewmodel.setShowTimePicker() })
+                        }
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = Dimensions.CREATE_EVENT_VERTICAL_PADDING),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(
+                                stringResource(R.string.event_participants),
+                                color = Ivory,
+                                modifier = Modifier.padding(
+                                    top = Dimensions.CREATE_EVENT_TEXT_PADDING,
+                                    bottom = Dimensions.CREATE_EVENT_TEXT_PADDING
+                                ),
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                            Image(painter = painterResource(id = R.drawable.addevent),
+                                contentDescription = "",
+                                modifier = Modifier
+                                    .clickable { scope.launch { sheetState.show() } }
+                                    .semantics {
+                                        contentDescription =
+                                            Constants.CREATE_EVENT_ADD_PARTICIPANTS_BUTTON
+                                    })
+                        }
                     }
-                }
                     HorizontalDivider(
                         thickness = Dimensions.CREATE_EVENT_LINE_THICKNESS, color = Ivory
                     )
@@ -228,6 +229,7 @@ fun CreateEventScreen(
                         }
                     }
                 }
+            }
             ActionButton(stringResource(R.string.event_create),
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
