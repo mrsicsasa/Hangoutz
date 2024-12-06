@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hangoutz.data.local.SharedPreferencesManager
+import com.example.hangoutz.data.models.EventCardDPO
 import com.example.hangoutz.data.models.Friend
 import com.example.hangoutz.domain.repository.FriendsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel

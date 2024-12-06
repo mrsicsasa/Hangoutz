@@ -51,9 +51,6 @@ fun EventDetailsScreen(
     val data = viewmodel.uiState.collectAsState()
     viewmodel.getEventIdFromController(navController)
 
-    val scrollableField =
-        LocalConfiguration.current.screenHeightDp.dp - (LocalConfiguration.current.screenHeightDp.dp - Dimensions.ACTION_BUTTON_MEDIUM4)
-
     Scaffold(topBar = {
         TopAppBar(modifier = Modifier
             .height(Dimensions.TOP_BAR_HEIGHT)
@@ -87,20 +84,7 @@ fun EventDetailsScreen(
             Column(
                 modifier = Modifier
                     .padding(
-                        top = innerPadding.calculateTopPadding() + Dimensions.EVENTDETAILS_TOP_PADDING,
-                        start = Dimensions.ACTION_BUTTON_MEDIUM2,
-                        end = Dimensions.ACTION_BUTTON_MEDIUM2,
-                        bottom = Dimensions.ACTION_BUTTON_SMALL1
-                    )
-                    .verticalScroll(rememberScrollState())
-                    .fillMaxSize()
-                    .weight(1f)
-            ) {
-
-            Column(
-                modifier = Modifier
-                    .padding(
-                        top = innerPadding.calculateTopPadding() + Dimensions.EVENTDETAILS_TOP_PADDING,
+                        top = innerPadding.calculateTopPadding() + Dimensions.EVENT_DETAILS_TOP_PADDING,
                         start = Dimensions.ACTION_BUTTON_MEDIUM2,
                         end = Dimensions.ACTION_BUTTON_MEDIUM2,
                         bottom = Dimensions.ACTION_BUTTON_SMALL1

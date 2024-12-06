@@ -89,9 +89,11 @@ fun MyEventsScreen(
                         counts = data.value.counts,
                         avatars = data.value.avatars,
                         getBackgroundColor = { viewModel.getCardColor(it) },
-                        getEvents = { viewModel.getEvents(it) })
+                        getEvents = { viewModel.getEvents(it) },
+                        isCurrentUserOwner = { viewModel.isCurrentUserOwner(it) })
 
-                    1 -> EventsList(navController,
+                    1 -> EventsList(
+                        navController,
                         page = EventsFilterOptions.INVITED.name,
                         events = data.value.eventsInvited,
                         isLoading = data.value.isLoading,
@@ -108,7 +110,8 @@ fun MyEventsScreen(
                             viewModel.updateInvitesStatus(
                                 status = Constants.EVENT_STATUS_ACCEPTED, eventId = it
                             )
-                        })
+                        }, isClickable = false
+                    )
 
                     2 -> EventsList(navController,
                         page = EventsFilterOptions.MINE.name,
@@ -117,7 +120,8 @@ fun MyEventsScreen(
                         counts = data.value.counts,
                         avatars = data.value.avatars,
                         getBackgroundColor = { viewModel.getCardColor(it) },
-                        getEvents = { viewModel.getEvents(it) })
+                        getEvents = { viewModel.getEvents(it) },
+                        isCurrentUserOwner = { viewModel.isCurrentUserOwner(it) })
                 }
             }
         }
@@ -144,12 +148,14 @@ fun EventsList(
     getBackgroundColor: (index: Int) -> Color,
     getEvents: (page: String) -> Unit,
     onRejected: (id: UUID) -> Unit = {},
-    onAccepted: (id: UUID) -> Unit = {}
+    onAccepted: (id: UUID) -> Unit = {},
+    isCurrentUserOwner: ((EventCardDPO) -> Boolean)? = null,
+    isClickable: Boolean = true
 ) {
     val angle = remember {
         androidx.compose.animation.core.Animatable(0f)
     }
-    val context = LocalContext.current
+
     Box(contentAlignment = Alignment.Center) {
         if (isLoading) {
             CircularProgressIndicator(modifier = Modifier.semantics { Constants.EVENTS_LOADING_SPINNER })
@@ -184,12 +190,13 @@ fun EventsList(
                             date = event.date.toDate().toEventDateDPO(),
                             countOfPeople = (countOfPeoplePair?.second ?: 0),
                             modifier = Modifier
-                                .clickable {
-                                    val destination = if (isCurrentUserOwner(context, event)) {
-                                        "EVENT_OWNER/${event.id}"
-                                    } else {
-                                        "EVENT_DETAILS/${event.id}"
-                                    }
+                                .clickable(enabled = isClickable) {
+                                    val destination =
+                                        if (isCurrentUserOwner?.let { it1 -> it1(event) } == true) {
+                                            "EVENT_OWNER/${event.id}"
+                                        } else {
+                                            "EVENT_DETAILS/${event.id}"
+                                        }
                                     Log.e("Destination", destination)
                                     navController.navigate(destination)
                                 }
@@ -209,19 +216,9 @@ fun EventsList(
     LaunchedEffect(key1 = true) {
         getEvents(page)
         angle.animateTo(
-            360f, animationSpec = tween(
-                3000, easing = EaseInOut
+            Dimensions.ANIMATION_TARGET_VALUE, animationSpec = tween(
+                Dimensions.ANIMATION_DURATION, easing = EaseInOut
             )
         )
     }
-}
-
-fun isCurrentUserOwner(context: Context, event: EventCardDPO): Boolean {
-    var isOwner: Boolean = false
-    val userId = SharedPreferencesManager.getUserId(context)
-    Log.e("comparing", userId + " and " + event.owner.toString())
-    if (userId == event.owner.toString()) {
-        isOwner = true
-    }
-    return isOwner
 }

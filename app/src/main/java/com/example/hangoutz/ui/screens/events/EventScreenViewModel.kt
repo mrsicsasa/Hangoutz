@@ -6,6 +6,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hangoutz.data.local.SharedPreferencesManager
+import com.example.hangoutz.data.models.EventCardDPO
 import com.example.hangoutz.data.models.UpdateEventStatusDTO
 import com.example.hangoutz.data.models.toEventCardDPO
 import com.example.hangoutz.domain.repository.EventRepository
@@ -224,5 +225,10 @@ class EventScreenViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun isCurrentUserOwner(event: EventCardDPO): Boolean {
+        val userId = SharedPreferencesManager.getUserId(context)
+        return userId == event.owner.toString()
     }
 }
