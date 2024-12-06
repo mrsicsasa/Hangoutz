@@ -226,7 +226,6 @@ class EventScreenViewModel @Inject constructor(
             }
         }
     }
-
     fun isCurrentUserOwner(event: EventCardDPO): Boolean {
         val userId = SharedPreferencesManager.getUserId(context)
         return userId == event.owner.toString()

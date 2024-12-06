@@ -20,7 +20,6 @@ import java.util.UUID
 import javax.inject.Inject
 
 data class EventDetailsData(
-    var isMine: Boolean = true,
     var eventId: UUID? = null,
     var title: String = "",
     var description: String = "",
@@ -54,6 +53,7 @@ class EventDetailsOwnerViewModel @Inject constructor(
     private val inviteRepository: InviteRepository,
     private val userRepository: UserRepository,
     private val eventRepository: EventRepository,
+    @ApplicationContext private val context: Context
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(EventDetailsData())
@@ -182,22 +182,15 @@ class EventDetailsOwnerViewModel @Inject constructor(
                     val (formattedDate, formattedTime) = formatDateTime(dateTemp)
 
                     _uiState.value = _uiState.value.copy(date = formattedDate, time = formattedTime)
-                    Log.d(
-                        "EventDetailsViewModel",
-                        "Fetching event details for eventId: ${_uiState.value.eventId}"
-                    )
 
                     val invitesResponse =
                         _uiState.value.eventId?.let { inviteRepository.getInvitesByEventId(it) }
                     if (invitesResponse?.isSuccessful == true && invitesResponse.body() != null) {
                         val acceptedUserIds: List<UUID> =
                             invitesResponse.body()!!.map { invite -> invite.userId }
-                        Log.d("EventDetailsViewModel", "Accepted user IDs: $acceptedUserIds")
-
                         val usersResponse = userRepository.getAllUsers()
                         if (usersResponse?.isSuccessful == true && usersResponse.body() != null) {
                             val allUsers: List<User> = usersResponse.body()!!
-
                             val acceptedUsers: List<User> = allUsers.filter { user ->
                                 user.id in acceptedUserIds
                             }
@@ -331,6 +324,9 @@ class EventDetailsOwnerViewModel @Inject constructor(
 
     fun onTitleChange(title: String) {
         _uiState.value = _uiState.value.copy(title = title, isTitleError = false)
+        if (title.trimEnd().trimStart().isEmpty()) {
+            _uiState.value = _uiState.value.copy(errorMessage = Constants.ERROR_EMPTY_FIELD)
+        } else _uiState.value = _uiState.value.copy(title = title)
     }
 
     fun onDescriptionChange(description: String) {
@@ -347,13 +343,25 @@ class EventDetailsOwnerViewModel @Inject constructor(
 
     fun onPlaceChange(place: String) {
         _uiState.value = _uiState.value.copy(place = place, isPlaceError = false)
+        if (place.trimEnd().trimStart().isEmpty()) {
+            _uiState.value = _uiState.value.copy(errorMessage = Constants.ERROR_EMPTY_FIELD)
+        } else
+            _uiState.value = _uiState.value.copy(place = place)
     }
 
     fun onDateChange(date: String) { //TODO Configure datepicker validation
         _uiState.value = _uiState.value.copy(date = date, isDateError = false)
+        if (date.trim().isEmpty()) {
+            _uiState.value = _uiState.value.copy(errorMessage = Constants.ERROR_EMPTY_FIELD)
+        } else
+            _uiState.value = _uiState.value.copy(date = date)
     }
 
     fun onTimeChange(time: String) { //TODO Configure timepicker validation
         _uiState.value = _uiState.value.copy(time = time, isDateError = false)
+        if (time.trim().isEmpty()) {
+            _uiState.value = _uiState.value.copy(errorMessage = Constants.ERROR_EMPTY_FIELD)
+        } else
+            _uiState.value = _uiState.value.copy(time = time)
     }
 }

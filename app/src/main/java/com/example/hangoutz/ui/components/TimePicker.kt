@@ -36,7 +36,6 @@ fun TimePickerModal(
         initialMinute = currentTime.get(Calendar.MINUTE),
         is24Hour = true,
     )
-
     BasicAlertDialog(
         onDismissRequest = onDismiss,
         modifier = Modifier.clip(RoundedCornerShape(20.dp))
