@@ -94,6 +94,7 @@ fun InputField(
             .padding(
                 bottom = Dimensions.INPUT_FIELD_PADDING_SMALL,
                 top = Dimensions.INPUT_FIELD_PADDING_SMALL,
+
             )
             .fillMaxWidth()
     )

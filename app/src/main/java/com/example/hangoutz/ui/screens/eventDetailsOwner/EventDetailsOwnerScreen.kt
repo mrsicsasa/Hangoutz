@@ -112,29 +112,29 @@ fun EventOwnerDetailsScreen(
                     .fillMaxSize()
                     .weight(1f)
             ) {
-                data.value.title?.let {
-                    InputField(stringResource(R.string.event_title),
-                        it,
-                        { viewmodel.onTitleChange(it) },
-                        modifier = Modifier.semantics {
-                            contentDescription = Constants.EVENT_OWNER_TITLE_FIELD
-                        },
-                        true,
-                        false,
-                        data.value.isError
-                    )
-                }
-                data.value.description?.let {
-                    InputField(
-                        stringResource(R.string.event_desc),
-                        it,
-                        { viewmodel.onDescriptionChange(it) },
-                        modifier = Modifier.semantics {
-                            contentDescription = Constants.EVENT_OWNER_DESC_FIELD
-                        },
-                        true
-                    )
-                }
+                    data.value.title?.let {
+                        InputField(
+                            stringResource(R.string.event_title),
+                            it,
+                            { viewmodel.onTitleChange(it) },
+                            modifier = Modifier.semantics {
+                                contentDescription = Constants.EVENT_OWNER_TITLE_FIELD
+                            },
+                            true
+                        )
+                    }
+
+                    data.value.description?.let {
+                        InputField(
+                            stringResource(R.string.event_desc),
+                            it,
+                            { viewmodel.onDescriptionChange(it) },
+                            modifier = Modifier.semantics {
+                                contentDescription = Constants.EVENT_OWNER_DESC_FIELD
+                            },
+                            true
+                        )
+                    }
 
                 data.value.city?.let {
                     InputField(stringResource(R.string.event_city),
@@ -282,5 +282,6 @@ fun EventOwnerDetailsScreen(
                 }, onDismiss = { viewmodel.setShowTimePicker() })
             }
         }
+    }
     }
 }

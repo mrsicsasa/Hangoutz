@@ -166,6 +166,7 @@ object Constants {
     const val FRIENDS_SEARCH_BAR = "friendsSearchBar"
     const val FRIENDS_LOADING_SPINNER = "friendsLoadingSpinner"
     const val NO_FRIENDS_AVAILABLE_MESSAGE = "noFriendsAvailableMessage"
+    const val CREATE_EVENT_ADD_SELECTED_PARTICIPANTS_BUTTON = "createEventAddSelectedParticipantsButton"
 
     //Bottom sheet
     const val BOTTOM_SHEET_TAG = "bottomSheet"
@@ -182,14 +183,14 @@ object Constants {
     const val PARTICIPANT_IMAGE = "participantImage"
     const val PARTICIPANT_DIVIDER = "participantDivider"
 
-    const val EVENT_DETAILS_TITLE  = "eventDetailsTitle"
-    const val EVENT_DETAILS_DESC  = "eventDetailsDescription"
-    const val EVENT_DETAILS_PLACE  = "eventDetailsPlace"
-    const val EVENT_DETAILS_STREET  = "eventDetailsStreet"
-    const val EVENT_DETAILS_CITY  = "eventDetailsCity"
+    const val EVENT_DETAILS_TITLE = "eventDetailsTitle"
+    const val EVENT_DETAILS_DESC = "eventDetailsDescription"
+    const val EVENT_DETAILS_PLACE = "eventDetailsPlace"
+    const val EVENT_DETAILS_STREET = "eventDetailsStreet"
+    const val EVENT_DETAILS_CITY = "eventDetailsCity"
     const val EVENT_DETAILS_DATE = "eventDetailsDate"
-    const val EVENT_DETAILS_TIME  = "eventDetailsTime"
-    const val EVENT_DETAILS_LEAVE_EVENT_BUTTON  = "eventDetailsLeaveEventButton"
+    const val EVENT_DETAILS_TIME = "eventDetailsTime"
+    const val EVENT_DETAILS_LEAVE_EVENT_BUTTON = "eventDetailsLeaveEventButton"
 
     const val EVENT_OWNER_TITLE_FIELD = "eventOwnerTitleField"
     const val EVENT_OWNER_DESC_FIELD = "eventOwnerDescriptionField"

@@ -2,16 +2,26 @@ package com.example.hangoutz.ui.screens.createEvent
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
-import com.example.hangoutz.data.models.User
+import androidx.lifecycle.viewModelScope
+import com.example.hangoutz.data.local.SharedPreferencesManager
+import com.example.hangoutz.data.models.Friend
+import com.example.hangoutz.domain.repository.FriendsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
-
+import androidx.lifecycle.viewModelScope
+import com.example.hangoutz.data.local.SharedPreferencesManager
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.Dispatchers
 
 data class EventDetailsData(
 
@@ -26,17 +36,62 @@ data class EventDetailsData(
     var showDatePicker: Boolean = false,
     var showTimePicker: Boolean = false,
 )
-
 @HiltViewModel
 class CreateEventViewModel @Inject constructor(
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    private val friendsRepository: FriendsRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(EventDetailsData())
     val uiState: StateFlow<EventDetailsData> = _uiState
 
+    init {
+        getFriends()
+    }
+
     fun createEvent() {
         //TODO
+    }
+
+    fun getFriends() {
+        _uiState.value = _uiState.value.copy(
+            listOfFriends = emptyList(),
+            isLoading = true
+        )
+        viewModelScope.launch {
+            val response = withContext(Dispatchers.IO) {
+                SharedPreferencesManager.getUserId(context)?.let {
+                    MutableStateFlow(friendsRepository.getFriendsFromUserId(it))
+                }
+            }
+            response?.value?.let {
+                if (it.isSuccessful) {
+                    response.value.body()?.let {
+                        _uiState.value =
+                            _uiState.value.copy(listOfFriends = it.sortedBy { it.users.name.uppercase() }
+                                .map { it.users } - _uiState.value.participants, isLoading = false)
+                    }
+                }
+            }
+        }
+    }
+
+    fun addParticipant(user: Friend) {
+        _uiState.value = _uiState.value.copy(
+            selectedParticipants = _uiState.value.selectedParticipants + user
+        )
+    }
+
+    fun removeParticipant(user: Friend) {
+        _uiState.value = _uiState.value.copy(
+            selectedParticipants = _uiState.value.selectedParticipants - user
+        )
+    }
+
+    fun addSelectedParticipants() {
+        _uiState.value = _uiState.value.copy(
+            participants = _uiState.value.participants + _uiState.value.selectedParticipants
+        )
     }
 
     fun onTimePicked(date: Long) {
@@ -44,7 +99,7 @@ class CreateEventViewModel @Inject constructor(
         onTimeChange(formattedTime)
     }
 
-   private fun formatTime(timeMillis: Long): String {
+    private fun formatTime(timeMillis: Long): String {
         val timeFormat = SimpleDateFormat("HH.mm", Locale.getDefault())
         return timeFormat.format(Date(timeMillis))
     }
