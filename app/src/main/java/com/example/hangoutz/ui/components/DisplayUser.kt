@@ -46,8 +46,6 @@ fun DisplayUser(
     onChange: (Boolean) -> Unit = {},
     addFriend: () -> Unit = {}
 ) {
-
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -59,7 +57,6 @@ fun DisplayUser(
                 .fillMaxWidth()
                 .padding(vertical = Dimensions.BOTTOM_SHEET_USER_PADDING)
         ) {
-            // Left side items
             Row(verticalAlignment = Alignment.CenterVertically) {
                 GlideImage(
                     model = "${BuildConfig.BASE_URL_AVATAR}${userAvatar ?: Constants.DEFAULT_USER_PHOTO}",
@@ -91,7 +88,7 @@ fun DisplayUser(
                     if (isCheckList) {
                         Checkbox(
                             checked = isCheckedInitial,
-                            onCheckedChange = { onChange(!isCheckedInitial)}
+                            onCheckedChange = { onChange(!isCheckedInitial) }
                         )
                     } else {
                         IconButton(
