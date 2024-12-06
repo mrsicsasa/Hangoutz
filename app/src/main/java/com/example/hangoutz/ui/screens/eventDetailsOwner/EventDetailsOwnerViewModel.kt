@@ -1,5 +1,6 @@
 package com.example.hangoutz.ui.screens.eventDetailsOwner
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,6 +11,7 @@ import com.example.hangoutz.domain.repository.InviteRepository
 import com.example.hangoutz.domain.repository.UserRepository
 import com.example.hangoutz.utils.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -94,7 +96,7 @@ class EventDetailsOwnerViewModel @Inject constructor(
         }
     }
 
-  private fun formatForDatabase() {
+    private fun formatForDatabase() {
         val inputDate = _uiState.value.date
         val inputTime = _uiState.value.time
 
@@ -324,44 +326,30 @@ class EventDetailsOwnerViewModel @Inject constructor(
 
     fun onTitleChange(title: String) {
         _uiState.value = _uiState.value.copy(title = title, isTitleError = false)
-        if (title.trimEnd().trimStart().isEmpty()) {
-            _uiState.value = _uiState.value.copy(errorMessage = Constants.ERROR_EMPTY_FIELD)
-        } else _uiState.value = _uiState.value.copy(title = title)
     }
 
     fun onDescriptionChange(description: String) {
-        _uiState.value = _uiState.value.copy(description = description)
+        _uiState.value = _uiState.value.copy(description = description, isDescError = false)
     }
 
     fun onCityChange(city: String) {
-        _uiState.value = _uiState.value.copy(city = city)
+        _uiState.value = _uiState.value.copy(city = city, isCityError = false)
     }
 
     fun onStreetChange(street: String) {
-        _uiState.value = _uiState.value.copy(street = street)
+        _uiState.value = _uiState.value.copy(street = street, isStreetError = false)
     }
 
     fun onPlaceChange(place: String) {
         _uiState.value = _uiState.value.copy(place = place, isPlaceError = false)
-        if (place.trimEnd().trimStart().isEmpty()) {
-            _uiState.value = _uiState.value.copy(errorMessage = Constants.ERROR_EMPTY_FIELD)
-        } else
-            _uiState.value = _uiState.value.copy(place = place)
     }
 
-    fun onDateChange(date: String) { //TODO Configure datepicker validation
+    fun onDateChange(date: String) {
         _uiState.value = _uiState.value.copy(date = date, isDateError = false)
-        if (date.trim().isEmpty()) {
-            _uiState.value = _uiState.value.copy(errorMessage = Constants.ERROR_EMPTY_FIELD)
-        } else
-            _uiState.value = _uiState.value.copy(date = date)
     }
 
-    fun onTimeChange(time: String) { //TODO Configure timepicker validation
-        _uiState.value = _uiState.value.copy(time = time, isDateError = false)
-        if (time.trim().isEmpty()) {
-            _uiState.value = _uiState.value.copy(errorMessage = Constants.ERROR_EMPTY_FIELD)
-        } else
-            _uiState.value = _uiState.value.copy(time = time)
+    fun onTimeChange(time: String) {
+        _uiState.value = _uiState.value.copy(time = time, isTimeError = false)
+
     }
 }
