@@ -16,4 +16,5 @@ data class CreateEventState(
     val isLoading: Boolean = false,
     val participants: List<Friend> = emptyList(),
     val selectedParticipants: List<Friend> = emptyList(),
+    val searchQuery: String = ""
 )

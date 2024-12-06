@@ -242,19 +242,21 @@ fun CreateEventScreen(
                 })
             if (sheetState.isVisible) {
                 FriendsPopup(userList = data.value.listOfFriends,
-                    searchQuery = "",
+                    searchQuery = data.value.searchQuery,
                     isLoading = data.value.isLoading,
-                    clearText = {},
+                    clearText = {viewmodel.clearSearchQuery()},
                     sheetState = sheetState,
                     showBottomSheet = {
                     },
-                    onTextInput = {
+                    onTextInput = { searchQuery ->
+                        viewmodel.onSearchInput(searchQuery)
                     },
                     participantSelected = data.value.selectedParticipants,
                     isCheckList = true,
                     onAdd = {
                         viewmodel.addSelectedParticipants()
                         scope.launch { sheetState.hide() }
+                        viewmodel.clearSearchQuery()
                     },
                     onChange = { isChecked, user ->
                         if (isChecked) {
@@ -280,8 +282,5 @@ fun CreateEventScreen(
             viewmodel.onTimePicked(time)
             viewmodel.setShowTimePicker()
         }, onDismiss = { viewmodel.setShowTimePicker() })
-    }
-    LaunchedEffect(sheetState.isVisible) {
-        viewmodel.getFriends()
     }
 }
