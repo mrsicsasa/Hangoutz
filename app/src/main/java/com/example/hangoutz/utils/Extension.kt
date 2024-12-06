@@ -3,6 +3,7 @@ package com.example.hangoutz.utils
 import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
+import com.example.hangoutz.data.models.Friend
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter.ofPattern
 

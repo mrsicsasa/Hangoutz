@@ -36,7 +36,9 @@ import kotlinx.coroutines.launch
 @Composable
 fun FriendsScreen(viewModel: FriendsViewModel = hiltViewModel()) {
     val data = viewModel.uiState.collectAsState()
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true
+    )
     val coroutineScope = rememberCoroutineScope()
     if (data.value.isLoading) {
         Box(
@@ -124,6 +126,9 @@ fun FriendsScreen(viewModel: FriendsViewModel = hiltViewModel()) {
                     viewModel.clearSearchInputPopupScreen()
                 },
                 sheetState = sheetState,
+                addFriend = {
+                    viewModel.addFriend(it)
+                },
                 showBottomSheet = {
                     viewModel.showSheetState(data.value.showBottomSheet)
                 }) { searchQuery ->

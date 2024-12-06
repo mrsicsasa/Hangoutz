@@ -169,6 +169,7 @@ object Constants {
     const val FRIENDS_SEARCH_BAR = "friendsSearchBar"
     const val FRIENDS_LOADING_SPINNER = "friendsLoadingSpinner"
     const val NO_FRIENDS_AVAILABLE_MESSAGE = "noFriendsAvailableMessage"
+    const val CREATE_EVENT_ADD_SELECTED_PARTICIPANTS_BUTTON = "createEventAddSelectedParticipantsButton"
 
     //Bottom sheet
     const val BOTTOM_SHEET_TAG = "bottomSheet"
