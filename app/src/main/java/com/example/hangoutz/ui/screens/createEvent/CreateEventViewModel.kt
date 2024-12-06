@@ -17,33 +17,17 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
-import androidx.lifecycle.viewModelScope
-import com.example.hangoutz.data.local.SharedPreferencesManager
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import kotlinx.coroutines.Dispatchers
 
-data class EventDetailsData(
 
-    var title: String = "",
-    var description: String = "",
-    var city: String = "",
-    var street: String = "",
-    var place: String = "",
-    var date: String = "",
-    var time: String = "",
-    var participants: List<User> = emptyList(),
-    var showDatePicker: Boolean = false,
-    var showTimePicker: Boolean = false,
-)
+
 @HiltViewModel
 class CreateEventViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val friendsRepository: FriendsRepository
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(EventDetailsData())
-    val uiState: StateFlow<EventDetailsData> = _uiState
+    private val _uiState = MutableStateFlow(CreateEventState())
+    val uiState: StateFlow<CreateEventState> = _uiState
 
     init {
         getFriends()
