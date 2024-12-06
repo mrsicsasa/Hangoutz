@@ -50,7 +50,7 @@ fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltVi
         modifier = Modifier
             .fillMaxSize()
             .paint(
-                painterResource(R.drawable.main_background), contentScale = ContentScale.FillHeight,
+                painterResource(R.drawable.main_background), contentScale = ContentScale.FillBounds,
             )
     ) {
         Column(

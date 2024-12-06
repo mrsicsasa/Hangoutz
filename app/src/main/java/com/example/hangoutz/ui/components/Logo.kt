@@ -4,9 +4,6 @@ import android.view.animation.OvershootInterpolator
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -29,26 +26,24 @@ fun Logo(
     modifier: Modifier
 ) {
     val scale = remember { Animatable(initialValue) }
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .aspectRatio(Dimensions.LOGO_ASPECT_RATIO)
-    ) {
-        Image(
-            painter = painter,
-            contentDescription = stringResource(R.string.application_logo),
-            modifier = modifier
-                .height(Dimensions.LOGO_HEIGHT)
-                .scale(scale.value)
+    Image(
+        painter = painter,
+        contentDescription = stringResource(R.string.application_logo),
+        modifier = modifier
+            .height(Dimensions.LOGO_HEIGHT)
+            .scale(scale.value)
+    )
+    LaunchedEffect(key1 = true) {
+        delay(animationDelay)
+        scale.animateTo(
+            targetValue = targetValue,
+            animationSpec = tween(
+                durationMillis = Constants.LOGO_ANIMATION_DURATION,
+                easing = {
+                    OvershootInterpolator(Dimensions.LOGO_OVERSHOOT_INTERPOLATOR_TENSION).getInterpolation(
+                        it
+                    )
+                })
         )
-        LaunchedEffect(key1 = true) {
-            delay(animationDelay)
-            scale.animateTo(
-                targetValue = targetValue,
-                animationSpec = tween(
-                    durationMillis = Constants.LOGO_ANIMATION_DURATION,
-                    easing = { OvershootInterpolator(Dimensions.LOGO_OVERSHOOT_INTERPOLATOR_TENSION).getInterpolation(it) })
-            )
-        }
     }
 }

@@ -61,12 +61,13 @@ object Dimensions {
     const val SPLASH_SCREEN_LOGO_TARGETED_ALPHA = 0f
 
     // Register Screen
-    val REGISTER_BOTTOM_PADDING = 145.dp
+    val REGISTER_FORM_TOP_PADDING = 10.dp
     val REGISTER_FORM_SIDE_PADDING = 30.dp
     val REGISTER_FORM_BOTTOM_PADDING = 50.dp
+    val FORM_SIZE = 420.dp
+    val ERROR_HEIGHT = 10.dp
 
     // Logo
-    const val LOGO_ASPECT_RATIO = 1f
     val LOGO_HEIGHT = 50.dp
     const val LOGO_OVERSHOOT_INTERPOLATOR_TENSION = 0f
 
@@ -145,13 +146,13 @@ object Dimensions {
     val DISMISS_ICON_END_PADDING = 8.dp
     val SPACER_FROM_FRIEND_UP = 10.dp
     val SPACER_FROM_FRIEND_DOWN = 15.dp
-    val FRIENDS_POPUP_PARTICIPANT_COLUMN = 0.85f
-    val FRIENDS_POPUP_COLUMN = 1f
+    const val FRIENDS_POPUP_PARTICIPANT_COLUMN = 0.85f
+    const val FRIENDS_POPUP_COLUMN = 1f
     val BUTTON_COLUMN_BOTTOM_PADDING = 10.dp
     val BUTTON_INNER_PADDING = 3.dp
     val BUTTON_WIDTH = 188.dp
     val BUTTON_HEIGHT = 53.dp
-    val ADD_FONT_WEIGHT = 700
+    const val ADD_FONT_WEIGHT = 700
     val ADD_FONT_SIZE = 20.sp
 
     //EVENT DETAILS SCREEN

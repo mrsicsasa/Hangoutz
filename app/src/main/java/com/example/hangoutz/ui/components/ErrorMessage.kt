@@ -7,7 +7,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.example.hangoutz.ui.theme.Error
+import androidx.compose.ui.graphics.Color
 import com.example.hangoutz.utils.Dimensions
 
 
@@ -24,7 +24,7 @@ fun ErrorMessage(errorMessage: String, modifier: Modifier = Modifier) {
         Text(
             text = errorMessage,
             style = MaterialTheme.typography.bodyMedium,
-            color = Error
+            color = Color.White
         )
     }
 }
