@@ -209,4 +209,7 @@ object Constants {
     const val DELETE_ERROR = "An error has ocurred while deleting"
     const val DELETE_SUCCESS = "Successfully deleted the event"
 
+    const val EVENT_ADD = "Event added successfully"
+    const val EVENT_ADD_ERROR = "An error occurred while creating your event"
+
 }

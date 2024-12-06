@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hangoutz.data.local.SharedPreferencesManager
-import com.example.hangoutz.data.models.EventCardDPO
 import com.example.hangoutz.data.models.EventRequest
 import com.example.hangoutz.data.models.Friend
 import com.example.hangoutz.domain.repository.EventRepository
@@ -24,6 +23,15 @@ import java.util.Locale
 import java.util.UUID
 import javax.inject.Inject
 
+data class ErrorState(
+    val errorTitle: String = "",
+    val errorDesc: String = "",
+    val errorCity: String = "",
+    val errorStreet: String = "",
+    val errorPlace: String = "",
+    val errorDate: String = "",
+    var errorMessage: String? = ""
+)
 
 @HiltViewModel
 class CreateEventViewModel @Inject constructor(
@@ -35,19 +43,22 @@ class CreateEventViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(CreateEventState())
     val uiState: StateFlow<CreateEventState> = _uiState
 
+    private val _errorState = MutableStateFlow(ErrorState())
+    val errorState: StateFlow<ErrorState> = _errorState
+
     init {
         getFriends()
     }
 
-    fun createEvent(onSuccess: () -> Unit) {
-        Log.e("DATA",
-            "${_uiState.value.title},,, ${_uiState.value.errorTitle}, ${_uiState.value.errorMessage} ")
+    fun createEvent(onSuccess: () -> Unit, onFailure: () -> Unit) {
 
         if (validateInputs()) {
             formatForDatabase()
-            _uiState.value = _uiState.value.copy(errorMessage = "")
+            _errorState.value = _errorState.value.copy(errorMessage = "")
 
             viewModelScope.launch {
+                val owner = SharedPreferencesManager.getUserId(context)
+
                 val insertEventResponse = eventsRepository.insertEvent(
                     EventRequest(
                         title = _uiState.value.title,
@@ -55,20 +66,19 @@ class CreateEventViewModel @Inject constructor(
                         city = _uiState.value.city,
                         street = _uiState.value.street,
                         place = _uiState.value.place,
-                        date = _uiState.value.date
+                        date = _uiState.value.formattedDateForDatabase,
+                        owner = owner ?: ""
                     )
                 )
-                if ( insertEventResponse?.isSuccessful == true) {
-                onSuccess()
-                Log.i("Info", "Successfully patched event")
-            } else Log.e("Info", "${ insertEventResponse.code()}")
+                if (insertEventResponse?.isSuccessful == true) {
+                    onSuccess()
+                    Log.i("Info", "Successfully patched event")
+                } else Log.e("Info", "${insertEventResponse.code()}")
             }
 
-        }
-    else {
+        } else {
             Log.e("Error", "Fields marked with * cant be empty")
         }
-
     }
 
     fun getFriends() {
@@ -178,11 +188,11 @@ class CreateEventViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(place = place)
     }
 
-    fun onDateChange(date: String) { //TODO Configure datepicker
+    fun onDateChange(date: String) {
         _uiState.value = _uiState.value.copy(date = date)
     }
 
-    fun onTimeChange(time: String) { //TODO Configure timepicker
+    fun onTimeChange(time: String) {
         _uiState.value = _uiState.value.copy(time = time)
     }
 
@@ -207,7 +217,7 @@ class CreateEventViewModel @Inject constructor(
 
     private fun validateInputs(): Boolean {
 
-        _uiState.value = _uiState.value.copy(
+        _errorState.value = _errorState.value.copy(
             errorMessage = "",
             errorTitle = "",
             errorDesc = "",
@@ -225,19 +235,18 @@ class CreateEventViewModel @Inject constructor(
         var validateStreet = false
 
         if (validateTitle || validatePlace || validateDate || validateTime) {
-            _uiState.value = _uiState.value.copy(errorMessage = Constants.ERROR_EMPTY_FIELD)
-
-            Log.e("e", "empty fields error ${_uiState.value.errorMessage}")
+            _errorState.value = _errorState.value.copy(errorMessage = Constants.ERROR_EMPTY_FIELD)
+            Log.e("e", "empty fields error ${_errorState.value.errorMessage}")
         }
 
         if (!validateTitle && !checkLength(_uiState.value.title, 25)) {
             validateTitle = true
-            _uiState.value = _uiState.value.copy(errorTitle = Constants.ERROR_TOO_LONG)
+            _errorState.value = _errorState.value.copy(errorTitle = Constants.ERROR_TOO_LONG)
         }
 
         if (!validatePlace && !checkLength(_uiState.value.place, 25)) {
             validatePlace = true
-            _uiState.value = _uiState.value.copy(errorPlace = Constants.ERROR_TOO_LONG)
+            _errorState.value = _errorState.value.copy(errorPlace = Constants.ERROR_TOO_LONG)
         }
 
         if (!validateDate && !validateTime) {
@@ -245,26 +254,25 @@ class CreateEventViewModel @Inject constructor(
             if (checkIfInPast(combinedInput)) {
                 validateDate = true
                 validateTime = true
-                _uiState.value =
-                    _uiState.value.copy(errorMessage = "Date and time cannot be in the past")
+                _errorState.value =
+                    _errorState.value.copy(errorMessage = "Date and time cannot be in the past")
             }
         }
 
         if (_uiState.value.description.length > 100) {
             validateDesc = true
-            _uiState.value = _uiState.value.copy(errorDesc = Constants.ERROR_TOO_LONG_DESC)
+            _errorState.value = _errorState.value.copy(errorDesc = Constants.ERROR_TOO_LONG_DESC)
         }
 
         if (_uiState.value.city.length > 25) {
             validateCity = true
-            _uiState.value = _uiState.value.copy(errorCity = Constants.ERROR_TOO_LONG)
+            _errorState.value = _errorState.value.copy(errorCity = Constants.ERROR_TOO_LONG)
         }
 
         if (_uiState.value.street.length > 25) {
             validateStreet = true
-            _uiState.value = _uiState.value.copy(errorStreet = Constants.ERROR_TOO_LONG)
+            _errorState.value = _errorState.value.copy(errorStreet = Constants.ERROR_TOO_LONG)
         }
-
 
         _uiState.value = _uiState.value.copy(
             isTitleError = validateTitle,
@@ -278,5 +286,4 @@ class CreateEventViewModel @Inject constructor(
 
         return !(validateTitle || validatePlace || validateDate || validateTime || validateDesc || validateCity || validateStreet)
     }
-
 }

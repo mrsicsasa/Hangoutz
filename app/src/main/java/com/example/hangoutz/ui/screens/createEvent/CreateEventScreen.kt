@@ -1,11 +1,10 @@
 package com.example.hangoutz.ui.screens.createEvent
 
-import android.util.Log
+
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -42,7 +41,6 @@ import androidx.navigation.NavController
 import com.example.hangoutz.R
 import com.example.hangoutz.ui.components.ActionButton
 import com.example.hangoutz.ui.components.DatePickerModal
-import com.example.hangoutz.ui.components.DisplayUser
 import com.example.hangoutz.ui.components.ErrorMessage
 import com.example.hangoutz.ui.components.InputField
 import com.example.hangoutz.ui.components.InputFieldWithIcon
@@ -61,6 +59,7 @@ fun CreateEventScreen(
     navController: NavController, viewmodel: CreateEventViewModel = hiltViewModel()
 ) {
     val data = viewmodel.uiState.collectAsState()
+    val errordata = viewmodel.errorState.collectAsState()
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -110,69 +109,67 @@ fun CreateEventScreen(
                     .weight(1f)
             ) {
 
-                    InputField(
-                        stringResource(R.string.event_title),
-                        data.value.title,
-                        { viewmodel.onTitleChange(it) },
-                        modifier = Modifier.semantics {
-                            contentDescription = Constants.EVENT_OWNER_TITLE_FIELD
-                        },
-                        true,
-                        false,
-                        data.value.isTitleError
-                    )
-              data.value.errorTitle.takeIf { it.isNotBlank() }?.let { ErrorMessage(it) }
+                InputField(
+                    stringResource(R.string.event_title),
+                    data.value.title,
+                    { viewmodel.onTitleChange(it) },
+                    modifier = Modifier.semantics {
+                        contentDescription = Constants.EVENT_OWNER_TITLE_FIELD
+                    },
+                    true,
+                    false,
+                    data.value.isTitleError
+                )
+                errordata.value.errorTitle.takeIf { it.isNotBlank() }?.let { ErrorMessage(it) }
 
 
-                    InputField(
-                        stringResource(R.string.event_desc),
-                        data.value.description,
-                        { viewmodel.onDescriptionChange(it) },
-                        modifier = Modifier.semantics {
-                            contentDescription = Constants.EVENT_OWNER_DESC_FIELD
-                        },
-                        true, false, data.value.isDescError
-                    )
-                data.value.errorDesc.takeIf { it.isNotBlank() }?.let { ErrorMessage(it) }
+                InputField(
+                    stringResource(R.string.event_desc),
+                    data.value.description,
+                    { viewmodel.onDescriptionChange(it) },
+                    modifier = Modifier.semantics {
+                        contentDescription = Constants.EVENT_OWNER_DESC_FIELD
+                    },
+                    true, false, data.value.isDescError
+                )
+                errordata.value.errorDesc.takeIf { it.isNotBlank() }?.let { ErrorMessage(it) }
 
+                InputField(
+                    stringResource(R.string.event_city),
+                    data.value.city,
+                    { viewmodel.onCityChange(it) },
+                    modifier = Modifier.semantics {
+                        contentDescription = Constants.EVENT_OWNER_CITY_FIELD
+                    },
+                    true, false, data.value.isCityError
+                )
+                errordata.value.errorCity.takeIf { it.isNotBlank() }?.let { ErrorMessage(it) }
 
-                    InputField(
-                        stringResource(R.string.event_city),
-                        data.value.city,
-                        { viewmodel.onCityChange(it) },
-                        modifier = Modifier.semantics {
-                            contentDescription = Constants.EVENT_OWNER_CITY_FIELD
-                        },
-                        true, false, data.value.isCityError
-                    )
-                data.value.errorCity.takeIf { it.isNotBlank() }?.let { ErrorMessage(it) }
+                InputField(
+                    stringResource(R.string.event_street),
+                    data.value.street,
+                    { viewmodel.onStreetChange(it) },
+                    modifier = Modifier.semantics {
+                        contentDescription = Constants.EVENT_OWNER_STREET_FIELD
+                    },
+                    true, false, data.value.isStreetError
+                )
 
-                    InputField(
-                        stringResource(R.string.event_street),
-                        data.value.street,
-                        { viewmodel.onStreetChange(it) },
-                        modifier = Modifier.semantics {
-                            contentDescription = Constants.EVENT_OWNER_STREET_FIELD
-                        },
-                        true, false, data.value.isStreetError
-                    )
+                errordata.value.errorStreet?.takeIf { it.isNotBlank() }?.let { ErrorMessage(it) }
 
-                data.value.errorStreet?.takeIf { it.isNotBlank() }?.let { ErrorMessage(it) }
+                InputField(
+                    stringResource(R.string.event_place),
+                    data.value.place,
+                    { viewmodel.onPlaceChange(it) },
+                    modifier = Modifier.semantics {
+                        contentDescription = Constants.EVENT_OWNER_PLACE_FIELD
+                    },
+                    true,
+                    false,
+                    data.value.isPlaceError
+                )
 
-
-                    InputField(
-                        stringResource(R.string.event_place),
-                        data.value.place,
-                        { viewmodel.onPlaceChange(it) },
-                        modifier = Modifier.semantics {
-                            contentDescription = Constants.EVENT_OWNER_PLACE_FIELD
-                        },
-                        true,
-                        false,
-                        data.value.isPlaceError
-                    )
-
-                data.value.errorPlace?.takeIf { it.isNotBlank() }?.let { ErrorMessage(it) }
+                errordata.value.errorPlace?.takeIf { it.isNotBlank() }?.let { ErrorMessage(it) }
 
                 Row(
                     modifier = Modifier
@@ -181,42 +178,40 @@ fun CreateEventScreen(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(Dimensions.CREATE_EVENT_HORIZONTAL_SPACING)
                 ) {
+                    InputFieldWithIcon(
+                        stringResource(R.string.event_date),
+                        data.value.date,
+                        { viewmodel.onDateChange(it) },
+                        modifier = Modifier
+                            .weight(1f)
+                            .semantics {
+                                contentDescription = Constants.EVENT_OWNER_DATE_FIELD
+                            },
+                        R.drawable.calendaricon,
+                        true,
+                        true,
+                        { viewmodel.setShowDatePicker() },
+                        data.value.isDateError
+                    )
 
-
-                        InputFieldWithIcon(
-                            stringResource(R.string.event_date),
-                            data.value.date,
-                            { viewmodel.onDateChange(it) },
-                            modifier = Modifier
-                                .weight(1f)
-                                .semantics {
-                                    contentDescription = Constants.EVENT_OWNER_DATE_FIELD
-                                },
-                            R.drawable.calendaricon,
-                            true,
-                            true,
-                            { viewmodel.setShowDatePicker() },
-                            data.value.isDateError
-                        )
-
-
-                        InputFieldWithIcon(
-                            stringResource(R.string.event_time),
-                            data.value.time,
-                            { viewmodel.onTimeChange(it) },
-                            modifier = Modifier
-                                .weight(1f)
-                                .semantics {
-                                    contentDescription = Constants.EVENT_OWNER_TIME_FIELD
-                                },
-                            R.drawable.clockicon,
-                            true,
-                            true,
-                            { viewmodel.setShowTimePicker() },
-                            data.value.isDateError
-                        )
+                    InputFieldWithIcon(
+                        stringResource(R.string.event_time),
+                        data.value.time,
+                        { viewmodel.onTimeChange(it) },
+                        modifier = Modifier
+                            .weight(1f)
+                            .semantics {
+                                contentDescription = Constants.EVENT_OWNER_TIME_FIELD
+                            },
+                        R.drawable.clockicon,
+                        true,
+                        true,
+                        { viewmodel.setShowTimePicker() },
+                        data.value.isDateError
+                    )
 
                 }
+                errordata.value.errorMessage?.let { ErrorMessage(it) }
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -247,70 +242,76 @@ fun CreateEventScreen(
                 //TODO put participants here, use participantUI component (check event details screen)
             }
 
-        Column(
-        ) {
-            ActionButton(stringResource(R.string.event_create),
-                modifier = Modifier
-                    .padding(bottom = Dimensions.ACTION_BUTTON_MEDIUM3)
-                    .semantics {
-                        contentDescription = Constants.CREATE_EVENT_CREATE_BUTTON
-                    },
-                onClick = {
-                    viewmodel.createEvent(onSuccess = {
-                        Toast.makeText(
-                            context,
-                            Constants.EVENT_EDITED_SUCCESSFULLY,
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        navController.popBackStack()
+            Column(
+            ) {
+                ActionButton(stringResource(R.string.event_create),
+                    modifier = Modifier
+                        .padding(bottom = Dimensions.ACTION_BUTTON_MEDIUM3)
+                        .semantics {
+                            contentDescription = Constants.CREATE_EVENT_CREATE_BUTTON
+                        },
+                    onClick = {
+                        viewmodel.createEvent(onSuccess = {
+                            Toast.makeText(
+                                context,
+                                Constants.EVENT_ADD,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            navController.popBackStack()
+                        },
+                            onFailure = {
+                                Toast.makeText(
+                                    context,
+                                    Constants.EVENT_ADD_ERROR,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            })
                     })
-                })
 
-            if (sheetState.isVisible) {
-                FriendsPopup(userList = data.value.listOfFriends,
-                    searchQuery = "",
-                    isLoading = data.value.isLoading,
-                    clearText = {},
-                    sheetState = sheetState,
-                    showBottomSheet = {
-                    },
-                    onTextInput = {
-                    },
-                    participantSelected = data.value.selectedParticipants,
-                    isCheckList = true,
-                    onAdd = {
-                        viewmodel.addSelectedParticipants()
-                        scope.launch { sheetState.hide() }
-                    },
-                    onChange = { isChecked, user ->
-                        if (isChecked) {
-                            viewmodel.addParticipant(user)
-                        } else {
-                            viewmodel.removeParticipant(user)
-                        }
-                    })
+                if (sheetState.isVisible) {
+                    FriendsPopup(userList = data.value.listOfFriends,
+                        searchQuery = "",
+                        isLoading = data.value.isLoading,
+                        clearText = {},
+                        sheetState = sheetState,
+                        showBottomSheet = {
+                        },
+                        onTextInput = {
+                        },
+                        participantSelected = data.value.selectedParticipants,
+                        isCheckList = true,
+                        onAdd = {
+                            viewmodel.addSelectedParticipants()
+                            scope.launch { sheetState.hide() }
+                        },
+                        onChange = { isChecked, user ->
+                            if (isChecked) {
+                                viewmodel.addParticipant(user)
+                            } else {
+                                viewmodel.removeParticipant(user)
+                            }
+                        })
+                }
+            }
+
+            if (data.value.showDatePicker) {
+                DatePickerModal(onDateSelected = { date ->
+                    date?.let {
+                        viewmodel.onDatePicked(date)
+                    }
+                }, onDismiss = { viewmodel.setShowDatePicker() })
+            }
+
+            if (data.value.showTimePicker) {
+                TimePickerModal(onConfirm = { time ->
+                    viewmodel.onTimePicked(time)
+                    viewmodel.setShowTimePicker()
+                }, onDismiss = { viewmodel.setShowTimePicker() })
+            }
+
+            LaunchedEffect(sheetState.isVisible) {
+                viewmodel.getFriends()
             }
         }
-
-        if (data.value.showDatePicker) {
-            DatePickerModal(onDateSelected = { date ->
-                date?.let {
-                    viewmodel.onDatePicked(date)
-                }
-            }, onDismiss = { viewmodel.setShowDatePicker() })
-        }
-
-        if (data.value.showTimePicker) {
-            TimePickerModal(onConfirm = { time ->
-                viewmodel.onTimePicked(time)
-                viewmodel.setShowTimePicker()
-            }, onDismiss = { viewmodel.setShowTimePicker() })
-        }
-
-        LaunchedEffect(sheetState.isVisible) {
-            viewmodel.getFriends()
-        }
-
     }
-}
 }

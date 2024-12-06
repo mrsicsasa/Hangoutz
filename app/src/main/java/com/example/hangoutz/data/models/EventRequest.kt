@@ -1,10 +1,11 @@
 package com.example.hangoutz.data.models
 
-data class EventRequest (
+data class EventRequest(
     val title: String,
     val description: String,
-    val city : String,
+    val city: String,
     val street: String,
     val place: String,
-    val date: String
-    )
+    val date: String,
+    val owner: String
+)

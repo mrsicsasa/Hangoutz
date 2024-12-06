@@ -1,15 +1,18 @@
 package com.example.hangoutz.ui.screens.eventDetailsOwner
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import com.example.hangoutz.data.local.SharedPreferencesManager
 import com.example.hangoutz.data.models.User
 import com.example.hangoutz.domain.repository.EventRepository
 import com.example.hangoutz.domain.repository.InviteRepository
 import com.example.hangoutz.domain.repository.UserRepository
 import com.example.hangoutz.utils.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -20,7 +23,7 @@ import java.util.UUID
 import javax.inject.Inject
 
 data class EventDetailsData(
-    var isMine: Boolean = true,
+
     var eventId: UUID? = null,
     var title: String = "",
     var description: String = "",
@@ -54,6 +57,7 @@ class EventDetailsOwnerViewModel @Inject constructor(
     private val inviteRepository: InviteRepository,
     private val userRepository: UserRepository,
     private val eventRepository: EventRepository,
+    @ApplicationContext private val context: Context,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(EventDetailsData())
@@ -72,7 +76,7 @@ class EventDetailsOwnerViewModel @Inject constructor(
         if (validateInputs()) {
             _uiState.value = _uiState.value.copy(errorMessage = "")
             viewModelScope.launch {
-
+            val userId = SharedPreferencesManager.getUserId(context)
                 val eventResponse = eventRepository.patchEventById(
                     id = _uiState.value.eventId.toString(),
                     newTitle = _uiState.value.title,
@@ -80,7 +84,8 @@ class EventDetailsOwnerViewModel @Inject constructor(
                     newCity = _uiState.value.city,
                     newStreet = _uiState.value.street,
                     newPlace = _uiState.value.place,
-                    newDate = _uiState.value.formattedDateForDatabase
+                    newDate = _uiState.value.formattedDateForDatabase,
+                    owner = userId ?: ""
                     )
                 if (eventResponse?.isSuccessful == true) {
                     onSuccess()

@@ -24,11 +24,5 @@ data class CreateEventState(
     var isCityError: Boolean = false,
     var isStreetError: Boolean = false,
     var formattedDateForDatabase: String = "",
-    val errorTitle: String = "",
-    val errorDesc: String = "",
-    val errorCity: String = "",
-    val errorStreet: String = "",
-    val errorPlace: String = "",
-    val errorDate: String = "",
-    var errorMessage: String? = ""
+
 )
