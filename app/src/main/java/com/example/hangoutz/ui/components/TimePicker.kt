@@ -26,14 +26,17 @@ import java.util.Calendar
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TimePickerModal(
+    initialTimeInMillis: Long,
     onConfirm: (Long) -> Unit,
     onDismiss: () -> Unit,
 ) {
+    val initialCalendar = Calendar.getInstance().apply {
+        timeInMillis = initialTimeInMillis
+    }
 
-    val currentTime = Calendar.getInstance()
     val timePickerState = rememberTimePickerState(
-        initialHour = currentTime.get(Calendar.HOUR_OF_DAY),
-        initialMinute = currentTime.get(Calendar.MINUTE),
+        initialHour = initialCalendar.get(Calendar.HOUR_OF_DAY),
+        initialMinute = initialCalendar.get(Calendar.MINUTE),
         is24Hour = true,
     )
 

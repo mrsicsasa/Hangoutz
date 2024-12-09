@@ -1,7 +1,9 @@
 package com.example.hangoutz.data.repository
 
 import com.example.hangoutz.data.models.CountOfAcceptedInvitesForEvent
+import com.example.hangoutz.data.models.EventRequest
 import com.example.hangoutz.data.models.Invite
+import com.example.hangoutz.data.models.InviteRequest
 import com.example.hangoutz.data.models.UpdateEventStatusDTO
 import com.example.hangoutz.data.remote.InviteAPI
 import com.example.hangoutz.domain.repository.InviteRepository
@@ -41,5 +43,9 @@ class InviteRepositoryImpl @Inject constructor(invitesAPI: InviteAPI) : InviteRe
 
     override suspend fun deleteInviteByEventId(id: UUID, eventId: UUID): Response<Unit> {
         return api.deleteInviteByEventId(id = "eq.${id}", eventId = "eq.${eventId}")
+    }
+
+    override suspend fun insertInvite(inviteRequest: InviteRequest): Response<Unit> {
+        return api.insertInvite(inviteRequest)
     }
 }

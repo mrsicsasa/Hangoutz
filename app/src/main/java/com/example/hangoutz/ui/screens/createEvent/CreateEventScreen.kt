@@ -129,9 +129,9 @@ fun CreateEventScreen(
                     modifier = Modifier.semantics {
                         contentDescription = Constants.CREATE_EVENT_DESC_FIELD
                     },
-                    true, false, data.value.isDescError
-                    true,
-                    singleLine = false
+                    true, false, data.value.isDescError,
+                            singleLine = false
+
                 )
                 errordata.value.errorDesc.takeIf { it.isNotBlank() }?.let { ErrorMessage(it) }
 
@@ -311,7 +311,9 @@ fun CreateEventScreen(
                 }
             }
             if (data.value.showDatePicker) {
-                DatePickerModal(onDateSelected = { date ->
+                DatePickerModal(
+                    System.currentTimeMillis(),
+                    onDateSelected = { date ->
                     date?.let {
                         viewmodel.onDatePicked(date)
                     }
@@ -319,7 +321,9 @@ fun CreateEventScreen(
             }
 
             if (data.value.showTimePicker) {
-                TimePickerModal(onConfirm = { time ->
+                TimePickerModal(
+                    System.currentTimeMillis(),
+                    onConfirm = { time ->
                     viewmodel.onTimePicked(time)
                     viewmodel.setShowTimePicker()
                 }, onDismiss = { viewmodel.setShowTimePicker() })

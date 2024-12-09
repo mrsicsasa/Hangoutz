@@ -14,10 +14,13 @@ import com.example.hangoutz.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DatePickerModal(
+    initialDateInMillis: Long? = null,
     onDateSelected: (Long?) -> Unit,
     onDismiss: () -> Unit
 ) {
-    val datePickerState = rememberDatePickerState()
+    val initialDateMillis =  initialDateInMillis ?: System.currentTimeMillis()
+
+    val datePickerState = rememberDatePickerState(initialSelectedDateMillis = initialDateMillis)
 
     DatePickerDialog(
         onDismissRequest = onDismiss,

@@ -7,8 +7,10 @@ import androidx.lifecycle.viewModelScope
 import com.example.hangoutz.data.local.SharedPreferencesManager
 import com.example.hangoutz.data.models.EventRequest
 import com.example.hangoutz.data.models.Friend
+import com.example.hangoutz.data.models.InviteRequest
 import com.example.hangoutz.domain.repository.EventRepository
 import com.example.hangoutz.domain.repository.FriendsRepository
+import com.example.hangoutz.domain.repository.InviteRepository
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Dimensions
 import com.example.hangoutz.utils.formatForDatabase
@@ -22,7 +24,6 @@ import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import java.util.UUID
 import javax.inject.Inject
 
 data class ErrorState(
@@ -40,7 +41,8 @@ data class ErrorState(
 class CreateEventViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val friendsRepository: FriendsRepository,
-    private val eventsRepository: EventRepository
+    private val eventsRepository: EventRepository,
+    private val inviteRepository: InviteRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(CreateEventState())
@@ -75,17 +77,66 @@ class CreateEventViewModel @Inject constructor(
                         owner = owner ?: ""
                     )
                 )
-                if (insertEventResponse?.isSuccessful == true) {
+                if(insertEventResponse.isSuccessful) {
+                    Log.i("Info", "Event was created successfully")
+                }
+                if(_uiState.value.participants.isNotEmpty()){
+                    val response =  owner?.let { eventsRepository.getEventsByOwnerTitleAndDate(
+                            it,
+                            _uiState.value.title,
+
+                        )
+                       }
+                    if (response != null && response.isSuccessful) {
+                        val events = response.body()
+
+                      if (events != null && events.isNotEmpty()) {
+                        val eventId = events.first().id
+                        postFriendInvites(eventId, _uiState.value.participants)
+
+                    } else {
+                        Log.e("Error", "An error has occurred while getting user")
+                    }
+                }
                     onSuccess()
                     Log.i("Info", "Successfully patched event")
-                } else Log.e("Info", "${insertEventResponse.code()}")
+                }
             }
-
-        } else {
+        }
+        else {
             Log.e("Error", "Fields marked with * cant be empty")
         }
     }
+    fun postFriendInvites(eventId: String, participants: List<Friend>) {
 
+        viewModelScope.launch {
+            try {
+                for (participant in participants) {
+                    val response = inviteRepository.insertInvite(
+                        InviteRequest("invited", participant.id.toString(), eventId)
+                    )
+                    Log.e("informacije", "${eventId} , ${participant.id}")
+
+                    if (response.isSuccessful) {
+                        Log.i(
+                            "Info",
+                            "Successfully added participant ${participant.name} to event $eventId"
+                        )
+                    } else {
+                        Log.e("Error----------", "${response.errorBody()}")
+                        Log.e(
+                            "Error",
+                            "Failed to add participant ${participant.name} to event $eventId"
+                        )
+                        break
+                    }
+                }
+            } catch (exception: Exception) {
+
+                Log.e("Error", "Exception while sending invites: ${exception.localizedMessage}")
+            }
+        }
+    }
     fun onSearchInput(newText: String) {
         _uiState.value = _uiState.value.copy(searchQuery = newText)
         if (_uiState.value.searchQuery.length >= Constants.MIN_SEARCH_LENGTH) {
@@ -118,7 +169,8 @@ class CreateEventViewModel @Inject constructor(
                     response.value.body()?.let { friends ->
                         _uiState.value =
                             _uiState.value.copy(listOfFriends = friends.sortedBy { friend -> friend.users.name.uppercase() }
-                                .map { friendData -> friendData.users } - _uiState.value.participants, isLoading = false)
+                                .map { friendData -> friendData.users } - _uiState.value.participants,
+                                isLoading = false)
                     }
                 }
             }
@@ -157,6 +209,7 @@ class CreateEventViewModel @Inject constructor(
         )
         removeParticipant(friend)
     }
+
 
     fun onTimePicked(date: Long) {
         val formattedTime = formatTime(date)
@@ -275,7 +328,7 @@ class CreateEventViewModel @Inject constructor(
                 validateDate = true
                 validateTime = true
                 _errorState.value =
-                    _errorState.value.copy(errorMessage = Constants. DATE_IN_PAST)
+                    _errorState.value.copy(errorMessage = Constants.DATE_IN_PAST)
             }
         }
 

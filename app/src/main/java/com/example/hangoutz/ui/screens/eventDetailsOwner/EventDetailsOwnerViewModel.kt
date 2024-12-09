@@ -11,6 +11,8 @@ import com.example.hangoutz.domain.repository.EventRepository
 import com.example.hangoutz.domain.repository.InviteRepository
 import com.example.hangoutz.domain.repository.UserRepository
 import com.example.hangoutz.utils.Constants
+import com.example.hangoutz.utils.Dimensions
+import com.example.hangoutz.utils.convertTimeToMillis
 import com.example.hangoutz.utils.formatDateTime
 import com.example.hangoutz.utils.formatForDatabase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,6 +21,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import java.util.UUID
@@ -125,6 +128,25 @@ class EventDetailsOwnerViewModel @Inject constructor(
         }
     }
 
+    fun getInitialTimeForPicker(): Long {
+        val time = _uiState.value.time
+        return convertTimeToMillis(time)
+    }
+
+    fun getInitialDateForPicker(): Long {
+        val formatter = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
+        val date = formatter.parse(_uiState.value.date)
+        val calendar = Calendar.getInstance()
+
+        calendar.time = date
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+        calendar.add(Calendar.DAY_OF_YEAR, 1)
+        return calendar.timeInMillis ?: 0L
+    }
+
     fun removeUser(userID: UUID) {
 
         viewModelScope.launch {
@@ -189,7 +211,7 @@ class EventDetailsOwnerViewModel @Inject constructor(
 
     fun checkIfInPast(date: String): Boolean {
         var isValid: Boolean = false
-        val inputFormat = SimpleDateFormat("dd.MM.yyyy. HH.mm", Locale.getDefault())
+        val inputFormat = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
         try {
             val inputDateTime = inputFormat.parse(date)
             if (inputDateTime != null && inputDateTime.before(Date())) {
@@ -224,12 +246,12 @@ class EventDetailsOwnerViewModel @Inject constructor(
             _uiState.value = _uiState.value.copy(errorMessage = Constants.ERROR_EMPTY_FIELD)
         }
 
-        if (!validateTitle && !checkLength(_uiState.value.title, 25)) {
+        if (!validateTitle && !checkLength(_uiState.value.title,  Dimensions.MAX_LENGTH)) {
             validateTitle = true
             _uiState.value = _uiState.value.copy(errorTitle = Constants.ERROR_TOO_LONG)
         }
 
-        if (!validatePlace && !checkLength(_uiState.value.place, 25)) {
+        if (!validatePlace && !checkLength(_uiState.value.place,  Dimensions.MAX_LENGTH)) {
             validatePlace = true
             _uiState.value = _uiState.value.copy(errorPlace = Constants.ERROR_TOO_LONG)
         }
@@ -244,17 +266,17 @@ class EventDetailsOwnerViewModel @Inject constructor(
             }
         }
 
-        if (_uiState.value.description.length > 100) {
+        if (_uiState.value.description.length >  Dimensions.MAX_LENGTH_DESC) {
             validateDesc = true
             _uiState.value = _uiState.value.copy(errorDesc = Constants.ERROR_TOO_LONG_DESC)
         }
 
-        if (_uiState.value.city.length > 25) {
+        if (_uiState.value.city.length > Dimensions.MAX_LENGTH) {
             validateCity = true
             _uiState.value = _uiState.value.copy(errorCity = Constants.ERROR_TOO_LONG)
         }
 
-        if (_uiState.value.street.length > 25) {
+        if (_uiState.value.street.length >  Dimensions.MAX_LENGTH) {
             validateStreet = true
             _uiState.value = _uiState.value.copy(errorStreet = Constants.ERROR_TOO_LONG)
         }
@@ -278,7 +300,7 @@ class EventDetailsOwnerViewModel @Inject constructor(
     }
 
     private fun formatTime(timeMillis: Long): String {
-        val timeFormat = SimpleDateFormat("HH.mm", Locale.getDefault())
+        val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
         return timeFormat.format(Date(timeMillis))
     }
 
@@ -288,7 +310,7 @@ class EventDetailsOwnerViewModel @Inject constructor(
     }
 
     private fun formatDate(dateMillis: Long): String {
-        val dateFormat = SimpleDateFormat("dd.MM.yyyy.", Locale.getDefault())
+        val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
         return dateFormat.format(Date(dateMillis))
     }
 
@@ -322,11 +344,11 @@ class EventDetailsOwnerViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(place = place, isPlaceError = false)
     }
 
-    fun onDateChange(date: String) { //TODO Configure datepicker validation
+    fun onDateChange(date: String) {
         _uiState.value = _uiState.value.copy(date = date, isDateError = false)
     }
 
-    fun onTimeChange(time: String) { //TODO Configure timepicker validation
+    fun onTimeChange(time: String) {
         _uiState.value = _uiState.value.copy(time = time, isTimeError = false)
     }
 }

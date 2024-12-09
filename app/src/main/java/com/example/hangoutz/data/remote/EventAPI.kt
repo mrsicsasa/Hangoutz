@@ -4,6 +4,7 @@ import com.example.hangoutz.BuildConfig
 import com.example.hangoutz.data.models.Event
 import com.example.hangoutz.data.models.EventCardDPO
 import com.example.hangoutz.data.models.EventRequest
+import com.example.hangoutz.data.models.EventResponse
 import com.example.hangoutz.data.models.EventsFromInvites
 import com.example.hangoutz.data.models.UserRequest
 import retrofit2.Response
@@ -48,4 +49,11 @@ interface EventAPI {
 
     @POST("${BuildConfig.REQUEST_URL}events")
     suspend fun insertEvent(@Body event: EventRequest): Response<Unit>
+
+    @GET("${BuildConfig.REQUEST_URL}events")
+    suspend fun getEventsByOwnerTitleAndDate(
+        @Query("owner") owner: String,
+        @Query("title") title: String,
+      //  @Query("date")  date: String
+    ): Response<List<EventResponse>>
 }
