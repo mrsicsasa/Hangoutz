@@ -4,8 +4,10 @@ import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.example.hangoutz.data.models.Friend
+import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter.ofPattern
+import java.util.Locale
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -34,4 +36,38 @@ fun Int.toZeroPaddedString(): String {
 
 fun String.firstLetterUppercase(): String {
     return this.lowercase().replaceFirstChar { it.uppercase() }
+}
+ fun formatDateTime(dateTimeString: String): Pair<String, String> {
+
+    val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm", Locale.getDefault())
+    val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
+    val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+
+    val date = inputFormat.parse(dateTimeString)
+    val formattedDate = dateFormat.format(date)
+    val formattedTime = timeFormat.format(date)
+
+    return Pair(formattedDate, formattedTime)
+}
+
+fun formatForDatabase(date : String, time : String) : String? {
+    val inputDate = date
+    val inputTime = time
+
+    val combined = "$inputDate $inputTime"
+
+    val inputFormat = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
+    val outputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+    val formattedDateTime = inputFormat.parse(combined)?.let { outputFormat.format(it) }
+    return formattedDateTime
+}
+
+fun convertTimeToMillis(dateTimeString: String? = null): Long {
+    val formatter = SimpleDateFormat("HH:mm", Locale.getDefault())
+    return if (dateTimeString != null) {
+        val date = formatter.parse(dateTimeString)
+        date?.time ?: 0L
+    } else {
+        System.currentTimeMillis()
+    }
 }

@@ -11,6 +11,8 @@ import com.example.hangoutz.domain.repository.EventRepository
 import com.example.hangoutz.domain.repository.InviteRepository
 import com.example.hangoutz.domain.repository.UserRepository
 import com.example.hangoutz.utils.Constants
+import com.example.hangoutz.utils.formatDateTime
+import com.example.hangoutz.utils.formatForDatabase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -70,7 +72,8 @@ class EventDetailsOwnerViewModel @Inject constructor(
     }
 
     fun editEvent(onSuccess: () -> Unit) {
-        formatForDatabase()
+        val formattedDateTime = formatForDatabase(uiState.value.date, _uiState.value.time) ?: ""
+        _uiState.value = _uiState.value.copy(formattedDateForDatabase = formattedDateTime)
 
         if (validateInputs()) {
             _uiState.value = _uiState.value.copy(errorMessage = "")
@@ -97,17 +100,6 @@ class EventDetailsOwnerViewModel @Inject constructor(
         }
     }
 
-  private fun formatForDatabase() {
-        val inputDate = _uiState.value.date
-        val inputTime = _uiState.value.time
-
-        val combined = "$inputDate $inputTime"
-
-        val inputFormat = SimpleDateFormat("dd.MM.yyyy. HH.mm", Locale.getDefault())
-        val outputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-        val formattedDateTime = outputFormat.format(inputFormat.parse(combined)!!)
-        _uiState.value = _uiState.value.copy(formattedDateForDatabase = formattedDateTime)
-    }
 
     fun deleteEvent(onSuccess: () -> Unit, onError: (String) -> Unit) {
         val eventId = _uiState.value.eventId
@@ -151,20 +143,6 @@ class EventDetailsOwnerViewModel @Inject constructor(
         }
         getData()
     }
-
-    private fun formatDateTime(dateTimeString: String): Pair<String, String> {
-
-        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm", Locale.getDefault())
-        val dateFormat = SimpleDateFormat("dd.MM.yyyy.", Locale.getDefault())
-        val timeFormat = SimpleDateFormat("HH.mm", Locale.getDefault())
-
-        val date = inputFormat.parse(dateTimeString)
-        val formattedDate = dateFormat.format(date)
-        val formattedTime = timeFormat.format(date)
-
-        return Pair(formattedDate, formattedTime)
-    }
-
 
     fun getData() {
         viewModelScope.launch {

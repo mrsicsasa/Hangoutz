@@ -12,6 +12,7 @@ import com.example.hangoutz.data.models.User
 import com.example.hangoutz.domain.repository.EventRepository
 import com.example.hangoutz.domain.repository.InviteRepository
 import com.example.hangoutz.domain.repository.UserRepository
+import com.example.hangoutz.utils.formatDateTime
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -52,18 +53,6 @@ class EventDetailsViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(eventId = eventId)
     }
 
-    fun formatDateTime(dateTimeString: String): Pair<String, String> {
-
-        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
-        val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
-        val timeFormat = SimpleDateFormat("HH.mm", Locale.getDefault())
-
-        val date = inputFormat.parse(dateTimeString)
-        val formattedDate = dateFormat.format(date)
-        val formattedTime = timeFormat.format(date)
-
-        return Pair(formattedDate, formattedTime)
-    }
 
     fun onLeave(onSuccess: () -> Unit, onFailure: (String) -> Unit) {
         viewModelScope.launch {

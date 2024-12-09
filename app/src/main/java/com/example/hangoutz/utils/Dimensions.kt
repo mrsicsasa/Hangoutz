@@ -172,4 +172,7 @@ object Dimensions {
     val TIME_PICKER_CORNERS = 20.dp
     //EVENT DETAILS SCREEN
     val EVENT_DETAILS_TOP_PADDING = 35.dp
+
+    const val MAX_LENGTH = 25
+    const val MAX_LENGTH_DESC = 100
 }

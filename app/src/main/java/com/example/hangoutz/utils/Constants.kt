@@ -214,6 +214,6 @@ object Constants {
     const val EVENT_ADD = "Event added successfully"
     const val EVENT_ADD_ERROR = "An error occurred while creating your event"
 
-
+    const val DATE_IN_PAST = "Date and time cannot be in the past"
 
 }

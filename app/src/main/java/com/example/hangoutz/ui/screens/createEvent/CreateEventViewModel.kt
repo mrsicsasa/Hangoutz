@@ -10,6 +10,8 @@ import com.example.hangoutz.data.models.Friend
 import com.example.hangoutz.domain.repository.EventRepository
 import com.example.hangoutz.domain.repository.FriendsRepository
 import com.example.hangoutz.utils.Constants
+import com.example.hangoutz.utils.Dimensions
+import com.example.hangoutz.utils.formatForDatabase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -54,7 +56,9 @@ class CreateEventViewModel @Inject constructor(
     fun createEvent(onSuccess: () -> Unit, onFailure: () -> Unit) {
 
         if (validateInputs()) {
-            formatForDatabase()
+            val formattedDateTime = formatForDatabase(uiState.value.date, _uiState.value.time) ?: ""
+            _uiState.value = _uiState.value.copy(formattedDateForDatabase = formattedDateTime)
+
             _errorState.value = _errorState.value.copy(errorMessage = "")
 
             viewModelScope.launch {
@@ -154,26 +158,13 @@ class CreateEventViewModel @Inject constructor(
         removeParticipant(friend)
     }
 
-    private fun formatForDatabase() {
-        val inputDate = _uiState.value.date
-        val inputTime = _uiState.value.time
-
-        val combined = "$inputDate $inputTime"
-
-        val inputFormat = SimpleDateFormat("dd.MM.yyyy. HH.mm", Locale.getDefault())
-        val outputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-        val formattedDateTime = outputFormat.format(inputFormat.parse(combined)!!)
-        _uiState.value = _uiState.value.copy(formattedDateForDatabase = formattedDateTime)
-    }
-
-
     fun onTimePicked(date: Long) {
         val formattedTime = formatTime(date)
         onTimeChange(formattedTime)
     }
 
     private fun formatTime(timeMillis: Long): String {
-        val timeFormat = SimpleDateFormat("HH.mm", Locale.getDefault())
+        val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
         return timeFormat.format(Date(timeMillis))
     }
 
@@ -183,7 +174,7 @@ class CreateEventViewModel @Inject constructor(
     }
 
     private fun formatDate(dateMillis: Long): String {
-        val dateFormat = SimpleDateFormat("dd.MM.yyyy.", Locale.getDefault())
+        val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
         return dateFormat.format(Date(dateMillis))
     }
 
@@ -232,7 +223,7 @@ class CreateEventViewModel @Inject constructor(
 
     fun checkIfInPast(date: String): Boolean {
         var isValid: Boolean = false
-        val inputFormat = SimpleDateFormat("dd.MM.yyyy. HH.mm", Locale.getDefault())
+        val inputFormat = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
         try {
             val inputDateTime = inputFormat.parse(date)
             if (inputDateTime != null && inputDateTime.before(Date())) {
@@ -268,12 +259,12 @@ class CreateEventViewModel @Inject constructor(
             Log.e("e", "empty fields error ${_errorState.value.errorMessage}")
         }
 
-        if (!validateTitle && !checkLength(_uiState.value.title, 25)) {
+        if (!validateTitle && !checkLength(_uiState.value.title, Dimensions.MAX_LENGTH)) {
             validateTitle = true
             _errorState.value = _errorState.value.copy(errorTitle = Constants.ERROR_TOO_LONG)
         }
 
-        if (!validatePlace && !checkLength(_uiState.value.place, 25)) {
+        if (!validatePlace && !checkLength(_uiState.value.place, Dimensions.MAX_LENGTH)) {
             validatePlace = true
             _errorState.value = _errorState.value.copy(errorPlace = Constants.ERROR_TOO_LONG)
         }
@@ -284,21 +275,21 @@ class CreateEventViewModel @Inject constructor(
                 validateDate = true
                 validateTime = true
                 _errorState.value =
-                    _errorState.value.copy(errorMessage = "Date and time cannot be in the past")
+                    _errorState.value.copy(errorMessage = Constants. DATE_IN_PAST)
             }
         }
 
-        if (_uiState.value.description.length > 100) {
+        if (_uiState.value.description.length > Dimensions.MAX_LENGTH_DESC) {
             validateDesc = true
             _errorState.value = _errorState.value.copy(errorDesc = Constants.ERROR_TOO_LONG_DESC)
         }
 
-        if (_uiState.value.city.length > 25) {
+        if (_uiState.value.city.length > Dimensions.MAX_LENGTH) {
             validateCity = true
             _errorState.value = _errorState.value.copy(errorCity = Constants.ERROR_TOO_LONG)
         }
 
-        if (_uiState.value.street.length > 25) {
+        if (_uiState.value.street.length > Dimensions.MAX_LENGTH) {
             validateStreet = true
             _errorState.value = _errorState.value.copy(errorStreet = Constants.ERROR_TOO_LONG)
         }
