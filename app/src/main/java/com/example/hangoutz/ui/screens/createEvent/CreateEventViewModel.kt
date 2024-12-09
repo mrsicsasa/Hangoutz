@@ -55,7 +55,7 @@ class CreateEventViewModel @Inject constructor(
         getFriends()
     }
 
-    fun createEvent(onSuccess: () -> Unit, onFailure: () -> Unit) {
+    fun createEvent(onSuccess: () -> Unit) {
 
         if (validateInputs()) {
             val formattedDateTime = formatForDatabase(uiState.value.date, _uiState.value.time) ?: ""
@@ -77,36 +77,37 @@ class CreateEventViewModel @Inject constructor(
                         owner = owner ?: ""
                     )
                 )
-                if(insertEventResponse.isSuccessful) {
+                if (insertEventResponse.isSuccessful) {
                     Log.i("Info", "Event was created successfully")
                 }
-                if(_uiState.value.participants.isNotEmpty()){
-                    val response =  owner?.let { eventsRepository.getEventsByOwnerTitleAndDate(
+                if (_uiState.value.participants.isNotEmpty()) {
+                    val response = owner?.let {
+                        eventsRepository.getEventsByOwnerTitleAndDate(
                             it,
                             _uiState.value.title,
 
-                        )
-                       }
+                            )
+                    }
                     if (response != null && response.isSuccessful) {
                         val events = response.body()
 
-                      if (events != null && events.isNotEmpty()) {
-                        val eventId = events.first().id
-                        postFriendInvites(eventId, _uiState.value.participants)
+                        if (events != null && events.isNotEmpty()) {
+                            val eventId = events.first().id
+                            postFriendInvites(eventId, _uiState.value.participants)
 
-                    } else {
-                        Log.e("Error", "An error has occurred while getting user")
+                        } else {
+                            Log.e("Error", "An error has occurred while getting user")
+                        }
                     }
-                }
                     onSuccess()
                     Log.i("Info", "Successfully patched event")
                 }
             }
-        }
-        else {
+        } else {
             Log.e("Error", "Fields marked with * cant be empty")
         }
     }
+
     fun postFriendInvites(eventId: String, participants: List<Friend>) {
 
         viewModelScope.launch {
@@ -115,7 +116,6 @@ class CreateEventViewModel @Inject constructor(
                     val response = inviteRepository.insertInvite(
                         InviteRequest("invited", participant.id.toString(), eventId)
                     )
-                    Log.e("informacije", "${eventId} , ${participant.id}")
 
                     if (response.isSuccessful) {
                         Log.i(
@@ -123,7 +123,6 @@ class CreateEventViewModel @Inject constructor(
                             "Successfully added participant ${participant.name} to event $eventId"
                         )
                     } else {
-                        Log.e("Error----------", "${response.errorBody()}")
                         Log.e(
                             "Error",
                             "Failed to add participant ${participant.name} to event $eventId"
@@ -137,6 +136,7 @@ class CreateEventViewModel @Inject constructor(
             }
         }
     }
+
     fun onSearchInput(newText: String) {
         _uiState.value = _uiState.value.copy(searchQuery = newText)
         if (_uiState.value.searchQuery.length >= Constants.MIN_SEARCH_LENGTH) {
@@ -150,16 +150,14 @@ class CreateEventViewModel @Inject constructor(
 
     private fun getFriends() {
         _uiState.value = _uiState.value.copy(
-            listOfFriends = emptyList(),
-            isLoading = true
+            listOfFriends = emptyList(), isLoading = true
         )
         viewModelScope.launch {
             val response = withContext(Dispatchers.IO) {
                 SharedPreferencesManager.getUserId(context)?.let {
                     MutableStateFlow(
                         friendsRepository.getFriendsFromUserId(
-                            it,
-                            _uiState.value.searchQuery
+                            it, _uiState.value.searchQuery
                         )
                     )
                 }
@@ -179,8 +177,7 @@ class CreateEventViewModel @Inject constructor(
 
     fun clearSearchQuery() {
         _uiState.value = _uiState.value.copy(
-            searchQuery = "",
-            listOfFriends = emptyList()
+            searchQuery = "", listOfFriends = emptyList()
         )
     }
 
@@ -327,8 +324,7 @@ class CreateEventViewModel @Inject constructor(
             if (checkIfInPast(combinedInput)) {
                 validateDate = true
                 validateTime = true
-                _errorState.value =
-                    _errorState.value.copy(errorMessage = Constants.DATE_IN_PAST)
+                _errorState.value = _errorState.value.copy(errorMessage = Constants.DATE_IN_PAST)
             }
         }
 
