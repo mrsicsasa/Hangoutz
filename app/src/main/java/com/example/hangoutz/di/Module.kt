@@ -1,7 +1,6 @@
 package com.example.hangoutz.di
 
 import android.content.Context
-import androidx.compose.ui.platform.LocalContext
 import com.example.hangoutz.BuildConfig
 import com.example.hangoutz.data.remote.EventAPI
 import com.example.hangoutz.data.remote.FriendsAPI

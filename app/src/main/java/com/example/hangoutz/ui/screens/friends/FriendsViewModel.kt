@@ -58,7 +58,7 @@ class FriendsViewModel @Inject constructor(
         }
     }
 
-    fun fetchFriends(isSearching: Boolean) {
+    private fun fetchFriends(isSearching: Boolean) {
         _uiState.value = _uiState.value.copy(
             listOfFriends = emptyList(),
             isLoading = true
@@ -81,9 +81,9 @@ class FriendsViewModel @Inject constructor(
                 }
                 response?.value?.let {
                     if (it.isSuccessful) {
-                        response.value.body()?.let {
+                        response.value.body()?.let { friends ->
                             _uiState.value =
-                                _uiState.value.copy(listOfFriends = it.sortedBy { it.users.name.uppercase() })
+                                _uiState.value.copy(listOfFriends = friends.sortedBy { friend -> friend.users.name.uppercase() })
                         }
                     }
                 }
@@ -96,7 +96,8 @@ class FriendsViewModel @Inject constructor(
         viewModelScope.launch {
             val response = withContext(Dispatchers.IO) {
                 SharedPreferencesManager.getUserId(context)?.let {
-                    (friendsRepository.removeFriend(userId = it, friendId = friendId.toString()))
+                    friendsRepository.removeFriend(userId = it, friendId = friendId.toString())
+                    friendsRepository.removeFriend(userId = friendId.toString(), friendId = it)
                 }
             }
             if (response?.isSuccessful == true) {
@@ -135,7 +136,7 @@ class FriendsViewModel @Inject constructor(
         }
     }
 
-    fun fetchNonFriends(isSearching: Boolean) {
+    private fun fetchNonFriends(isSearching: Boolean) {
         if (_uiState.value.isPopupLoading) {
             viewModelScope.launch {
                 val response = withContext(Dispatchers.IO) {
@@ -144,19 +145,25 @@ class FriendsViewModel @Inject constructor(
                             MutableStateFlow(
                                 friendsRepository.getNonFriendsFromUserId(
                                     it,
-                                    _uiState.value.popupSearch
+                                    _uiState.value.popupSearch,
+                                    friendsId = getFriendsId()
                                 )
                             )
                         } else {
-                            MutableStateFlow(friendsRepository.getNonFriendsFromUserId(it))
+                            MutableStateFlow(
+                                friendsRepository.getNonFriendsFromUserId(
+                                    it,
+                                    friendsId = getFriendsId()
+                                )
+                            )
                         }
                     }
                 }
                 response?.value?.let {
                     if (it.isSuccessful) {
-                        response.value.body()?.let {
+                        response.value.body()?.let { users ->
                             _uiState.value =
-                                _uiState.value.copy(addFriendList = it.sortedBy { it.name.uppercase() })
+                                _uiState.value.copy(addFriendList = users.sortedBy { user -> user.name.uppercase() })
                         }
                     }
                 }
@@ -177,9 +184,29 @@ class FriendsViewModel @Inject constructor(
                     )
                 )
             }
+            withContext(Dispatchers.IO) {
+                MutableStateFlow(
+                    friendsRepository.addFriend(
+                        id,
+                        UUID.fromString(SharedPreferencesManager.getUserId(context))
+                    )
+                )
+            }
             _uiState.value = _uiState.value.copy(isPopupLoading = true)
             fetchFriends(_uiState.value.searchQuery.length >= Constants.MIN_SEARCH_LENGTH)
             fetchNonFriends(_uiState.value.popupSearch.length >= Constants.MIN_SEARCH_LENGTH)
         }
+    }
+
+    private suspend fun getFriendsId(): String {
+        SharedPreferencesManager.getUserId(context)?.let {
+            val friendsResponse = friendsRepository.getFriendsFromUserId(id = it)
+            val stringBuilder = StringBuilder(it).append(",")
+            friendsResponse.body()?.forEach { friend ->
+                stringBuilder.append(friend.users.id).append(",")
+            }
+            return stringBuilder.toString().substring(0, stringBuilder.length - 1)
+        }
+        return ""
     }
 }
