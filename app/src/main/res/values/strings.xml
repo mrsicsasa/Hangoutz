@@ -53,4 +53,6 @@
     <string name="remove_participant_icon">remove participant icon</string>
     <string name="has_been_removed">%1$s has been removed</string>
     <string name="add_participate_button">add_participate_button</string>
+    <string name="ok_button">OK</string>
+    <string name="cancel_button">Cancel</string>
 </resources>
