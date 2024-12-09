@@ -12,9 +12,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.key
-import androidx.compose.ui.input.key.nativeKeyCode
-import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -42,7 +39,7 @@ fun InputField(
         shape = RoundedCornerShape(Dimensions.INPUT_FIELD_ROUNDED_CORNERS),
         visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
         keyboardOptions = KeyboardOptions(
-            keyboardType = when(label) {
+            keyboardType = when (label) {
                 Constants.EMAIL -> KeyboardType.Email
                 Constants.PASSWORD -> KeyboardType.Password
                 else -> KeyboardType.Unspecified
@@ -72,14 +69,6 @@ fun InputField(
                 top = Dimensions.INPUT_FIELD_PADDING_SMALL
             )
             .fillMaxWidth()
-            .onKeyEvent { event ->
-                if (event.key.nativeKeyCode == android.view.KeyEvent.KEYCODE_KEYBOARD_BACKLIGHT_TOGGLE) {
-                    focusManager.clearFocus()
-                    true
-                } else{
-                    false
-                }
-            }
     )
 }
 
@@ -96,11 +85,12 @@ fun InputField(
     singleLine: Boolean = true
 ) {
 
-    OutlinedTextField(value = value,
+    OutlinedTextField(
+        value = value,
         label = { Text(text = label, style = MaterialTheme.typography.bodySmall) },
         onValueChange = { onValueChange(it) },
         singleLine = singleLine,
-        maxLines = 3,
+        maxLines = Constants.MAX_LINES,
         isError = isError,
         enabled = isEnabled,
         readOnly = isReadOnly,
@@ -126,7 +116,7 @@ fun InputField(
                 bottom = Dimensions.INPUT_FIELD_PADDING_SMALL,
                 top = Dimensions.INPUT_FIELD_PADDING_SMALL,
 
-            )
+                )
             .fillMaxWidth()
     )
 }

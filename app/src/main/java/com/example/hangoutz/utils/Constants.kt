@@ -107,6 +107,9 @@ object Constants {
     const val VALID_EMAIL = "^[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.com$"
     const val CONTAINS_DIGIT = ".*\\d.*"
 
+    //Input fields
+    const val MAX_LINES = 3
+
     //RegisterViewModel
     const val MIN_NAME_LENGTH = 3
     const val MAX_NAME_LENGTH = 25

@@ -101,7 +101,6 @@ class FriendsViewModel @Inject constructor(
                 }
             }
             if (response?.isSuccessful == true) {
-
                 if (_uiState.value.searchQuery.length < Constants.MIN_SEARCH_LENGTH) {
                     fetchFriends(false)
                 } else {

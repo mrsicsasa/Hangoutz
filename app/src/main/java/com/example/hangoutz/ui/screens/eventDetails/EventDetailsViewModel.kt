@@ -100,7 +100,6 @@ class EventDetailsViewModel @Inject constructor(
 
     fun getParticipants() {
         viewModelScope.launch {
-
             val eventResponse = _uiState.value.eventId?.let { eventRepository.getEvent(it) }
             if (eventResponse?.isSuccessful == true && eventResponse.body() != null) {
                 val event = eventResponse.body()?.first()
