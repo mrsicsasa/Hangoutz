@@ -203,5 +203,5 @@ object Constants {
     const val EVENT_OWNER_ADD_PARTICIPANTS_BUTTON = "eventOwnerAddParticipantsButton"
     const val EVENT_OWNER_CREATE_BUTTON = "eventOwnerCreateButton"
     const val EVENT_OWNER_EDIT_BUTTON = "eventOwnerCreateButton"
-
+    const val CREATE_EVENT_REMOVE_BUTTON = "createEventRemoveButton"
 }
