@@ -48,7 +48,7 @@ class FriendsViewModel @Inject constructor(
             )
             fetchFriends(isSearching = true)
         } else {
-            if (_uiState.value.isFiltered){
+            if (_uiState.value.isFiltered) {
                 _uiState.value = _uiState.value.copy(
                     isFiltered = false,
                     isLoading = true
@@ -102,8 +102,7 @@ class FriendsViewModel @Inject constructor(
             if (response?.isSuccessful == true) {
                 if (_uiState.value.searchQuery.length < Constants.MIN_SEARCH_LENGTH) {
                     fetchFriends(false)
-                }
-                else {
+                } else {
                     _uiState.value = _uiState.value.copy(
                         isLoading = true
                     )
@@ -178,8 +177,9 @@ class FriendsViewModel @Inject constructor(
                     )
                 )
             }
+            _uiState.value = _uiState.value.copy(isPopupLoading = true)
+            fetchFriends(_uiState.value.searchQuery.length >= Constants.MIN_SEARCH_LENGTH)
+            fetchNonFriends(_uiState.value.popupSearch.length >= Constants.MIN_SEARCH_LENGTH)
         }
-        onPopupSearchInput(_uiState.value.popupSearch)
-        onSearchInput(_uiState.value.searchQuery)
     }
 }

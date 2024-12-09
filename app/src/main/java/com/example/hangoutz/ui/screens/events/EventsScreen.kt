@@ -29,7 +29,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -65,7 +64,7 @@ fun MyEventsScreen(
                 items = listOf(
                     EventsFilterOptions.GOING.name.uppercase(),
                     EventsFilterOptions.INVITED.name.uppercase(),
-                    EventsFilterOptions.MINE.name.uppercase()
+                    EventsFilterOptions.CREATED.name.uppercase()
                 ),
                 selectedItemIndex = data.value.pagerState.currentPage,
                 scope = scope,
@@ -112,7 +111,7 @@ fun MyEventsScreen(
                     )
 
                     2 -> EventsList(navController,
-                        page = EventsFilterOptions.MINE.name,
+                        page = EventsFilterOptions.CREATED.name,
                         events = data.value.eventsMine,
                         isLoading = data.value.isLoading,
                         counts = data.value.counts,
@@ -176,7 +175,7 @@ fun EventsList(
                 items(events) { event ->
                     val countOfPeoplePair: Pair<UUID, Int>? = counts.find { it.first == event.id }
                     val userAvatar: Pair<UUID, String?>? = avatars.find { it.first == event.owner }
-                    (if (page == EventsFilterOptions.MINE.name) {
+                    (if (page == EventsFilterOptions.CREATED.name) {
                         event.users.avatar ?: stringResource(R.string.default_user_image)
                     } else {
                         userAvatar?.second ?: stringResource(R.string.default_user_image)

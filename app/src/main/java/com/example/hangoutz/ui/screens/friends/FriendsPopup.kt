@@ -1,5 +1,6 @@
 package com.example.hangoutz.ui.screens.friends
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,6 +25,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -32,6 +35,7 @@ import com.example.hangoutz.R
 import com.example.hangoutz.data.models.Friend
 import com.example.hangoutz.ui.components.DisplayUser
 import com.example.hangoutz.ui.components.SearchField
+import com.example.hangoutz.ui.theme.CoolGray
 import com.example.hangoutz.ui.theme.OrangeButton
 import com.example.hangoutz.ui.theme.SilverCloud
 import com.example.hangoutz.utils.Constants
@@ -53,6 +57,7 @@ fun FriendsPopup(
     isCheckList: Boolean = false,
     onAdd: () -> Unit = {},
     participantSelected: List<Friend> = emptyList(),
+    onRemove: (Friend) -> Unit = {},
     onTextInput: (String) -> Unit,
 ) {
     ModalBottomSheet(
@@ -94,6 +99,20 @@ fun FriendsPopup(
                             contentDescription = Constants.BOTTOM_SHEET_LOADING_SPINNER
                         })
             }
+        } else if (isCheckList && searchQuery.length < Constants.MIN_SEARCH_LENGTH) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_search),
+                    contentDescription = stringResource(R.string.search_icon),
+                    modifier = Modifier
+                        .size(Dimensions.CREATE_EVENT_SEARCH_ICON_SIZE),
+                    contentScale = ContentScale.Fit
+                )
+            }
+
         } else if (userList.isEmpty()) {
             Box(
                 contentAlignment = Alignment.Center,
@@ -102,7 +121,7 @@ fun FriendsPopup(
                 if (searchQuery.length >= Constants.MIN_SEARCH_LENGTH) {
                     Text(
                         text = stringResource(R.string.no_friends_found),
-                        color = Color.Black,
+                        color = CoolGray,
                         modifier = Modifier.semantics {
                             contentDescription = Constants.NO_USERS_FOUND_MESSAGE
                         })
@@ -132,7 +151,8 @@ fun FriendsPopup(
                     isParticipant = isParticipant,
                     isCheckedInitial = participantSelected.any { it.id == user.id },
                     onChange = { onChange(it, user) },
-                    addFriend = { addFriend(user.id) }
+                    addFriend = { addFriend(user.id) },
+                    onRemove = { onRemove(user) }
                 )
             }
         }

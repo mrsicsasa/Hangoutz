@@ -7,6 +7,7 @@ import com.example.hangoutz.data.local.SharedPreferencesManager
 import com.example.hangoutz.data.models.EventCardDPO
 import com.example.hangoutz.data.models.Friend
 import com.example.hangoutz.domain.repository.FriendsRepository
+import com.example.hangoutz.utils.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -29,15 +30,22 @@ class CreateEventViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(CreateEventState())
     val uiState: StateFlow<CreateEventState> = _uiState
 
-    init {
-        getFriends()
-    }
-
     fun createEvent() {
         //TODO
     }
 
-    fun getFriends() {
+    fun onSearchInput(newText: String) {
+        _uiState.value = _uiState.value.copy(searchQuery = newText)
+        if (_uiState.value.searchQuery.length >= Constants.MIN_SEARCH_LENGTH) {
+            getFriends()
+        } else {
+            _uiState.value = _uiState.value.copy(
+                listOfFriends = emptyList()
+            )
+        }
+    }
+
+    private fun getFriends() {
         _uiState.value = _uiState.value.copy(
             listOfFriends = emptyList(),
             isLoading = true
@@ -45,7 +53,12 @@ class CreateEventViewModel @Inject constructor(
         viewModelScope.launch {
             val response = withContext(Dispatchers.IO) {
                 SharedPreferencesManager.getUserId(context)?.let {
-                    MutableStateFlow(friendsRepository.getFriendsFromUserId(it))
+                    MutableStateFlow(
+                        friendsRepository.getFriendsFromUserId(
+                            it,
+                            _uiState.value.searchQuery
+                        )
+                    )
                 }
             }
             response?.value?.let {
@@ -58,6 +71,13 @@ class CreateEventViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun clearSearchQuery() {
+        _uiState.value = _uiState.value.copy(
+            searchQuery = "",
+            listOfFriends = emptyList()
+        )
     }
 
     fun addParticipant(user: Friend) {
@@ -77,6 +97,13 @@ class CreateEventViewModel @Inject constructor(
             participants = _uiState.value.participants + _uiState.value.selectedParticipants,
             selectedParticipants = emptyList()
         )
+    }
+
+    fun removeSelectedParticipant(friend: Friend) {
+        _uiState.value = _uiState.value.copy(
+            participants = _uiState.value.participants - friend,
+        )
+        removeParticipant(friend)
     }
 
     fun onTimePicked(date: Long) {

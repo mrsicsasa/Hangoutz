@@ -4,12 +4,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BasicAlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TimeInput
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
@@ -54,9 +55,14 @@ fun TimePickerModal(
                 state = timePickerState
             )
             Row(
-                horizontalArrangement = Arrangement.spacedBy(Dimensions.ACTION_BUTTON_SMALL2)
+                horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.Bottom,
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Button(onClick = {
+                TextButton(onClick = onDismiss) {
+                    Text(stringResource(R.string.dismiss_time_picker))
+                }
+                TextButton(onClick = {
                     val selectedCalendar = Calendar.getInstance().apply {
                         set(Calendar.HOUR_OF_DAY, timePickerState.hour)
                         set(Calendar.MINUTE, timePickerState.minute)
@@ -67,9 +73,6 @@ fun TimePickerModal(
                     onConfirm(selectedTimeInMillis)
                 }) {
                     Text(stringResource(R.string.confirm_time_picker))
-                }
-                Button(onClick = onDismiss) {
-                    Text(stringResource(R.string.dismiss_time_picker))
                 }
             }
         }
