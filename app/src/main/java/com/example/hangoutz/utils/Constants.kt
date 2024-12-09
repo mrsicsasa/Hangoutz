@@ -174,6 +174,7 @@ object Constants {
     //Bottom sheet
     const val BOTTOM_SHEET_TAG = "bottomSheet"
     const val BOTTOM_SHEET_SEARCH = "bottomSheetSearch"
+    const val BOTTOM_SHEET_USER_ROW = "bottomSheetUserRow"
     const val BOTTOM_SHEET_PROFILE_PICTURE = "bottomSheetProfilePicture"
     const val BOTTOM_SHEET_USERNAME = "bottomSheetUsername"
     const val BOTTOM_SHEET_ADD_ICON = "bottomSheetAddIcon"
@@ -205,6 +206,7 @@ object Constants {
     const val EVENT_OWNER_ADD_PARTICIPANTS_BUTTON = "eventOwnerAddParticipantsButton"
     const val EVENT_OWNER_CREATE_BUTTON = "eventOwnerCreateButton"
     const val EVENT_OWNER_EDIT_BUTTON = "eventOwnerCreateButton"
+    const val CREATE_EVENT_REMOVE_BUTTON = "createEventRemoveButton"
 
     const val DELETE_ERROR = "An error has ocurred while deleting"
     const val DELETE_SUCCESS = "Successfully deleted the event"

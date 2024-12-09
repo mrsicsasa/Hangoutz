@@ -19,6 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import com.example.hangoutz.R
+import com.example.hangoutz.ui.theme.DeleteColor
 import com.example.hangoutz.utils.Dimensions
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -26,7 +27,7 @@ import com.example.hangoutz.utils.Dimensions
 fun DismissBackground(dismissState: SwipeToDismissBoxState) {
     val color = when (dismissState.dismissDirection) {
         SwipeToDismissBoxValue.StartToEnd -> Color.Transparent
-        SwipeToDismissBoxValue.EndToStart -> Color(0xFFEB6851)
+        SwipeToDismissBoxValue.EndToStart -> DeleteColor
         SwipeToDismissBoxValue.Settled -> Color.Transparent
     }
     Row(

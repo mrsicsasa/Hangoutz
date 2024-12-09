@@ -1,6 +1,5 @@
 package com.example.hangoutz.ui.screens.createEvent
 
-
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -23,7 +22,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -42,11 +40,13 @@ import com.example.hangoutz.R
 import com.example.hangoutz.ui.components.ActionButton
 import com.example.hangoutz.ui.components.DatePickerModal
 import com.example.hangoutz.ui.components.ErrorMessage
+import com.example.hangoutz.ui.components.DisplayUser
 import com.example.hangoutz.ui.components.InputField
 import com.example.hangoutz.ui.components.InputFieldWithIcon
 import com.example.hangoutz.ui.components.TimePickerModal
 import com.example.hangoutz.ui.screens.friends.FriendsPopup
 import com.example.hangoutz.ui.theme.Ivory
+import com.example.hangoutz.ui.theme.OrangeButton
 import com.example.hangoutz.ui.theme.TopBarBackgroundColor
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Dimensions
@@ -104,11 +104,10 @@ fun CreateEventScreen(
                         end = Dimensions.ACTION_BUTTON_MEDIUM2,
                         bottom = Dimensions.ACTION_BUTTON_SMALL1
                     )
-                    .verticalScroll(rememberScrollState())
                     .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
                     .weight(1f)
             ) {
-
                 InputField(
                     stringResource(R.string.event_title),
                     data.value.title,
@@ -229,17 +228,34 @@ fun CreateEventScreen(
                         style = MaterialTheme.typography.bodyMedium
                     )
                     Image(painter = painterResource(id = R.drawable.addevent),
-                        contentDescription = "",
+                        contentDescription = stringResource(R.string.add_participate_button),
                         modifier = Modifier
-                            .clickable { }
+                            .clickable { scope.launch { sheetState.show() } }
                             .semantics {
                                 contentDescription = Constants.CREATE_EVENT_ADD_PARTICIPANTS_BUTTON
                             })
                 }
                 HorizontalDivider(
-                    thickness = Dimensions.CREATE_EVENT_LINE_THICKNESS, color = Ivory
+                    thickness = Dimensions.CREATE_EVENT_LINE_THICKNESS, color = OrangeButton
                 )
-                //TODO put participants here, use participantUI component (check event details screen)
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    data.value.participants.forEach {
+                        DisplayUser(
+                            it.name,
+                            it.avatar,
+                            isCheckList = false,
+                            isParticipant = true,
+                            onRemove = {
+                                viewmodel.removeSelectedParticipant(friend = it)
+                                Toast.makeText(
+                                    context,
+                                    context.getString(R.string.has_been_removed, it.name),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        )
+                    }
+                }
             }
             Column(
             ) {
@@ -266,22 +282,23 @@ fun CreateEventScreen(
                                 ).show()
                             })
                     })
-
                 if (sheetState.isVisible) {
                     FriendsPopup(userList = data.value.listOfFriends,
-                        searchQuery = "",
+                        searchQuery = data.value.searchQuery,
                         isLoading = data.value.isLoading,
-                        clearText = {},
+                        clearText = { viewmodel.clearSearchQuery() },
                         sheetState = sheetState,
                         showBottomSheet = {
                         },
-                        onTextInput = {
+                        onTextInput = { searchQuery ->
+                            viewmodel.onSearchInput(searchQuery)
                         },
                         participantSelected = data.value.selectedParticipants,
                         isCheckList = true,
                         onAdd = {
                             viewmodel.addSelectedParticipants()
                             scope.launch { sheetState.hide() }
+                            viewmodel.clearSearchQuery()
                         },
                         onChange = { isChecked, user ->
                             if (isChecked) {
@@ -292,7 +309,6 @@ fun CreateEventScreen(
                         })
                 }
             }
-
             if (data.value.showDatePicker) {
                 DatePickerModal(onDateSelected = { date ->
                     date?.let {
@@ -306,10 +322,6 @@ fun CreateEventScreen(
                     viewmodel.onTimePicked(time)
                     viewmodel.setShowTimePicker()
                 }, onDismiss = { viewmodel.setShowTimePicker() })
-            }
-
-            LaunchedEffect(sheetState.isVisible) {
-                viewmodel.getFriends()
             }
         }
     }

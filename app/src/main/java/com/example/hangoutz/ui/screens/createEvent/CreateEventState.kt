@@ -24,5 +24,5 @@ data class CreateEventState(
     var isCityError: Boolean = false,
     var isStreetError: Boolean = false,
     var formattedDateForDatabase: String = "",
-
+    val searchQuery: String = ""
 )

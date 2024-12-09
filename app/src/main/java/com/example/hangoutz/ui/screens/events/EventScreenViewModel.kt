@@ -39,7 +39,7 @@ class EventScreenViewModel @Inject constructor(
         viewModelScope.launch {
             getCountOfInvites()
             when (page) {
-                EventsFilterOptions.MINE.name -> {
+                EventsFilterOptions.CREATED.name -> {
                     getMineEvents()
                 }
 

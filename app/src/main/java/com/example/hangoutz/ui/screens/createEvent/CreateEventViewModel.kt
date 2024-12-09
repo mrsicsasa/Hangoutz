@@ -82,7 +82,18 @@ class CreateEventViewModel @Inject constructor(
         }
     }
 
-    fun getFriends() {
+    fun onSearchInput(newText: String) {
+        _uiState.value = _uiState.value.copy(searchQuery = newText)
+        if (_uiState.value.searchQuery.length >= Constants.MIN_SEARCH_LENGTH) {
+            getFriends()
+        } else {
+            _uiState.value = _uiState.value.copy(
+                listOfFriends = emptyList()
+            )
+        }
+    }
+
+    private fun getFriends() {
         _uiState.value = _uiState.value.copy(
             listOfFriends = emptyList(),
             isLoading = true
@@ -90,7 +101,12 @@ class CreateEventViewModel @Inject constructor(
         viewModelScope.launch {
             val response = withContext(Dispatchers.IO) {
                 SharedPreferencesManager.getUserId(context)?.let {
-                    MutableStateFlow(friendsRepository.getFriendsFromUserId(it))
+                    MutableStateFlow(
+                        friendsRepository.getFriendsFromUserId(
+                            it,
+                            _uiState.value.searchQuery
+                        )
+                    )
                 }
             }
             response?.value?.let {
@@ -103,6 +119,13 @@ class CreateEventViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun clearSearchQuery() {
+        _uiState.value = _uiState.value.copy(
+            searchQuery = "",
+            listOfFriends = emptyList()
+        )
     }
 
     fun addParticipant(user: Friend) {
@@ -124,8 +147,11 @@ class CreateEventViewModel @Inject constructor(
         )
     }
 
-    fun removeUser(userID: UUID) {
-        //TODO remove participant from list
+    fun removeSelectedParticipant(friend: Friend) {
+        _uiState.value = _uiState.value.copy(
+            participants = _uiState.value.participants - friend,
+        )
+        removeParticipant(friend)
     }
 
     private fun formatForDatabase() {
@@ -139,6 +165,7 @@ class CreateEventViewModel @Inject constructor(
         val formattedDateTime = outputFormat.format(inputFormat.parse(combined)!!)
         _uiState.value = _uiState.value.copy(formattedDateForDatabase = formattedDateTime)
     }
+
 
     fun onTimePicked(date: Long) {
         val formattedTime = formatTime(date)
