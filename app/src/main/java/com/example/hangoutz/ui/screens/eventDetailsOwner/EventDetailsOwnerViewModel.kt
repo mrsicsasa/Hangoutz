@@ -73,7 +73,7 @@ class EventDetailsOwnerViewModel @Inject constructor(
     }
 
     fun editEvent(onSuccess: () -> Unit) {
-        val formattedDateTime =  formatForDatabase(uiState.value.date, _uiState.value.time) ?: ""
+        val formattedDateTime = formatForDatabase(uiState.value.date, _uiState.value.time) ?: ""
         _uiState.value = _uiState.value.copy(formattedDateForDatabase = formattedDateTime)
 
         if (validateInputs()) {
@@ -108,7 +108,8 @@ class EventDetailsOwnerViewModel @Inject constructor(
                 inviteRepository.deleteInviteByEventId(participant.id, eventId)
             }
 
-            val allParticipantDeletionsSuccessful = deleteParticipantResponses.all { it?.isSuccessful == true }
+            val allParticipantDeletionsSuccessful =
+                deleteParticipantResponses.all { it?.isSuccessful == true }
             if (allParticipantDeletionsSuccessful) {
                 Log.i("EventDetailsOwner", "Successfully deleted invites for event")
 
@@ -161,7 +162,7 @@ class EventDetailsOwnerViewModel @Inject constructor(
         }
         getData()
     }
-    
+
     fun getData() {
         viewModelScope.launch {
 
