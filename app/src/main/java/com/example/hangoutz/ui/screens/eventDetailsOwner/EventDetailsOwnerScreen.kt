@@ -307,7 +307,9 @@ fun EventOwnerDetailsScreen(
             }
 
             if (data.value.showDatePicker) {
-                DatePickerModal(onDateSelected = { date ->
+                DatePickerModal(
+                    viewmodel.getInitialDateForPicker(),
+                    onDateSelected = { date ->
                     date?.let {
                         viewmodel.onDatePicked(date)
                     }
@@ -315,7 +317,9 @@ fun EventOwnerDetailsScreen(
             }
 
             if (data.value.showTimePicker) {
-                TimePickerModal(onConfirm = { time ->
+                TimePickerModal(
+                    viewmodel.getInitialTimeForPicker(),
+                    onConfirm = { time ->
                     viewmodel.onTimePicked(time)
                     viewmodel.setShowTimePicker()
                 }, onDismiss = { viewmodel.setShowTimePicker() })

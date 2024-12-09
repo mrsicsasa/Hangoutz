@@ -251,7 +251,9 @@ fun CreateEventScreen(
             }
 
             if (data.value.showDatePicker) {
-                DatePickerModal(onDateSelected = { date ->
+                DatePickerModal(
+                    System.currentTimeMillis(),
+                    onDateSelected = { date ->
                     date?.let {
                         viewmodel.onDatePicked(date)
                     }
@@ -259,7 +261,9 @@ fun CreateEventScreen(
             }
 
             if (data.value.showTimePicker) {
-                TimePickerModal(onConfirm = { time ->
+                TimePickerModal(
+                    System.currentTimeMillis(),
+                    onConfirm = { time ->
                     viewmodel.onTimePicked(time)
                     viewmodel.setShowTimePicker()
                 }, onDismiss = { viewmodel.setShowTimePicker() })

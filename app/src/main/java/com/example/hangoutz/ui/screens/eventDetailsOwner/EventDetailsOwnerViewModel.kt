@@ -10,12 +10,16 @@ import com.example.hangoutz.domain.repository.EventRepository
 import com.example.hangoutz.domain.repository.InviteRepository
 import com.example.hangoutz.domain.repository.UserRepository
 import com.example.hangoutz.utils.Constants
+import com.example.hangoutz.utils.convertTimeToMillis
+import com.example.hangoutz.utils.formatDateTime
+import com.example.hangoutz.utils.formatForDatabase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import java.util.UUID
@@ -69,11 +73,9 @@ class EventDetailsOwnerViewModel @Inject constructor(
     }
 
     fun editEvent(onSuccess: () -> Unit) {
-        formatForDatabase()
-        Log.e(
-            "DATA",
-            "id=  ${_uiState.value.eventId.toString()}, newTitle =  ${_uiState.value.title}, newPlace = ${_uiState.value.place}, newDate =  ${_uiState.value.formattedDateForDatabase}"
-        )
+        val formattedDateTime =  formatForDatabase(uiState.value.date, _uiState.value.time) ?: ""
+        _uiState.value = _uiState.value.copy(formattedDateForDatabase = formattedDateTime)
+
         if (validateInputs()) {
             _uiState.value = _uiState.value.copy(errorMessage = "")
             viewModelScope.launch {
@@ -90,22 +92,9 @@ class EventDetailsOwnerViewModel @Inject constructor(
                     Log.i("Info", "Successfully patched event")
                 } else Log.e("Info", "${eventResponse.code()}")
             }
-
         } else {
             Log.e("Error", "Fields marked with * cant be empty")
         }
-    }
-
-    private fun formatForDatabase() {
-        val inputDate = _uiState.value.date
-        val inputTime = _uiState.value.time
-
-        val combined = "$inputDate $inputTime"
-
-        val inputFormat = SimpleDateFormat("dd.MM.yyyy. HH.mm", Locale.getDefault())
-        val outputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-        val formattedDateTime = outputFormat.format(inputFormat.parse(combined)!!)
-        _uiState.value = _uiState.value.copy(formattedDateForDatabase = formattedDateTime)
     }
 
     fun deleteEvent(onSuccess: () -> Unit, onError: (String) -> Unit) {
@@ -115,8 +104,12 @@ class EventDetailsOwnerViewModel @Inject constructor(
             return
         }
         viewModelScope.launch {
-            val deleteInvitesResponse = inviteRepository.deleteInvite(id = eventId)
-            if (deleteInvitesResponse?.isSuccessful == true) {
+            val deleteParticipantResponses = _uiState.value.participants.map { participant ->
+                inviteRepository.deleteInviteByEventId(participant.id, eventId)
+            }
+
+            val allParticipantDeletionsSuccessful = deleteParticipantResponses.all { it?.isSuccessful == true }
+            if (allParticipantDeletionsSuccessful) {
                 Log.i("EventDetailsOwner", "Successfully deleted invites for event")
 
                 val deleteEventResponse = eventRepository.deleteEvent(id = eventId)
@@ -132,10 +125,28 @@ class EventDetailsOwnerViewModel @Inject constructor(
         }
     }
 
+    fun getInitialTimeForPicker(): Long {
+        val time = _uiState.value.time
+        return convertTimeToMillis(time)
+    }
+
+    fun getInitialDateForPicker(): Long {
+        val formatter = SimpleDateFormat("dd.MM.yyyy.", Locale.getDefault())
+        val date = formatter.parse(_uiState.value.date)
+        val calendar = Calendar.getInstance()
+
+        calendar.time = date
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+        calendar.add(Calendar.DAY_OF_YEAR, 1)
+        return calendar.timeInMillis ?: 0L
+    }
+
     fun removeUser(userID: UUID) {
 
         viewModelScope.launch {
-
             val updatedParticipants = _uiState.value.participants.filter { it.id != userID }
             _uiState.value = _uiState.value.copy(participants = updatedParticipants)
 
@@ -150,21 +161,7 @@ class EventDetailsOwnerViewModel @Inject constructor(
         }
         getData()
     }
-
-    private fun formatDateTime(dateTimeString: String): Pair<String, String> {
-
-        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm", Locale.getDefault())
-        val dateFormat = SimpleDateFormat("dd.MM.yyyy.", Locale.getDefault())
-        val timeFormat = SimpleDateFormat("HH.mm", Locale.getDefault())
-
-        val date = inputFormat.parse(dateTimeString)
-        val formattedDate = dateFormat.format(date)
-        val formattedTime = timeFormat.format(date)
-
-        return Pair(formattedDate, formattedTime)
-    }
-
-
+    
     fun getData() {
         viewModelScope.launch {
 
@@ -209,7 +206,7 @@ class EventDetailsOwnerViewModel @Inject constructor(
         else return false
     }
 
-    fun checkIfInPast(date: String): Boolean {
+    fun isEventPassed(date: String): Boolean {
         var isValid: Boolean = false
         val inputFormat = SimpleDateFormat("dd.MM.yyyy. HH.mm", Locale.getDefault())
         try {
@@ -246,37 +243,37 @@ class EventDetailsOwnerViewModel @Inject constructor(
             _uiState.value = _uiState.value.copy(errorMessage = Constants.ERROR_EMPTY_FIELD)
         }
 
-        if (!validateTitle && !checkLength(_uiState.value.title, 25)) {
+        if (!validateTitle && !checkLength(_uiState.value.title, Constants.MAX_LENGTH)) {
             validateTitle = true
             _uiState.value = _uiState.value.copy(errorTitle = Constants.ERROR_TOO_LONG)
         }
 
-        if (!validatePlace && !checkLength(_uiState.value.place, 25)) {
+        if (!validatePlace && !checkLength(_uiState.value.place, Constants.MAX_LENGTH)) {
             validatePlace = true
             _uiState.value = _uiState.value.copy(errorPlace = Constants.ERROR_TOO_LONG)
         }
 
         if (!validateDate && !validateTime) {
             val combinedInput = "${_uiState.value.date} ${_uiState.value.time}"
-            if (checkIfInPast(combinedInput)) {
+            if (isEventPassed(combinedInput)) {
                 validateDate = true
                 validateTime = true
                 _uiState.value =
-                    _uiState.value.copy(errorMessage = "Date and time cannot be in the past")
+                    _uiState.value.copy(errorMessage = Constants.DATE_IN_PAST)
             }
         }
 
-        if (_uiState.value.description.length > 100) {
+        if (_uiState.value.description.length > Constants.MAX_LENGTH_DESC) {
             validateDesc = true
             _uiState.value = _uiState.value.copy(errorDesc = Constants.ERROR_TOO_LONG_DESC)
         }
 
-        if (_uiState.value.city.length > 25) {
+        if (_uiState.value.city.length > Constants.MAX_LENGTH) {
             validateCity = true
             _uiState.value = _uiState.value.copy(errorCity = Constants.ERROR_TOO_LONG)
         }
 
-        if (_uiState.value.street.length > 25) {
+        if (_uiState.value.street.length > Constants.MAX_LENGTH) {
             validateStreet = true
             _uiState.value = _uiState.value.copy(errorStreet = Constants.ERROR_TOO_LONG)
         }

@@ -209,4 +209,9 @@ object Constants {
     const val DELETE_ERROR = "An error has ocurred while deleting"
     const val DELETE_SUCCESS = "Successfully deleted the event"
 
+    const val MAX_LENGTH = 25
+    const val MAX_LENGTH_DESC = 100
+
+    const val DATE_IN_PAST = "Date and time cannot be in the past"
+
 }

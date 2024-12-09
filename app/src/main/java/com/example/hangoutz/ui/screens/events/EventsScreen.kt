@@ -1,7 +1,6 @@
 package com.example.hangoutz.ui.screens.events
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -37,7 +36,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.hangoutz.R
-import com.example.hangoutz.data.local.SharedPreferencesManager
 import com.example.hangoutz.data.models.EventCardDPO
 import com.example.hangoutz.ui.components.FloatingPlusButton
 import com.example.hangoutz.ui.navigation.NavigationItem
@@ -53,6 +51,7 @@ fun MyEventsScreen(
     navController: NavController, viewModel: EventScreenViewModel = hiltViewModel()
 ) {
     val data = viewModel.uiState.collectAsState()
+    val context = LocalContext.current
     val scope = rememberCoroutineScope()
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -221,4 +220,3 @@ fun EventsList(
         )
     }
 }
-
