@@ -31,7 +31,7 @@ class CreateEventViewModel @Inject constructor(
     val uiState: StateFlow<CreateEventState> = _uiState
 
     fun createEvent() {
-        //TODO
+         //TODO
     }
 
     fun onSearchInput(newText: String) {
