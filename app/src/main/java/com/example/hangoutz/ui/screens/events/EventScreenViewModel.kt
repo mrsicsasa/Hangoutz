@@ -1,10 +1,15 @@
 package com.example.hangoutz.ui.screens.events
 
 import android.content.Context
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.Data
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.example.hangoutz.data.local.SharedPreferencesManager
 import com.example.hangoutz.data.models.EventCardDPO
 import com.example.hangoutz.data.models.UpdateEventStatusDTO
@@ -16,12 +21,15 @@ import com.example.hangoutz.ui.theme.GreenDark
 import com.example.hangoutz.ui.theme.Orange
 import com.example.hangoutz.ui.theme.PurpleDark
 import com.example.hangoutz.utils.Constants
+import com.example.hangoutz.utils.notifications.NotificationWorker
+import com.example.hangoutz.utils.toMilliseconds
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.util.UUID
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
@@ -35,6 +43,7 @@ class EventScreenViewModel @Inject constructor(
     val uiState: StateFlow<EventScreenState> = _uiState
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun getEvents(page: String = EventsFilterOptions.GOING.name) {
         viewModelScope.launch {
             getCountOfInvites()
@@ -106,6 +115,7 @@ class EventScreenViewModel @Inject constructor(
         return Orange
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private suspend fun getMineEvents() {
         _uiState.value = _uiState.value.copy(
             eventsMine = emptyList(),
@@ -122,6 +132,7 @@ class EventScreenViewModel @Inject constructor(
                     )
                     it.forEach { event ->
                         getCountOfAcceptedInvitesForEvent(id = event.id)
+                        scheduleNotificationIfNeeded(eventId = event.id, eventName = event.title, eventTime = event.date.toMilliseconds())
                     }
                 }
 
@@ -187,6 +198,7 @@ class EventScreenViewModel @Inject constructor(
         )
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun updateInvitesStatus(status: String, eventId: UUID) {
         viewModelScope.launch {
             val response = SharedPreferencesManager.getUserId(context)
@@ -230,4 +242,35 @@ class EventScreenViewModel @Inject constructor(
         val userId = SharedPreferencesManager.getUserId(context)
         return userId == event.owner.toString()
     }
+
+    private fun scheduleNotificationIfNeeded(eventId: UUID, eventName: String, eventTime: Long) {
+        val workManager = WorkManager.getInstance(context)
+        val delay = eventTime - System.currentTimeMillis() - TimeUnit.HOURS.toMillis(3)
+        Log.d("Notifikacija", "$eventName - $delay")
+
+        if (delay > 0) {
+            workManager.getWorkInfosByTag(eventId.toString()).get().let { workInfos ->
+                val hasActiveWork = workInfos.any { workInfo ->
+                    workInfo.state == androidx.work.WorkInfo.State.ENQUEUED ||
+                            workInfo.state == androidx.work.WorkInfo.State.RUNNING
+                }
+
+                if (!hasActiveWork) {
+                    val data = Data.Builder()
+                        .putString("eventId", eventId.toString())
+                        .putString("eventName", eventName)
+                        .build()
+
+                    val workRequest = OneTimeWorkRequestBuilder<NotificationWorker>()
+                        .setInitialDelay(delay, TimeUnit.MICROSECONDS)
+                        .setInputData(data)
+                        .addTag(eventId.toString())
+                        .build()
+
+                    workManager.enqueue(workRequest)
+                }
+            }
+        }
+    }
+
 }
