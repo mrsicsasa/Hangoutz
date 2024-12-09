@@ -35,6 +35,7 @@ import com.example.hangoutz.R
 import com.example.hangoutz.data.models.Friend
 import com.example.hangoutz.ui.components.DisplayUser
 import com.example.hangoutz.ui.components.SearchField
+import com.example.hangoutz.ui.theme.CoolGray
 import com.example.hangoutz.ui.theme.OrangeButton
 import com.example.hangoutz.ui.theme.SilverCloud
 import com.example.hangoutz.utils.Constants
@@ -120,7 +121,7 @@ fun FriendsPopup(
                 if (searchQuery.length >= Constants.MIN_SEARCH_LENGTH) {
                     Text(
                         text = stringResource(R.string.no_friends_found),
-                        color = Color.Black,
+                        color = CoolGray,
                         modifier = Modifier.semantics {
                             contentDescription = Constants.NO_USERS_FOUND_MESSAGE
                         })
