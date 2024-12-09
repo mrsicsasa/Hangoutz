@@ -50,7 +50,6 @@ fun MyEventsScreen(
     navController: NavController, viewModel: EventScreenViewModel = hiltViewModel()
 ) {
     val data = viewModel.uiState.collectAsState()
-    val context = LocalContext.current
     val scope = rememberCoroutineScope()
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
