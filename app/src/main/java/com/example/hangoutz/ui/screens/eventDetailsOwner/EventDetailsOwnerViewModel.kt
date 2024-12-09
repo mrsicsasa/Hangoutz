@@ -81,7 +81,7 @@ class EventDetailsOwnerViewModel @Inject constructor(
         if (validateInputs()) {
             _uiState.value = _uiState.value.copy(errorMessage = "")
             viewModelScope.launch {
-            val userId = SharedPreferencesManager.getUserId(context)
+                val userId = SharedPreferencesManager.getUserId(context)
                 val eventResponse = eventRepository.patchEventById(
                     id = _uiState.value.eventId.toString(),
                     newTitle = _uiState.value.title,
@@ -91,7 +91,7 @@ class EventDetailsOwnerViewModel @Inject constructor(
                     newPlace = _uiState.value.place,
                     newDate = _uiState.value.formattedDateForDatabase,
                     owner = userId ?: ""
-                    )
+                )
                 if (eventResponse?.isSuccessful == true) {
                     onSuccess()
                     Log.i("Info", "Successfully patched event")
@@ -168,7 +168,6 @@ class EventDetailsOwnerViewModel @Inject constructor(
 
     fun getData() {
         viewModelScope.launch {
-
             val eventResponse = _uiState.value.eventId?.let { eventRepository.getEvent(it) }
             if (eventResponse?.isSuccessful == true && eventResponse.body() != null) {
                 val event = eventResponse.body()?.first()
@@ -186,7 +185,9 @@ class EventDetailsOwnerViewModel @Inject constructor(
                     _uiState.value = _uiState.value.copy(date = formattedDate, time = formattedTime)
 
                     val invitesResponse =
-                        _uiState.value.eventId?.let { inviteRepository.getInvitesByEventId(it) }
+                        _uiState.value.eventId?.let {
+                            inviteRepository.getInvitesByEventId(it)
+                        }
                     if (invitesResponse?.isSuccessful == true && invitesResponse.body() != null) {
                         val acceptedUserIds: List<UUID> =
                             invitesResponse.body()!!.map { invite -> invite.userId }
@@ -246,12 +247,12 @@ class EventDetailsOwnerViewModel @Inject constructor(
             _uiState.value = _uiState.value.copy(errorMessage = Constants.ERROR_EMPTY_FIELD)
         }
 
-        if (!validateTitle && !checkLength(_uiState.value.title,  Dimensions.MAX_LENGTH)) {
+        if (!validateTitle && !checkLength(_uiState.value.title, Dimensions.MAX_LENGTH)) {
             validateTitle = true
             _uiState.value = _uiState.value.copy(errorTitle = Constants.ERROR_TOO_LONG)
         }
 
-        if (!validatePlace && !checkLength(_uiState.value.place,  Dimensions.MAX_LENGTH)) {
+        if (!validatePlace && !checkLength(_uiState.value.place, Dimensions.MAX_LENGTH)) {
             validatePlace = true
             _uiState.value = _uiState.value.copy(errorPlace = Constants.ERROR_TOO_LONG)
         }
@@ -266,7 +267,7 @@ class EventDetailsOwnerViewModel @Inject constructor(
             }
         }
 
-        if (_uiState.value.description.length >  Dimensions.MAX_LENGTH_DESC) {
+        if (_uiState.value.description.length > Dimensions.MAX_LENGTH_DESC) {
             validateDesc = true
             _uiState.value = _uiState.value.copy(errorDesc = Constants.ERROR_TOO_LONG_DESC)
         }
@@ -276,7 +277,7 @@ class EventDetailsOwnerViewModel @Inject constructor(
             _uiState.value = _uiState.value.copy(errorCity = Constants.ERROR_TOO_LONG)
         }
 
-        if (_uiState.value.street.length >  Dimensions.MAX_LENGTH) {
+        if (_uiState.value.street.length > Dimensions.MAX_LENGTH) {
             validateStreet = true
             _uiState.value = _uiState.value.copy(errorStreet = Constants.ERROR_TOO_LONG)
         }

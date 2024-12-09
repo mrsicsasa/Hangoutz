@@ -26,7 +26,7 @@ interface InviteAPI {
     @GET("${BuildConfig.REQUEST_URL}invites")
     suspend fun getInvitesByEventId(
         @Query("event_id") id: String,
-        @Query("event_status") status: String = "eq.accepted"
+        @Query("event_status") status: String = "in.(accepted,invited)"
     ): Response<List<Invite>>
 
     @DELETE("${BuildConfig.REQUEST_URL}invites")
@@ -36,7 +36,8 @@ interface InviteAPI {
 
     @GET("${BuildConfig.REQUEST_URL}invites?select=count&event_status=eq.accepted")
     suspend fun getCountOfAcceptedInvitesByEvent(
-        @Query("event_id") id: String
+        @Query("event_id") id: String,
+        @Query("event_status") status: String = "eq.accepted"
     ): Response<List<CountOfAcceptedInvitesForEvent>>
 
     @PATCH("${BuildConfig.REQUEST_URL}invites?")

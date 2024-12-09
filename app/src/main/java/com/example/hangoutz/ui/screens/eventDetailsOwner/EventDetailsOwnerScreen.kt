@@ -133,7 +133,7 @@ fun EventOwnerDetailsScreen(
                     .fillMaxSize()
                     .weight(1f)
             ) {
-                data.value.title?.let {
+                data.value.title.let {
                     InputField(
                         stringResource(R.string.event_title),
                         it,
@@ -147,7 +147,7 @@ fun EventOwnerDetailsScreen(
                     )
                 }
                 data.value.errorTitle.takeIf { it.isNotBlank() }?.let { ErrorMessage(it) }
-                data.value.description?.let {
+                data.value.description.let {
                     InputField(
                         stringResource(R.string.event_desc),
                         it,
@@ -160,7 +160,7 @@ fun EventOwnerDetailsScreen(
                     )
                 }
                 data.value.errorDesc.takeIf { it.isNotBlank() }?.let { ErrorMessage(it) }
-                data.value.city?.let {
+                data.value.city.let {
                     InputField(
                         stringResource(R.string.event_city),
                         it,
@@ -172,7 +172,7 @@ fun EventOwnerDetailsScreen(
                     )
                 }
                 data.value.errorCity.takeIf { it.isNotBlank() }?.let { ErrorMessage(it) }
-                data.value.street?.let {
+                data.value.street.let {
                     InputField(
                         stringResource(R.string.event_street),
                         it,
@@ -183,9 +183,9 @@ fun EventOwnerDetailsScreen(
                         true, false, data.value.isStreetError
                     )
                 }
-                data.value.errorStreet?.takeIf { it.isNotBlank() }?.let { ErrorMessage(it) }
+                data.value.errorStreet.takeIf { it.isNotBlank() }?.let { ErrorMessage(it) }
 
-                data.value.place?.let {
+                data.value.place.let {
                     InputField(
                         stringResource(R.string.event_place),
                         it,
@@ -198,7 +198,7 @@ fun EventOwnerDetailsScreen(
                         data.value.isPlaceError
                     )
                 }
-                data.value.errorPlace?.takeIf { it.isNotBlank() }?.let { ErrorMessage(it) }
+                data.value.errorPlace.takeIf { it.isNotBlank() }?.let { ErrorMessage(it) }
 
                 Row(
                     modifier = Modifier
@@ -208,7 +208,7 @@ fun EventOwnerDetailsScreen(
                     horizontalArrangement = Arrangement.spacedBy(Dimensions.CREATE_EVENT_HORIZONTAL_SPACING)
                 ) {
 
-                    data.value.date?.let {
+                    data.value.date.let {
                         InputFieldWithIcon(
                             stringResource(R.string.event_date),
                             it,
@@ -226,7 +226,7 @@ fun EventOwnerDetailsScreen(
                         )
                     }
 
-                    data.value.time?.let {
+                    data.value.time.let {
                         InputFieldWithIcon(
                             stringResource(R.string.event_time),
                             it,
