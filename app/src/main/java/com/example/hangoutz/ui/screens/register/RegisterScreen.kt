@@ -127,7 +127,7 @@ fun RegisterScreen(navController: NavController, viewModel: RegisterViewModel = 
                 label = stringResource(R.string.input_confirm_password),
                 value = data.value.confirmPassword,
                 onValueChange = { newValue ->
-                    viewModel.onTextChanged(Fields.CONFIRMPASSWORD, newValue)
+                    viewModel.onTextChanged(Fields.CONFIRM_PASSWORD, newValue)
                 },
                 isError = (data.value.confirmPassword.isEmpty() && data.value.incompleteFormError.isNotEmpty())
                         || data.value.confirmPasswordError.isNotEmpty(),

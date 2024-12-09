@@ -63,10 +63,10 @@ class CreateEventViewModel @Inject constructor(
             }
             response?.value?.let {
                 if (it.isSuccessful) {
-                    response.value.body()?.let {
+                    response.value.body()?.let { friends ->
                         _uiState.value =
-                            _uiState.value.copy(listOfFriends = it.sortedBy { it.users.name.uppercase() }
-                                .map { it.users } - _uiState.value.participants, isLoading = false)
+                            _uiState.value.copy(listOfFriends = friends.sortedBy { friend -> friend.users.name.uppercase() }
+                                .map { friendData -> friendData.users } - _uiState.value.participants, isLoading = false)
                     }
                 }
             }
@@ -156,11 +156,11 @@ class CreateEventViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(place = place)
     }
 
-    fun onDateChange(date: String) { //TODO Configure datepicker
+    fun onDateChange(date: String) {
         _uiState.value = _uiState.value.copy(date = date)
     }
 
-    fun onTimeChange(time: String) { //TODO Configure timepicker
+    fun onTimeChange(time: String) {
         _uiState.value = _uiState.value.copy(time = time)
     }
 }

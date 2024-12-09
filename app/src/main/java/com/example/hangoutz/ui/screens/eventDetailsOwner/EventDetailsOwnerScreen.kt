@@ -131,7 +131,8 @@ fun EventOwnerDetailsScreen(
                         modifier = Modifier.semantics {
                             contentDescription = Constants.EVENT_OWNER_DESC_FIELD
                         },
-                        true
+                        true,
+                        singleLine = false
                     )
                 }
 

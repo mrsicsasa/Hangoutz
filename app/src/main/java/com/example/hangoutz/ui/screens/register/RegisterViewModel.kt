@@ -33,7 +33,7 @@ enum class Fields {
     NAME,
     EMAIL,
     PASSWORD,
-    CONFIRMPASSWORD
+    CONFIRM_PASSWORD
 }
 
 @HiltViewModel
@@ -48,7 +48,7 @@ class RegisterViewModel @Inject constructor(
             Fields.NAME -> _uiState.value = _uiState.value.copy(name = newText)
             Fields.EMAIL -> _uiState.value = _uiState.value.copy(email = newText.trim())
             Fields.PASSWORD -> _uiState.value = _uiState.value.copy(password = newText.trim())
-            Fields.CONFIRMPASSWORD -> _uiState.value =
+            Fields.CONFIRM_PASSWORD -> _uiState.value =
                 _uiState.value.copy(confirmPassword = newText.trim())
         }
     }
@@ -75,7 +75,7 @@ class RegisterViewModel @Inject constructor(
             )
             isValid = false
         } else {
-            _uiState.value = _uiState.value.copy(_uiState.value.name.trim())
+            _uiState.value = _uiState.value.copy(name = _uiState.value.name.trim())
             if (!Validator.isValidNameLength(_uiState.value.name)) {
                 _uiState.value =
                     _uiState.value.copy(nameError = Constants.NAME_ERROR_MESSAGE)

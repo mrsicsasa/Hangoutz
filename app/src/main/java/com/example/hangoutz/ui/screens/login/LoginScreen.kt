@@ -107,7 +107,7 @@ fun LoginScreen(navController: NavController, viewmodel: LoginViewModel = hiltVi
             ErrorMessage(data.value.errorMessage)
             ActionButton(
                 R.drawable.enter, LOGIN, onClick = {
-                    viewmodel.userAuth() {
+                    viewmodel.userAuth {
                         navController.navigate(NavigationItem.MainScreen.route) {
                             popUpTo(0)
                             launchSingleTop

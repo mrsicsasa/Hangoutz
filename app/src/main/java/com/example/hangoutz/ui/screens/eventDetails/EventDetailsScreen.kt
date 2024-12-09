@@ -91,7 +91,7 @@ fun EventDetailsScreen(
                     .fillMaxSize()
                     .weight(1f)
             ) {
-                data.value.title?.let {
+                data.value.title.let {
                     InputField(stringResource(R.string.event_title),
                         it,
                         { },
@@ -100,16 +100,19 @@ fun EventDetailsScreen(
                         })
                 }
 
-                data.value.description?.let {
-                    InputField(stringResource(R.string.event_desc),
+                data.value.description.let {
+                    InputField(
+                        stringResource(R.string.event_desc),
                         it,
                         { },
                         modifier = Modifier.semantics {
                             contentDescription = Constants.EVENT_DETAILS_DESC
-                        })
+                        },
+                        singleLine = false
+                    )
                 }
 
-                data.value.city?.let {
+                data.value.city.let {
                     InputField(stringResource(R.string.event_city),
                         it,
                         { },
@@ -119,7 +122,7 @@ fun EventDetailsScreen(
                 }
 
 
-                data.value.street?.let {
+                data.value.street.let {
                     InputField(stringResource(R.string.event_street),
                         it,
                         { },
@@ -128,7 +131,7 @@ fun EventDetailsScreen(
                         })
                 }
 
-                data.value.place?.let {
+                data.value.place.let {
                     InputField(stringResource(R.string.event_place),
                         it,
                         { },
@@ -144,7 +147,7 @@ fun EventDetailsScreen(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(Dimensions.CREATE_EVENT_HORIZONTAL_SPACING)
                 ) {
-                    data.value.date?.let {
+                    data.value.date.let {
                         InputField(
                             stringResource(R.string.event_date),
                             it,
@@ -154,11 +157,11 @@ fun EventDetailsScreen(
                                 .semantics {
                                     contentDescription = Constants.EVENT_DETAILS_DATE
                                 },
-                            false,
-                            true,
+                            isEnabled = false,
+                            isReadOnly = true,
                         )
                     }
-                    data.value.time?.let {
+                    data.value.time.let {
                         InputField(
                             stringResource(R.string.event_time),
                             it,
@@ -168,8 +171,8 @@ fun EventDetailsScreen(
                                 .semantics {
                                     contentDescription = Constants.EVENT_DETAILS_TIME
                                 },
-                            false,
-                            true,
+                            isEnabled = false,
+                            isReadOnly = true,
                         )
                     }
                 }
@@ -193,17 +196,16 @@ fun EventDetailsScreen(
                 }
                 val participants = data.value.participants
                 participants.forEach { participant ->
-                    ParticipantUI(participant = participant, false, {})
+                    ParticipantUI(participant = participant, false) {}
                 }
             }
-            Column(
-            ) {
+            Column {
                 ActionButton(stringResource(R.string.leave_event),
                     modifier = Modifier.padding(bottom = Dimensions.ACTION_BUTTON_MEDIUM3),
                     onClick = {
                         viewmodel.onLeave(onSuccess = { navController.popBackStack() },
-                            onFailure = { errorMessage ->
-                                Log.e("Error", "An error has occurred")
+                            onFailure = {
+                                Log.e("Error", "An error has occurred!")
                             })
                     })
             }

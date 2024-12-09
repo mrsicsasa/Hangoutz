@@ -1,4 +1,4 @@
-package com.example.hangoutz.ui.components
+package com.example.hangoutz.utils
 
 fun getRandomString(length: Int): String {
     val allowedChars = ('A'..'Z') + ('a'..'z') + ('0'..'9')
