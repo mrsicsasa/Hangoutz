@@ -40,7 +40,7 @@ fun String.firstLetterUppercase(): String {
 fun formatDateTime(dateTimeString: String): Pair<String, String> {
 
     val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm", Locale.getDefault())
-    val dateFormat = SimpleDateFormat("dd.MM.yyyy.", Locale.getDefault())
+    val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
     val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
 
     val date = inputFormat.parse(dateTimeString)
@@ -56,7 +56,7 @@ fun formatDateTime(dateTimeString: String): Pair<String, String> {
 
     val combined = "$inputDate $inputTime"
 
-    val inputFormat = SimpleDateFormat("dd.MM.yyyy. HH:mm", Locale.getDefault())
+    val inputFormat = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
     val outputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
     val formattedDateTime = inputFormat.parse(combined)?.let { outputFormat.format(it) }
      return formattedDateTime

@@ -45,6 +45,7 @@ import com.example.hangoutz.ui.components.InputFieldWithIcon
 import com.example.hangoutz.ui.components.ParticipantUI
 import com.example.hangoutz.ui.components.TimePickerModal
 import com.example.hangoutz.ui.theme.Ivory
+import com.example.hangoutz.ui.theme.Orange
 import com.example.hangoutz.ui.theme.TopBarBackgroundColor
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Dimensions
@@ -270,7 +271,7 @@ fun EventOwnerDetailsScreen(
                             })
                 }
                 HorizontalDivider(
-                    thickness = Dimensions.CREATE_EVENT_LINE_THICKNESS, color = Ivory
+                    thickness = Dimensions.CREATE_EVENT_LINE_THICKNESS, color = Orange
                 )
                 LaunchedEffect(data.value.eventId) {
                     data.value.eventId?.let {

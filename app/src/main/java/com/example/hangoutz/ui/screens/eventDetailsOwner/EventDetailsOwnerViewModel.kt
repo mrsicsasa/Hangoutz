@@ -132,7 +132,7 @@ class EventDetailsOwnerViewModel @Inject constructor(
     }
 
     fun getInitialDateForPicker(): Long {
-        val formatter = SimpleDateFormat("dd.MM.yyyy.", Locale.getDefault())
+        val formatter = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
         val date = formatter.parse(_uiState.value.date)
         val calendar = Calendar.getInstance()
 
@@ -298,7 +298,7 @@ class EventDetailsOwnerViewModel @Inject constructor(
     }
 
     private fun formatTime(timeMillis: Long): String {
-        val timeFormat = SimpleDateFormat("HH.mm", Locale.getDefault())
+        val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
         return timeFormat.format(Date(timeMillis))
     }
 
@@ -308,7 +308,7 @@ class EventDetailsOwnerViewModel @Inject constructor(
     }
 
     private fun formatDate(dateMillis: Long): String {
-        val dateFormat = SimpleDateFormat("dd.MM.yyyy.", Locale.getDefault())
+        val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
         return dateFormat.format(Date(dateMillis))
     }
 

@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -30,6 +32,7 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.example.hangoutz.BuildConfig
 import com.example.hangoutz.R
 import com.example.hangoutz.data.models.User
+import com.example.hangoutz.ui.theme.DeleteColor
 import com.example.hangoutz.ui.theme.Ivory
 import com.example.hangoutz.ui.theme.Orange
 import com.example.hangoutz.utils.Constants
@@ -68,7 +71,6 @@ fun ParticipantUI(participant: User, isOwner : Boolean = false, onClick: () -> U
                     }
             )
 
-
             Text(
                 text = participant.name,
                 style = MaterialTheme.typography.bodyMedium.copy(color = Color.White),
@@ -83,9 +85,9 @@ fun ParticipantUI(participant: User, isOwner : Boolean = false, onClick: () -> U
             ) {
 
                 Icon(
-                    painter = painterResource(id = R.drawable.trashicon),
+                    Icons.Outlined.Clear,
                     contentDescription = "Image",
-                    tint = Ivory,
+                    tint = DeleteColor,
                     modifier = Modifier.clickable { onClick() }
                         .semantics {
                             contentDescription = Constants.PARTICIPANT_ICON_TAG
@@ -95,7 +97,7 @@ fun ParticipantUI(participant: User, isOwner : Boolean = false, onClick: () -> U
         }
         }
         HorizontalDivider(
-            color = Ivory,
+            color = Orange,
             thickness = Dimensions.CREATE_EVENT_LINE_THICKNESS,
             modifier = Modifier.padding(top = Dimensions.CREATE_EVENT_TEXT_PADDING)
                 .semantics {

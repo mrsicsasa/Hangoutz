@@ -44,6 +44,7 @@ import com.example.hangoutz.ui.components.InputFieldWithIcon
 import com.example.hangoutz.ui.components.TimePickerModal
 import com.example.hangoutz.ui.screens.friends.FriendsPopup
 import com.example.hangoutz.ui.theme.Ivory
+import com.example.hangoutz.ui.theme.Orange
 import com.example.hangoutz.ui.theme.OrangeButton
 import com.example.hangoutz.ui.theme.TopBarBackgroundColor
 import com.example.hangoutz.utils.Constants
@@ -214,8 +215,9 @@ fun CreateEventScreen(
                 }
 
                 HorizontalDivider(
-                    thickness = Dimensions.CREATE_EVENT_LINE_THICKNESS, color = OrangeButton
+                    thickness = Dimensions.CREATE_EVENT_LINE_THICKNESS, color = Orange
                 )
+
                 Column(modifier = Modifier.fillMaxWidth()) {
                     data.value.participants.forEach {
                         DisplayUser(
