@@ -130,6 +130,8 @@ fun CreateEventScreen(
                         contentDescription = Constants.CREATE_EVENT_DESC_FIELD
                     },
                     true, false, data.value.isDescError
+                    true,
+                    singleLine = false
                 )
                 errordata.value.errorDesc.takeIf { it.isNotBlank() }?.let { ErrorMessage(it) }
 
@@ -257,8 +259,7 @@ fun CreateEventScreen(
                     }
                 }
             }
-            Column(
-            ) {
+            Column {
                 ActionButton(stringResource(R.string.event_create),
                     modifier = Modifier
                         .padding(bottom = Dimensions.ACTION_BUTTON_MEDIUM3)

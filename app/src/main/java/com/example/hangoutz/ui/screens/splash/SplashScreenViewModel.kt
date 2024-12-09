@@ -2,7 +2,6 @@ package com.example.hangoutz.ui.screens.splash
 
 import android.content.Context
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -27,24 +26,20 @@ class SplashScreenViewModel @Inject constructor(
     fun deleteEventsFromPast() {
         viewModelScope.launch {
             val events = getEvents()
-            events?.filter { it.date.toDate() < LocalDateTime.now() }?.forEach {
-                val invitesForEvent = getInvites(it.id)
-                invitesForEvent?.forEach {
-                    inviteRepository.deleteInvite(it.id)
+            events?.filter { event -> event.date.toDate() < LocalDateTime.now() }?.forEach { event ->
+                val invitesForEvent = getInvites(event.id)
+                invitesForEvent?.forEach { invite ->
+                    inviteRepository.deleteInvite(invite.id)
                 }
-                Log.d("brisanje", eventRepository.deleteEvent(it.id).code().toString())
             }
         }
     }
 
     fun isUserLoggedIn(context: Context): Boolean {
-        if (SharedPreferencesManager.getUserId(context = context) != null) {
-            return true
-        }
-        return false
+        return SharedPreferencesManager.getUserId(context = context) != null
     }
 
-    suspend private fun getEvents(): List<Event>? {
+    private suspend fun getEvents(): List<Event>? {
         val response = eventRepository.getEvents()
         if (response.isSuccessful && response.body() != null) {
             return response.body()
@@ -52,7 +47,7 @@ class SplashScreenViewModel @Inject constructor(
         return null
     }
 
-    suspend private fun getInvites(id: UUID): List<Invite>? {
+    private suspend fun getInvites(id: UUID): List<Invite>? {
         val response = inviteRepository.getInvitesByEventId(id)
         if (response.isSuccessful && response.body() != null) {
             return response.body()

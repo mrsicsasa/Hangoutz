@@ -155,7 +155,8 @@ fun EventOwnerDetailsScreen(
                         modifier = Modifier.semantics {
                             contentDescription = Constants.EVENT_OWNER_DESC_FIELD
                         },
-                        true, false, data.value.isDescError
+                        true, false, data.value.isDescError,
+                        singleLine = false
                     )
                 }
                 data.value.errorDesc.takeIf { it.isNotBlank() }?.let { ErrorMessage(it) }

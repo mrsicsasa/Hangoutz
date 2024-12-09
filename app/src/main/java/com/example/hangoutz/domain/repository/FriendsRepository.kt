@@ -18,7 +18,8 @@ interface FriendsRepository {
 
     suspend fun getNonFriendsFromUserId(
         id: String,
-        startingWith: String = ""
+        startingWith: String = "",
+        friendsId: String
     ): Response<List<Friend>>
 
     suspend fun addFriend(

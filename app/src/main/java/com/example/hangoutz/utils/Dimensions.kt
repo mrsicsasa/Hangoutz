@@ -28,7 +28,7 @@ object Dimensions {
     val BOTTOM_SHEET_VERTICAL_PADDING = 40.dp
     val BOTTOM_SHEET_USER_PADDING = 10.dp
     val BOTTOM_SHEET_DIVIDER_WIDTH = 2.dp
-    val BOTTOM_SHEET_NAME_PADING = 12.dp
+    val BOTTOM_SHEET_NAME_PADDING = 12.dp
     val ADD_ICON_SIZE = 30.dp
 
     //InviteRespondButton
@@ -49,8 +49,8 @@ object Dimensions {
     val INVITATION_BOX_BOTTOM_PADDING: Dp = 10.dp
     val INVITATION_BUTTONS_SEPARATION_WIDTH = 10.dp
     val INVITE_RESPOND_BUTTON_INNER_PADDING = 2.dp
-    val ANIMATION_TARGET_VALUE = 360f
-    val ANIMATION_DURATION = 3000
+    const val ANIMATION_TARGET_VALUE = 360f
+    const val ANIMATION_DURATION = 3000
 
     //Profile image
     val PROFILE_IMAGE_SIZE: Dp = 74.dp
@@ -104,7 +104,6 @@ object Dimensions {
     val ACTION_BUTTON_MEDIUM1 = 50.dp
     val ACTION_BUTTON_MEDIUM2 = 30.dp
     val ACTION_BUTTON_MEDIUM3 = 20.dp
-    val ACTION_BUTTON_MEDIUM4 = 80.dp
 
     //Error message
     val ERROR_MESSAGE_PADDING_SMALL = 10.dp
@@ -118,12 +117,11 @@ object Dimensions {
     val POPUP_WIDTH = 350.dp
 
     // Filter bar
-
     const val FILTER_BAR_ALPHA = 0.46f
-    const val BAR_WIDTH_SCREEN_PERCENT = 0.9f
+    const val BAR_WIDTH_SCREEN_PERCENT = 0.93f
     const val BAR_HEIGHT_SCREEN_PERCENT = 0.05f
     val BADGE_SIZE = 18.dp
-    val BADGE_FONT_SIZE = 10.sp
+    val BADGE_TEXT_START_PADDING = 5.dp
     val TAB_ITEM_FONT_SIZE = 12.sp
     const val TAB_HEIGHT_PERCENT = 0.7f
     const val INDICATOR_POSITION_OFFSET = 0.1f
@@ -147,13 +145,13 @@ object Dimensions {
     val DISMISS_ICON_END_PADDING = 8.dp
     val SPACER_FROM_FRIEND_UP = 10.dp
     val SPACER_FROM_FRIEND_DOWN = 5.dp
-    val FRIENDS_POPUP_PARTICIPANT_COLUMN = 0.8f
-    val FRIENDS_POPUP_COLUMN = 1f
+    const val FRIENDS_POPUP_PARTICIPANT_COLUMN = 0.8f
+    const val FRIENDS_POPUP_COLUMN = 1f
     val BUTTON_COLUMN_BOTTOM_PADDING = 10.dp
     val BUTTON_INNER_PADDING = 3.dp
     val BUTTON_WIDTH = 188.dp
     val BUTTON_HEIGHT = 53.dp
-    val ADD_FONT_WEIGHT = 700
+    const val ADD_FONT_WEIGHT = 700
     val ADD_FONT_SIZE = 20.sp
 
     //CREATE EVENT
@@ -161,7 +159,7 @@ object Dimensions {
     val CREATE_EVENT_VERTICAL_PADDING = 2.dp
     val CREATE_EVENT_TEXT_PADDING = 15.dp
     val CREATE_EVENT_LINE_THICKNESS = 2.dp
-    val CREATE_EVENT_ICON_PADDING = 2.dp
+    val CREATE_EVENT_ICON_PADDING = 30.dp
     val CREATE_EVENT_PARTICIPANT = 10.dp
     val CREATE_EVENT_PARTICIPANT_PHOTO = 40.dp
     val CREATE_EVENT_TEXT_PADDING2 = 12.dp

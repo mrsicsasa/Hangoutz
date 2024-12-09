@@ -79,7 +79,6 @@ object Constants {
 
     //Test tags settings screen
     const val SETTINGS_NAME_FIELD_TAG = "settingsNameField"
-    const val SETTINGS_NAME_ICON_TAG = "settingsNameIcon"
     const val SETTINGS_NAME_VALIDATOR_ICON_TAG = "settingsNameValidatorIcon"
     const val SETTINGS_USER_PHOTO_TAG = "settingsUserPhoto"
     const val SETTINGS_BACKGROUND_LINES_TAG = "settingsBackgroundLines"
@@ -94,8 +93,7 @@ object Constants {
     const val SETTINGS_ACTION = "Choose Action"
     const val RANDOM_STRING_LENGTH = 3
     const val JPG = ".jpg"
-    const val TEMPIMAGE = "_image"
-    const val IMAGEDIRECTORY = "MyAppImages"
+    const val TEMP_IMAGE = "_image"
 
     //BottomNavigation bar
     const val BOTTOM_NAVIGATION_BAR = "bottomNavigationBar"
@@ -111,6 +109,9 @@ object Constants {
     const val AT_SIGN = "@"
     const val VALID_EMAIL = "^[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.com$"
     const val CONTAINS_DIGIT = ".*\\d.*"
+
+    //Input fields
+    const val MAX_LINES = 3
 
     //RegisterViewModel
     const val MIN_NAME_LENGTH = 3
@@ -160,7 +161,6 @@ object Constants {
     const val CREATE_EVENT_TIME_FIELD = "createEventTimeField"
     const val CREATE_EVENT_ADD_PARTICIPANTS_BUTTON = "createEventAddParticipantsButton"
     const val CREATE_EVENT_CREATE_BUTTON = "createEventCreateButton"
-    const val CREATE_EVENT_EDIT_BUTTON = "createEventCreateButton"
 
     //FriendsViewModel
     const val FRIENDS_SEARCH_BAR_CLEAR_DESCRIPTION = "Clear search bar icon"
@@ -194,7 +194,6 @@ object Constants {
     const val EVENT_DETAILS_CITY = "eventDetailsCity"
     const val EVENT_DETAILS_DATE = "eventDetailsDate"
     const val EVENT_DETAILS_TIME = "eventDetailsTime"
-    const val EVENT_DETAILS_LEAVE_EVENT_BUTTON = "eventDetailsLeaveEventButton"
 
     const val EVENT_OWNER_TITLE_FIELD = "eventOwnerTitleField"
     const val EVENT_OWNER_DESC_FIELD = "eventOwnerDescriptionField"
@@ -204,7 +203,6 @@ object Constants {
     const val EVENT_OWNER_DATE_FIELD = "eventOwnerDateField"
     const val EVENT_OWNER_TIME_FIELD = "eventOwnerTimeField"
     const val EVENT_OWNER_ADD_PARTICIPANTS_BUTTON = "eventOwnerAddParticipantsButton"
-    const val EVENT_OWNER_CREATE_BUTTON = "eventOwnerCreateButton"
     const val EVENT_OWNER_EDIT_BUTTON = "eventOwnerCreateButton"
     const val CREATE_EVENT_REMOVE_BUTTON = "createEventRemoveButton"
 
