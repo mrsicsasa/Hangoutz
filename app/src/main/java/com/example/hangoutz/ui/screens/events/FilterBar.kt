@@ -12,14 +12,15 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -69,7 +70,6 @@ private fun MyTabIndicator(
             .background(
                 color = indicatorColor,
             )
-
     )
 }
 
@@ -105,28 +105,25 @@ private fun MyTabItem(
             .fillMaxHeight()
     ) {
         if (text == EventsFilterOptions.INVITED.name.uppercase() && numberOfInvites > 0) {
-            Row {
+            BadgedBox(badge = {
+                Badge(
+                    modifier = Modifier
+                        .padding(start = Dimensions.BADGE_TEXT_START_PADDING)
+                        .size(Dimensions.BADGE_SIZE),
+                    containerColor = OrangeDark
+                ) {
+                    Text(
+                        numberOfInvites.toString(),
+                        color = Charcoal
+                    )
+                }
+            }) {
                 Text(
                     text = text,
                     color = tabTextColor,
                     textAlign = TextAlign.Center,
-                    fontSize = Dimensions.TAB_ITEM_FONT_SIZE,
+                    fontSize = Dimensions.TAB_ITEM_FONT_SIZE
                 )
-                Box(contentAlignment = Alignment.Center) {
-                    Badge(
-                        modifier = Modifier
-                            .size(Dimensions.BADGE_SIZE),
-                        containerColor = OrangeDark
-                    ) {
-                        Text(
-                            text = numberOfInvites.toString(),
-                            fontSize = Dimensions.BADGE_FONT_SIZE,
-                            color = Charcoal,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.fillMaxSize()
-                        )
-                    }
-                }
             }
 
         } else {

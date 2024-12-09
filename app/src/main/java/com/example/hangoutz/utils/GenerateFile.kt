@@ -17,7 +17,7 @@ fun getTempUri(context: Context): Uri {
         val file = try {
             Log.e("SettingsScreen", "File created")
             File.createTempFile(
-                Constants.TEMPIMAGE + System.currentTimeMillis().toString(),
+                Constants.TEMP_IMAGE + System.currentTimeMillis().toString(),
                 Constants.JPG,
                 it
             )

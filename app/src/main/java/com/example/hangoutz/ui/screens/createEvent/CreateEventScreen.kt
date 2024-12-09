@@ -123,7 +123,8 @@ fun CreateEventScreen(
                     modifier = Modifier.semantics {
                         contentDescription = Constants.CREATE_EVENT_DESC_FIELD
                     },
-                    true
+                    true,
+                    singleLine = false
                 )
 
                 InputField(
@@ -237,8 +238,7 @@ fun CreateEventScreen(
                     }
                 }
             }
-            Column(
-            ) {
+            Column {
                 ActionButton(stringResource(R.string.event_create),
                     modifier = Modifier
                         .padding(bottom = Dimensions.ACTION_BUTTON_MEDIUM3)

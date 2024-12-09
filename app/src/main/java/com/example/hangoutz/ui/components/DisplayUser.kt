@@ -83,7 +83,7 @@ fun DisplayUser(
                     text = name,
                     style = MaterialTheme.typography.bodyMedium.copy(color = if (isParticipant) Color.White else Color.Black),
                     modifier = Modifier
-                        .padding(start = Dimensions.BOTTOM_SHEET_NAME_PADING)
+                        .padding(start = Dimensions.BOTTOM_SHEET_NAME_PADDING)
                         .semantics {
                             contentDescription = Constants.BOTTOM_SHEET_USERNAME
                         }

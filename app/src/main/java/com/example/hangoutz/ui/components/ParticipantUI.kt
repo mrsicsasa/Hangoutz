@@ -26,7 +26,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.hangoutz.BuildConfig
@@ -38,7 +37,6 @@ import com.example.hangoutz.ui.theme.Orange
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Constants.DEFAULT_USER_PHOTO
 import com.example.hangoutz.utils.Constants.PROFILE_PHOTO
-import com.example.hangoutz.utils.Constants.SETTINGS_BACKGROUND_LINES_TAG
 import com.example.hangoutz.utils.Constants.SETTINGS_USER_PHOTO_TAG
 import com.example.hangoutz.utils.Dimensions
 

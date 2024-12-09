@@ -17,7 +17,7 @@ import com.example.hangoutz.BuildConfig
 import com.example.hangoutz.R
 import com.example.hangoutz.data.local.SharedPreferencesManager
 import com.example.hangoutz.domain.repository.UserRepository
-import com.example.hangoutz.ui.components.getRandomString
+import com.example.hangoutz.utils.getRandomString
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Constants.DEFAULT_USER_PHOTO
 import com.example.hangoutz.utils.getTempUri
@@ -32,6 +32,7 @@ import okhttp3.RequestBody
 import java.io.ByteArrayOutputStream
 import java.io.File
 import javax.inject.Inject
+import kotlin.math.sqrt
 
 
 data class SettingsData(
@@ -163,7 +164,7 @@ class SettingsViewModel @Inject constructor(
                     val body = MultipartBody.Part.createFormData(
                         "file", "image_${System.currentTimeMillis()}.jpg", requestFile
                     )
-                    val avatarNameGenerator = Constants.TEMPIMAGE + System.currentTimeMillis()
+                    val avatarNameGenerator = Constants.TEMP_IMAGE + System.currentTimeMillis()
                         .toString() + getRandomString(Constants.RANDOM_STRING_LENGTH) + Constants.JPG
 
                     if (_uiState.value.avatar != DEFAULT_USER_PHOTO) {
@@ -262,7 +263,7 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun compressImage(context: Context, imageUri: Uri): Uri? {
+    private fun compressImage(context: Context, imageUri: Uri): Uri? {
         try {
             val inputStream = context.contentResolver.openInputStream(imageUri)
             val originalBitmap = BitmapFactory.decodeStream(inputStream)
@@ -277,7 +278,7 @@ class SettingsViewModel @Inject constructor(
                 val compressedSize = byteArrayOutputStream.size() / 1024
 
                 if (compressedSize > 50) {
-                    val scaleFactor = Math.sqrt(50.0 / compressedSize).toFloat()
+                    val scaleFactor = sqrt(50.0 / compressedSize).toFloat()
                     val newWidth = (resizedBitmap.width * scaleFactor).toInt()
                     val newHeight = (resizedBitmap.height * scaleFactor).toInt()
                     resizedBitmap =
