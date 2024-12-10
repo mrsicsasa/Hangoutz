@@ -36,7 +36,6 @@ data class ErrorState(
     var errorMessage: String? = ""
 )
 
-
 @HiltViewModel
 class CreateEventViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -299,8 +298,12 @@ class CreateEventViewModel @Inject constructor(
         val validateDateTime = checkCombinedDateTime()
 
         updateUiState(
-            validateTitle, validatePlace, validateDateTime,
-            validateDesc, validateCity, validateStreet
+            validateTitle,
+            validatePlace,
+            validateDateTime,
+            validateDesc,
+            validateCity,
+            validateStreet
         )
 
         return !(validateTitle || validatePlace || validateDateTime || validateDesc || validateCity || validateStreet)
@@ -338,7 +341,6 @@ class CreateEventViewModel @Inject constructor(
         }
         return isError
     }
-
 
     private fun checkCombinedDateTime(): Boolean {
         val combinedInput = "${_uiState.value.date} ${_uiState.value.time}"
