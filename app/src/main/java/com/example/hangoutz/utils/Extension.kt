@@ -4,12 +4,10 @@ import android.annotation.SuppressLint
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
-import com.example.hangoutz.data.models.Friend
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter.ofPattern
-import java.util.Date
-import java.util.Locale
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -86,4 +84,12 @@ fun convertTimeToMillis(dateTimeString: String? = null): Long {
         Log.e("Error", "Exception while parsing")
     }
     return isValid
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun String.toMilliseconds(): Long {
+    val localDateTime = this.toDate()
+    return localDateTime.atZone(ZoneId.systemDefault())
+        .toInstant()
+        .toEpochMilli()
 }
