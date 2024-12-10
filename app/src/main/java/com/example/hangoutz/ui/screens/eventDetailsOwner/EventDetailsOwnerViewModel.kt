@@ -17,6 +17,7 @@ import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.convertTimeToMillis
 import com.example.hangoutz.utils.formatDateTime
 import com.example.hangoutz.utils.formatForDatabase
+import com.example.hangoutz.utils.mapUserToFriend
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -132,16 +133,6 @@ class EventDetailsOwnerViewModel @Inject constructor(
         }
     }
 
-    fun mapUserToFriend(userList: List<User>): List<Friend> {
-        val newParticipants = userList.map { user ->
-            Friend(
-                id = user.id,
-                name = user.name,
-                avatar = user.avatar,
-            )
-        }
-        return newParticipants
-    }
 
 
     fun deleteEvent(onSuccess: () -> Unit, onError: (String) -> Unit) {

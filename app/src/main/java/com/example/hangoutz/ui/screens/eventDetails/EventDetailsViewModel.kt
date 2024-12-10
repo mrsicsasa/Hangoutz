@@ -6,12 +6,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.hangoutz.data.local.SharedPreferencesManager
+import com.example.hangoutz.data.models.Friend
 import com.example.hangoutz.data.models.UpdateEventStatusDTO
 import com.example.hangoutz.data.models.User
 import com.example.hangoutz.domain.repository.EventRepository
 import com.example.hangoutz.domain.repository.InviteRepository
 import com.example.hangoutz.domain.repository.UserRepository
 import com.example.hangoutz.utils.formatDateTime
+import com.example.hangoutz.utils.mapUserToFriend
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,7 +31,7 @@ data class EventDetailsData(
     var place: String = "",
     var date: String = "",
     var time: String = "",
-    var participants: List<User> = emptyList()
+    var participants: List<Friend> = emptyList()
 )
 
 @HiltViewModel
@@ -120,7 +122,7 @@ class EventDetailsViewModel @Inject constructor(
                                 user.id in acceptedUserIds
                             }
 
-                            _uiState.value = _uiState.value.copy(participants = acceptedUsers)
+                            _uiState.value = _uiState.value.copy(participants = mapUserToFriend(acceptedUsers))
                         }
                     }
                 }

@@ -3,6 +3,8 @@ package com.example.hangoutz.utils
 import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
+import com.example.hangoutz.data.models.Friend
+import com.example.hangoutz.data.models.User
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter.ofPattern
@@ -71,3 +73,15 @@ fun convertTimeToMillis(dateTimeString: String? = null): Long {
         System.currentTimeMillis()
     }
 }
+
+    fun mapUserToFriend(userList: List<User>): List<Friend> {
+        val newParticipants = userList.map { user ->
+            Friend(
+                id = user.id,
+                name = user.name,
+                avatar = user.avatar,
+            )
+        }
+        return newParticipants
+    }
+
