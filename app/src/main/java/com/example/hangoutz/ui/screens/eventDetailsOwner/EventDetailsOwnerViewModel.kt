@@ -12,6 +12,7 @@ import com.example.hangoutz.domain.repository.InviteRepository
 import com.example.hangoutz.domain.repository.UserRepository
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Dimensions
+import com.example.hangoutz.utils.checkIfInPast
 import com.example.hangoutz.utils.convertTimeToMillis
 import com.example.hangoutz.utils.formatDateTime
 import com.example.hangoutz.utils.formatForDatabase
@@ -208,20 +209,6 @@ class EventDetailsOwnerViewModel @Inject constructor(
     fun checkLength(text: String, length: Int): Boolean {
         if (text.length <= length) return true
         else return false
-    }
-
-    fun checkIfInPast(date: String): Boolean {
-        var isValid: Boolean = false
-        val inputFormat = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
-        try {
-            val inputDateTime = inputFormat.parse(date)
-            if (inputDateTime != null && inputDateTime.before(Date())) {
-                isValid = true
-            } else isValid = false
-        } catch (e: Exception) {
-            Log.e("Error", "Exception while parsing")
-        }
-        return isValid
     }
 
     private fun validateInputs(): Boolean {

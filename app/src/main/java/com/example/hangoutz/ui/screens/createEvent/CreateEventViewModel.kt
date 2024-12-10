@@ -13,6 +13,7 @@ import com.example.hangoutz.domain.repository.FriendsRepository
 import com.example.hangoutz.domain.repository.InviteRepository
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Dimensions
+import com.example.hangoutz.utils.checkIfInPast
 import com.example.hangoutz.utils.formatForDatabase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -264,21 +265,6 @@ class CreateEventViewModel @Inject constructor(
 
     fun onTimeChange(time: String) {
         _uiState.value = _uiState.value.copy(time = time)
-    }
-
-
-    private fun checkIfInPast(date: String): Boolean {
-        var isValid: Boolean = false
-        val inputFormat = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
-        try {
-            val inputDateTime = inputFormat.parse(date)
-            if (inputDateTime != null && inputDateTime.before(Date())) {
-                isValid = true
-            } else isValid = false
-        } catch (e: Exception) {
-            Log.e("Error", "Exception while parsing")
-        }
-        return isValid
     }
 
     fun checkLength(text: String, length: Int): Boolean {

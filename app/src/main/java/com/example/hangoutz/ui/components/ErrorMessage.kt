@@ -1,6 +1,5 @@
 package com.example.hangoutz.ui.components
 
-
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -10,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.hangoutz.ui.theme.Error
 import com.example.hangoutz.utils.Dimensions
-
 
 @Composable
 fun ErrorMessage(errorMessage: String, modifier: Modifier = Modifier) {
