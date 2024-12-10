@@ -1,10 +1,17 @@
 package com.example.hangoutz.ui.screens.events
 
 import android.content.Context
+import android.content.Intent
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.ui.graphics.Color
+import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.Data
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.example.hangoutz.data.local.SharedPreferencesManager
 import com.example.hangoutz.data.models.EventCardDPO
 import com.example.hangoutz.data.models.UpdateEventStatusDTO
@@ -16,13 +23,18 @@ import com.example.hangoutz.ui.theme.GreenDark
 import com.example.hangoutz.ui.theme.Orange
 import com.example.hangoutz.ui.theme.PurpleDark
 import com.example.hangoutz.utils.Constants
+import com.example.hangoutz.utils.notifications.NotificationWorker
+import com.example.hangoutz.utils.toMilliseconds
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.util.UUID
+import java.util.concurrent.TimeUnit
+import android.provider.Settings
 import javax.inject.Inject
+import androidx.work.WorkInfo
 
 @HiltViewModel
 class EventScreenViewModel @Inject constructor(
@@ -35,6 +47,7 @@ class EventScreenViewModel @Inject constructor(
     val uiState: StateFlow<EventScreenState> = _uiState
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun getEvents(page: String = EventsFilterOptions.GOING.name) {
         viewModelScope.launch {
             getCountOfInvites()
@@ -106,6 +119,7 @@ class EventScreenViewModel @Inject constructor(
         return Orange
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private suspend fun getMineEvents() {
         _uiState.value = _uiState.value.copy(
             eventsMine = emptyList(),
@@ -122,6 +136,8 @@ class EventScreenViewModel @Inject constructor(
                     )
                     it.forEach { event ->
                         getCountOfAcceptedInvitesForEvent(id = event.id)
+                        cancelAllScheduledNotifications(eventId = event.id)
+                        scheduleNotificationIfNeeded(eventId = event.id, eventName = event.title, eventTime = event.date.toMilliseconds())
                     }
                 }
 
@@ -134,6 +150,7 @@ class EventScreenViewModel @Inject constructor(
         )
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private suspend fun getEventsFromInvites(page: String) {
         if (page == EventsFilterOptions.GOING.name) {
             _uiState.value = _uiState.value.copy(
@@ -174,6 +191,8 @@ class EventScreenViewModel @Inject constructor(
                         getAvatars(event.events.owner)
                         if (page == EventsFilterOptions.GOING.name) {
                             getCountOfAcceptedInvitesForEvent(event.events.id)
+                            cancelAllScheduledNotifications(eventId = event.events.id)
+                            scheduleNotificationIfNeeded(eventId = event.events.id, eventName = event.events.title, eventTime = event.events.date.toMilliseconds())
                         }
                     }
                 }
@@ -187,6 +206,7 @@ class EventScreenViewModel @Inject constructor(
         )
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun updateInvitesStatus(status: String, eventId: UUID) {
         viewModelScope.launch {
             val response = SharedPreferencesManager.getUserId(context)
@@ -229,5 +249,63 @@ class EventScreenViewModel @Inject constructor(
     fun isCurrentUserOwner(event: EventCardDPO): Boolean {
         val userId = SharedPreferencesManager.getUserId(context)
         return userId == event.owner.toString()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun scheduleNotificationIfNeeded(eventId: UUID, eventName: String, eventTime: Long) {
+        val workManager = WorkManager.getInstance(context)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            checkAndRequestNotificationPermission()
+        }
+
+        val delay = eventTime - System.currentTimeMillis() - TimeUnit.HOURS.toMillis(3)
+        Log.d("Notifikacija", "$eventName - $delay")
+
+        if (delay > 0) {
+            workManager.getWorkInfosByTag(eventId.toString()).get().let { workInfos ->
+                val hasActiveWork = workInfos.any { workInfo ->
+                    workInfo.state == androidx.work.WorkInfo.State.ENQUEUED ||
+                            workInfo.state == androidx.work.WorkInfo.State.RUNNING
+                }
+
+                if (!hasActiveWork) {
+                    val data = Data.Builder()
+                        .putString("eventId", eventId.toString())
+                        .putString("eventName", eventName)
+                        .build()
+
+                    val workRequest = OneTimeWorkRequestBuilder<NotificationWorker>()
+                        .setInitialDelay(delay, TimeUnit.MILLISECONDS)
+                        .setInputData(data)
+                        .addTag(eventId.toString())
+                        .build()
+
+                    workManager.enqueue(workRequest)
+                }
+            }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun checkAndRequestNotificationPermission() {
+        if (!NotificationManagerCompat.from(context).areNotificationsEnabled()) {
+            Log.e("NotificationPermission", "Notifications are disabled for this app.")
+            val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+            intent.putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            context.startActivity(intent)
+        } else {
+            Log.d("NotificationPermission", "Notifications are enabled for this app.")
+        }
+    }
+    private fun cancelAllScheduledNotifications(eventId: UUID) {
+        val workManager = WorkManager.getInstance(context)
+        val workInfos = workManager.getWorkInfosByTag(eventId.toString()).get()
+        workInfos.forEach { workInfo ->
+            if (workInfo.state == WorkInfo.State.ENQUEUED || workInfo.state == WorkInfo.State.RUNNING) {
+                workManager.cancelWorkById(workInfo.id)
+                Log.d("Notification", "Cancelled work: ${workInfo.id}")
+            }
+        }
     }
 }
