@@ -23,24 +23,20 @@ class NotificationWorker(
         val eventName = inputData.getString("eventName") ?: return Result.failure()
         val eventId = inputData.getString("eventId") ?: return Result.failure()
 
-        // Proveravamo da li aplikacija ima dozvolu za prikazivanje notifikacija (Android 13+)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (!NotificationManagerCompat.from(applicationContext).areNotificationsEnabled()) {
                 Log.e("NotificationWorker", "Notifications are disabled for this app.")
-                // Ako notifikacije nisu omogućene, pokreni aktivnost da korisnik omogući notifikacije
                 val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
                 intent.putExtra(Settings.EXTRA_APP_PACKAGE, applicationContext.packageName)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 applicationContext.startActivity(intent)
-                return Result.failure() // Ne možemo poslati notifikaciju dok korisnik ne omogući
+                return Result.failure()
             }
         }
 
-        // Priprema NotificationManager za slanje notifikacije
         val notificationManager =
             applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        // Kreiranje kanala za notifikacije (Android 8.0 i noviji)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 "event_notifications",
@@ -49,17 +45,14 @@ class NotificationWorker(
             )
             notificationManager.createNotificationChannel(channel)
         }
-
-        // Kreiranje notifikacije
         val notification = NotificationCompat.Builder(applicationContext, "event_notifications")
             .setSmallIcon(R.drawable.avatar_default)
             .setContentTitle("Upcoming Event")
-            .setContentText("Your event '$eventName' is starting soon!")
+            .setContentText("Your event $eventName is starting in three hours!")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .build()
 
-        // Prikazivanje notifikacije sa jedinstvenim ID-em baziranim na eventId
-        val notificationId = eventId.hashCode() // Možeš koristiti UUID ako želiš jedinstveniji ID
+        val notificationId = eventId.hashCode()
         notificationManager.notify(notificationId, notification)
 
         Log.d("NotificationWorker", "Notification sent for event: $eventName")
