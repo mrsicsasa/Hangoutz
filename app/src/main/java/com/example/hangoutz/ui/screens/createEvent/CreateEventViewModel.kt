@@ -397,5 +397,4 @@ class CreateEventViewModel @Inject constructor(
             isStreetError = validateStreet
         )
     }
-
 }
