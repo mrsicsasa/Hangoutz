@@ -75,6 +75,7 @@ dependencies {
     implementation libs.androidx.constraintlayout.compose
     implementation libs.compose
     implementation libs.androidx.espresso.core
+    implementation "androidx.work:work-runtime-ktx:2.8.1"
     kapt(libs.hilt.android.compiler)
     kapt(libs.hilt.compiler)
     testImplementation libs.junit

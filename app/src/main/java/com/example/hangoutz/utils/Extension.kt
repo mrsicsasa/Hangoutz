@@ -3,10 +3,9 @@ package com.example.hangoutz.utils
 import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
-import com.example.hangoutz.data.models.Friend
-import com.example.hangoutz.data.models.User
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter.ofPattern
 import java.util.Locale
 
@@ -85,3 +84,10 @@ fun convertTimeToMillis(dateTimeString: String? = null): Long {
         return newParticipants
     }
 
+@RequiresApi(Build.VERSION_CODES.O)
+fun String.toMilliseconds(): Long {
+    val localDateTime = this.toDate()
+    return localDateTime.atZone(ZoneId.systemDefault())
+        .toInstant()
+        .toEpochMilli()
+}
