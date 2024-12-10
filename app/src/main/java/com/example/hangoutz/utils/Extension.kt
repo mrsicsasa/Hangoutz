@@ -3,6 +3,8 @@ package com.example.hangoutz.utils
 import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
+import com.example.hangoutz.data.models.Friend
+import com.example.hangoutz.data.models.User
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -51,7 +53,7 @@ fun formatDateTime(dateTimeString: String): Pair<String, String> {
     return Pair(formattedDate, formattedTime)
 }
 
- fun formatForDatabase(date : String, time : String) : String? {
+fun formatForDatabase(date: String, time: String): String? {
     val inputDate = date
     val inputTime = time
 
@@ -60,7 +62,7 @@ fun formatDateTime(dateTimeString: String): Pair<String, String> {
     val inputFormat = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
     val outputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
     val formattedDateTime = inputFormat.parse(combined)?.let { outputFormat.format(it) }
-     return formattedDateTime
+    return formattedDateTime
 }
 
 fun convertTimeToMillis(dateTimeString: String? = null): Long {
@@ -73,16 +75,16 @@ fun convertTimeToMillis(dateTimeString: String? = null): Long {
     }
 }
 
-    fun mapUserToFriend(userList: List<User>): List<Friend> {
-        val newParticipants = userList.map { user ->
-            Friend(
-                id = user.id,
-                name = user.name,
-                avatar = user.avatar,
-            )
-        }
-        return newParticipants
+fun mapUserToFriend(userList: List<User>): List<Friend> {
+    val newParticipants = userList.map { user ->
+        Friend(
+            id = user.id,
+            name = user.name,
+            avatar = user.avatar,
+        )
     }
+    return newParticipants
+}
 
 @RequiresApi(Build.VERSION_CODES.O)
 fun String.toMilliseconds(): Long {

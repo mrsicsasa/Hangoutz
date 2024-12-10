@@ -121,7 +121,6 @@ class EventDetailsOwnerViewModel @Inject constructor(
                         eventId
                     )
                 )
-                Log.e("Data", "${participant.id.toString()} ${eventId}")
                 if (response.isSuccessful) {
                     Log.e("Info", "Successfully added new invites")
                 } else Log.e(
