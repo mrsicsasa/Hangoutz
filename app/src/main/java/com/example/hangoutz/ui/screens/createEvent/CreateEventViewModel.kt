@@ -55,7 +55,7 @@ class CreateEventViewModel @Inject constructor(
         getFriends()
     }
 
-    fun createEvent(onSuccess: () -> Unit) {
+    fun createEvent(onSuccess: () -> Unit, onFailure: () -> Unit) {
 
         if (validateInputs()) {
             val formattedDateTime = formatForDatabase(uiState.value.date, _uiState.value.time) ?: ""
@@ -91,7 +91,7 @@ class CreateEventViewModel @Inject constructor(
                     if (response != null && response.isSuccessful) {
                         val events = response.body()
 
-                        if (events != null && events.isNotEmpty()) {
+                        if (!events.isNullOrEmpty()) {
                             val eventId = events.first().id
                             postFriendInvites(eventId, _uiState.value.participants)
 
@@ -99,16 +99,17 @@ class CreateEventViewModel @Inject constructor(
                             Log.e("Error", "An error has occurred while getting user")
                         }
                     }
-                    onSuccess()
+
                     Log.i("Info", "Successfully patched event")
                 }
+                onSuccess()
             }
         } else {
             Log.e("Error", "Fields marked with * cant be empty")
         }
     }
 
-    fun postFriendInvites(eventId: String, participants: List<Friend>) {
+    private fun postFriendInvites(eventId: String, participants: List<Friend>) {
 
         viewModelScope.launch {
             try {
@@ -266,12 +267,8 @@ class CreateEventViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(time = time)
     }
 
-    fun checkLength(text: String, length: Int): Boolean {
-        if (text.length <= length) return true
-        else return false
-    }
 
-    fun checkIfInPast(date: String): Boolean {
+    private fun checkIfInPast(date: String): Boolean {
         var isValid: Boolean = false
         val inputFormat = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
         try {
@@ -285,8 +282,31 @@ class CreateEventViewModel @Inject constructor(
         return isValid
     }
 
-    private fun validateInputs(): Boolean {
+    fun checkLength(text: String, length: Int): Boolean {
+        if (text.length <= length) return true
+        else return false
+    }
 
+
+    private fun validateInputs(): Boolean {
+        resetErrorState()
+
+        val validateTitle = validateTitleField()
+        val validatePlace = validatePlaceField()
+        val validateDesc = validateDescriptionField()
+        val validateCity = validateCityField()
+        val validateStreet = validateStreetField()
+        val validateDateTime = checkCombinedDateTime()
+
+        updateUiState(
+            validateTitle, validatePlace, validateDateTime,
+            validateDesc, validateCity, validateStreet
+        )
+
+        return !(validateTitle || validatePlace || validateDateTime || validateDesc || validateCity || validateStreet)
+    }
+
+    private fun resetErrorState() {
         _errorState.value = _errorState.value.copy(
             errorMessage = "",
             errorTitle = "",
@@ -296,63 +316,86 @@ class CreateEventViewModel @Inject constructor(
             errorDate = "",
             errorPlace = ""
         )
-        var validateTitle = _uiState.value.title.trim().isEmpty()
-        var validatePlace = _uiState.value.place.trim().isEmpty()
-        var validateDate = _uiState.value.date.trim().isEmpty()
-        var validateTime = _uiState.value.time.trim().isEmpty()
-        var validateDesc = false
-        var validateCity = false
-        var validateStreet = false
+    }
 
-        if (validateTitle || validatePlace || validateDate || validateTime) {
+    private fun validateTitleField(): Boolean {
+        var isError = _uiState.value.title.trim().isEmpty()
+        if (isError) {
             _errorState.value = _errorState.value.copy(errorMessage = Constants.ERROR_EMPTY_FIELD)
-            Log.e("e", "empty fields error ${_errorState.value.errorMessage}")
-        }
-
-        if (!validateTitle && !checkLength(_uiState.value.title, Dimensions.MAX_LENGTH)) {
-            validateTitle = true
+            Log.e("e", "empty title error ${_errorState.value.errorMessage}")
+        } else if (!checkLength(_uiState.value.title, Dimensions.MAX_LENGTH)) {
+            isError = true
             _errorState.value = _errorState.value.copy(errorTitle = Constants.ERROR_TOO_LONG)
         }
+        return isError
+    }
 
-        if (!validatePlace && !checkLength(_uiState.value.place, Dimensions.MAX_LENGTH)) {
-            validatePlace = true
+    private fun validatePlaceField(): Boolean {
+        var isError = _uiState.value.place.trim().isEmpty()
+        if (!isError && !checkLength(_uiState.value.place, Dimensions.MAX_LENGTH)) {
+            isError = true
             _errorState.value = _errorState.value.copy(errorPlace = Constants.ERROR_TOO_LONG)
         }
+        return isError
+    }
 
-        if (!validateDate && !validateTime) {
-            val combinedInput = "${_uiState.value.date} ${_uiState.value.time}"
-            if (checkIfInPast(combinedInput)) {
-                validateDate = true
-                validateTime = true
-                _errorState.value = _errorState.value.copy(errorMessage = Constants.DATE_IN_PAST)
-            }
+
+    private fun checkCombinedDateTime(): Boolean {
+        val combinedInput = "${_uiState.value.date} ${_uiState.value.time}"
+        if (_uiState.value.date.isNullOrEmpty()) {
+            _errorState.value = _errorState.value.copy(errorMessage = Constants.ERROR_EMPTY_FIELD)
+            return true
+        } else if (checkIfInPast(combinedInput)) {
+            _errorState.value = _errorState.value.copy(errorMessage = Constants.DATE_IN_PAST)
+            return true
+        } else {
+            return false
         }
+    }
 
-        if (_uiState.value.description.length > Dimensions.MAX_LENGTH_DESC) {
-            validateDesc = true
+    private fun validateDescriptionField(): Boolean {
+        return if (_uiState.value.description.length > Dimensions.MAX_LENGTH_DESC) {
             _errorState.value = _errorState.value.copy(errorDesc = Constants.ERROR_TOO_LONG_DESC)
+            true
+        } else {
+            false
         }
+    }
 
-        if (_uiState.value.city.length > Dimensions.MAX_LENGTH) {
-            validateCity = true
+    private fun validateCityField(): Boolean {
+        return if (_uiState.value.city.length > Dimensions.MAX_LENGTH) {
             _errorState.value = _errorState.value.copy(errorCity = Constants.ERROR_TOO_LONG)
+            true
+        } else {
+            false
         }
+    }
 
-        if (_uiState.value.street.length > Dimensions.MAX_LENGTH) {
-            validateStreet = true
+    private fun validateStreetField(): Boolean {
+        return if (_uiState.value.street.length > Dimensions.MAX_LENGTH) {
             _errorState.value = _errorState.value.copy(errorStreet = Constants.ERROR_TOO_LONG)
+            true
+        } else {
+            false
         }
+    }
 
+    private fun updateUiState(
+        validateTitle: Boolean,
+        validatePlace: Boolean,
+        validateDateTime: Boolean,
+        validateDesc: Boolean,
+        validateCity: Boolean,
+        validateStreet: Boolean
+    ) {
         _uiState.value = _uiState.value.copy(
             isTitleError = validateTitle,
             isPlaceError = validatePlace,
-            isDateError = validateDate,
-            isTimeError = validateTime,
+            isDateError = validateDateTime,
             isDescError = validateDesc,
             isCityError = validateCity,
             isStreetError = validateStreet
         )
-
-        return !(validateTitle || validatePlace || validateDate || validateTime || validateDesc || validateCity || validateStreet)
     }
+
 }
