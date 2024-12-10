@@ -222,7 +222,7 @@ class EventDetailsOwnerViewModel @Inject constructor(
                     _uiState.value = _uiState.value.copy(date = formattedDate, time = formattedTime)
 
                     val invitesResponse =
-                        _uiState.value.eventId?.let { inviteRepository.getInvitesByEventId(it) }
+                        _uiState.value.eventId?.let { inviteRepository.getInvitedOrAcceptedByEventId(it) }
                     if (invitesResponse?.isSuccessful == true && invitesResponse.body() != null) {
                         val acceptedUserIds: List<UUID> =
                             invitesResponse.body()!!.map { invite -> invite.userId }

@@ -28,6 +28,12 @@ interface InviteAPI {
         @Query("event_status") status: String = "eq.accepted"
     ): Response<List<Invite>>
 
+    @GET("${BuildConfig.REQUEST_URL}invites")
+    suspend fun getInvitedOrAcceptedByEventId(
+        @Query("event_id") id: String,
+        @Query("event_status") status: String = "in.(accepted,invited)"
+    ): Response<List<Invite>>
+
     @DELETE("${BuildConfig.REQUEST_URL}invites")
     suspend fun deleteInvite(
         @Query("id") id: String

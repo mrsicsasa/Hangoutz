@@ -12,6 +12,7 @@ interface InviteRepository {
     suspend fun getInvite(id: UUID): Response<List<Invite>>
     suspend fun deleteInvite(id: UUID): Response<Unit>
     suspend fun getInvitesByEventId(id: UUID): Response<List<Invite>>
+    suspend fun getInvitedOrAcceptedByEventId(id: UUID): Response<List<Invite>>
     suspend fun getCountOfAcceptedInvitesByEvent(id: UUID): Response<List<CountOfAcceptedInvitesForEvent>>
     suspend fun updateInviteStatus(userId:String, eventId: UUID, body: UpdateEventStatusDTO): Response<Unit>
     suspend fun deleteInviteByEventId(id: UUID, eventId: UUID): Response<Unit>
