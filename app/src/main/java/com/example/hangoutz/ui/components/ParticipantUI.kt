@@ -30,6 +30,7 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.hangoutz.BuildConfig
 import com.example.hangoutz.R
+import com.example.hangoutz.data.models.Friend
 import com.example.hangoutz.data.models.User
 import com.example.hangoutz.ui.theme.DeleteColor
 import com.example.hangoutz.ui.theme.Ivory
@@ -42,7 +43,7 @@ import com.example.hangoutz.utils.Dimensions
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun ParticipantUI(participant: User, isOwner : Boolean = false, onClick: () -> Unit) {
+fun ParticipantUI(participant: Friend, isOwner : Boolean = false, onClick: () -> Unit) {
     val displayAvatar = if (participant.avatar?.isNotBlank() == true) participant.avatar else DEFAULT_USER_PHOTO
     Column(
         modifier = Modifier

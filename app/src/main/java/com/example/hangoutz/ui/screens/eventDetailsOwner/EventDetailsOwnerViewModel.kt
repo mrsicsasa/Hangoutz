@@ -5,8 +5,12 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import com.example.hangoutz.data.local.SharedPreferencesManager
+import com.example.hangoutz.data.models.Friend
+import com.example.hangoutz.data.models.InviteRequest
 import com.example.hangoutz.data.models.User
 import com.example.hangoutz.domain.repository.EventRepository
+import com.example.hangoutz.domain.repository.FriendsRepository
 import com.example.hangoutz.domain.repository.InviteRepository
 import com.example.hangoutz.domain.repository.UserRepository
 import com.example.hangoutz.utils.Constants
@@ -15,9 +19,11 @@ import com.example.hangoutz.utils.formatDateTime
 import com.example.hangoutz.utils.formatForDatabase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -34,7 +40,7 @@ data class EventDetailsData(
     var place: String = "",
     var date: String = "",
     var time: String = "",
-    var participants: List<User> = emptyList(),
+    var participants: List<Friend> = emptyList(),
     var showDatePicker: Boolean = false,
     var showTimePicker: Boolean = false,
     var isTitleError: Boolean = false,
@@ -51,7 +57,12 @@ data class EventDetailsData(
     val errorStreet: String = "",
     val errorPlace: String = "",
     val errorDate: String = "",
-    var errorMessage: String? = ""
+    var errorMessage: String? = "",
+    var participantFriends: List<Friend> = emptyList(),
+    val selectedParticipants: List<Friend> = emptyList(),
+    val searchQuery: String = "",
+    val listOfFriends: List<Friend> = emptyList(),
+    val isLoading: Boolean = false
 )
 
 @HiltViewModel
@@ -59,6 +70,7 @@ class EventDetailsOwnerViewModel @Inject constructor(
     private val inviteRepository: InviteRepository,
     private val userRepository: UserRepository,
     private val eventRepository: EventRepository,
+    private val friendsRepository: FriendsRepository,
     @ApplicationContext private val context: Context
 ) : ViewModel() {
 
@@ -85,10 +97,11 @@ class EventDetailsOwnerViewModel @Inject constructor(
                     newTitle = _uiState.value.title,
                     newPlace = _uiState.value.place,
                     newDate = _uiState.value.formattedDateForDatabase,
-
-                    )
+                )
                 if (eventResponse?.isSuccessful == true) {
+                    insertNewParticipantsIntoDatabase(_uiState.value.eventId.toString())
                     onSuccess()
+
                     Log.i("Info", "Successfully patched event")
                 } else Log.e("Info", "${eventResponse.code()}")
             }
@@ -96,6 +109,40 @@ class EventDetailsOwnerViewModel @Inject constructor(
             Log.e("Error", "Fields marked with * cant be empty")
         }
     }
+
+    fun insertNewParticipantsIntoDatabase(eventId: String) {
+        viewModelScope.launch {
+            for (participant in _uiState.value.participantFriends.filter { friend -> friend !in _uiState.value.participants }) {
+                val response = inviteRepository.insertInvite(
+                    InviteRequest(
+                        "invited",
+                        participant.id.toString(),
+                        eventId
+                    )
+                )
+                Log.e("Data", "${participant.id.toString()} ${eventId}")
+                if (response.isSuccessful) {
+                    Log.e("Info", "Successfully added new invites")
+                } else Log.e(
+                    "Info",
+                    "An error has occurred while adding new invites ${response.code()}"
+                )
+
+            }
+        }
+    }
+
+    fun mapUserToFriend(userList: List<User>): List<Friend> {
+        val newParticipants = userList.map { user ->
+            Friend(
+                id = user.id,
+                name = user.name,
+                avatar = user.avatar,
+            )
+        }
+        return newParticipants
+    }
+
 
     fun deleteEvent(onSuccess: () -> Unit, onError: (String) -> Unit) {
         val eventId = _uiState.value.eventId
@@ -126,6 +173,7 @@ class EventDetailsOwnerViewModel @Inject constructor(
         }
     }
 
+
     fun getInitialTimeForPicker(): Long {
         val time = _uiState.value.time
         return convertTimeToMillis(time)
@@ -148,8 +196,8 @@ class EventDetailsOwnerViewModel @Inject constructor(
     fun removeUser(userID: UUID) {
 
         viewModelScope.launch {
-            val updatedParticipants = _uiState.value.participants.filter { it.id != userID }
-            _uiState.value = _uiState.value.copy(participants = updatedParticipants)
+            val updatedParticipants = _uiState.value.participantFriends.filter { it.id != userID }
+            _uiState.value = _uiState.value.copy(participantFriends = updatedParticipants)
 
             val response =
                 _uiState.value.eventId?.let { inviteRepository.deleteInviteByEventId(userID, it) }
@@ -194,13 +242,84 @@ class EventDetailsOwnerViewModel @Inject constructor(
                             val acceptedUsers: List<User> = allUsers.filter { user ->
                                 user.id in acceptedUserIds
                             }
-                            _uiState.value = _uiState.value.copy(participants = acceptedUsers)
+                            _uiState.value =
+                                _uiState.value.copy(participants = mapUserToFriend(acceptedUsers))
+                            _uiState.value =
+                                _uiState.value.copy(participantFriends = _uiState.value.participantFriends + _uiState.value.participants.filter { friend -> friend !in _uiState.value.participantFriends })
+
                         }
                     }
                 }
             }
         }
     }
+
+    fun onSearchInput(newText: String) {
+        _uiState.value = _uiState.value.copy(searchQuery = newText)
+        if (_uiState.value.searchQuery.length >= Constants.MIN_SEARCH_LENGTH) {
+            getFriends()
+        } else {
+            _uiState.value = _uiState.value.copy(
+                listOfFriends = emptyList()
+            )
+        }
+    }
+
+    private fun getFriends() {
+        _uiState.value = _uiState.value.copy(
+            listOfFriends = emptyList(),
+            isLoading = true
+        )
+        viewModelScope.launch {
+            val response = withContext(Dispatchers.IO) {
+                SharedPreferencesManager.getUserId(context)?.let {
+                    MutableStateFlow(
+                        friendsRepository.getFriendsFromUserId(
+                            it,
+                            _uiState.value.searchQuery
+                        )
+                    )
+                }
+            }
+            response?.value?.let {
+                if (it.isSuccessful) {
+                    response.value.body()?.let { friends ->
+                        _uiState.value =
+                            _uiState.value.copy(listOfFriends = friends.sortedBy { friend -> friend.users.name.uppercase() }
+                                .map { friendData -> friendData.users } - _uiState.value.participantFriends,
+                                isLoading = false)
+                    }
+                }
+            }
+        }
+    }
+
+    fun clearSearchQuery() {
+        _uiState.value = _uiState.value.copy(
+            searchQuery = "",
+            listOfFriends = emptyList()
+        )
+    }
+
+    fun addParticipant(user: Friend) {
+        _uiState.value = _uiState.value.copy(
+            selectedParticipants = _uiState.value.selectedParticipants + user
+        )
+    }
+
+    fun removeParticipant(user: Friend) {
+        _uiState.value = _uiState.value.copy(
+            selectedParticipants = _uiState.value.selectedParticipants - user
+        )
+    }
+
+    fun addSelectedParticipants() {
+        _uiState.value = _uiState.value.copy(
+            participantFriends = _uiState.value.participantFriends + _uiState.value.selectedParticipants,
+            selectedParticipants = emptyList()
+        )
+    }
+
 
     fun checkLength(text: String, length: Int): Boolean {
         if (text.length <= length) return true
@@ -209,7 +328,7 @@ class EventDetailsOwnerViewModel @Inject constructor(
 
     fun isEventPassed(date: String): Boolean {
         var isValid: Boolean = false
-        val inputFormat = SimpleDateFormat("dd.MM.yyyy. HH.mm", Locale.getDefault())
+        val inputFormat = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
         try {
             val inputDateTime = inputFormat.parse(date)
             if (inputDateTime != null && inputDateTime.before(Date())) {

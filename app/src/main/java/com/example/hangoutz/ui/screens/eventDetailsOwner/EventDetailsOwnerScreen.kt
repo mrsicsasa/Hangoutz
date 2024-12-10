@@ -21,9 +21,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
@@ -44,11 +46,13 @@ import com.example.hangoutz.ui.components.InputField
 import com.example.hangoutz.ui.components.InputFieldWithIcon
 import com.example.hangoutz.ui.components.ParticipantUI
 import com.example.hangoutz.ui.components.TimePickerModal
+import com.example.hangoutz.ui.screens.friends.FriendsPopup
 import com.example.hangoutz.ui.theme.Ivory
 import com.example.hangoutz.ui.theme.Orange
 import com.example.hangoutz.ui.theme.TopBarBackgroundColor
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Dimensions
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -57,6 +61,8 @@ fun EventOwnerDetailsScreen(
 ) {
     val context = LocalContext.current
     val data = viewmodel.uiState.collectAsState()
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val scope = rememberCoroutineScope()
     viewmodel.getEventIdFromController(navController)
 
     Scaffold(topBar = {
@@ -266,7 +272,7 @@ fun EventOwnerDetailsScreen(
                     Image(painter = painterResource(id = R.drawable.addevent),
                         contentDescription = "",
                         modifier = Modifier
-                            .clickable { }
+                            .clickable { scope.launch { sheetState.show() }}
                             .semantics {
                                 contentDescription = Constants.EVENT_OWNER_ADD_PARTICIPANTS_BUTTON
                             })
@@ -279,7 +285,7 @@ fun EventOwnerDetailsScreen(
                         viewmodel.getData()
                     }
                 }
-                val participants = data.value.participants
+                val participants = data.value.participantFriends
                 participants.forEach { participant ->
                     ParticipantUI(
                         participant = participant,
@@ -306,6 +312,32 @@ fun EventOwnerDetailsScreen(
                             navController.popBackStack()
                         })
                     })
+                if (sheetState.isVisible) {
+                    FriendsPopup(userList = data.value.listOfFriends,
+                        searchQuery = data.value.searchQuery,
+                        isLoading = data.value.isLoading,
+                        clearText = { viewmodel.clearSearchQuery() },
+                        sheetState = sheetState,
+                        showBottomSheet = {
+                        },
+                        onTextInput = { searchQuery ->
+                            viewmodel.onSearchInput(searchQuery)
+                        },
+                        participantSelected = data.value.selectedParticipants,
+                        isCheckList = true,
+                        onAdd = {
+                            viewmodel.addSelectedParticipants()
+                            scope.launch { sheetState.hide() }
+                            viewmodel.clearSearchQuery()
+                        },
+                        onChange = { isChecked, user ->
+                            if (isChecked) {
+                                viewmodel.addParticipant(user)
+                            } else {
+                                viewmodel.removeParticipant(user)
+                            }
+                        })
+                }
             }
 
             if (data.value.showDatePicker) {

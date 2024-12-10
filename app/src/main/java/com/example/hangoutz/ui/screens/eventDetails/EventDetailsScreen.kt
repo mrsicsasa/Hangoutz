@@ -197,7 +197,7 @@ fun EventDetailsScreen(
                 }
                 val participants = data.value.participants
                 participants.forEach { participant ->
-                    ParticipantUI(participant = participant, false) {}
+                  //  ParticipantUI(participant = participant, false) {}
                 }
             }
             Column {
