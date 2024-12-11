@@ -1,6 +1,5 @@
 package com.example.hangoutz.ui.screens.settings
 
-
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
@@ -17,9 +16,9 @@ import com.example.hangoutz.BuildConfig
 import com.example.hangoutz.R
 import com.example.hangoutz.data.local.SharedPreferencesManager
 import com.example.hangoutz.domain.repository.UserRepository
-import com.example.hangoutz.utils.getRandomString
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Constants.DEFAULT_USER_PHOTO
+import com.example.hangoutz.utils.getRandomString
 import com.example.hangoutz.utils.getTempUri
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -34,7 +33,6 @@ import java.io.File
 import javax.inject.Inject
 import kotlin.math.sqrt
 
-
 data class SettingsData(
     var name: TextFieldValue = TextFieldValue(""),
     var email: String = "",
@@ -44,7 +42,6 @@ data class SettingsData(
     val textIcon: Int = R.drawable.pencil,
     val tempUri: Uri = Uri.EMPTY,
     val showBottomSheet: Boolean = false
-
 )
 
 @HiltViewModel
@@ -64,7 +61,6 @@ class SettingsViewModel @Inject constructor(
     fun onNameChanged(newText: TextFieldValue) {
         _uiState.value = _uiState.value.copy(name = newText)
     }
-
 
     fun setShowBottomSheet(showBottomSheet: Boolean) {
         _uiState.value = _uiState.value.copy(showBottomSheet = showBottomSheet)
@@ -102,11 +98,10 @@ class SettingsViewModel @Inject constructor(
 
                 val response = userID?.let {
                     userRepository.patchUserNameById(it, newName.text)
-
                 }
                 if (response != null) {
                     if (response.isSuccessful) {
-                        Log.e("Successfully  edited", " ${response.code()}")
+                        Log.e("Successfully edited", " ${response.code()}")
                     } else {
                         Log.e("An error has occurred ", " ${response.code()}")
                     }
@@ -131,9 +126,7 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val response = userID?.let {
-                    userRepository.getUserById(
-                        it
-                    )
+                    userRepository.getUserById(it)
                 }
                 if (response?.isSuccessful == true && !response.body().isNullOrEmpty()) {
                     val user = response.body()?.first()
@@ -146,7 +139,7 @@ class SettingsViewModel @Inject constructor(
                     }
                 }
             } catch (e: Exception) {
-                Log.e("LoginViewModel", "Login error: ${e.message}")
+                Log.e("SettingsViewModel", "Error fetching user: ${e.message}")
             }
         }
     }
@@ -180,7 +173,6 @@ class SettingsViewModel @Inject constructor(
                                     "Info",
                                     "successfully deleted old avatar - " + deleteAvatarResponse.code()
                                 )
-
                             } else {
                                 Log.e(
                                     "Error",
@@ -203,12 +195,11 @@ class SettingsViewModel @Inject constructor(
                 Log.d("handleImage", inputStream.toString())
             }
         } catch (e: Exception) {
-            Log.e("LoginViewModel", "Login error: ${e.message}")
+            Log.e("SettingsViewModel", "Error processing image: ${e.message}")
         }
     }
 
     fun updateAvatarUri(uri: Uri) {
-
         viewModelScope.launch {
             val compressedUri = compressImage(context, uri)
             if (compressedUri != null) {
@@ -218,8 +209,6 @@ class SettingsViewModel @Inject constructor(
                 Log.e("updateAvatarUri", "Failed to compress image")
             }
         }
-
-
     }
 
     fun setAvatarUri() {
@@ -299,8 +288,8 @@ class SettingsViewModel @Inject constructor(
             return Uri.fromFile(tempFile)
         } catch (e: Exception) {
             Log.e("compressImageTo50Kb", "Error compressing image: ${e.message}")
-            return null
+
         }
+        return null
     }
 }
-

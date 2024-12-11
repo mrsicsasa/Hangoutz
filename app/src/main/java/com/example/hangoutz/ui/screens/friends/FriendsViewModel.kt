@@ -1,6 +1,7 @@
 package com.example.hangoutz.ui.screens.friends
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hangoutz.data.local.SharedPreferencesManager
@@ -36,6 +37,7 @@ class FriendsViewModel @Inject constructor(
     private val friendsRepository: FriendsRepository,
     @ApplicationContext private val context: Context
 ) : ViewModel() {
+
     private var _uiState = MutableStateFlow(FriendsUIState())
     var uiState: StateFlow<FriendsUIState> = _uiState
 
@@ -63,52 +65,66 @@ class FriendsViewModel @Inject constructor(
             listOfFriends = emptyList(),
             isLoading = true
         )
+
         if (_uiState.value.isLoading) {
             viewModelScope.launch {
-                val response = withContext(Dispatchers.IO) {
-                    SharedPreferencesManager.getUserId(context)?.let {
-                        if (isSearching) {
-                            MutableStateFlow(
-                                friendsRepository.getFriendsFromUserId(
-                                    it,
-                                    _uiState.value.searchQuery
+                try {
+                    val userId = SharedPreferencesManager.getUserId(context)
+                    if (userId != null) {
+                        val response = withContext(Dispatchers.IO) {
+                            if (isSearching) {
+                                friendsRepository.getFriendsFromUserId(userId, _uiState.value.searchQuery)
+                            } else {
+                                friendsRepository.getFriendsFromUserId(userId)
+                            }
+                        }
+
+                        if (response.isSuccessful) {
+                            response.body()?.let { friends ->
+                                _uiState.value = _uiState.value.copy(
+                                    listOfFriends = friends.sortedBy { friend -> friend.users.name.uppercase() }
                                 )
-                            )
+                            }
                         } else {
-                            MutableStateFlow(friendsRepository.getFriendsFromUserId(it))
+                            Log.e("FriendsViewModel", "Error fetching friends: ${response.message()}")
                         }
+                    } else {
+                        Log.e("FriendsViewModel", "User ID is null")
                     }
+                } catch (e: Exception) {
+                    Log.e("FriendsViewModel", "Error during fetchFriends: ${e.message}")
+                } finally {
+                    _uiState.value = _uiState.value.copy(isLoading = false)
                 }
-                response?.value?.let {
-                    if (it.isSuccessful) {
-                        response.value.body()?.let { friends ->
-                            _uiState.value =
-                                _uiState.value.copy(listOfFriends = friends.sortedBy { friend -> friend.users.name.uppercase() })
-                        }
-                    }
-                }
-                _uiState.value = _uiState.value.copy(isLoading = false)
             }
         }
     }
 
     fun removeFriend(friendId: UUID) {
         viewModelScope.launch {
-            val response = withContext(Dispatchers.IO) {
-                SharedPreferencesManager.getUserId(context)?.let {
-                    friendsRepository.removeFriend(userId = it, friendId = friendId.toString())
-                    friendsRepository.removeFriend(userId = friendId.toString(), friendId = it)
-                }
-            }
-            if (response?.isSuccessful == true) {
-                if (_uiState.value.searchQuery.length < Constants.MIN_SEARCH_LENGTH) {
-                    fetchFriends(false)
+            try {
+                val userId = SharedPreferencesManager.getUserId(context)
+                if (userId != null) {
+                    val response = withContext(Dispatchers.IO) {
+                        friendsRepository.removeFriend(userId = userId, friendId = friendId.toString())
+                        friendsRepository.removeFriend(userId = friendId.toString(), friendId = userId)
+                    }
+
+                    if (response?.isSuccessful == true) {
+                        if (_uiState.value.searchQuery.length < Constants.MIN_SEARCH_LENGTH) {
+                            fetchFriends(false)
+                        } else {
+                            _uiState.value = _uiState.value.copy(isLoading = true)
+                            fetchFriends(true)
+                        }
+                    } else {
+                        Log.e("FriendsViewModel", "Failed to remove friend, response: ${response?.code()}")
+                    }
                 } else {
-                    _uiState.value = _uiState.value.copy(
-                        isLoading = true
-                    )
-                    fetchFriends(true)
+                    Log.e("FriendsViewModel", "User ID is null")
                 }
+            } catch (e: Exception) {
+                Log.e("FriendsViewModel", "Error during removeFriend: ${e.message}")
             }
         }
     }
@@ -131,77 +147,79 @@ class FriendsViewModel @Inject constructor(
         if (_uiState.value.popupSearch.length >= Constants.MIN_SEARCH_LENGTH) {
             fetchNonFriends(isSearching = true)
         } else {
-            _uiState.value =
-                _uiState.value.copy(addFriendList = emptyList(), isPopupLoading = false)
+            _uiState.value = _uiState.value.copy(addFriendList = emptyList(), isPopupLoading = false)
         }
     }
 
     private fun fetchNonFriends(isSearching: Boolean) {
         if (_uiState.value.isPopupLoading) {
             viewModelScope.launch {
-                val response = withContext(Dispatchers.IO) {
-                    SharedPreferencesManager.getUserId(context)?.let {
-                        if (isSearching) {
-                            MutableStateFlow(
+                try {
+                    val userId = SharedPreferencesManager.getUserId(context)
+                    if (userId != null) {
+                        val response = withContext(Dispatchers.IO) {
+                            if (isSearching) {
                                 friendsRepository.getNonFriendsFromUserId(
-                                    it,
+                                    userId,
                                     _uiState.value.popupSearch,
                                     friendsId = getFriendsId()
                                 )
-                            )
-                        } else {
-                            MutableStateFlow(
+                            } else {
                                 friendsRepository.getNonFriendsFromUserId(
-                                    it,
+                                    userId,
                                     friendsId = getFriendsId()
                                 )
-                            )
+                            }
                         }
-                    }
-                }
-                response?.value?.let {
-                    if (it.isSuccessful) {
-                        response.value.body()?.let { users ->
-                            _uiState.value =
-                                _uiState.value.copy(addFriendList = users.sortedBy { user -> user.name.uppercase() })
+
+                        if (response.isSuccessful) {
+                            response.body()?.let { users ->
+                                _uiState.value = _uiState.value.copy(
+                                    addFriendList = users.sortedBy { user -> user.name.uppercase() }
+                                )
+                            }
+                        } else {
+                            Log.e("FriendsViewModel", "Error fetching non-friends: ${response.message()}")
                         }
+                    } else {
+                        Log.e("FriendsViewModel", "User ID is null")
                     }
+                } catch (e: Exception) {
+                    Log.e("FriendsViewModel", "Error during fetchNonFriends: ${e.message}")
+                } finally {
+                    _uiState.value = _uiState.value.copy(isPopupLoading = false)
                 }
-                _uiState.value = _uiState.value.copy(isPopupLoading = false)
             }
         }
     }
 
     fun addFriend(id: UUID) {
-        _uiState.value =
-            _uiState.value.copy(addedFriendId = id)
+        _uiState.value = _uiState.value.copy(addedFriendId = id)
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                MutableStateFlow(
-                    friendsRepository.addFriend(
-                        UUID.fromString(SharedPreferencesManager.getUserId(context)),
-                        id
-                    )
-                )
+            try {
+                val userId = SharedPreferencesManager.getUserId(context)
+                if (userId != null) {
+                    withContext(Dispatchers.IO) {
+                        friendsRepository.addFriend(UUID.fromString(userId), id)
+                        friendsRepository.addFriend(id, UUID.fromString(userId))
+                    }
+                    _uiState.value = _uiState.value.copy(isPopupLoading = true)
+                    fetchFriends(_uiState.value.searchQuery.length >= Constants.MIN_SEARCH_LENGTH)
+                    fetchNonFriends(_uiState.value.popupSearch.length >= Constants.MIN_SEARCH_LENGTH)
+                } else {
+                    Log.e("FriendsViewModel", "User ID is null")
+                }
+            } catch (e: Exception) {
+                Log.e("FriendsViewModel", "Error adding friend: ${e.message}")
             }
-            withContext(Dispatchers.IO) {
-                MutableStateFlow(
-                    friendsRepository.addFriend(
-                        id,
-                        UUID.fromString(SharedPreferencesManager.getUserId(context))
-                    )
-                )
-            }
-            _uiState.value = _uiState.value.copy(isPopupLoading = true)
-            fetchFriends(_uiState.value.searchQuery.length >= Constants.MIN_SEARCH_LENGTH)
-            fetchNonFriends(_uiState.value.popupSearch.length >= Constants.MIN_SEARCH_LENGTH)
         }
     }
 
     private suspend fun getFriendsId(): String {
-        SharedPreferencesManager.getUserId(context)?.let {
-            val friendsResponse = friendsRepository.getFriendsFromUserId(id = it)
-            val stringBuilder = StringBuilder(it).append(",")
+        val userId = SharedPreferencesManager.getUserId(context)
+        if (userId != null) {
+            val friendsResponse = friendsRepository.getFriendsFromUserId(id = userId)
+            val stringBuilder = StringBuilder(userId).append(",")
             friendsResponse.body()?.forEach { friend ->
                 stringBuilder.append(friend.users.id).append(",")
             }
