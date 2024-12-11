@@ -94,6 +94,7 @@ object Constants {
     const val RANDOM_STRING_LENGTH = 3
     const val JPG = ".jpg"
     const val TEMP_IMAGE = "_image"
+    const val LINES = "lines"
 
     //BottomNavigation bar
     const val BOTTOM_NAVIGATION_BAR = "bottomNavigationBar"

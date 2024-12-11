@@ -42,6 +42,7 @@ import com.example.hangoutz.ui.components.ActionButton
 import com.example.hangoutz.ui.components.NameInput
 import com.example.hangoutz.ui.navigation.NavigationItem
 import com.example.hangoutz.ui.theme.Ivory
+import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Constants.LOGOUT
 import com.example.hangoutz.utils.Constants.PROFILE_PHOTO
 import com.example.hangoutz.utils.Constants.SETTINGS_BACKGROUND_LINES_TAG
@@ -156,7 +157,7 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
                 )
                 Image(
                     painter = painterResource(R.drawable.profilelines),
-                    contentDescription = "lines",
+                    contentDescription = Constants.LINES,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .align(Alignment.Center)
