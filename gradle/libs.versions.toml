@@ -23,7 +23,8 @@ material3 = "1.5.0"
 navigationCompose = "2.8.4"
 retrofit = "2.9.0"
 constraintlayout = "2.2.0"
-workRuntimeKtx = "2.10.0"
+workRuntimeKtx = "2.8.1"
+imageCropView = "3.0.1"
 
 [libraries]
 androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintlayoutCompose" }
@@ -60,6 +61,7 @@ kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-c
 material3 = { module = "androidx.compose.material3:material3", version.ref = "material3" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+imagecropview = { group = "io.github.rroohit", name = "ImageCropView", version.ref = "imageCropView" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

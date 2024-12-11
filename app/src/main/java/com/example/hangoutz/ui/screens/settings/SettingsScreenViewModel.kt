@@ -17,9 +17,9 @@ import com.example.hangoutz.BuildConfig
 import com.example.hangoutz.R
 import com.example.hangoutz.data.local.SharedPreferencesManager
 import com.example.hangoutz.domain.repository.UserRepository
-import com.example.hangoutz.utils.getRandomString
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Constants.DEFAULT_USER_PHOTO
+import com.example.hangoutz.utils.getRandomString
 import com.example.hangoutz.utils.getTempUri
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -31,9 +31,10 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 import javax.inject.Inject
 import kotlin.math.sqrt
-
 
 data class SettingsData(
     var name: TextFieldValue = TextFieldValue(""),
@@ -43,8 +44,9 @@ data class SettingsData(
     val avatarUri: String? = null,
     val textIcon: Int = R.drawable.pencil,
     val tempUri: Uri = Uri.EMPTY,
-    val showBottomSheet: Boolean = false
-
+    val showBottomSheet: Boolean = false,
+    val showImageCropper: Boolean = false,
+    val fileName: String = ""
 )
 
 @HiltViewModel
@@ -68,6 +70,11 @@ class SettingsViewModel @Inject constructor(
 
     fun setShowBottomSheet(showBottomSheet: Boolean) {
         _uiState.value = _uiState.value.copy(showBottomSheet = showBottomSheet)
+    }
+
+    fun setShowImageCropper(resultUri: Uri, showImageCropper: Boolean) {
+        _uiState.value =
+            _uiState.value.copy(showImageCropper = showImageCropper, tempUri = resultUri)
     }
 
     fun onPencilClick() {
@@ -207,10 +214,9 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun updateAvatarUri(uri: Uri) {
-
+    fun updateAvatarUri() {
         viewModelScope.launch {
-            val compressedUri = compressImage(context, uri)
+            val compressedUri = compressImage(context, tempUri)
             if (compressedUri != null) {
                 _uiState.value = _uiState.value.copy(avatarUri = compressedUri.toString())
                 handleImage(compressedUri)
@@ -218,8 +224,6 @@ class SettingsViewModel @Inject constructor(
                 Log.e("updateAvatarUri", "Failed to compress image")
             }
         }
-
-
     }
 
     fun setAvatarUri() {
@@ -302,5 +306,50 @@ class SettingsViewModel @Inject constructor(
             return null
         }
     }
-}
 
+    fun uriToBitmap(context: Context, uri: Uri): Bitmap? {
+        return try {
+            val inputStream = context.contentResolver.openInputStream(uri)
+            BitmapFactory.decodeStream(inputStream)
+        } catch (e: IOException) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    fun bitmapToUri(context: Context, bitmap: Bitmap?): Uri? {
+        _uiState.value = _uiState.value.copy(fileName = "TEMP${System.currentTimeMillis()}.jpg")
+        val tempImage = File(context.cacheDir, _uiState.value.fileName)
+        return try {
+            val outputStream = FileOutputStream(tempImage)
+            bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+            outputStream.flush()
+            outputStream.close()
+            Uri.fromFile(tempImage)
+        } catch (e: IOException) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    fun updateBitmap(bitmap: Bitmap?) {
+        val newUri = bitmapToUri(context, bitmap)
+        if (newUri != null) {
+            _uiState.value = _uiState.value.copy(tempUri = newUri, showImageCropper = false)
+            tempUri = newUri
+            updateAvatarUri()
+            deleteCachedImage(context)
+        } else {
+            Log.e("SetttingsScreenViewModel", Constants.GENERIC_ERROR_MESSAGE)
+        }
+    }
+
+    private fun deleteCachedImage(context: Context): Boolean {
+        val file = File(context.cacheDir, _uiState.value.fileName)
+        return if (file.exists()) {
+            file.delete()
+        } else {
+            false
+        }
+    }
+}
