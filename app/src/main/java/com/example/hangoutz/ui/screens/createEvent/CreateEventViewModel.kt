@@ -330,7 +330,7 @@ class CreateEventViewModel @Inject constructor(
 
     private fun checkCombinedDateTime(): Boolean {
         val combinedInput = "${_uiState.value.date} ${_uiState.value.time}"
-        if (_uiState.value.date.isNullOrEmpty()) {
+        if (_uiState.value.date.isNullOrEmpty() || _uiState.value.time.isNullOrEmpty()) {
             _errorState.value = _errorState.value.copy(errorMessage = Constants.ERROR_EMPTY_FIELD)
             return true
         } else if (checkIfInPast(combinedInput)) {

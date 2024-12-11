@@ -4,7 +4,6 @@ import com.example.hangoutz.data.models.Event
 import com.example.hangoutz.data.models.EventCardDPO
 import com.example.hangoutz.data.models.EventRequest
 import com.example.hangoutz.data.models.EventResponse
-import com.example.hangoutz.data.models.EventRequest
 import com.example.hangoutz.data.models.EventsFromInvites
 import com.example.hangoutz.data.remote.EventAPI
 import com.example.hangoutz.domain.repository.EventRepository
