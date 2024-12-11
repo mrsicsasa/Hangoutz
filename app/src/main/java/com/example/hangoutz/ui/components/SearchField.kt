@@ -1,5 +1,6 @@
 package com.example.hangoutz.ui.components
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
@@ -26,6 +27,7 @@ fun SearchField(
     searchQuery: String,
     backgroundColor: Color,
     textColor: Color,
+    borderColor: Color = Color.Transparent,
     modifier: Modifier = Modifier,
     clearText: () -> Unit,
     onTextInput: (String) -> Unit
@@ -54,7 +56,7 @@ fun SearchField(
                     Icon(
                         imageVector = Icons.Default.Close,
                         contentDescription = Constants.FRIENDS_SEARCH_BAR_CLEAR_DESCRIPTION,
-                        modifier = Modifier.size(Dimensions.FRIENDS_SEARCH_BAR_CLEAR_ICON_SIZE),
+                        modifier = Modifier.size(Dimensions.SEARCH_BAR_CLEAR_ICON_SIZE),
                         tint = textColor
                     )
                 }
@@ -62,7 +64,12 @@ fun SearchField(
         },
         modifier = modifier
             .fillMaxWidth()
-            .height(Dimensions.FRIENDS_SEARCH_BAR_HEIGHT)
+            .height(Dimensions.SEARCH_BAR_HEIGHT)
             .clip(RoundedCornerShape(Dimensions.FRIENDS_FIELD_ROUNDED_CORNER))
+            .border(
+                Dimensions.SEARCH_BAR_BORDER,
+                borderColor,
+                RoundedCornerShape(Dimensions.FRIENDS_FIELD_ROUNDED_CORNER)
+            )
     )
 }

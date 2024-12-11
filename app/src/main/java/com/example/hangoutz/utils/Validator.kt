@@ -32,7 +32,7 @@ object Validator {
     }
 
     fun isValidEmail(email: String): Boolean {
-        return (email.endsWith(Constants.VALID_EMAIL) == true &&
+        return (Constants.VALID_EMAIL.lowercase().toRegex().matches(email) &&
                 !email.startsWith(Constants.AT_SIGN) &&
                 email.split(Constants.AT_SIGN).size == Constants.TWO_HALVES)
     }

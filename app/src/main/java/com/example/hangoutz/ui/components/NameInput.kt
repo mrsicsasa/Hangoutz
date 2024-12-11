@@ -13,18 +13,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.constraintlayout.compose.ConstraintLayout
-import com.example.hangoutz.R
 import com.example.hangoutz.ui.theme.Ivory
-import com.example.hangoutz.utils.Constants.SETTINGS_NAME_ICON_TAG
+import com.example.hangoutz.utils.Constants
+import com.example.hangoutz.utils.Constants.SETTINGS_NAME_FIELD_TAG
 import com.example.hangoutz.utils.Dimensions
 
 
 @Composable
 fun NameInput(
-    name: String, isReadOnly: Boolean, onNameChanged: (String) -> Unit, onPencilClick: () -> Unit
+    icon: Int,
+    name: TextFieldValue,
+    isReadOnly: Boolean,
+    onNameChanged: (TextFieldValue) -> Unit,
+    onPencilClick: () -> Unit
 ) {
     val focusRequester = remember { FocusRequester() }
     ConstraintLayout(
@@ -42,12 +48,13 @@ fun NameInput(
             top.linkTo(parent.top)
             bottom.linkTo(parent.bottom)
         }) {
-            nameField(
+            NameField(
                 name,
                 { onNameChanged(it) },
                 isReadOnly,
                 focusRequester,
                 modifier = Modifier.align(Alignment.Center)
+                    .semantics { contentDescription = SETTINGS_NAME_FIELD_TAG }
             )
         }
         Box(modifier = Modifier
@@ -57,12 +64,14 @@ fun NameInput(
             .padding(Dimensions.SETTINGS_SCREEN_SMALL1)
             .fillMaxHeight()) {
             Image(
-                painterResource(R.drawable.pencil),
+                painterResource(icon),
                 "",
                 modifier = Modifier
                     .size(Dimensions.SETTINGS_SCREEN_MEDIUM4)
                     .align(Alignment.Center)
-                    .testTag(SETTINGS_NAME_ICON_TAG)
+                    .semantics {
+                        contentDescription = Constants.SETTINGS_NAME_VALIDATOR_ICON_TAG
+                    }
                     .clickable {
                         onPencilClick()
                         focusRequester.requestFocus()

@@ -4,13 +4,15 @@ import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter.ofPattern
+import java.util.Locale
 
 
 @RequiresApi(Build.VERSION_CODES.O)
 fun String.toDate(): LocalDateTime {
     val dateString = this.replace("T", " ")
-    val formatter = ofPattern("yyyy-MM-dd HH:mm:ss")
+    val formatter = ofPattern("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
     val dateTime = LocalDateTime.parse(dateString, formatter)
     return dateTime
 }
@@ -33,4 +35,11 @@ fun Int.toZeroPaddedString(): String {
 
 fun String.firstLetterUppercase(): String {
     return this.lowercase().replaceFirstChar { it.uppercase() }
+}
+@RequiresApi(Build.VERSION_CODES.O)
+fun String.toMilliseconds(): Long {
+    val localDateTime = this.toDate()
+    return localDateTime.atZone(ZoneId.systemDefault())
+        .toInstant()
+        .toEpochMilli()
 }

@@ -17,12 +17,24 @@ object Dimensions {
     val FILTER_BAR_TOP_PADDING = 10.dp
     val FLOATING_BUTTON_BORDER = 2.dp
 
+    //Search bar
+    val SEARCH_BAR_HEIGHT = 50.dp
+    val SEARCH_BAR_CLEAR_ICON_SIZE = 20.dp
+    val SEARCH_BAR_BORDER = 1.5.dp
+    val SEARCH_BAR_HORIZONTAL_PADDING = 20.dp
+
+    //Bottom popup sheet
+    val BOTTOM_SHEET_HORIZONTAL_PADDING = 30.dp
+    val BOTTOM_SHEET_VERTICAL_PADDING = 40.dp
+    val BOTTOM_SHEET_USER_PADDING = 10.dp
+    val BOTTOM_SHEET_DIVIDER_WIDTH = 2.dp
+    val BOTTOM_SHEET_NAME_PADDING = 12.dp
+    val ADD_ICON_SIZE = 30.dp
 
     //InviteRespondButton
     val INVITE_RESPOND_BUTTON_ROUNDED_RADIUS: Dp = 20.dp
     val INVITE_RESPOND_BUTTON_WIDTH: Dp = 105.dp
     val INVITE_RESPOND_BUTTON_FONT_SIZE = 12.sp
-
 
     //EventCard
     val CARD_ROUNDED_CORNER_RADIUS: Dp = 16.dp
@@ -36,6 +48,8 @@ object Dimensions {
     val INVITATION_BOX_BOTTOM_PADDING: Dp = 10.dp
     val INVITATION_BUTTONS_SEPARATION_WIDTH = 10.dp
     val INVITE_RESPOND_BUTTON_INNER_PADDING = 2.dp
+    const val ANIMATION_TARGET_VALUE = 360f
+    const val ANIMATION_DURATION = 3000
 
     //Profile image
     val PROFILE_IMAGE_SIZE: Dp = 74.dp
@@ -85,6 +99,7 @@ object Dimensions {
     val ACTION_BUTTON_SMALL2 = 5.dp
 
     //Medium range 20-99.dp
+
     val ACTION_BUTTON_MEDIUM1 = 50.dp
     val ACTION_BUTTON_MEDIUM2 = 30.dp
     val ACTION_BUTTON_MEDIUM3 = 20.dp
@@ -96,13 +111,16 @@ object Dimensions {
     val INPUT_FIELD_ROUNDED_CORNERS = 20.dp
     val INPUT_FIELD_PADDING_SMALL = 10.dp
 
-    // Filter bar
+    //Friends Popup
+    val POPUP_HEIGHT = 690.dp
+    val POPUP_WIDTH = 350.dp
 
+    // Filter bar
     const val FILTER_BAR_ALPHA = 0.46f
-    const val BAR_WIDTH_SCREEN_PERCENT = 0.9f
+    const val BAR_WIDTH_SCREEN_PERCENT = 0.93f
     const val BAR_HEIGHT_SCREEN_PERCENT = 0.05f
     val BADGE_SIZE = 18.dp
-    val BADGE_FONT_SIZE = 10.sp
+    val BADGE_TEXT_START_PADDING = 5.dp
     val TAB_ITEM_FONT_SIZE = 12.sp
     const val TAB_HEIGHT_PERCENT = 0.7f
     const val INDICATOR_POSITION_OFFSET = 0.1f
@@ -122,9 +140,37 @@ object Dimensions {
     val FRIENDS_AVATAR_BORDER = 3.dp
     val FRIENDS_TEXT_START_PADDING = 10.dp
     val FRIENDS_FLOATING_BUTTON_PADDING = 20.dp
-    val FRIENDS_SEARCH_BAR_HEIGHT = 50.dp
-    val FRIENDS_SEARCH_BAR_CLEAR_ICON_SIZE = 20.dp
     val FRIENDS_LOADING_SPINNER_SIZE = 40.dp
+    val DISMISS_ICON_END_PADDING = 8.dp
+    val SPACER_FROM_FRIEND_UP = 10.dp
+    val SPACER_FROM_FRIEND_DOWN = 5.dp
+    const val FRIENDS_POPUP_PARTICIPANT_COLUMN = 0.8f
+    const val FRIENDS_POPUP_COLUMN = 1f
+    val BUTTON_COLUMN_BOTTOM_PADDING = 10.dp
+    val BUTTON_INNER_PADDING = 3.dp
+    val BUTTON_WIDTH = 188.dp
+    val BUTTON_HEIGHT = 53.dp
+    const val ADD_FONT_WEIGHT = 700
+    val ADD_FONT_SIZE = 20.sp
+
+    //CREATE EVENT
+    val CREATE_EVENT_HORIZONTAL_SPACING = 35.dp
+    val CREATE_EVENT_VERTICAL_PADDING = 2.dp
+    val CREATE_EVENT_TEXT_PADDING = 15.dp
+    val CREATE_EVENT_LINE_THICKNESS = 2.dp
+    val CREATE_EVENT_ICON_PADDING = 30.dp
+    val CREATE_EVENT_PARTICIPANT = 10.dp
+    val CREATE_EVENT_PARTICIPANT_PHOTO = 40.dp
+    val CREATE_EVENT_TEXT_PADDING2 = 12.dp
+    val CREATE_EVENT_REMOVE_PARTICIPANT_ICON_SIZE = 25.dp
+    val CREATE_EVENT_SEARCH_ICON_SIZE = 40.dp
+
+    //TIME PICKER
+    val TIME_PICKER_CORNERS = 20.dp
+
+    //EVENT DETAILS SCREEN
+    val EVENT_DETAILS_TOP_PADDING = 35.dp
+
 }
 
 

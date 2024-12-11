@@ -51,8 +51,7 @@ class SplashScreenViewModel @Inject constructor(
                     }
                 } catch (e: Exception) {
                     Log.d("ERROR", e.message.toString())
-                }
-            }
+                } }
         }
     }
 

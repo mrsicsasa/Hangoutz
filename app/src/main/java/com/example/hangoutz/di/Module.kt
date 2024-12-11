@@ -1,5 +1,6 @@
 package com.example.hangoutz.di
 
+import android.content.Context
 import com.example.hangoutz.BuildConfig
 import com.example.hangoutz.data.remote.EventAPI
 import com.example.hangoutz.data.remote.FriendsAPI
@@ -17,6 +18,7 @@ import com.example.hangoutz.domain.repository.UserRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -76,5 +78,10 @@ object Module {
     @Provides
     fun provideInviteRepository(invitesAPI: InviteAPI): InviteRepository {
         return InviteRepositoryImpl(invitesAPI)
+    }
+
+    @Provides
+    fun provideContext(@ApplicationContext appContext: Context): Context{
+        return appContext
     }
 }
