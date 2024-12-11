@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -24,9 +25,9 @@ fun InputFieldWithIcon(
     modifier: Modifier = Modifier,
     painterResource: Int,
     isEnabled: Boolean = false,
-    isReadOnly : Boolean = false,
+    isReadOnly: Boolean = false,
     onClick: () -> (Unit),
-    isError : Boolean?= false
+    isError: Boolean? = false
 ) {
     if (isError != null) {
         OutlinedTextField(
@@ -35,7 +36,7 @@ fun InputFieldWithIcon(
             onValueChange = { onValueChange(it) },
             singleLine = true,
             enabled = isEnabled,
-            isError = isError ,
+            isError = isError,
             readOnly = isReadOnly,
             shape = RoundedCornerShape(Dimensions.INPUT_FIELD_ROUNDED_CORNERS),
             colors = OutlinedTextFieldDefaults.colors(
@@ -54,18 +55,16 @@ fun InputFieldWithIcon(
                 errorTextColor = Ivory
             ),
             trailingIcon = {
-                androidx.compose.material3.Icon(
-                    painter = painterResource(id = painterResource),
+               Icon(painter = painterResource(id = painterResource),
                     contentDescription = "Icon",
                     tint = Color.White,
-                    modifier = Modifier.clickable { onClick() }
-                )},
+                    modifier = Modifier.clickable { onClick() })
+            },
             textStyle = MaterialTheme.typography.bodySmall.copy(color = Color.White),
             modifier = modifier
                 .padding(
                     bottom = Dimensions.INPUT_FIELD_PADDING_SMALL,
                     top = Dimensions.INPUT_FIELD_PADDING_SMALL,
-
                     )
                 .fillMaxWidth()
         )

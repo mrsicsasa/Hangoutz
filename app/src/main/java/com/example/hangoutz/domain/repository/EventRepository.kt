@@ -12,4 +12,5 @@ interface EventRepository {
     suspend fun deleteEvent(id: UUID): Response<Unit>
     suspend fun getEventsWithAvatar(userID: String): Response<List<EventCardDPO>>
     suspend fun getEventsFromInvites(eventStatus: String, userID: String): Response<List<EventsFromInvites>>
+    suspend fun patchEventById(id: String, newTitle : String, newPlace : String, newDate: String): Response<Unit>
 }

@@ -36,6 +36,8 @@ object Constants {
     const val ERROR_EMPTY_FIELDS = "All fields must be filled!"
     const val ERROR_INVALID_INPUT = "Incorrect email or password"
     const val ERROR_EMPTY_FIELD = "Fields marked with * must be filled"
+    const val ERROR_TOO_LONG = "This field can have max 25 characters"
+    const val ERROR_TOO_LONG_DESC = "Description can have max 100 characters"
 
     //Events screen
     const val GET_EVENTS_ERRORS = "Loading events errors"
@@ -53,6 +55,7 @@ object Constants {
     const val ANIMATION_INDICATOR_OFFSET = "animationIndicatorOffset"
     const val INVITED_TAB_INDEX = 1
     const val NUMBER_OF_INVITES_DEFAULT_VALUE = 0
+    const val EVENT_EDITED_SUCCESSFULLY = "Event Edited Successfully"
 
     //EventCard
     const val EVENT_CARD = "eventCard"
@@ -202,4 +205,13 @@ object Constants {
     const val EVENT_OWNER_ADD_PARTICIPANTS_BUTTON = "eventOwnerAddParticipantsButton"
     const val EVENT_OWNER_EDIT_BUTTON = "eventOwnerCreateButton"
     const val CREATE_EVENT_REMOVE_BUTTON = "createEventRemoveButton"
+
+    const val DELETE_ERROR = "An error has ocurred while deleting"
+    const val DELETE_SUCCESS = "Successfully deleted the event"
+
+    const val MAX_LENGTH = 25
+    const val MAX_LENGTH_DESC = 100
+
+    const val DATE_IN_PAST = "Date and time cannot be in the past"
+
 }

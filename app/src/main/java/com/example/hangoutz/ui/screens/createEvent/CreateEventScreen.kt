@@ -44,6 +44,7 @@ import com.example.hangoutz.ui.components.InputFieldWithIcon
 import com.example.hangoutz.ui.components.TimePickerModal
 import com.example.hangoutz.ui.screens.friends.FriendsPopup
 import com.example.hangoutz.ui.theme.Ivory
+import com.example.hangoutz.ui.theme.Orange
 import com.example.hangoutz.ui.theme.OrangeButton
 import com.example.hangoutz.ui.theme.TopBarBackgroundColor
 import com.example.hangoutz.utils.Constants
@@ -210,14 +211,14 @@ fun CreateEventScreen(
                         modifier = Modifier
                             .clickable { scope.launch { sheetState.show() } }
                             .semantics {
-                                contentDescription =
-                                    Constants.CREATE_EVENT_ADD_PARTICIPANTS_BUTTON
+                                contentDescription = Constants.CREATE_EVENT_ADD_PARTICIPANTS_BUTTON
                             })
                 }
 
                 HorizontalDivider(
-                    thickness = Dimensions.CREATE_EVENT_LINE_THICKNESS, color = OrangeButton
+                    thickness = Dimensions.CREATE_EVENT_LINE_THICKNESS, color = Orange
                 )
+
                 Column(modifier = Modifier.fillMaxWidth()) {
                     data.value.participants.forEach {
                         DisplayUser(
@@ -275,19 +276,26 @@ fun CreateEventScreen(
                 }
             }
             if (data.value.showDatePicker) {
-                DatePickerModal(onDateSelected = { date ->
-                    date?.let {
-                        viewmodel.onDatePicked(date)
-                    }
-                }, onDismiss = { viewmodel.setShowDatePicker() })
+                DatePickerModal(
+                    System.currentTimeMillis(),
+                    onDateSelected = { date ->
+                        date?.let {
+                            viewmodel.onDatePicked(date)
+                        }
+                    }, onDismiss = { viewmodel.setShowDatePicker() })
             }
 
+
             if (data.value.showTimePicker) {
-                TimePickerModal(onConfirm = { time ->
+                TimePickerModal(
+                    System.currentTimeMillis(),
+                    onConfirm = { time ->
                     viewmodel.onTimePicked(time)
                     viewmodel.setShowTimePicker()
                 }, onDismiss = { viewmodel.setShowTimePicker() })
             }
+
+            }
         }
-    }
 }
+

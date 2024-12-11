@@ -1,5 +1,6 @@
 package com.example.hangoutz.ui.screens.eventDetailsOwner
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -20,14 +21,17 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -42,17 +46,23 @@ import com.example.hangoutz.ui.components.InputField
 import com.example.hangoutz.ui.components.InputFieldWithIcon
 import com.example.hangoutz.ui.components.ParticipantUI
 import com.example.hangoutz.ui.components.TimePickerModal
+import com.example.hangoutz.ui.screens.friends.FriendsPopup
 import com.example.hangoutz.ui.theme.Ivory
+import com.example.hangoutz.ui.theme.Orange
 import com.example.hangoutz.ui.theme.TopBarBackgroundColor
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Dimensions
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EventOwnerDetailsScreen(
     navController: NavController, viewmodel: EventDetailsOwnerViewModel = hiltViewModel()
 ) {
+    val context = LocalContext.current
     val data = viewmodel.uiState.collectAsState()
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val scope = rememberCoroutineScope()
     viewmodel.getEventIdFromController(navController)
 
     Scaffold(topBar = {
@@ -82,7 +92,25 @@ fun EventOwnerDetailsScreen(
                     Icon(painter = painterResource(id = R.drawable.trashicon),
                         contentDescription = "Image",
                         tint = Ivory,
-                        modifier = Modifier.clickable { viewmodel.deleteEvent() })
+                        modifier = Modifier.clickable {
+                            viewmodel.deleteEvent(
+                                onSuccess = {
+                                    Toast.makeText(
+                                        context,
+                                        Constants.DELETE_SUCCESS,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    navController.popBackStack()
+                                },
+                                onError = { errorMessage ->
+                                    Toast.makeText(
+                                        context,
+                                        Constants.DELETE_ERROR,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            )
+                        })
                 }
             },
             colors = TopAppBarDefaults.topAppBarColors(
@@ -113,16 +141,19 @@ fun EventOwnerDetailsScreen(
                     .weight(1f)
             ) {
                 data.value.title?.let {
-                    InputField(stringResource(R.string.event_title),
+                    InputField(
+                        stringResource(R.string.event_title),
                         it,
                         { viewmodel.onTitleChange(it) },
                         modifier = Modifier.semantics {
                             contentDescription = Constants.EVENT_OWNER_TITLE_FIELD
                         },
-                        true
+                        true,
+                        false,
+                        data.value.isTitleError
                     )
                 }
-
+                data.value.errorTitle.takeIf { it.isNotBlank() }?.let { ErrorMessage(it) }
                 data.value.description?.let {
                     InputField(
                         stringResource(R.string.event_desc),
@@ -131,34 +162,39 @@ fun EventOwnerDetailsScreen(
                         modifier = Modifier.semantics {
                             contentDescription = Constants.EVENT_OWNER_DESC_FIELD
                         },
-                        true,
+                        true, false, data.value.isDescError,
                         singleLine = false
                     )
                 }
-
+                data.value.errorDesc.takeIf { it.isNotBlank() }?.let { ErrorMessage(it) }
                 data.value.city?.let {
-                    InputField(stringResource(R.string.event_city),
+                    InputField(
+                        stringResource(R.string.event_city),
                         it,
                         { viewmodel.onCityChange(it) },
                         modifier = Modifier.semantics {
                             contentDescription = Constants.EVENT_OWNER_CITY_FIELD
                         },
-                        true
+                        true, false, data.value.isCityError
                     )
                 }
+                data.value.errorCity.takeIf { it.isNotBlank() }?.let { ErrorMessage(it) }
                 data.value.street?.let {
-                    InputField(stringResource(R.string.event_street),
+                    InputField(
+                        stringResource(R.string.event_street),
                         it,
                         { viewmodel.onStreetChange(it) },
                         modifier = Modifier.semantics {
                             contentDescription = Constants.EVENT_OWNER_STREET_FIELD
                         },
-                        true
+                        true, false, data.value.isStreetError
                     )
                 }
+                data.value.errorStreet?.takeIf { it.isNotBlank() }?.let { ErrorMessage(it) }
 
                 data.value.place?.let {
-                    InputField(stringResource(R.string.event_place),
+                    InputField(
+                        stringResource(R.string.event_place),
                         it,
                         { viewmodel.onPlaceChange(it) },
                         modifier = Modifier.semantics {
@@ -166,9 +202,10 @@ fun EventOwnerDetailsScreen(
                         },
                         true,
                         false,
-                        data.value.isError
+                        data.value.isPlaceError
                     )
                 }
+                data.value.errorPlace?.takeIf { it.isNotBlank() }?.let { ErrorMessage(it) }
 
                 Row(
                     modifier = Modifier
@@ -192,7 +229,7 @@ fun EventOwnerDetailsScreen(
                             true,
                             true,
                             { viewmodel.setShowDatePicker() },
-                            data.value.isError
+                            data.value.isDateError
                         )
                     }
 
@@ -210,11 +247,12 @@ fun EventOwnerDetailsScreen(
                             true,
                             true,
                             { viewmodel.setShowTimePicker() },
-                            data.value.isError
+                            data.value.isDateError
                         )
                     }
                 }
                 data.value.errorMessage?.let { ErrorMessage(it) }
+
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -234,24 +272,27 @@ fun EventOwnerDetailsScreen(
                     Image(painter = painterResource(id = R.drawable.addevent),
                         contentDescription = "",
                         modifier = Modifier
-                            .clickable { }
+                            .clickable { scope.launch { sheetState.show() }}
                             .semantics {
                                 contentDescription = Constants.EVENT_OWNER_ADD_PARTICIPANTS_BUTTON
                             })
                 }
                 HorizontalDivider(
-                    thickness = Dimensions.CREATE_EVENT_LINE_THICKNESS, color = Ivory
+                    thickness = Dimensions.CREATE_EVENT_LINE_THICKNESS, color = Orange
                 )
                 LaunchedEffect(data.value.eventId) {
                     data.value.eventId?.let {
-                        viewmodel.getParticipants()
+                        viewmodel.getData()
                     }
                 }
-                val participants = data.value.participants
+                val participants = data.value.participantFriends
                 participants.forEach { participant ->
-                    ParticipantUI(participant = participant, false, {})
+                    ParticipantUI(
+                        participant = participant,
+                        true,
+                        { viewmodel.removeUser(participant.id) })
                 }
-                //TODO put participants here, use participantUI component (check event details screen)
+
             }
             Column(
             ) {
@@ -262,12 +303,47 @@ fun EventOwnerDetailsScreen(
                             contentDescription = Constants.EVENT_OWNER_EDIT_BUTTON
                         },
                     onClick = {
-                        viewmodel.editEvent(onSuccess = {})
+                        viewmodel.editEvent(onSuccess = {
+                            Toast.makeText(
+                                context,
+                                Constants.EVENT_EDITED_SUCCESSFULLY,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            navController.popBackStack()
+                        })
                     })
+                if (sheetState.isVisible) {
+                    FriendsPopup(userList = data.value.listOfFriends,
+                        searchQuery = data.value.searchQuery,
+                        isLoading = data.value.isLoading,
+                        clearText = { viewmodel.clearSearchQuery() },
+                        sheetState = sheetState,
+                        showBottomSheet = {
+                        },
+                        onTextInput = { searchQuery ->
+                            viewmodel.onSearchInput(searchQuery)
+                        },
+                        participantSelected = data.value.selectedParticipants,
+                        isCheckList = true,
+                        onAdd = {
+                            viewmodel.addSelectedParticipants()
+                            scope.launch { sheetState.hide() }
+                            viewmodel.clearSearchQuery()
+                        },
+                        onChange = { isChecked, user ->
+                            if (isChecked) {
+                                viewmodel.addParticipant(user)
+                            } else {
+                                viewmodel.removeParticipant(user)
+                            }
+                        })
+                }
             }
 
             if (data.value.showDatePicker) {
-                DatePickerModal(onDateSelected = { date ->
+                DatePickerModal(
+                    viewmodel.getInitialDateForPicker(),
+                    onDateSelected = { date ->
                     date?.let {
                         viewmodel.onDatePicked(date)
                     }
@@ -275,7 +351,9 @@ fun EventOwnerDetailsScreen(
             }
 
             if (data.value.showTimePicker) {
-                TimePickerModal(onConfirm = { time ->
+                TimePickerModal(
+                    viewmodel.getInitialTimeForPicker(),
+                    onConfirm = { time ->
                     viewmodel.onTimePicked(time)
                     viewmodel.setShowTimePicker()
                 }, onDismiss = { viewmodel.setShowTimePicker() })

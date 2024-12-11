@@ -6,18 +6,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.hangoutz.data.local.SharedPreferencesManager
+import com.example.hangoutz.data.models.Friend
 import com.example.hangoutz.data.models.UpdateEventStatusDTO
 import com.example.hangoutz.data.models.User
 import com.example.hangoutz.domain.repository.EventRepository
 import com.example.hangoutz.domain.repository.InviteRepository
 import com.example.hangoutz.domain.repository.UserRepository
+import com.example.hangoutz.utils.formatDateTime
+import com.example.hangoutz.utils.mapUserToFriend
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Locale
 import java.util.UUID
 import javax.inject.Inject
 
@@ -30,7 +31,7 @@ data class EventDetailsData(
     var place: String = "",
     var date: String = "",
     var time: String = "",
-    var participants: List<User> = emptyList()
+    var participants: List<Friend> = emptyList()
 )
 
 @HiltViewModel
@@ -52,19 +53,6 @@ class EventDetailsViewModel @Inject constructor(
     }
 
 
-    fun formatDateTime(dateTimeString: String): Pair<String, String> {
-
-        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
-        val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
-        val timeFormat = SimpleDateFormat("HH.mm", Locale.getDefault())
-
-        val date = inputFormat.parse(dateTimeString)
-        val formattedDate = dateFormat.format(date)
-        val formattedTime = timeFormat.format(date)
-
-        return Pair(formattedDate, formattedTime)
-    }
-
     fun onLeave(onSuccess: () -> Unit, onFailure: (String) -> Unit) {
         viewModelScope.launch {
             try {
@@ -80,15 +68,14 @@ class EventDetailsViewModel @Inject constructor(
 
                     if (response.isSuccessful) {
                         getParticipants()
-
-                        Log.d("EventDetailsViewModel", "Successfully left event: $eventId")
+                        Log.d("INFO", "Successfully left event: $eventId")
                         onSuccess()
                     } else {
-                        Log.e("EventDetailsViewModel", "Failed to leave event: ${response.code()}")
+                        Log.e("ERROR", "Failed to leave event: ${response.code()}")
                         onFailure("Failed to leave the event. Please try again.")
                     }
                 } else {
-                    Log.e("EventDetailsViewModel", "User ID or Event ID is null")
+                    Log.e("ERROR", "User ID or Event ID is null")
                     onFailure("Unable to identify the user or event.")
                 }
             } catch (e: Exception) {
@@ -100,6 +87,7 @@ class EventDetailsViewModel @Inject constructor(
 
     fun getParticipants() {
         viewModelScope.launch {
+
             val eventResponse = _uiState.value.eventId?.let { eventRepository.getEvent(it) }
             if (eventResponse?.isSuccessful == true && eventResponse.body() != null) {
                 val event = eventResponse.body()?.first()
@@ -119,11 +107,6 @@ class EventDetailsViewModel @Inject constructor(
                     _uiState.value =
                         _uiState.value.copy(date = formattedDate, time = formattedTime)
 
-                    Log.d(
-                        "EventDetailsViewModel",
-                        "Fetching event details for eventId: ${_uiState.value.eventId}"
-                    )
-
                     val invitesResponse =
                         _uiState.value.eventId?.let { inviteRepository.getInvitesByEventId(it) }
                     if (invitesResponse?.isSuccessful == true && invitesResponse.body() != null) {
@@ -139,7 +122,7 @@ class EventDetailsViewModel @Inject constructor(
                                 user.id in acceptedUserIds
                             }
 
-                            _uiState.value = _uiState.value.copy(participants = acceptedUsers)
+                            _uiState.value = _uiState.value.copy(participants = mapUserToFriend(acceptedUsers))
                         }
                     }
                 }
@@ -147,5 +130,3 @@ class EventDetailsViewModel @Inject constructor(
         }
     }
 }
-
-
