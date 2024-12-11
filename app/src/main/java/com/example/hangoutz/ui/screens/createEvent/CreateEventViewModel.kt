@@ -60,7 +60,6 @@ class CreateEventViewModel @Inject constructor(
         if (validateInputs()) {
             val formattedDateTime = formatForDatabase(uiState.value.date, _uiState.value.time) ?: ""
             _uiState.value = _uiState.value.copy(formattedDateForDatabase = formattedDateTime)
-
             _errorState.value = _errorState.value.copy(errorMessage = "")
 
             viewModelScope.launch {
@@ -85,7 +84,6 @@ class CreateEventViewModel @Inject constructor(
                         eventsRepository.getEventsByOwnerTitleAndDate(
                             it,
                             _uiState.value.title,
-
                             )
                     }
                     if (response != null && response.isSuccessful) {
@@ -94,18 +92,17 @@ class CreateEventViewModel @Inject constructor(
                         if (!events.isNullOrEmpty()) {
                             val eventId = events.first().id
                             postFriendInvites(eventId, _uiState.value.participants)
-
                         } else {
                             Log.e("Error", "An error has occurred while getting user")
                         }
                     }
-
                     Log.i("Info", "Successfully patched event")
                 }
                 onSuccess()
             }
         } else {
             Log.e("Error", "Fields marked with * cant be empty")
+            onFailure()
         }
     }
 
