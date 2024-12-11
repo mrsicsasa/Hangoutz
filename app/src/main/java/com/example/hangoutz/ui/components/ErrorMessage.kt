@@ -10,7 +10,6 @@ import androidx.compose.ui.Modifier
 import com.example.hangoutz.ui.theme.Error
 import com.example.hangoutz.utils.Dimensions
 
-
 @Composable
 fun ErrorMessage(errorMessage: String, modifier: Modifier = Modifier) {
     Row(

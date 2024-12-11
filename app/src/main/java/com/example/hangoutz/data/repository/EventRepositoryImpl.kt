@@ -3,6 +3,7 @@ package com.example.hangoutz.data.repository
 import com.example.hangoutz.data.models.Event
 import com.example.hangoutz.data.models.EventCardDPO
 import com.example.hangoutz.data.models.EventRequest
+import com.example.hangoutz.data.models.EventResponse
 import com.example.hangoutz.data.models.EventsFromInvites
 import com.example.hangoutz.data.remote.EventAPI
 import com.example.hangoutz.domain.repository.EventRepository
@@ -40,12 +41,34 @@ class EventRepositoryImpl @Inject constructor(
     override suspend fun patchEventById(
         id: String,
         newTitle: String,
+        newDesc: String,
+        newCity: String,
+        newStreet: String,
         newPlace: String,
-        newDate: String
+        newDate: String,
+        owner: String
     ): Response<Unit> {
         return api.patchEventById(
-            id = "eq.${id}", EventRequest(title = newTitle, place = newPlace, date = newDate)
+            id = "eq.${id}", EventRequest(
+                title = newTitle, place = newPlace, date = newDate,
+                description = newDesc,
+                city = newCity,
+                street = newStreet,
+                owner = owner
+            )
         )
     }
+
+    override suspend fun insertEvent(eventRequest: EventRequest): Response<Unit> {
+        return api.insertEvent(eventRequest)
+    }
+
+    override suspend fun getEventsByOwnerTitleAndDate(
+        ownerId: String,
+        title: String
+    ): Response<List<EventResponse>> {
+        return api.getEventsByOwnerTitleAndDate(owner = "eq.$ownerId", title = "eq.$title")
+    }
+
 
 }

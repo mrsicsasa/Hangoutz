@@ -167,10 +167,11 @@ object Dimensions {
     val CREATE_EVENT_REMOVE_PARTICIPANT_ICON_SIZE = 25.dp
     val CREATE_EVENT_SEARCH_ICON_SIZE = 40.dp
 
-
     //TIME PICKER
     val TIME_PICKER_CORNERS = 20.dp
-
     //EVENT DETAILS SCREEN
     val EVENT_DETAILS_TOP_PADDING = 35.dp
+
+    const val MAX_LENGTH = 25
+    const val MAX_LENGTH_DESC = 100
 }

@@ -14,6 +14,8 @@ import com.example.hangoutz.domain.repository.FriendsRepository
 import com.example.hangoutz.domain.repository.InviteRepository
 import com.example.hangoutz.domain.repository.UserRepository
 import com.example.hangoutz.utils.Constants
+import com.example.hangoutz.utils.Dimensions
+import com.example.hangoutz.utils.checkIfInPast
 import com.example.hangoutz.utils.convertTimeToMillis
 import com.example.hangoutz.utils.formatDateTime
 import com.example.hangoutz.utils.formatForDatabase
@@ -92,47 +94,46 @@ class EventDetailsOwnerViewModel @Inject constructor(
         if (validateInputs()) {
             _uiState.value = _uiState.value.copy(errorMessage = "")
             viewModelScope.launch {
-
+                val userId = SharedPreferencesManager.getUserId(context)
                 val eventResponse = eventRepository.patchEventById(
                     id = _uiState.value.eventId.toString(),
                     newTitle = _uiState.value.title,
+                    newDesc = _uiState.value.description,
+                    newCity = _uiState.value.city,
+                    newStreet = _uiState.value.street,
                     newPlace = _uiState.value.place,
                     newDate = _uiState.value.formattedDateForDatabase,
+                    owner = userId ?: ""
                 )
                 if (eventResponse?.isSuccessful == true) {
                     insertNewParticipantsIntoDatabase(_uiState.value.eventId.toString())
                     onSuccess()
-
                     Log.i("Info", "Successfully patched event")
                 } else Log.e("Info", "${eventResponse.code()}")
             }
+
         } else {
             Log.e("Error", "Fields marked with * cant be empty")
         }
     }
 
-    fun insertNewParticipantsIntoDatabase(eventId: String) {
+    private fun insertNewParticipantsIntoDatabase(eventId: String) {
         viewModelScope.launch {
             for (participant in _uiState.value.participantFriends.filter { friend -> friend !in _uiState.value.participants }) {
                 val response = inviteRepository.insertInvite(
                     InviteRequest(
-                        "invited",
-                        participant.id.toString(),
-                        eventId
+                        "invited", participant.id.toString(), eventId
                     )
                 )
                 if (response.isSuccessful) {
                     Log.e("Info", "Successfully added new invites")
                 } else Log.e(
-                    "Info",
-                    "An error has occurred while adding new invites ${response.code()}"
+                    "Info", "An error has occurred while adding new invites ${response.code()}"
                 )
 
             }
         }
     }
-
-
 
     fun deleteEvent(onSuccess: () -> Unit, onError: (String) -> Unit) {
         val eventId = _uiState.value.eventId
@@ -144,7 +145,6 @@ class EventDetailsOwnerViewModel @Inject constructor(
             val deleteParticipantResponses = _uiState.value.participants.map { participant ->
                 inviteRepository.deleteInviteByEventId(participant.id, eventId)
             }
-
             val allParticipantDeletionsSuccessful =
                 deleteParticipantResponses.all { it?.isSuccessful == true }
             if (allParticipantDeletionsSuccessful) {
@@ -162,7 +162,6 @@ class EventDetailsOwnerViewModel @Inject constructor(
             }
         }
     }
-
 
     fun getInitialTimeForPicker(): Long {
         val time = _uiState.value.time
@@ -186,24 +185,30 @@ class EventDetailsOwnerViewModel @Inject constructor(
     fun removeUser(userID: UUID) {
 
         viewModelScope.launch {
-            val updatedParticipants = _uiState.value.participantFriends.filter { it.id != userID }
-            _uiState.value = _uiState.value.copy(participantFriends = updatedParticipants)
 
-            val response =
-                _uiState.value.eventId?.let { inviteRepository.deleteInviteByEventId(userID, it) }
+            viewModelScope.launch {
+                val updatedParticipants =
+                    _uiState.value.participantFriends.filter { it.id != userID }
+                _uiState.value = _uiState.value.copy(participantFriends = updatedParticipants)
 
-            if (response?.isSuccessful == true) {
-                Log.i("RemoveUser", "User successfully removed from event")
-            } else {
-                Log.e("RemoveUser", "Failed to remove user from event")
+                val response = _uiState.value.eventId?.let {
+                    inviteRepository.deleteInviteByEventId(
+                        userID, it
+                    )
+                }
+
+                if (response?.isSuccessful == true) {
+                    Log.i("RemoveUser", "User successfully removed from event")
+                } else {
+                    Log.e("RemoveUser", "Failed to remove user from event")
+                }
             }
+            getData()
         }
-        getData()
     }
 
     fun getData() {
         viewModelScope.launch {
-
             val eventResponse = _uiState.value.eventId?.let { eventRepository.getEvent(it) }
             if (eventResponse?.isSuccessful == true && eventResponse.body() != null) {
                 val event = eventResponse.body()?.first()
@@ -218,11 +223,13 @@ class EventDetailsOwnerViewModel @Inject constructor(
                     )
                     val dateTemp = _uiState.value.date ?: ""
                     val (formattedDate, formattedTime) = formatDateTime(dateTemp)
-
                     _uiState.value = _uiState.value.copy(date = formattedDate, time = formattedTime)
 
-                    val invitesResponse =
-                        _uiState.value.eventId?.let { inviteRepository.getInvitedOrAcceptedByEventId(it) }
+                    val invitesResponse = _uiState.value.eventId?.let {
+                        inviteRepository.getInvitedOrAcceptedByEventId(
+                            it
+                        )
+                    }
                     if (invitesResponse?.isSuccessful == true && invitesResponse.body() != null) {
                         val acceptedUserIds: List<UUID> =
                             invitesResponse.body()!!.map { invite -> invite.userId }
@@ -232,8 +239,11 @@ class EventDetailsOwnerViewModel @Inject constructor(
                             val acceptedUsers: List<User> = allUsers.filter { user ->
                                 user.id in acceptedUserIds
                             }
-                            _uiState.value =
-                                _uiState.value.copy(participants = mapUserToFriend(acceptedUsers))
+                            _uiState.value = _uiState.value.copy(
+                                participants = mapUserToFriend(
+                                    acceptedUsers
+                                )
+                            )
                             _uiState.value =
                                 _uiState.value.copy(participantFriends = _uiState.value.participantFriends + _uiState.value.participants.filter { friend -> friend !in _uiState.value.participantFriends })
 
@@ -257,16 +267,14 @@ class EventDetailsOwnerViewModel @Inject constructor(
 
     private fun getFriends() {
         _uiState.value = _uiState.value.copy(
-            listOfFriends = emptyList(),
-            isLoading = true
+            listOfFriends = emptyList(), isLoading = true
         )
         viewModelScope.launch {
             val response = withContext(Dispatchers.IO) {
                 SharedPreferencesManager.getUserId(context)?.let {
                     MutableStateFlow(
                         friendsRepository.getFriendsFromUserId(
-                            it,
-                            _uiState.value.searchQuery
+                            it, _uiState.value.searchQuery
                         )
                     )
                 }
@@ -286,8 +294,7 @@ class EventDetailsOwnerViewModel @Inject constructor(
 
     fun clearSearchQuery() {
         _uiState.value = _uiState.value.copy(
-            searchQuery = "",
-            listOfFriends = emptyList()
+            searchQuery = "", listOfFriends = emptyList()
         )
     }
 
@@ -314,91 +321,6 @@ class EventDetailsOwnerViewModel @Inject constructor(
     fun checkLength(text: String, length: Int): Boolean {
         if (text.length <= length) return true
         else return false
-    }
-
-    fun isEventPassed(date: String): Boolean {
-        var isValid: Boolean = false
-        val inputFormat = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
-        try {
-            val inputDateTime = inputFormat.parse(date)
-            if (inputDateTime != null && inputDateTime.before(Date())) {
-                isValid = true
-            } else isValid = false
-        } catch (e: Exception) {
-            Log.e("Error", "Exception while parsing")
-        }
-        return isValid
-    }
-
-    private fun validateInputs(): Boolean {
-
-        _uiState.value = _uiState.value.copy(
-            errorMessage = "",
-            errorTitle = "",
-            errorDesc = "",
-            errorCity = "",
-            errorStreet = "",
-            errorDate = "",
-            errorPlace = ""
-        )
-        var validateTitle = _uiState.value.title.trim().isEmpty()
-        var validatePlace = _uiState.value.place.trim().isEmpty()
-        var validateDate = _uiState.value.date.trim().isEmpty()
-        var validateTime = _uiState.value.time.trim().isEmpty()
-        var validateDesc = false
-        var validateCity = false
-        var validateStreet = false
-
-        if (validateTitle || validatePlace || validateDate || validateTime) {
-            _uiState.value = _uiState.value.copy(errorMessage = Constants.ERROR_EMPTY_FIELD)
-        }
-
-        if (!validateTitle && !checkLength(_uiState.value.title, Constants.MAX_LENGTH)) {
-            validateTitle = true
-            _uiState.value = _uiState.value.copy(errorTitle = Constants.ERROR_TOO_LONG)
-        }
-
-        if (!validatePlace && !checkLength(_uiState.value.place, Constants.MAX_LENGTH)) {
-            validatePlace = true
-            _uiState.value = _uiState.value.copy(errorPlace = Constants.ERROR_TOO_LONG)
-        }
-
-        if (!validateDate && !validateTime) {
-            val combinedInput = "${_uiState.value.date} ${_uiState.value.time}"
-            if (isEventPassed(combinedInput)) {
-                validateDate = true
-                validateTime = true
-                _uiState.value =
-                    _uiState.value.copy(errorMessage = Constants.DATE_IN_PAST)
-            }
-        }
-
-        if (_uiState.value.description.length > Constants.MAX_LENGTH_DESC) {
-            validateDesc = true
-            _uiState.value = _uiState.value.copy(errorDesc = Constants.ERROR_TOO_LONG_DESC)
-        }
-
-        if (_uiState.value.city.length > Constants.MAX_LENGTH) {
-            validateCity = true
-            _uiState.value = _uiState.value.copy(errorCity = Constants.ERROR_TOO_LONG)
-        }
-
-        if (_uiState.value.street.length > Constants.MAX_LENGTH) {
-            validateStreet = true
-            _uiState.value = _uiState.value.copy(errorStreet = Constants.ERROR_TOO_LONG)
-        }
-
-        _uiState.value = _uiState.value.copy(
-            isTitleError = validateTitle,
-            isPlaceError = validatePlace,
-            isDateError = validateDate,
-            isTimeError = validateTime,
-            isDescError = validateDesc,
-            isCityError = validateCity,
-            isStreetError = validateStreet
-        )
-
-        return !(validateTitle || validatePlace || validateDate || validateTime || validateDesc || validateCity || validateStreet)
     }
 
     fun onTimePicked(date: Long) {
@@ -457,6 +379,118 @@ class EventDetailsOwnerViewModel @Inject constructor(
 
     fun onTimeChange(time: String) {
         _uiState.value = _uiState.value.copy(time = time, isTimeError = false)
+    }
 
+    private fun validateInputs(): Boolean {
+        resetErrorState()
+
+        val validateTitle = validateTitleField()
+        val validatePlace = validatePlaceField()
+        val validateDesc = validateDescriptionField()
+        val validateCity = validateCityField()
+        val validateStreet = validateStreetField()
+        val validateDateTime = checkCombinedDateTime()
+
+        updateUiState(
+            validateTitle,
+            validatePlace,
+            validateDateTime,
+            validateDesc,
+            validateCity,
+            validateStreet
+        )
+
+        return !(validateTitle || validatePlace || validateDateTime || validateDesc || validateCity || validateStreet)
+    }
+
+    private fun resetErrorState() {
+        _uiState.value = _uiState.value.copy(
+            errorMessage = "",
+            errorTitle = "",
+            errorDesc = "",
+            errorCity = "",
+            errorStreet = "",
+            errorDate = "",
+            errorPlace = ""
+        )
+    }
+
+    private fun validateTitleField(): Boolean {
+        var isError = _uiState.value.title.trim().isEmpty()
+        if (isError) {
+            _uiState.value = _uiState.value.copy(errorMessage = Constants.ERROR_EMPTY_FIELD)
+            Log.e("e", "empty title error ${_uiState.value.errorMessage}")
+        } else if (!checkLength(_uiState.value.title, Dimensions.MAX_LENGTH)) {
+            isError = true
+            _uiState.value = _uiState.value.copy(errorTitle = Constants.ERROR_TOO_LONG)
+        }
+        return isError
+    }
+
+    private fun validatePlaceField(): Boolean {
+        var isError = _uiState.value.place.trim().isEmpty()
+        if (!isError && !checkLength(_uiState.value.place, Dimensions.MAX_LENGTH)) {
+            isError = true
+            _uiState.value = _uiState.value.copy(errorPlace = Constants.ERROR_TOO_LONG)
+        }
+        return isError
+    }
+
+    private fun checkCombinedDateTime(): Boolean {
+        val combinedInput = "${_uiState.value.date} ${_uiState.value.time}"
+        if (_uiState.value.date.isNullOrEmpty() || _uiState.value.time.isNullOrEmpty()) {
+            _uiState.value = _uiState.value.copy(errorMessage = Constants.ERROR_EMPTY_FIELD)
+            return true
+        } else if (checkIfInPast(combinedInput)) {
+            _uiState.value = _uiState.value.copy(errorMessage = Constants.DATE_IN_PAST)
+            return true
+        } else {
+            return false
+        }
+    }
+
+    private fun validateDescriptionField(): Boolean {
+        return if (_uiState.value.description.length > Dimensions.MAX_LENGTH_DESC) {
+            _uiState.value = _uiState.value.copy(errorDesc = Constants.ERROR_TOO_LONG_DESC)
+            true
+        } else {
+            false
+        }
+    }
+
+    private fun validateCityField(): Boolean {
+        return if (_uiState.value.city.length > Dimensions.MAX_LENGTH) {
+            _uiState.value = _uiState.value.copy(errorCity = Constants.ERROR_TOO_LONG)
+            true
+        } else {
+            false
+        }
+    }
+
+    private fun validateStreetField(): Boolean {
+        return if (_uiState.value.street.length > Dimensions.MAX_LENGTH) {
+            _uiState.value = _uiState.value.copy(errorStreet = Constants.ERROR_TOO_LONG)
+            true
+        } else {
+            false
+        }
+    }
+
+    private fun updateUiState(
+        validateTitle: Boolean,
+        validatePlace: Boolean,
+        validateDateTime: Boolean,
+        validateDesc: Boolean,
+        validateCity: Boolean,
+        validateStreet: Boolean
+    ) {
+        _uiState.value = _uiState.value.copy(
+            isTitleError = validateTitle,
+            isPlaceError = validatePlace,
+            isDateError = validateDateTime,
+            isDescError = validateDesc,
+            isCityError = validateCity,
+            isStreetError = validateStreet
+        )
     }
 }

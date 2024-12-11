@@ -35,17 +35,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.example.hangoutz.R
 import com.example.hangoutz.ui.components.ActionButton
 import com.example.hangoutz.ui.components.DatePickerModal
 import com.example.hangoutz.ui.components.DisplayUser
+import com.example.hangoutz.ui.components.ErrorMessage
 import com.example.hangoutz.ui.components.InputField
 import com.example.hangoutz.ui.components.InputFieldWithIcon
 import com.example.hangoutz.ui.components.TimePickerModal
 import com.example.hangoutz.ui.screens.friends.FriendsPopup
 import com.example.hangoutz.ui.theme.Ivory
 import com.example.hangoutz.ui.theme.Orange
-import com.example.hangoutz.ui.theme.OrangeButton
 import com.example.hangoutz.ui.theme.TopBarBackgroundColor
 import com.example.hangoutz.utils.Constants
 import com.example.hangoutz.utils.Dimensions
@@ -55,9 +56,10 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateEventScreen(
-    viewmodel: CreateEventViewModel = hiltViewModel()
+    navController: NavController, viewmodel: CreateEventViewModel = hiltViewModel()
 ) {
     val data = viewmodel.uiState.collectAsState()
+    val errordata = viewmodel.errorState.collectAsState()
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -113,8 +115,12 @@ fun CreateEventScreen(
                     modifier = Modifier.semantics {
                         contentDescription = Constants.CREATE_EVENT_TITLE_FIELD
                     },
-                    true
+                    true,
+                    false,
+                    data.value.isTitleError
                 )
+                errordata.value.errorTitle.takeIf { it.isNotBlank() }?.let { ErrorMessage(it) }
+
 
                 InputField(
                     stringResource(R.string.event_desc),
@@ -123,9 +129,11 @@ fun CreateEventScreen(
                     modifier = Modifier.semantics {
                         contentDescription = Constants.CREATE_EVENT_DESC_FIELD
                     },
-                    true,
+                    true, false, data.value.isDescError,
                     singleLine = false
+
                 )
+                errordata.value.errorDesc.takeIf { it.isNotBlank() }?.let { ErrorMessage(it) }
 
                 InputField(
                     stringResource(R.string.event_city),
@@ -134,8 +142,10 @@ fun CreateEventScreen(
                     modifier = Modifier.semantics {
                         contentDescription = Constants.CREATE_EVENT_CITY_FIELD
                     },
-                    true
+                    true, false, data.value.isCityError
                 )
+                errordata.value.errorCity.takeIf { it.isNotBlank() }?.let { ErrorMessage(it) }
+
                 InputField(
                     stringResource(R.string.event_street),
                     data.value.street,
@@ -143,8 +153,10 @@ fun CreateEventScreen(
                     modifier = Modifier.semantics {
                         contentDescription = Constants.CREATE_EVENT_STREET_FIELD
                     },
-                    true
+                    true, false, data.value.isStreetError
                 )
+
+                errordata.value.errorStreet?.takeIf { it.isNotBlank() }?.let { ErrorMessage(it) }
 
                 InputField(
                     stringResource(R.string.event_place),
@@ -153,8 +165,12 @@ fun CreateEventScreen(
                     modifier = Modifier.semantics {
                         contentDescription = Constants.CREATE_EVENT_PLACE_FIELD
                     },
-                    true
+                    true,
+                    false,
+                    data.value.isPlaceError
                 )
+
+                errordata.value.errorPlace?.takeIf { it.isNotBlank() }?.let { ErrorMessage(it) }
 
                 Row(
                     modifier = Modifier
@@ -163,8 +179,8 @@ fun CreateEventScreen(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(Dimensions.CREATE_EVENT_HORIZONTAL_SPACING)
                 ) {
-
-                    InputFieldWithIcon(stringResource(R.string.event_date),
+                    InputFieldWithIcon(
+                        stringResource(R.string.event_date),
                         data.value.date,
                         { viewmodel.onDateChange(it) },
                         modifier = Modifier
@@ -173,11 +189,14 @@ fun CreateEventScreen(
                                 contentDescription = Constants.CREATE_EVENT_DATE_FIELD
                             },
                         R.drawable.calendaricon,
-                        isEnabled = true,
-                        isReadOnly = true,
-                        onClick = { viewmodel.setShowDatePicker() })
+                        true,
+                        true,
+                        { viewmodel.setShowDatePicker() },
+                        data.value.isDateError
+                    )
 
-                    InputFieldWithIcon(stringResource(R.string.event_time),
+                    InputFieldWithIcon(
+                        stringResource(R.string.event_time),
                         data.value.time,
                         { viewmodel.onTimeChange(it) },
                         modifier = Modifier
@@ -186,10 +205,14 @@ fun CreateEventScreen(
                                 contentDescription = Constants.CREATE_EVENT_TIME_FIELD
                             },
                         R.drawable.clockicon,
-                        isEnabled = true,
-                        isReadOnly = true,
-                        onClick = { viewmodel.setShowTimePicker() })
+                        true,
+                        true,
+                        { viewmodel.setShowTimePicker() },
+                        data.value.isDateError
+                    )
+
                 }
+                errordata.value.errorMessage?.let { ErrorMessage(it) }
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -214,11 +237,9 @@ fun CreateEventScreen(
                                 contentDescription = Constants.CREATE_EVENT_ADD_PARTICIPANTS_BUTTON
                             })
                 }
-
                 HorizontalDivider(
                     thickness = Dimensions.CREATE_EVENT_LINE_THICKNESS, color = Orange
                 )
-
                 Column(modifier = Modifier.fillMaxWidth()) {
                     data.value.participants.forEach {
                         DisplayUser(
@@ -246,7 +267,21 @@ fun CreateEventScreen(
                             contentDescription = Constants.CREATE_EVENT_CREATE_BUTTON
                         },
                     onClick = {
-                        viewmodel.createEvent()
+                        viewmodel.createEvent(onSuccess = {
+                            Toast.makeText(
+                                context,
+                                Constants.EVENT_ADD,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            navController.popBackStack()
+                        },
+                            onFailure = {
+                                Toast.makeText(
+                                    context,
+                                    Constants.EVENT_ADD_ERROR,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            })
                     })
                 if (sheetState.isVisible) {
                     FriendsPopup(userList = data.value.listOfFriends,
@@ -285,17 +320,14 @@ fun CreateEventScreen(
                     }, onDismiss = { viewmodel.setShowDatePicker() })
             }
 
-
             if (data.value.showTimePicker) {
                 TimePickerModal(
                     System.currentTimeMillis(),
                     onConfirm = { time ->
-                    viewmodel.onTimePicked(time)
-                    viewmodel.setShowTimePicker()
-                }, onDismiss = { viewmodel.setShowTimePicker() })
-            }
-
+                        viewmodel.onTimePicked(time)
+                        viewmodel.setShowTimePicker()
+                    }, onDismiss = { viewmodel.setShowTimePicker() })
             }
         }
+    }
 }
-
