@@ -95,7 +95,6 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
                 viewmodel.updateBitmap(croppedBitmap)
             }
         )
-        //viewmodel.updateAvatarUri()
     } else {
         if (data.value.showBottomSheet) {
             ImageHandleDialog(
