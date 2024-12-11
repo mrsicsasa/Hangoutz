@@ -5,6 +5,8 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import java.text.SimpleDateFormat
+import com.example.hangoutz.data.models.Friend
+import com.example.hangoutz.data.models.User
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter.ofPattern
@@ -39,7 +41,8 @@ fun Int.toZeroPaddedString(): String {
 fun String.firstLetterUppercase(): String {
     return this.lowercase().replaceFirstChar { it.uppercase() }
 }
- fun formatDateTime(dateTimeString: String): Pair<String, String> {
+
+fun formatDateTime(dateTimeString: String): Pair<String, String> {
 
     val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm", Locale.getDefault())
     val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
@@ -52,7 +55,7 @@ fun String.firstLetterUppercase(): String {
     return Pair(formattedDate, formattedTime)
 }
 
-fun formatForDatabase(date : String, time : String) : String? {
+fun formatForDatabase(date: String, time: String): String? {
     val inputDate = date
     val inputTime = time
 
@@ -74,7 +77,17 @@ fun convertTimeToMillis(dateTimeString: String? = null): Long {
     }
 }
 
- fun checkIfInPast(date: String): Boolean {
+fun mapUserToFriend(userList: List<User>): List<Friend> {
+    val newParticipants = userList.map { user ->
+        Friend(
+            id = user.id,
+            name = user.name,
+            avatar = user.avatar,
+        )
+    }
+    return newParticipants
+}
+fun checkIfInPast(date: String): Boolean {
     var isValid: Boolean = false
     val inputFormat = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
     try {

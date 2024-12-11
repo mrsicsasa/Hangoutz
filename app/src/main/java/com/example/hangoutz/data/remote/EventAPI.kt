@@ -6,7 +6,6 @@ import com.example.hangoutz.data.models.EventCardDPO
 import com.example.hangoutz.data.models.EventRequest
 import com.example.hangoutz.data.models.EventResponse
 import com.example.hangoutz.data.models.EventsFromInvites
-import com.example.hangoutz.data.models.UserRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -14,7 +13,6 @@ import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Query
-
 
 interface EventAPI {
     @GET("${BuildConfig.REQUEST_URL}events?select=*&order=date")
@@ -54,6 +52,5 @@ interface EventAPI {
     suspend fun getEventsByOwnerTitleAndDate(
         @Query("owner") owner: String,
         @Query("title") title: String,
-      //  @Query("date")  date: String
     ): Response<List<EventResponse>>
 }

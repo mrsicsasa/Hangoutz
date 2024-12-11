@@ -30,10 +30,10 @@ fun TimePickerModal(
     onConfirm: (Long) -> Unit,
     onDismiss: () -> Unit,
 ) {
+
     val initialCalendar = Calendar.getInstance().apply {
         timeInMillis = initialTimeInMillis
     }
-
     val timePickerState = rememberTimePickerState(
         initialHour = initialCalendar.get(Calendar.HOUR_OF_DAY),
         initialMinute = initialCalendar.get(Calendar.MINUTE),

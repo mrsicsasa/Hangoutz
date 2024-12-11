@@ -214,4 +214,6 @@ object Constants {
 
     const val DATE_IN_PAST = "Date and time cannot be in the past"
 
+    const val MAX_LENGTH = 25
+    const val MAX_LENGTH_DESC = 100
 }
