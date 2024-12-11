@@ -142,16 +142,17 @@ class EventDetailsOwnerViewModel @Inject constructor(
             return
         }
         viewModelScope.launch {
-            val deleteParticipantResponses = _uiState.value.participants.map { participant ->
-                inviteRepository.deleteInviteByEventId(participant.id, eventId)
+
+            val deleteInvitesResponse = _uiState.value.eventId?.let {
+                inviteRepository.deleteAllInvitesByEventId(
+                    it
+                )
             }
-            val allParticipantDeletionsSuccessful =
-                deleteParticipantResponses.all { it?.isSuccessful == true }
-            if (allParticipantDeletionsSuccessful) {
+            if (deleteInvitesResponse?.isSuccessful == true) {
                 Log.i("EventDetailsOwner", "Successfully deleted invites for event")
 
                 val deleteEventResponse = eventRepository.deleteEvent(id = eventId)
-                if (deleteEventResponse?.isSuccessful == true) {
+                if (deleteEventResponse.isSuccessful) {
                     onSuccess()
                     Log.i("EventDetailsOwner", "Successfully deleted the event")
                 } else {
@@ -185,26 +186,23 @@ class EventDetailsOwnerViewModel @Inject constructor(
     fun removeUser(userID: UUID) {
 
         viewModelScope.launch {
+            val updatedParticipants = _uiState.value.participantFriends.filter { it.id != userID }
+            _uiState.value = _uiState.value.copy(participantFriends = updatedParticipants)
 
-            viewModelScope.launch {
-                val updatedParticipants =
-                    _uiState.value.participantFriends.filter { it.id != userID }
-                _uiState.value = _uiState.value.copy(participantFriends = updatedParticipants)
-
-                val response = _uiState.value.eventId?.let {
-                    inviteRepository.deleteInviteByEventId(
-                        userID, it
-                    )
-                }
-
-                if (response?.isSuccessful == true) {
-                    Log.i("RemoveUser", "User successfully removed from event")
-                } else {
-                    Log.e("RemoveUser", "Failed to remove user from event")
-                }
+            val response = _uiState.value.eventId?.let {
+                inviteRepository.deleteInviteByEventId(
+                    userID.toString(), it
+                )
             }
-            getData()
+
+            if (response?.isSuccessful == true) {
+                Log.i("RemoveUser", "User successfully removed from event")
+            } else {
+                Log.e("RemoveUser", "Failed to remove user from event")
+            }
         }
+        getData()
+
     }
 
     fun getData() {

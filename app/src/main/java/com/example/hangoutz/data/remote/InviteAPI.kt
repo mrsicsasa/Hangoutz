@@ -60,4 +60,9 @@ interface InviteAPI {
 
     @POST("${BuildConfig.REQUEST_URL}invites")
     suspend fun insertInvite(@Body invite: InviteRequest): Response<Unit>
+
+    @DELETE("${BuildConfig.REQUEST_URL}invites")
+    suspend fun deleteAllInvitesByEventId(
+        @Query("event_id") id: String,
+    ): Response<List<Invite>>
 }
