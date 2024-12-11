@@ -9,8 +9,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import com.example.hangoutz.R
 import com.example.hangoutz.ui.components.ActionButton
 import com.example.hangoutz.ui.theme.SilverCloud
 import com.example.hangoutz.utils.Constants
@@ -48,7 +50,7 @@ fun ImageCropperScreen(
         }
 
         ActionButton(
-            buttonText = "Select this area",
+            buttonText = stringResource(R.string.select_this_area),
             modifier = Modifier
                 .padding(bottom = Dimensions.PHOTO_PICKER_BUTTON_PADDING)
                 .semantics {
