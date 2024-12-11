@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.hangoutz.data.local.SharedPreferencesManager
 import com.example.hangoutz.data.models.Friend
-import com.example.hangoutz.data.models.UpdateEventStatusDTO
 import com.example.hangoutz.data.models.User
 import com.example.hangoutz.domain.repository.EventRepository
 import com.example.hangoutz.domain.repository.InviteRepository
@@ -56,15 +55,14 @@ class EventDetailsViewModel @Inject constructor(
     fun onLeave(onSuccess: () -> Unit, onFailure: (String) -> Unit) {
         viewModelScope.launch {
             try {
-                val userId = SharedPreferencesManager.getUserId(context) // Retrieve current user ID
+                val userId = SharedPreferencesManager.getUserId(context)
                 val eventId = _uiState.value.eventId
 
                 if (userId != null && eventId != null) {
-                    val response = inviteRepository.updateInviteStatus(
-                        userId,
-                        eventId,
-                        body = UpdateEventStatusDTO(event_status = "declined")
-                    )
+                    val response =
+                        inviteRepository.deleteInviteByEventId(
+                            userId, eventId
+                        )
 
                     if (response.isSuccessful) {
                         getParticipants()
@@ -74,9 +72,6 @@ class EventDetailsViewModel @Inject constructor(
                         Log.e("ERROR", "Failed to leave event: ${response.code()}")
                         onFailure("Failed to leave the event. Please try again.")
                     }
-                } else {
-                    Log.e("ERROR", "User ID or Event ID is null")
-                    onFailure("Unable to identify the user or event.")
                 }
             } catch (e: Exception) {
                 Log.e("EventDetailsViewModel", "Error leaving event: ${e.message}")
@@ -84,6 +79,7 @@ class EventDetailsViewModel @Inject constructor(
             }
         }
     }
+
 
     fun getParticipants() {
         viewModelScope.launch {

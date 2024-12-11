@@ -1,7 +1,6 @@
 package com.example.hangoutz.data.repository
 
 import com.example.hangoutz.data.models.CountOfAcceptedInvitesForEvent
-import com.example.hangoutz.data.models.EventRequest
 import com.example.hangoutz.data.models.Invite
 import com.example.hangoutz.data.models.InviteRequest
 import com.example.hangoutz.data.models.UpdateEventStatusDTO
@@ -45,7 +44,7 @@ class InviteRepositoryImpl @Inject constructor(invitesAPI: InviteAPI) : InviteRe
         return api.updateInviteStatus(userID = "eq.$userId", eventID = "eq.$eventId", body = body)
     }
 
-    override suspend fun deleteInviteByEventId(id: UUID, eventId: UUID): Response<Unit> {
+    override suspend fun deleteInviteByEventId(id: String, eventId: UUID): Response<Unit> {
         return api.deleteInviteByEventId(id = "eq.${id}", eventId = "eq.${eventId}")
     }
 

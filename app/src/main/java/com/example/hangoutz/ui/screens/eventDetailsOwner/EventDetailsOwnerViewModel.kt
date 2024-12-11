@@ -142,8 +142,16 @@ class EventDetailsOwnerViewModel @Inject constructor(
             return
         }
         viewModelScope.launch {
+
+            val invitesResponse = _uiState.value.eventId?.let {
+                inviteRepository.getInvitesByEventId(
+                    it
+                )
+            }
+            val invites = invitesResponse?.body()
+            //TODO
             val deleteParticipantResponses = _uiState.value.participants.map { participant ->
-                inviteRepository.deleteInviteByEventId(participant.id, eventId)
+                inviteRepository.deleteInviteByEventId(participant.id.toString(), eventId)
             }
             val allParticipantDeletionsSuccessful =
                 deleteParticipantResponses.all { it?.isSuccessful == true }
@@ -184,8 +192,6 @@ class EventDetailsOwnerViewModel @Inject constructor(
 
     fun removeUser(userID: UUID) {
 
-        viewModelScope.launch {
-
             viewModelScope.launch {
                 val updatedParticipants =
                     _uiState.value.participantFriends.filter { it.id != userID }
@@ -193,7 +199,7 @@ class EventDetailsOwnerViewModel @Inject constructor(
 
                 val response = _uiState.value.eventId?.let {
                     inviteRepository.deleteInviteByEventId(
-                        userID, it
+                        userID.toString(), it
                     )
                 }
 
@@ -204,7 +210,7 @@ class EventDetailsOwnerViewModel @Inject constructor(
                 }
             }
             getData()
-        }
+
     }
 
     fun getData() {

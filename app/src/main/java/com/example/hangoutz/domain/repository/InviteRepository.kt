@@ -1,7 +1,6 @@
 package com.example.hangoutz.domain.repository
 
 import com.example.hangoutz.data.models.CountOfAcceptedInvitesForEvent
-import com.example.hangoutz.data.models.EventRequest
 import com.example.hangoutz.data.models.Invite
 import com.example.hangoutz.data.models.InviteRequest
 import com.example.hangoutz.data.models.UpdateEventStatusDTO
@@ -16,6 +15,6 @@ interface InviteRepository {
     suspend fun getInvitedOrAcceptedByEventId(id: UUID): Response<List<Invite>>
     suspend fun getCountOfAcceptedInvitesByEvent(id: UUID): Response<List<CountOfAcceptedInvitesForEvent>>
     suspend fun updateInviteStatus(userId:String, eventId: UUID, body: UpdateEventStatusDTO): Response<Unit>
-    suspend fun deleteInviteByEventId(id: UUID, eventId: UUID): Response<Unit>
+    suspend fun deleteInviteByEventId(id: String, eventId: UUID): Response<Unit>
     suspend fun insertInvite(inviteRequest: InviteRequest): Response<Unit>
 }
