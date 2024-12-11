@@ -2,7 +2,6 @@ package com.example.hangoutz.data.remote
 
 import com.example.hangoutz.BuildConfig
 import com.example.hangoutz.data.models.CountOfAcceptedInvitesForEvent
-import com.example.hangoutz.data.models.EventRequest
 import com.example.hangoutz.data.models.Invite
 import com.example.hangoutz.data.models.InviteRequest
 import com.example.hangoutz.data.models.UpdateEventStatusDTO
@@ -56,7 +55,7 @@ interface InviteAPI {
     @DELETE("${BuildConfig.REQUEST_URL}invites")
     suspend fun deleteInviteByEventId(
         @Query("user_id") id: String,
-        @Query("event_id") eventId : String
+        @Query("event_id") eventId: String
     ): Response<Unit>
 
     @POST("${BuildConfig.REQUEST_URL}invites")

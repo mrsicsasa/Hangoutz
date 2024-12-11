@@ -272,7 +272,7 @@ fun EventOwnerDetailsScreen(
                     Image(painter = painterResource(id = R.drawable.addevent),
                         contentDescription = "",
                         modifier = Modifier
-                            .clickable { scope.launch { sheetState.show() }}
+                            .clickable { scope.launch { sheetState.show() } }
                             .semantics {
                                 contentDescription = Constants.EVENT_OWNER_ADD_PARTICIPANTS_BUTTON
                             })
@@ -342,18 +342,18 @@ fun EventOwnerDetailsScreen(
             if (data.value.showDatePicker) {
                 DatePickerModal(viewmodel.getInitialDateForPicker(),
                     onDateSelected = { date ->
-                    date?.let {
-                        viewmodel.onDatePicked(date)
-                    }
-                }, onDismiss = { viewmodel.setShowDatePicker() })
+                        date?.let {
+                            viewmodel.onDatePicked(date)
+                        }
+                    }, onDismiss = { viewmodel.setShowDatePicker() })
             }
 
             if (data.value.showTimePicker) {
-                TimePickerModal(   viewmodel.getInitialTimeForPicker(),
+                TimePickerModal(viewmodel.getInitialTimeForPicker(),
                     onConfirm = { time ->
-                    viewmodel.onTimePicked(time)
-                    viewmodel.setShowTimePicker()
-                }, onDismiss = { viewmodel.setShowTimePicker() })
+                        viewmodel.onTimePicked(time)
+                        viewmodel.setShowTimePicker()
+                    }, onDismiss = { viewmodel.setShowTimePicker() })
             }
         }
     }

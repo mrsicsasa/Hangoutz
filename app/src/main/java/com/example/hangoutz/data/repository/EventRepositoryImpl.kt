@@ -42,8 +42,8 @@ class EventRepositoryImpl @Inject constructor(
         id: String,
         newTitle: String,
         newDesc: String,
-        newCity : String,
-        newStreet : String,
+        newCity: String,
+        newStreet: String,
         newPlace: String,
         newDate: String,
         owner: String
@@ -51,18 +51,22 @@ class EventRepositoryImpl @Inject constructor(
         return api.patchEventById(
             id = "eq.${id}", EventRequest(
                 title = newTitle, place = newPlace, date = newDate,
-                description =  newDesc,
+                description = newDesc,
                 city = newCity,
                 street = newStreet,
                 owner = owner
             )
         )
     }
+
     override suspend fun insertEvent(eventRequest: EventRequest): Response<Unit> {
         return api.insertEvent(eventRequest)
     }
 
-    override suspend fun getEventsByOwnerTitleAndDate(ownerId: String, title: String): Response<List<EventResponse>> {
+    override suspend fun getEventsByOwnerTitleAndDate(
+        ownerId: String,
+        title: String
+    ): Response<List<EventResponse>> {
         return api.getEventsByOwnerTitleAndDate(owner = "eq.$ownerId", title = "eq.$title")
     }
 

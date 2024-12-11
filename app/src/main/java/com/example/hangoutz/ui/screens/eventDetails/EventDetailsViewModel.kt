@@ -13,7 +13,6 @@ import com.example.hangoutz.domain.repository.EventRepository
 import com.example.hangoutz.domain.repository.InviteRepository
 import com.example.hangoutz.domain.repository.UserRepository
 import com.example.hangoutz.utils.formatDateTime
-import com.example.hangoutz.utils.formatDateTime
 import com.example.hangoutz.utils.mapUserToFriend
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -122,7 +121,8 @@ class EventDetailsViewModel @Inject constructor(
                                 user.id in acceptedUserIds
                             }
 
-                            _uiState.value = _uiState.value.copy(participants = mapUserToFriend(acceptedUsers))
+                            _uiState.value =
+                                _uiState.value.copy(participants = mapUserToFriend(acceptedUsers))
                         }
                     }
                 }

@@ -39,8 +39,8 @@ import androidx.navigation.NavController
 import com.example.hangoutz.R
 import com.example.hangoutz.ui.components.ActionButton
 import com.example.hangoutz.ui.components.DatePickerModal
-import com.example.hangoutz.ui.components.ErrorMessage
 import com.example.hangoutz.ui.components.DisplayUser
+import com.example.hangoutz.ui.components.ErrorMessage
 import com.example.hangoutz.ui.components.InputField
 import com.example.hangoutz.ui.components.InputFieldWithIcon
 import com.example.hangoutz.ui.components.TimePickerModal
@@ -130,7 +130,7 @@ fun CreateEventScreen(
                         contentDescription = Constants.CREATE_EVENT_DESC_FIELD
                     },
                     true, false, data.value.isDescError,
-                            singleLine = false
+                    singleLine = false
 
                 )
                 errordata.value.errorDesc.takeIf { it.isNotBlank() }?.let { ErrorMessage(it) }
@@ -314,19 +314,19 @@ fun CreateEventScreen(
                 DatePickerModal(
                     System.currentTimeMillis(),
                     onDateSelected = { date ->
-                    date?.let {
-                        viewmodel.onDatePicked(date)
-                    }
-                }, onDismiss = { viewmodel.setShowDatePicker() })
+                        date?.let {
+                            viewmodel.onDatePicked(date)
+                        }
+                    }, onDismiss = { viewmodel.setShowDatePicker() })
             }
 
             if (data.value.showTimePicker) {
                 TimePickerModal(
                     System.currentTimeMillis(),
                     onConfirm = { time ->
-                    viewmodel.onTimePicked(time)
-                    viewmodel.setShowTimePicker()
-                }, onDismiss = { viewmodel.setShowTimePicker() })
+                        viewmodel.onTimePicked(time)
+                        viewmodel.setShowTimePicker()
+                    }, onDismiss = { viewmodel.setShowTimePicker() })
             }
         }
     }

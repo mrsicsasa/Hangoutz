@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hangoutz.data.local.SharedPreferencesManager
 import com.example.hangoutz.data.models.EventRequest
-import com.example.hangoutz.data.models.EventCardDPO
 import com.example.hangoutz.data.models.Friend
 import com.example.hangoutz.data.models.InviteRequest
 import com.example.hangoutz.domain.repository.EventRepository

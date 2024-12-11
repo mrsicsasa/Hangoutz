@@ -117,7 +117,7 @@ class EventDetailsOwnerViewModel @Inject constructor(
         }
     }
 
-    fun insertNewParticipantsIntoDatabase(eventId: String) {
+    private fun insertNewParticipantsIntoDatabase(eventId: String) {
         viewModelScope.launch {
             for (participant in _uiState.value.participantFriends.filter { friend -> friend !in _uiState.value.participants }) {
                 val response = inviteRepository.insertInvite(
@@ -145,7 +145,8 @@ class EventDetailsOwnerViewModel @Inject constructor(
             val deleteParticipantResponses = _uiState.value.participants.map { participant ->
                 inviteRepository.deleteInviteByEventId(participant.id, eventId)
             }
-            val allParticipantDeletionsSuccessful = deleteParticipantResponses.all { it?.isSuccessful == true }
+            val allParticipantDeletionsSuccessful =
+                deleteParticipantResponses.all { it?.isSuccessful == true }
             if (allParticipantDeletionsSuccessful) {
                 Log.i("EventDetailsOwner", "Successfully deleted invites for event")
 
@@ -493,4 +494,3 @@ class EventDetailsOwnerViewModel @Inject constructor(
         )
     }
 }
-
