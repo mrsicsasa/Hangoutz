@@ -2,13 +2,15 @@ package com.example.hangoutz.utils
 
 import android.annotation.SuppressLint
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
+import java.text.SimpleDateFormat
 import com.example.hangoutz.data.models.Friend
 import com.example.hangoutz.data.models.User
-import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter.ofPattern
+import java.util.Date
 import java.util.Locale
 
 
@@ -84,6 +86,19 @@ fun mapUserToFriend(userList: List<User>): List<Friend> {
         )
     }
     return newParticipants
+}
+fun checkIfInPast(date: String): Boolean {
+    var isValid: Boolean = false
+    val inputFormat = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
+    try {
+        val inputDateTime = inputFormat.parse(date)
+        if (inputDateTime != null && inputDateTime.before(Date())) {
+            isValid = true
+        } else isValid = false
+    } catch (e: Exception) {
+        Log.e("Error", "Exception while parsing")
+    }
+    return isValid
 }
 
 @RequiresApi(Build.VERSION_CODES.O)

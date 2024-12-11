@@ -87,7 +87,6 @@ class EventDetailsViewModel @Inject constructor(
 
     fun getParticipants() {
         viewModelScope.launch {
-
             val eventResponse = _uiState.value.eventId?.let { eventRepository.getEvent(it) }
             if (eventResponse?.isSuccessful == true && eventResponse.body() != null) {
                 val event = eventResponse.body()?.first()
@@ -122,7 +121,8 @@ class EventDetailsViewModel @Inject constructor(
                                 user.id in acceptedUserIds
                             }
 
-                            _uiState.value = _uiState.value.copy(participants = mapUserToFriend(acceptedUsers))
+                            _uiState.value =
+                                _uiState.value.copy(participants = mapUserToFriend(acceptedUsers))
                         }
                     }
                 }

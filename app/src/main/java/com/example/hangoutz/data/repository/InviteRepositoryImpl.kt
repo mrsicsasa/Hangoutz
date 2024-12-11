@@ -1,6 +1,7 @@
 package com.example.hangoutz.data.repository
 
 import com.example.hangoutz.data.models.CountOfAcceptedInvitesForEvent
+import com.example.hangoutz.data.models.EventRequest
 import com.example.hangoutz.data.models.Invite
 import com.example.hangoutz.data.models.InviteRequest
 import com.example.hangoutz.data.models.UpdateEventStatusDTO

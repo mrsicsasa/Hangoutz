@@ -55,7 +55,7 @@ fun InputFieldWithIcon(
                 errorTextColor = Ivory
             ),
             trailingIcon = {
-               Icon(painter = painterResource(id = painterResource),
+              Icon(painter = painterResource(id = painterResource),
                     contentDescription = "Icon",
                     tint = Color.White,
                     modifier = Modifier.clickable { onClick() })

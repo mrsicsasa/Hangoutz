@@ -44,7 +44,7 @@ fun AppNavHost(
             MainScreen(navController)
         }
         composable(NavigationItem.CreateEvent.route) {
-            CreateEventScreen()
+                CreateEventScreen(navController)
         }
         composable(NavigationItem.EventDetailsOwner.route) { backStackEntry ->
             val eventId = backStackEntry.arguments?.getString("eventId")
