@@ -1,7 +1,6 @@
 package com.example.hangoutz.ui.screens.events
 
 import android.content.Context
-import android.content.Intent
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -32,9 +31,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.util.UUID
 import java.util.concurrent.TimeUnit
-import android.provider.Settings
 import javax.inject.Inject
-import androidx.work.WorkInfo
 
 @HiltViewModel
 class EventScreenViewModel @Inject constructor(
@@ -51,261 +48,252 @@ class EventScreenViewModel @Inject constructor(
     fun getEvents(page: String = EventsFilterOptions.GOING.name) {
         viewModelScope.launch {
             getCountOfInvites()
-            when (page) {
-                EventsFilterOptions.CREATED.name -> {
-                    getMineEvents()
-                }
+            try {
+                when (page) {
+                    EventsFilterOptions.CREATED.name -> {
+                        getMineEvents()
+                    }
 
-                EventsFilterOptions.GOING.name -> {
-                    getEventsFromInvites(page = page)
+                    EventsFilterOptions.GOING.name, EventsFilterOptions.INVITED.name -> {
+                        getEventsFromInvites(page = page)
+                    }
                 }
-
-                EventsFilterOptions.INVITED.name -> {
-                    getEventsFromInvites(page = page)
-                }
+            } catch (e: Exception) {
+                Log.e("EventScreenViewModelGet", "Error fetching events: ${e.message}")
             }
         }
     }
 
     private suspend fun getCountOfAcceptedInvitesForEvent(id: UUID) {
-        val response = inviteRepository.getCountOfAcceptedInvitesByEvent(id = id)
-        if (response.isSuccessful) {
-            val count = response.body()
-            if (_uiState.value.counts.find { it.first == id } == null) {
-                _uiState.value = _uiState.value.copy(
-                    counts = _uiState.value.counts + Pair(
-                        id,
-                        (count?.first()?.count?.plus(1)) ?: 1
+        try {
+            val response = inviteRepository.getCountOfAcceptedInvitesByEvent(id = id)
+            if (response.isSuccessful) {
+                val count = response.body()
+                if (_uiState.value.counts.find { it.first == id } == null) {
+                    _uiState.value = _uiState.value.copy(
+                        counts = _uiState.value.counts + Pair(
+                            id,
+                            (count?.first()?.count?.plus(1)) ?: 1
+                        )
                     )
-                )
-            } else {
-                _uiState.value = _uiState.value.copy(
-                    counts = _uiState.value.counts.map { pair ->
-                        if (pair.first == id) {
-                            pair.copy(second = count?.first()?.count?.plus(1) ?: 1)
-                        } else {
-                            pair
+                } else {
+                    _uiState.value = _uiState.value.copy(
+                        counts = _uiState.value.counts.map { pair ->
+                            if (pair.first == id) {
+                                pair.copy(second = count?.first()?.count?.plus(1) ?: 1)
+                            } else {
+                                pair
+                            }
                         }
-                    }
-                )
+                    )
+                }
+            } else {
+                Log.d("Error", response.message())
             }
-        } else {
-            Log.d("Error", response.message())
+        } catch (e: Exception) {
+            Log.e("EventScreenViewModelAccepted", "Error getting invite count: ${e.message}")
         }
     }
 
     private suspend fun getAvatars(id: UUID) {
-        val response = userRepository.getUserAvatar(id.toString())
-        if (response.isSuccessful) {
-            response.body()?.let {
-                _uiState.value = _uiState.value.copy(
-                    avatars = _uiState.value.avatars + Pair(
-                        id,
-                        it.first().avatar
+        try {
+            val response = userRepository.getUserAvatar(id.toString())
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    _uiState.value = _uiState.value.copy(
+                        avatars = _uiState.value.avatars + Pair(id, it.first().avatar)
                     )
-                )
+                }
+            } else {
+                Log.d("Error", response.message())
             }
-        } else {
-            Log.d("Error", response.message())
+        } catch (e: Exception) {
+            Log.e("EventScreenViewModelAvatar", "Error getting avatar: ${e.message}")
         }
     }
 
     fun getCardColor(cardIndex: Int): Color {
-        if (cardIndex % 3 == 0) {
-            return PurpleDark
-        } else if (cardIndex % 3 == 1) {
-            return GreenDark
+        return when (cardIndex % 3) {
+            0 -> PurpleDark
+            1 -> GreenDark
+            else -> Orange
         }
-        return Orange
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private suspend fun getMineEvents() {
-        _uiState.value = _uiState.value.copy(
-            eventsMine = emptyList(),
-            isLoading = true
-        )
-        val response =
-            SharedPreferencesManager.getUserId(context)
-                ?.let { eventRepository.getEventsWithAvatar(it) }
-        if (response != null) {
-            if (response.isSuccessful && !response.body().isNullOrEmpty()) {
-                response.body()?.let {
-                    _uiState.value = _uiState.value.copy(
-                        eventsMine = it
-                    )
-                    it.forEach { event ->
-                        getCountOfAcceptedInvitesForEvent(id = event.id)
-                        cancelAllScheduledNotifications(eventId = event.id)
-                        scheduleNotificationIfNeeded(eventId = event.id, eventName = event.title, eventTime = event.date.toMilliseconds())
-                    }
-                }
+        try {
+            _uiState.value = _uiState.value.copy(
+                eventsMine = emptyList(),
+                isLoading = true
+            )
 
+            val userId = SharedPreferencesManager.getUserId(context)
+            if (userId != null) {
+                val response = eventRepository.getEventsWithAvatar(userId)
+
+                if (response.isSuccessful && !response.body().isNullOrEmpty()) {
+                    response.body()?.let {
+                        _uiState.value = _uiState.value.copy(
+                            eventsMine = it
+                        )
+                        it.forEach { event ->
+                            getCountOfAcceptedInvitesForEvent(id = event.id)
+                            cancelAllScheduledNotifications(eventId = event.id)
+                            scheduleNotificationIfNeeded(eventId = event.id, eventName = event.title, eventTime = event.date.toMilliseconds())
+                        }
+                    }
+                } else {
+                    Log.d("Events", Constants.GET_EVENTS_ERRORS)
+                    _uiState.value = _uiState.value.copy(eventsMine = emptyList())
+                }
             } else {
-                Log.d("Events", Constants.GET_EVENTS_ERRORS)
+                Log.e("EventScreenViewModel2", "User ID is null")
+                _uiState.value = _uiState.value.copy(eventsMine = emptyList())
             }
+        } catch (e: Exception) {
+            Log.e("EventScreenViewModel2", "Error getting events: ${e.message}")
+            _uiState.value = _uiState.value.copy(eventsMine = emptyList())
+        } finally {
+            _uiState.value = _uiState.value.copy(isLoading = false)
         }
-        _uiState.value = _uiState.value.copy(
-            isLoading = false
-        )
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private suspend fun getEventsFromInvites(page: String) {
         if (page == EventsFilterOptions.GOING.name) {
-            _uiState.value = _uiState.value.copy(
-                eventsGoing = emptyList(),
-                isLoading = true
-            )
+            _uiState.value = _uiState.value.copy(eventsGoing = emptyList(), isLoading = true)
         } else {
-            _uiState.value = _uiState.value.copy(
-                eventsInvited = emptyList(),
-                isLoading = true
-            )
+            _uiState.value = _uiState.value.copy(eventsInvited = emptyList(), isLoading = true)
         }
-        val response =
-            SharedPreferencesManager.getUserId(context)
-                ?.let {
-                    eventRepository.getEventsFromInvites(
-                        eventStatus = if (page == EventsFilterOptions.GOING.name) Constants.INVITE_STATUS_ACCEPTED else Constants.INVITE_STATUS_INVITED,
-                        userID = it
-                    )
-                }
-        if (response != null) {
-            if (response.isSuccessful && !response.body().isNullOrEmpty()) {
-                response.body()?.let {
-                    if (page == EventsFilterOptions.GOING.name) {
-                        _uiState.value = _uiState.value.copy(
-                            eventsGoing = _uiState.value.eventsGoing + it.map { event ->
-                                event.toEventCardDPO()
-                            },
-                        )
-                    } else {
-                        _uiState.value = _uiState.value.copy(
-                            eventsInvited = _uiState.value.eventsInvited + it.map { event ->
-                                event.toEventCardDPO()
-                            },
-                        )
-                    }
-                    it.forEach { event ->
-                        getAvatars(event.events.owner)
+
+        try {
+            val userId = SharedPreferencesManager.getUserId(context)
+
+            if (userId != null) {
+                val response = eventRepository.getEventsFromInvites(
+                    eventStatus = if (page == EventsFilterOptions.GOING.name) Constants.INVITE_STATUS_ACCEPTED else Constants.INVITE_STATUS_INVITED,
+                    userID = userId
+                )
+
+                if (response.isSuccessful && !response.body().isNullOrEmpty()) {
+                    response.body()?.let {
                         if (page == EventsFilterOptions.GOING.name) {
-                            getCountOfAcceptedInvitesForEvent(event.events.id)
-                            cancelAllScheduledNotifications(eventId = event.events.id)
-                            scheduleNotificationIfNeeded(eventId = event.events.id, eventName = event.events.title, eventTime = event.events.date.toMilliseconds())
+                            _uiState.value = _uiState.value.copy(
+                                eventsGoing = _uiState.value.eventsGoing + it.map { event -> event.toEventCardDPO() }
+                            )
+                        } else {
+                            _uiState.value = _uiState.value.copy(
+                                eventsInvited = _uiState.value.eventsInvited + it.map { event -> event.toEventCardDPO() }
+                            )
+                        }
+
+                        it.forEach { event ->
+                            getAvatars(event.events.owner)
+                            if (page == EventsFilterOptions.GOING.name) {
+                                getCountOfAcceptedInvitesForEvent(event.events.id)
+                                cancelAllScheduledNotifications(eventId = event.events.id)
+                                scheduleNotificationIfNeeded(
+                                    eventId = event.events.id,
+                                    eventName = event.events.title,
+                                    eventTime = event.events.date.toMilliseconds()
+                                )
+                            }
                         }
                     }
+                } else {
+                    Log.d("Events", Constants.GET_EVENTS_ERRORS)
                 }
-
             } else {
-                Log.d("Events", Constants.GET_EVENTS_ERRORS)
+                Log.e("EventScreenViewModel", "User ID is null")
             }
+        } catch (e: Exception) {
+            Log.e("EventScreenViewModel", "Error getting events from invites: ${e.message}")
+            _uiState.value = _uiState.value.copy(
+                eventsGoing = emptyList(),
+                eventsInvited = emptyList()
+            )
+        } finally {
+            _uiState.value = _uiState.value.copy(isLoading = false)
         }
-        _uiState.value = _uiState.value.copy(
-            isLoading = false
-        )
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun updateInvitesStatus(status: String, eventId: UUID) {
         viewModelScope.launch {
-            val response = SharedPreferencesManager.getUserId(context)
-                ?.let {
-                    inviteRepository.updateInviteStatus(
-                        eventId = eventId,
-                        userId = it,
-                        body = UpdateEventStatusDTO(event_status = status)
-                    )
+            try {
+                val response = SharedPreferencesManager.getUserId(context)
+                    ?.let {
+                        inviteRepository.updateInviteStatus(
+                            eventId = eventId,
+                            userId = it,
+                            body = UpdateEventStatusDTO(event_status = status)
+                        )
+                    }
+
+                if (response?.isSuccessful == true) {
+                    getEvents(EventsFilterOptions.INVITED.name)
+                } else {
+                    Log.d("ERROR", response?.code().toString())
                 }
-            if (response?.isSuccessful == true) {
-                getEvents(EventsFilterOptions.INVITED.name)
-            } else {
-                Log.d("ERROR", response?.code().toString())
+            } catch (e: Exception) {
+                Log.e("EventScreenViewModelUpdate", "Error updating invite status: ${e.message}")
             }
         }
     }
 
     private fun getCountOfInvites() {
         viewModelScope.launch {
-            val response =
-                SharedPreferencesManager.getUserId(context)
-                    ?.let {
-                        eventRepository.getEventsFromInvites(
-                            eventStatus = "invited",
-                            userID = it
-                        )
-                    }
-            if (response != null) {
-                if (response.isSuccessful && response.body() != null) {
+            try {
+                val response =
+                    SharedPreferencesManager.getUserId(context)
+                        ?.let {
+                            eventRepository.getEventsFromInvites(
+                                eventStatus = "invited",
+                                userID = it
+                            )
+                        }
+                if (response != null && response.isSuccessful) {
                     _uiState.value = response.body()?.size?.let {
                         _uiState.value.copy(
                             countOfInvites = it
                         )
-                    }!!
+                    } ?: _uiState.value.copy(countOfInvites = 0)
                 }
+            } catch (e: Exception) {
+                Log.e("EventScreenViewModel", "Error fetching invites: ${e.message}")
+                _uiState.value =_uiState.value.copy(
+                    countOfInvites = 0
+                )
             }
         }
     }
+
     fun isCurrentUserOwner(event: EventCardDPO): Boolean {
         val userId = SharedPreferencesManager.getUserId(context)
         return userId == event.owner.toString()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun scheduleNotificationIfNeeded(eventId: UUID, eventName: String, eventTime: Long) {
-        val workManager = WorkManager.getInstance(context)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            checkAndRequestNotificationPermission()
-        }
+    fun scheduleNotificationIfNeeded(eventId: UUID, eventName: String, eventTime: Long) {
+        if (eventTime > System.currentTimeMillis()) {
+            val notificationData = Data.Builder().apply {
+                putString("event_name", eventName)
+                putString("event_id", eventId.toString())
+            }.build()
 
-        val delay = eventTime - System.currentTimeMillis() - TimeUnit.HOURS.toMillis(3)
-        Log.d("Notifikacija", "$eventName - $delay")
+            val workRequest = OneTimeWorkRequestBuilder<NotificationWorker>()
+                .setInitialDelay(eventTime - System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+                .setInputData(notificationData)
+                .build()
 
-        if (delay > 0) {
-            workManager.getWorkInfosByTag(eventId.toString()).get().let { workInfos ->
-                val hasActiveWork = workInfos.any { workInfo ->
-                    workInfo.state == androidx.work.WorkInfo.State.ENQUEUED ||
-                            workInfo.state == androidx.work.WorkInfo.State.RUNNING
-                }
-
-                if (!hasActiveWork) {
-                    val data = Data.Builder()
-                        .putString("eventId", eventId.toString())
-                        .putString("eventName", eventName)
-                        .build()
-
-                    val workRequest = OneTimeWorkRequestBuilder<NotificationWorker>()
-                        .setInitialDelay(delay, TimeUnit.MILLISECONDS)
-                        .setInputData(data)
-                        .addTag(eventId.toString())
-                        .build()
-
-                    workManager.enqueue(workRequest)
-                }
-            }
+            WorkManager.getInstance(context).enqueue(workRequest)
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    private fun checkAndRequestNotificationPermission() {
-        if (!NotificationManagerCompat.from(context).areNotificationsEnabled()) {
-            Log.e("NotificationPermission", "Notifications are disabled for this app.")
-            val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
-            intent.putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            context.startActivity(intent)
-        } else {
-            Log.d("NotificationPermission", "Notifications are enabled for this app.")
-        }
-    }
     private fun cancelAllScheduledNotifications(eventId: UUID) {
-        val workManager = WorkManager.getInstance(context)
-        val workInfos = workManager.getWorkInfosByTag(eventId.toString()).get()
-        workInfos.forEach { workInfo ->
-            if (workInfo.state == WorkInfo.State.ENQUEUED || workInfo.state == WorkInfo.State.RUNNING) {
-                workManager.cancelWorkById(workInfo.id)
-                Log.d("Notification", "Cancelled work: ${workInfo.id}")
-            }
-        }
+        val notificationManager = NotificationManagerCompat.from(context)
+        val notificationId = eventId.hashCode()
+        notificationManager.cancel(notificationId)
     }
 }

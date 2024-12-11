@@ -8,7 +8,8 @@ enum class Screen {
     CREATE_EVENT,
     EVENT_DETAILS,
     EVENT_OWNER,
-    SPLASH
+    SPLASH,
+    NO_INTERNET
 }
 
 sealed class NavigationItem(val route: String) {
@@ -20,4 +21,5 @@ sealed class NavigationItem(val route: String) {
     object EventDetails : NavigationItem(Screen.EVENT_DETAILS.name + "/{eventId}")
     object EventDetailsOwner : NavigationItem(Screen.EVENT_OWNER.name + "/{eventId}")
     object Splash : NavigationItem(Screen.SPLASH.name)
+    object NoInternet: NavigationItem(Screen.NO_INTERNET.name)
 }
