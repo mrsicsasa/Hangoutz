@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hangoutz.data.local.SharedPreferencesManager
+import com.example.hangoutz.data.models.EventCardDPO
 import com.example.hangoutz.data.models.Friend
 import com.example.hangoutz.domain.repository.FriendsRepository
 import com.example.hangoutz.utils.Constants
@@ -20,7 +21,6 @@ import java.util.Locale
 import javax.inject.Inject
 
 
-
 @HiltViewModel
 class CreateEventViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -31,7 +31,7 @@ class CreateEventViewModel @Inject constructor(
     val uiState: StateFlow<CreateEventState> = _uiState
 
     fun createEvent() {
-        //TODO
+         //TODO
     }
 
     fun onSearchInput(newText: String) {
@@ -164,6 +164,3 @@ class CreateEventViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(time = time)
     }
 }
-
-
-

@@ -187,7 +187,8 @@ fun EventDetailsScreen(
                     style = MaterialTheme.typography.bodyMedium
                 )
                 HorizontalDivider(
-                    thickness = Dimensions.CREATE_EVENT_LINE_THICKNESS, color = Ivory
+                    thickness = Dimensions.CREATE_EVENT_LINE_THICKNESS,
+                    color = Ivory
                 )
                 LaunchedEffect(data.value.eventId) {
                     data.value.eventId?.let {
@@ -201,12 +202,15 @@ fun EventDetailsScreen(
             }
             Column {
                 ActionButton(stringResource(R.string.leave_event),
-                    modifier = Modifier.padding(bottom = Dimensions.ACTION_BUTTON_MEDIUM3),
+                    modifier = Modifier
+                        .padding(bottom = Dimensions.ACTION_BUTTON_MEDIUM3),
                     onClick = {
-                        viewmodel.onLeave(onSuccess = { navController.popBackStack() },
-                            onFailure = {
-                                Log.e("Error", "An error has occurred!")
-                            })
+                        viewmodel.onLeave(
+                            onSuccess = { navController.popBackStack() },
+                            onFailure = { errorMessage ->
+                                Log.e("Error", "An error has occurred")
+                            }
+                        )
                     })
             }
         }
