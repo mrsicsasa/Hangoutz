@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
@@ -57,7 +58,7 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
         contract = ActivityResultContracts.PickVisualMedia(),
         onResult = {
             it?.let {
-                viewmodel.updateAvatarUri(it)
+                viewmodel.setShowImageCropper(it, true)
             }
         }
     )
@@ -66,7 +67,7 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
         onResult = { isSaved ->
             if (isSaved) {
                 viewmodel.tempUri.let {
-                    viewmodel.updateAvatarUri(it)
+                    viewmodel.setShowImageCropper(it, true)
                 }
             } else {
                 viewmodel.setAvatarUri()
@@ -87,121 +88,131 @@ fun SettingsScreen(navController: NavController, viewmodel: SettingsViewModel = 
         )
     }
 
-    if (data.value.showBottomSheet) {
-        ImageHandleDialog(
-            onDismiss = { viewmodel.setShowBottomSheet(false) },
-            onCaptureFromCamera = {
-                viewmodel.setShowBottomSheet(false)
-                viewmodel.requestCameraPermission(
-                    onPermissionGranted = {
-                        viewmodel.captureImage { uri ->
-                            takePhotoLauncher.launch(uri)
-                        }
-                    },
-                    onPermissionDenied = { permission ->
-                        cameraPermissionLauncher.launch(permission)
-                    }
-                )
-            },
-            onPickFromGallery = {
-                viewmodel.setShowBottomSheet(false)
-                imagePicker.launch(
-                    PickVisualMediaRequest(
-                        ActivityResultContracts.PickVisualMedia.ImageOnly
-                    )
-                )
+    if (data.value.showImageCropper) {
+        ImageCropperScreen(
+            bitmap = viewmodel.uriToBitmap(LocalContext.current, data.value.tempUri),
+            onBitmapCropped = { croppedBitmap ->
+                viewmodel.updateBitmap(croppedBitmap)
             }
         )
-    }
-    Column(
-        modifier = Modifier
-            .padding(top = Dimensions.SETTINGS_SCREEN_MEDIUM2)
-            .fillMaxSize()
-    ) {
-        Box(
+        //viewmodel.updateAvatarUri()
+    } else {
+        if (data.value.showBottomSheet) {
+            ImageHandleDialog(
+                onDismiss = { viewmodel.setShowBottomSheet(false) },
+                onCaptureFromCamera = {
+                    viewmodel.setShowBottomSheet(false)
+                    viewmodel.requestCameraPermission(
+                        onPermissionGranted = {
+                            viewmodel.captureImage { uri ->
+                                takePhotoLauncher.launch(uri)
+                            }
+                        },
+                        onPermissionDenied = { permission ->
+                            cameraPermissionLauncher.launch(permission)
+                        }
+                    )
+                },
+                onPickFromGallery = {
+                    viewmodel.setShowBottomSheet(false)
+                    imagePicker.launch(
+                        PickVisualMediaRequest(
+                            ActivityResultContracts.PickVisualMedia.ImageOnly
+                        )
+                    )
+                }
+            )
+        }
+        Column(
             modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth(),
-            contentAlignment = Alignment.Center
+                .padding(top = Dimensions.SETTINGS_SCREEN_MEDIUM2)
+                .fillMaxSize()
         ) {
             Box(
                 modifier = Modifier
-                    .size(Dimensions.SETTINGS_SCREEN_LARGE1)
-                    .clip(CircleShape)
-                    .border(Dimensions.SETTINGS_SCREEN_SMALL3, Ivory, CircleShape)
-            ) {}
-            GlideImage(
-                model = data.value.avatarUri
-                    ?: "${BuildConfig.BASE_URL_AVATAR}${data.value.avatar}",
-                contentDescription = PROFILE_PHOTO,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .width(Dimensions.SETTINGS_SCREEN_LARGE2)
-                    .height(Dimensions.SETTINGS_SCREEN_LARGE2)
-                    .clip(CircleShape)
-                    .align(Alignment.Center)
-                    .testTag(SETTINGS_USER_PHOTO_TAG)
-                    .clickable {
-                        viewmodel.setShowBottomSheet(true)
-                    }
-            )
-            Image(
-                painter = painterResource(R.drawable.profilelines),
-                contentDescription = "lines",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .semantics {
-                        contentDescription = SETTINGS_BACKGROUND_LINES_TAG
-                    },
-                colorFilter = ColorFilter.tint(Ivory)
-            )
-        }
-        Column(
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .fillMaxWidth(),
-            verticalArrangement = Arrangement.Center
-        ) {
-            Row(
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .fillMaxWidth()
-                    .height(Dimensions.SETTINGS_SCREEN_MEDIUM1),
-                horizontalArrangement = Arrangement.spacedBy(Dimensions.SETTINGS_SCREEN_SMALL1),
-                verticalAlignment = Alignment.CenterVertically
+                    .weight(1f)
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.Center
             ) {
-                NameInput(
-                    data.value.textIcon,
-                    data.value.name,
-                    data.value.isReadOnly,
-                    { viewmodel.onNameChanged(it) },
-                    { viewmodel.onPencilClick() },
+                Box(
+                    modifier = Modifier
+                        .size(Dimensions.SETTINGS_SCREEN_LARGE1)
+                        .clip(CircleShape)
+                        .border(Dimensions.SETTINGS_SCREEN_SMALL3, Ivory, CircleShape)
+                ) {}
+                GlideImage(
+                    model = data.value.avatarUri
+                        ?: "${BuildConfig.BASE_URL_AVATAR}${data.value.avatar}",
+                    contentDescription = PROFILE_PHOTO,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .width(Dimensions.SETTINGS_SCREEN_LARGE2)
+                        .height(Dimensions.SETTINGS_SCREEN_LARGE2)
+                        .clip(CircleShape)
+                        .align(Alignment.Center)
+                        .testTag(SETTINGS_USER_PHOTO_TAG)
+                        .clickable {
+                            viewmodel.setShowBottomSheet(true)
+                        }
+                )
+                Image(
+                    painter = painterResource(R.drawable.profilelines),
+                    contentDescription = "lines",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .semantics {
+                            contentDescription = SETTINGS_BACKGROUND_LINES_TAG
+                        },
+                    colorFilter = ColorFilter.tint(Ivory)
                 )
             }
-            Text(
-                text = data.value.email,
-                style = MaterialTheme.typography.headlineMedium,
+            Column(
                 modifier = Modifier
-                    .padding(end = Dimensions.SETTINGS_SCREEN_SMALL4)
                     .align(Alignment.CenterHorizontally)
-                    .testTag(SETTINGS_EMAIL_FIELD_TAG)
-            )
-        }
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth()
-                .align(Alignment.End)
-                .padding(bottom = Dimensions.SETTINGS_SCREEN_SMALL2)
-        ) {
-            ActionButton(R.drawable.iconlogout, LOGOUT, onClick = {
-                viewmodel.logoutUser {
-                    navController.navigate(NavigationItem.Login.route) {
-                        popUpTo(0)
-                    }
+                    .fillMaxWidth(),
+                verticalArrangement = Arrangement.Center
+            ) {
+                Row(
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .fillMaxWidth()
+                        .height(Dimensions.SETTINGS_SCREEN_MEDIUM1),
+                    horizontalArrangement = Arrangement.spacedBy(Dimensions.SETTINGS_SCREEN_SMALL1),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    NameInput(
+                        data.value.textIcon,
+                        data.value.name,
+                        data.value.isReadOnly,
+                        { viewmodel.onNameChanged(it) },
+                        { viewmodel.onPencilClick() },
+                    )
                 }
-            }, modifier = Modifier.testTag(SETTINGS_LOGOUT_BUTTON))
+                Text(
+                    text = data.value.email,
+                    style = MaterialTheme.typography.headlineMedium,
+                    modifier = Modifier
+                        .padding(end = Dimensions.SETTINGS_SCREEN_SMALL4)
+                        .align(Alignment.CenterHorizontally)
+                        .testTag(SETTINGS_EMAIL_FIELD_TAG)
+                )
+            }
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .align(Alignment.End)
+                    .padding(bottom = Dimensions.SETTINGS_SCREEN_SMALL2)
+            ) {
+                ActionButton(R.drawable.iconlogout, LOGOUT, onClick = {
+                    viewmodel.logoutUser {
+                        navController.navigate(NavigationItem.Login.route) {
+                            popUpTo(0)
+                        }
+                    }
+                }, modifier = Modifier.testTag(SETTINGS_LOGOUT_BUTTON))
+            }
         }
     }
 }

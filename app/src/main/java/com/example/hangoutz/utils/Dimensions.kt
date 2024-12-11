@@ -54,6 +54,7 @@ object Dimensions {
     //Profile image
     val PROFILE_IMAGE_SIZE: Dp = 74.dp
     val PROFILE_IMAGE_BORDER_WIDTH: Dp = 2.dp
+    val PHOTO_PICKER_BUTTON_PADDING = 20.dp
 
     //Splash screen
     const val SPLASH_SCREEN_STARTING_ALPHA = 0.4f
