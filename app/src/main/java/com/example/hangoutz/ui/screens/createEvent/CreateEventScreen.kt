@@ -210,9 +210,9 @@ fun CreateEventScreen(
                         { viewmodel.setShowTimePicker() },
                         data.value.isDateError
                     )
-
                 }
                 errordata.value.errorMessage?.let { ErrorMessage(it) }
+
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()

@@ -77,10 +77,8 @@ fun ParticipantUI(participant: Friend, isOwner : Boolean = false, onClick: () ->
             )
             if(isOwner){
             Row(
-                modifier = Modifier.fillMaxWidth()
-                    .padding(end = Dimensions.CREATE_EVENT_ICON_PADDING),
+                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
-
             ) {
 
                 Icon(
