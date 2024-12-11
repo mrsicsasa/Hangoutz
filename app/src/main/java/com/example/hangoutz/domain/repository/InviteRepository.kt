@@ -17,4 +17,5 @@ interface InviteRepository {
     suspend fun updateInviteStatus(userId:String, eventId: UUID, body: UpdateEventStatusDTO): Response<Unit>
     suspend fun deleteInviteByEventId(id: String, eventId: UUID): Response<Unit>
     suspend fun insertInvite(inviteRequest: InviteRequest): Response<Unit>
+    suspend fun deleteAllInvitesByEventId(id: UUID): Response<List<Invite>>
 }

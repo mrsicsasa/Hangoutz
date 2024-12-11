@@ -56,15 +56,12 @@ class CreateEventViewModel @Inject constructor(
     }
 
     fun createEvent(onSuccess: () -> Unit, onFailure: () -> Unit) {
-
         if (validateInputs()) {
             val formattedDateTime = formatForDatabase(uiState.value.date, _uiState.value.time) ?: ""
             _uiState.value = _uiState.value.copy(formattedDateForDatabase = formattedDateTime)
             _errorState.value = _errorState.value.copy(errorMessage = "")
-
             viewModelScope.launch {
                 val owner = SharedPreferencesManager.getUserId(context)
-
                 val insertEventResponse = eventsRepository.insertEvent(
                     EventRequest(
                         title = _uiState.value.title,

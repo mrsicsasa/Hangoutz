@@ -136,27 +136,26 @@ fun CreateEventScreen(
                 errordata.value.errorDesc.takeIf { it.isNotBlank() }?.let { ErrorMessage(it) }
 
                 InputField(
-                    stringResource(R.string.event_city),
-                    data.value.city,
-                    { viewmodel.onCityChange(it) },
+                    label = stringResource(R.string.event_city),
+                    value = data.value.city,
                     modifier = Modifier.semantics {
                         contentDescription = Constants.CREATE_EVENT_CITY_FIELD
                     },
-                    true, false, data.value.isCityError
+                    isEnabled = true, isReadOnly = false, isError = data.value.isCityError,
+                    onValueChange = { viewmodel.onCityChange(it) },
                 )
                 errordata.value.errorCity.takeIf { it.isNotBlank() }?.let { ErrorMessage(it) }
 
                 InputField(
-                    stringResource(R.string.event_street),
-                    data.value.street,
-                    { viewmodel.onStreetChange(it) },
+                    label = stringResource(R.string.event_street),
+                    value= data.value.street,
                     modifier = Modifier.semantics {
                         contentDescription = Constants.CREATE_EVENT_STREET_FIELD
                     },
-                    true, false, data.value.isStreetError
+                    onValueChange = { viewmodel.onStreetChange(it) },
+                    isEnabled = true, isReadOnly = false, isError = data.value.isStreetError
                 )
-
-                errordata.value.errorStreet?.takeIf { it.isNotBlank() }?.let { ErrorMessage(it) }
+                errordata.value.errorStreet.takeIf { it.isNotBlank() }?.let { ErrorMessage(it) }
 
                 InputField(
                     stringResource(R.string.event_place),

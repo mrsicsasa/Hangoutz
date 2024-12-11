@@ -51,4 +51,9 @@ class InviteRepositoryImpl @Inject constructor(invitesAPI: InviteAPI) : InviteRe
     override suspend fun insertInvite(inviteRequest: InviteRequest): Response<Unit> {
         return api.insertInvite(inviteRequest)
     }
+
+    override suspend fun deleteAllInvitesByEventId(id: UUID): Response<List<Invite>> {
+        return api.deleteAllInvitesByEventId(id = "eq.${id}")
+    }
+
 }
