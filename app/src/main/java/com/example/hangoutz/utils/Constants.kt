@@ -214,7 +214,6 @@ object Constants {
 
     const val DATE_IN_PAST = "Date and time cannot be in the past"
 
-
     //Image picker
     const val IMAGE_CROPPER = "imageCropper"
     const val SELECT_THIS_AREA = "selectThisArea"
